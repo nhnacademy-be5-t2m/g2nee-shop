@@ -11,8 +11,8 @@
 	<groupId>com.t2m.g2nee</groupId>
 	<artifactId>shop</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>g2nee</name>
-	<description>g2nee</description>
+	<name>shop</name>
+	<description>shop</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
