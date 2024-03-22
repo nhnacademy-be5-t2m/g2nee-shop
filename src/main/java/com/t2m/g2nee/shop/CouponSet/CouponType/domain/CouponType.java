@@ -1,16 +1,18 @@
 package com.t2m.g2nee.shop.CouponSet.CouponType.domain;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn
 @Entity
 @Table(name = "CouponTypes")
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CouponType {

@@ -1,12 +1,13 @@
 package com.t2m.g2nee.shop.MemberSet.Customer.domain;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
