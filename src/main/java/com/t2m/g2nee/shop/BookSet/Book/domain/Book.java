@@ -31,7 +31,7 @@ public class Book {
     private BookStatus bookStatus;
     private int pages;
 
-    @OneToOne
+    @OneToOne // ManyToOne?
     @JoinColumn(name = "publisherId")
     private Publisher publisher;
 
