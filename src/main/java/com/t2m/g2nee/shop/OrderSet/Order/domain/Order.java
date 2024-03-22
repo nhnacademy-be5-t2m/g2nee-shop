@@ -1,5 +1,6 @@
 package com.t2m.g2nee.shop.OrderSet.Order.domain;
 
+import com.t2m.g2nee.shop.CouponSet.Coupon.domain.Coupon;
 import com.t2m.g2nee.shop.MemberSet.Customer.domain.Customer;
 import lombok.*;
 
@@ -37,9 +38,9 @@ public class Order {
     @JoinColumn(name = "customerId")
     private Customer customer;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "couponId")
-
+    private Coupon coupon;
 
     public enum OrderState{
         WAITING, DELIVERING, DELIVERED, RETURNING, RETURNED
