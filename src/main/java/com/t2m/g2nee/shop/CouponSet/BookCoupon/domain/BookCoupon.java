@@ -18,7 +18,6 @@ import javax.persistence.*;
 public class BookCoupon extends CouponType{
 
 
-
     @ManyToOne
     @JoinColumn(name = "bookId")
     private Book book;
