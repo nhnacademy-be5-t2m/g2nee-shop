@@ -6,13 +6,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/hello")
+@RequestMapping("/shop")
 public class TestController {
 
     @Value("${server.port}")
     private String port;
 
-    @GetMapping
+    @GetMapping("/hello")
     public String getHello(){
         return port + ":hello g2nee shop";
     }
