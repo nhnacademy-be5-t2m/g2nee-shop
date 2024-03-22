@@ -1,4 +1,4 @@
-package com.t2m.g2nee.shop.OrderSet.PackageType;
+package com.t2m.g2nee.shop.OrderSet.PackageType.domain;
 
 import lombok.*;
 

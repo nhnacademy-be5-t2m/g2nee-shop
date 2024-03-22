@@ -1,4 +1,4 @@
-package com.t2m.g2nee.shop.BookSet.Categroy.domain;
+package com.t2m.g2nee.shop.BookSet.Category.domain;
 
 import lombok.*;
 

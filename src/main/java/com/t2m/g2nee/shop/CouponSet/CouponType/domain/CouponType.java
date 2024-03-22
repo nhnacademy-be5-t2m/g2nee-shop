@@ -5,7 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.math.BigDecimal;
 
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.JOINED)
 @Entity
 @Table(name = "CouponTypes")
 @Getter
@@ -21,7 +21,7 @@ public class CouponType {
     private Integer period;
     private Type type;
     private Long discount;
-    private BigDecimal minimumOrderAmounnt;
+    private BigDecimal minimumOrderAmount;
     private BigDecimal maximumDiscount;
 
     public enum Type{

@@ -1,11 +1,10 @@
 package com.t2m.g2nee.shop.MemberSet.Member.domain;
 
 import com.t2m.g2nee.shop.MemberSet.Customer.domain.Customer;
+import com.t2m.g2nee.shop.MemberSet.Grade.domain.Grade;
 import lombok.*;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,6 +21,9 @@ public class Member extends Customer {
     private MemberStatus memberStatus;
     private LocalDateTime recentLoginDate;
 
+    @OneToOne
+    @JoinColumn(name = "gradeId", table = "Grades")
+    private Grade grade;
 
     public enum MemberStatus{
 

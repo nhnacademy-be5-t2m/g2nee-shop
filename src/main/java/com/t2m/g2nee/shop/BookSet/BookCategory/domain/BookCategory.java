@@ -1,7 +1,7 @@
 package com.t2m.g2nee.shop.BookSet.BookCategory.domain;
 
 import com.t2m.g2nee.shop.BookSet.Book.domain.Book;
-import com.t2m.g2nee.shop.BookSet.Categroy.domain.Category;
+import com.t2m.g2nee.shop.BookSet.Category.domain.Category;
 import lombok.*;
 
 import javax.persistence.*;

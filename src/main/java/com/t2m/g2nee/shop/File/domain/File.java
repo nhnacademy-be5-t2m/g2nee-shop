@@ -34,6 +34,6 @@ public class File {
     private Review review;
 
     @ManyToOne
-    @JoinColumn(name = "memberId", referencedColumnName = "customerId")
+    @JoinColumn(name = "memberId")
     private Member member;
 }

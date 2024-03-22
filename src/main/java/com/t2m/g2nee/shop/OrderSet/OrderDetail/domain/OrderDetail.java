@@ -2,14 +2,14 @@ package com.t2m.g2nee.shop.OrderSet.OrderDetail.domain;
 
 import com.t2m.g2nee.shop.BookSet.Book.domain.Book;
 import com.t2m.g2nee.shop.MemberSet.Customer.domain.Customer;
-import com.t2m.g2nee.shop.OrderSet.PackageType.PackageType;
+import com.t2m.g2nee.shop.OrderSet.PackageType.domain.PackageType;
 import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "OrderDetail")
+@Table(name = "OrderDetails")
 @Getter
 @Setter
 @Builder

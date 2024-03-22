@@ -17,8 +17,7 @@ import javax.persistence.*;
 @DiscriminatorValue("CouponType")
 public class BookCoupon extends CouponType{
 
-
     @ManyToOne
-    @JoinColumn(name = "bookId")
+    @JoinColumn(name = "bookId",table = "Books")
     private Book book;
 }

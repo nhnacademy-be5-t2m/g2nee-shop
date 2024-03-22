@@ -26,7 +26,7 @@ public class Point {
     //TODO: order Mapping
 
     @ManyToOne
-    @JoinColumn(name = "memberId", referencedColumnName = "customerId")
+    @JoinColumn(name = "memberId")
     private Member member;
 
     public enum ReasonChange {

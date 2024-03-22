@@ -1,4 +1,4 @@
-package com.t2m.g2nee.shop.OrderSet.Return;
+package com.t2m.g2nee.shop.OrderSet.Return.domain;
 
 import com.t2m.g2nee.shop.OrderSet.OrderDetail.domain.OrderDetail;
 import lombok.*;
@@ -6,7 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "PackageTypes")
+@Table(name = "Returns")
 @Getter
 @Setter
 @Builder

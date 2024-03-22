@@ -1,6 +1,6 @@
 package com.t2m.g2nee.shop.BookSet.CategoryPath.domain;
 
-import com.t2m.g2nee.shop.BookSet.Categroy.domain.Category;
+import com.t2m.g2nee.shop.BookSet.Category.domain.Category;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,10 +19,10 @@ public class CategoryPath {
     private Long categoryPathId;
 
     @ManyToOne
-    @JoinColumn(name = "ancestorId", referencedColumnName = "categoryId")
+    @JoinColumn(name = "ancestorId")
     private Category ancestor;
 
     @ManyToOne
-    @JoinColumn(name = "descendantId", referencedColumnName = "categoryId")
+    @JoinColumn(name = "descendantId")
     private Category descendant;
 }

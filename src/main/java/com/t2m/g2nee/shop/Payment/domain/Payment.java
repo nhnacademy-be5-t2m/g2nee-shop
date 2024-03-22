@@ -1,5 +1,6 @@
 package com.t2m.g2nee.shop.Payment.domain;
 
+import com.t2m.g2nee.shop.MemberSet.Customer.domain.Customer;
 import com.t2m.g2nee.shop.MemberSet.Member.domain.Member;
 import lombok.*;
 
@@ -26,7 +27,7 @@ public class Payment {
 
     @ManyToOne
     @JoinColumn(name = "customerId")
-    private Member member;
+    private Customer customer;
 
     //TODO: order Mapping
 

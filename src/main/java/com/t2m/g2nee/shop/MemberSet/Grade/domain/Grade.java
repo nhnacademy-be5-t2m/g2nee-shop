@@ -6,7 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Grade")
+@Table(name = "Grades")
 @Getter
 @Setter
 @Builder
@@ -18,8 +18,7 @@ public class Grade {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long gradeId;
     private String gradeName;
-
-    @OneToOne
-    @JoinColumn(name = "customerId")
+    @OneToOne(mappedBy = "grade", optional = false)
     private Member member;
+
 }

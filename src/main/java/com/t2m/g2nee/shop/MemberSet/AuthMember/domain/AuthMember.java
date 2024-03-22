@@ -24,6 +24,6 @@ public class AuthMember {
     private Auth auth;
 
     @ManyToOne
-    @JoinColumn(name = "memberId", referencedColumnName = "customerId")
+    @JoinColumn(name = "memberId")
     private Member member;
 }
