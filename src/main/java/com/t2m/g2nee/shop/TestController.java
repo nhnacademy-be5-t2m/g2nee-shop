@@ -14,6 +14,6 @@ public class TestController {
 
     @GetMapping("/hello")
     public String getHello(){
-        return port + ":hello g2nee shop";
+        return "hello g2nee shop : "+port;
     }
 }
