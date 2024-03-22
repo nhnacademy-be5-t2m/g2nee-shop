@@ -10,7 +10,6 @@ import javax.persistence.*;
 @Table(name = "CategoryCoupon")
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @DiscriminatorValue("CouponType")

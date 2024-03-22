@@ -11,7 +11,6 @@ import javax.persistence.*;
 @Table(name = "BookCoupon")
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @DiscriminatorValue("CouponType")
