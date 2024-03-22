@@ -19,14 +19,13 @@ public class Coupon {
     private Long couponId;
     private Timestamp issuedDate;
     private Timestamp expirationDate;
-    private Status status;
+    private CouponStatus status;
 
     @ManyToOne
     @JoinColumn(name = "couponTypeId")
     private CouponType couponType;
-    //
 
-    public enum Status{
+    public enum CouponStatus{
         USED, NOTUSED, EXPIRED;
     }
 }
