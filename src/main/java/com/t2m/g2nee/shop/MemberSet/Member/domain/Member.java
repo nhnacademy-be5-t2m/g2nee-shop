@@ -12,9 +12,6 @@ import java.time.LocalDateTime;
 @Table(name = "Members")
 @Getter
 @Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @DiscriminatorValue("Member")
 public class Member extends Customer {
 

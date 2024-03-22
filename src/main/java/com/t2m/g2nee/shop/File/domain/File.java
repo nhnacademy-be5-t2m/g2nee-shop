@@ -1,31 +1,39 @@
-package com.t2m.g2nee.shop.ShoppingCart.domain;
+package com.t2m.g2nee.shop.File.domain;
+
 
 import com.t2m.g2nee.shop.BookSet.Book.domain.Book;
 import com.t2m.g2nee.shop.MemberSet.Member.domain.Member;
+import com.t2m.g2nee.shop.Review.domain.Review;
 import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "ShoppingCart")
+@Table(name = "Files")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ShoppingCart {
+public class File {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long shoppingCartId;
-    private int quantity;
+    private Long fileId;
+
+    private String url;
+    private String extensionName;
+    private String type;
 
     @ManyToOne
     @JoinColumn(name = "bookId")
     private Book book;
 
     @ManyToOne
+    @JoinColumn(name = "reviewId")
+    private Review review;
+
+    @ManyToOne
     @JoinColumn(name = "memberId", referencedColumnName = "customerId")
     private Member member;
-
 }
