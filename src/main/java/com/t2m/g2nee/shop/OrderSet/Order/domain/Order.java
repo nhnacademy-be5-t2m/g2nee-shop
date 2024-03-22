@@ -1,5 +1,6 @@
 package com.t2m.g2nee.shop.OrderSet.Order.domain;
 
+import com.t2m.g2nee.shop.MemberSet.Customer.domain.Customer;
 import lombok.*;
 
 import javax.persistence.*;
@@ -32,7 +33,12 @@ public class Order {
     private String detail;
     private String message;
 
-    //@ManyToOne
+    @ManyToOne
+    @JoinColumn(name = "customerId")
+    private Customer customer;
+
+    @ManyToOne
+    @JoinColumn(name = "couponId")
 
 
     public enum OrderState{
