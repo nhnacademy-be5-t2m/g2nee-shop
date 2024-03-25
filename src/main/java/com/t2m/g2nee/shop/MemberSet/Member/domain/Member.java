@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @DiscriminatorValue("Member")
 public class Member extends Customer {
-
+    
     private String username;
     private String nickname;
     private String birthday;

@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "Coupons")
+@DiscriminatorColumn
 @Getter
 @Setter
 @Builder

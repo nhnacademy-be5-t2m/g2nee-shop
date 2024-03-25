@@ -15,7 +15,7 @@ import javax.persistence.*;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@DiscriminatorValue("CouponType")
+@DiscriminatorValue("CategoryCoupon")
 public class CategoryCoupon extends CouponType {
 
 
