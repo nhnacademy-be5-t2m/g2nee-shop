@@ -2,9 +2,11 @@ package com.t2m.g2nee.shop;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
+@ConfigurationPropertiesScan
 @EnableDiscoveryClient
 public class G2neeApplication {
 
