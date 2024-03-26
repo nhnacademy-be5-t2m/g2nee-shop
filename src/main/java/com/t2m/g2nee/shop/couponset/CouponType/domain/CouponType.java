@@ -23,7 +23,7 @@ public class CouponType {
     private Integer period;
     @Enumerated(EnumType.STRING)
     private Type type;
-    private Long discount;
+    private BigDecimal discount;
     private BigDecimal minimumOrderAmount;
     private BigDecimal maximumDiscount;
 
