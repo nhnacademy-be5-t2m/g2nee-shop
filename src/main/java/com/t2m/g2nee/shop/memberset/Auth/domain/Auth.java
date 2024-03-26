@@ -15,6 +15,12 @@ public class Auth {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long authId;
-    private String authName;
+
+    @Enumerated(EnumType.STRING)
+    private AuthName authName;
+
+    public enum AuthName{
+        ROLE_ADMIN, ROLE_MEMBER
+    }
 }
 
