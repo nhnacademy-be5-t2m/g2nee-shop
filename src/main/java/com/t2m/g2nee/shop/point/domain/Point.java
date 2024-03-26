@@ -31,6 +31,6 @@ public class Point {
 
     public enum ReasonChange {
 
-        REVIEW, SINGUP, PURCHASE
+        REVIEW, SINGUP, PURCHASE, RETURN
     }
 }
