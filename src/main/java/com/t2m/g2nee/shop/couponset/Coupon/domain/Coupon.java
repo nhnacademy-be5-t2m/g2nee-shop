@@ -20,6 +20,8 @@ public class Coupon {
     private Long couponId;
     private Timestamp issuedDate;
     private Timestamp expirationDate;
+
+    @Enumerated(EnumType.STRING)
     private CouponStatus status;
 
     @ManyToOne
