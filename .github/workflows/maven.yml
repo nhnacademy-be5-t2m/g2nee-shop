@@ -18,6 +18,9 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+      env:
+      SECURE_KEY_MANAGER_PASSWORD: 0t18TjOrZAPoyxhIrITv
+      SECURE_KEY_MANAGER_APP_KEY: 500rMJPT021TnyNl/
 
     steps:
     - uses: actions/checkout@v3
