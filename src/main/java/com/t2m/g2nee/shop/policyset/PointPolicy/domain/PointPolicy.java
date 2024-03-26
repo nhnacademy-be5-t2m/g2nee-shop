@@ -18,6 +18,11 @@ public class PointPolicy {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pointPolicyId;
     private String policyName;
+    @Enumerated(EnumType.STRING)
     private String policyType;
     private BigDecimal amount;
+
+    public enum PolicyType{
+        AMOUNT, PERCENT
+    }
 }
