@@ -17,8 +17,16 @@ public class Grade {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long gradeId;
+
+    @Enumerated(EnumType.STRING)
     private String gradeName;
+    
     @OneToOne(mappedBy = "grade", optional = false)
     private Member member;
+
+    public enum GradeName{
+        NOMAL, ROYAL, GOLD, PLATINUM
+
+    }    
 
 }
