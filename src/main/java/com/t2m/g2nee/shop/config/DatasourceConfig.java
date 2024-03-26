@@ -12,12 +12,12 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Objects;
 
 @Configuration
 public class DatasourceConfig {
 
     private final NhnCloudKey nhnCloudKey;
-
     private final String URL;
 
     public DatasourceConfig(NhnCloudKey nhnCloudKey) {
@@ -79,7 +79,7 @@ public class DatasourceConfig {
                 new ParameterizedTypeReference<>() {
                 });
 
-        return exchange.getBody().getBody().getSecret().getValue();
+        return Objects.requireNonNull(exchange.getBody()).getBody().getSecret().getValue();
 
     }
 }
