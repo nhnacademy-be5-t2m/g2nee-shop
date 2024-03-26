@@ -25,4 +25,6 @@ public class CategoryPath {
     @ManyToOne
     @JoinColumn(name = "descendantId")
     private Category descendant;
+
+    private Long depth;
 }
