@@ -1,8 +1,8 @@
 package com.t2m.g2nee.shop.config;
 
 import com.t2m.g2nee.shop.properties.DataSourceProperties;
-import com.t2m.g2nee.shop.properties.KeyResponseDto;
-import com.t2m.g2nee.shop.properties.NhnCloudKey;
+import com.t2m.g2nee.shop.dto.KeyResponseDto;
+import com.t2m.g2nee.shop.properties.NhnCloudProperties;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,12 +17,12 @@ import java.util.Objects;
 @Configuration
 public class DatasourceConfig {
 
-    private final NhnCloudKey nhnCloudKey;
+    private final NhnCloudProperties nhnCloudProperties;
     private final String URL;
 
-    public DatasourceConfig(NhnCloudKey nhnCloudKey) {
-        this.nhnCloudKey = nhnCloudKey;
-        this.URL = nhnCloudKey.getUrl() + nhnCloudKey.getPath() + nhnCloudKey.getAppKey();
+    public DatasourceConfig(NhnCloudProperties nhnCloudProperties) {
+        this.nhnCloudProperties = nhnCloudProperties;
+        this.URL = nhnCloudProperties.getUrl() + nhnCloudProperties.getPath() + nhnCloudProperties.getAppKey();
 
     }
 
@@ -50,9 +50,9 @@ public class DatasourceConfig {
      **/
     public DataSourceProperties getDataSourceProperties() {
 
-        String url = getProperties(nhnCloudKey.getUrlKeyId());
-        String username = getProperties(nhnCloudKey.getUsernameKeyId());
-        String password = getProperties(nhnCloudKey.getPasswordKeyId());
+        String url = getProperties(nhnCloudProperties.getUrlKeyId());
+        String username = getProperties(nhnCloudProperties.getUsernameKeyId());
+        String password = getProperties(nhnCloudProperties.getPasswordKeyId());
 
         return DataSourceProperties.builder()
                 .url(url)

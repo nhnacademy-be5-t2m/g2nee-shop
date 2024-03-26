@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 
 @ConfigurationProperties(prefix = "nhncloud")
 @Data
-public class NhnCloudKey {
+public class NhnCloudProperties {
 
     private String url;
     private String path;
@@ -16,7 +16,7 @@ public class NhnCloudKey {
     private String passwordKeyId;
 
     @ConstructorBinding
-    public NhnCloudKey(String url, String path, String appKey, String urlKeyId, String usernameKeyId, String passwordKeyId) {
+    public NhnCloudProperties(String url, String path, String appKey, String urlKeyId, String usernameKeyId, String passwordKeyId) {
         this.url = url;
         this.path = path;
         this.appKey = appKey;

@@ -1,4 +1,4 @@
-package com.t2m.g2nee.shop.properties;
+package com.t2m.g2nee.shop.dto;
 
 import lombok.*;
 
