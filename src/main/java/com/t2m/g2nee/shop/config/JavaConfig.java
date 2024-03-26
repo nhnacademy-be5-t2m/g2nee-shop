@@ -30,6 +30,7 @@ public class JavaConfig {
     @Bean
     public DataSource dataSource() {
 
+
         DataSourceProperties dataSourceProperties = getDataSourceProperties();
 
         BasicDataSource basicDataSource = new BasicDataSource();
