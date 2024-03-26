@@ -27,9 +27,11 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: |
+        mvn -B package --file pom.xml
+        sed -i 's/nhncloud.appKey=${APP_KEY}/nhncloud.appKey=${{ secrets.APP_KEY }}/g' /src/main/resources/application.properties
       env:
-        APP_KEY : ${{ secrets.APP_KEY }}
+        APP_KEY: ${{ secrets.APP_KEY }}
 
     - name : Run SonarQube
       run : mvn sonar:sonar -Dsonar.projectKey=g2neeShop -Dsonar.host.url=${{secrets.SONAR_HOST}} -Dsonar.login=${{secrets.SONAR_TOKEN}}  
