@@ -18,10 +18,9 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-      env:
-      SECURE_KEY_MANAGER_PASSWORD: 0t18TjOrZAPoyxhIrITv
-      SECURE_KEY_MANAGER_APP_KEY: 500rMJPT021TnyNl/
-
+     env:
+      SECURE_KEY_MANAGER_PASSWORD: ${{ secrets.SECURE_KEY_MANAGER_PASSWORD }}
+      SECURE_KEY_MANAGER_APP_KEY: ${{ secrets.SECURE_KEY_MANAGER_APP_KEY }}
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 11
