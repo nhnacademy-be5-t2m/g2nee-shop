@@ -28,6 +28,8 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+      env:
+        APP_KEY: ${{ secrets.APP_KEY }}
 
     - name : Run SonarQube
       run : mvn sonar:sonar -Dsonar.projectKey=g2neeShop -Dsonar.host.url=${{secrets.SONAR_HOST}} -Dsonar.login=${{secrets.SONAR_TOKEN}}  
