@@ -19,13 +19,13 @@ public class Grade {
     private Long gradeId;
 
     @Enumerated(EnumType.STRING)
-    private String gradeName;
+    private GradeName gradeName;
     
     @OneToOne(mappedBy = "grade", optional = false)
     private Member member;
 
     public enum GradeName{
-        NOMAL, ROYAL, GOLD, PLATINUM
+        NORMAL, ROYAL, GOLD, PLATINUM
 
     }    
 

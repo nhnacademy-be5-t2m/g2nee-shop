@@ -17,7 +17,7 @@ import java.util.List;
 @Configuration
 public class JavaConfig {
 
-    private NhnCloudKey nhnCloudKey;
+    private final NhnCloudKey nhnCloudKey;
 
     private final String URL;
 
