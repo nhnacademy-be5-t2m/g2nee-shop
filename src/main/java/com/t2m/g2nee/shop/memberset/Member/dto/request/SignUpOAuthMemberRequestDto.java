@@ -9,7 +9,7 @@ import javax.validation.constraints.Pattern;
  * @author : 정지은
  * @since : 1.0
  **/
-public class SignUpOAuthMemberRequest {
+public class SignUpOAuthMemberRequestDto {
     @NotBlank
     @Pattern(regexp="^[a-zA-Z가-힣]{2,20}$", message = "영어와 한글만 사용하여 2-20자의 형식으로 작성하여 주십시오.")
     private String name;

@@ -2,7 +2,6 @@ package com.t2m.g2nee.shop.memberset.Member.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -15,7 +14,7 @@ import javax.validation.constraints.Pattern;
  **/
 @Getter
 @NoArgsConstructor
-public class SignUpMemberRequest {
+public class SignUpMemberRequestDto {
 
     @NotBlank
     @Pattern(regexp="^[a-zA-Z0-9]{4,20}$", message = "영어와 숫자만 사용하여 4-20자의 형식으로 작성하여 주십시오.")
