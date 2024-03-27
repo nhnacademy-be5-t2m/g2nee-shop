@@ -16,5 +16,5 @@ public class MemberResponse {
     private String userName;
     private String name;
     private String nickName;
-    private String authName;
+    private String grade;
 }

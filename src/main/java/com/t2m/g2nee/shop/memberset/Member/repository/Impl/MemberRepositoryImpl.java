@@ -8,4 +8,5 @@ public class MemberRepositoryImpl extends QuerydslRepositorySupport implements M
     public MemberRepositoryImpl() {
         super(Member.class);
     }
+
 }
