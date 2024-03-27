@@ -4,9 +4,9 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 
-@ConfigurationProperties(prefix = "nhncloud")
+@ConfigurationProperties(prefix = "nhncloud.key")
 @Data
-public class NhnCloudProperties {
+public class NhnCloudKeyProperties {
 
     private String url;
     private String path;
@@ -16,7 +16,8 @@ public class NhnCloudProperties {
     private String passwordKeyId;
 
     @ConstructorBinding
-    public NhnCloudProperties(String url, String path, String appKey, String urlKeyId, String usernameKeyId, String passwordKeyId) {
+    public NhnCloudKeyProperties(String url, String path, String appKey, String urlKeyId, String usernameKeyId,
+                                 String passwordKeyId) {
         this.url = url;
         this.path = path;
         this.appKey = appKey;

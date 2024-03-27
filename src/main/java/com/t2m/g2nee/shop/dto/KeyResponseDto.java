@@ -1,6 +1,9 @@
 package com.t2m.g2nee.shop.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -28,6 +31,7 @@ public class KeyResponseDto {
 
         private Secret secret;
     }
+
     @Getter
     @Setter
     @AllArgsConstructor
