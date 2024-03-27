@@ -29,6 +29,13 @@ public class Member extends Customer {
     @OneToOne
     @JoinColumn(name = "gradeId")
     private Grade grade;
+    private boolean isOAuth;
+    private Gender gender;
+
+    public enum Gender{
+        Male, Female;
+    }
+
 
     public enum MemberStatus{
 
