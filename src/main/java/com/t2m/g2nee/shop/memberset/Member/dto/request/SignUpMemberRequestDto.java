@@ -17,11 +17,11 @@ import javax.validation.constraints.Pattern;
 public class SignUpMemberRequestDto {
 
     @NotBlank
-    @Pattern(regexp="^[a-zA-Z0-9]{4,20}$", message = "영어와 숫자만 사용하여 4-20자의 형식으로 작성하여 주십시오.")
+    @Pattern(regexp="^[a-zA-Z0-9]{4,20}$|^[a-zA-Z0-9+-\\_.]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$", message = "영어와 숫자만 사용한 4-20자의 형식이나 이메일의 형식으로 작성하여 주십시오.")
     private String userName;
 
     @NotBlank
-    @Pattern(regexp="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[~?!@#$%^&*_-]).{10,20}$", message = "영어, 숫자, 특수문자를 포함하여 10-20자의 형식으로 작성하여 주십시오.")
+    @Pattern(regexp="^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[~?!@#$%^&*_-]).{8,20}$", message = "영어 숫자, 특수문자를 포함하여 8-20자의 형식으로 작성하여 주십시오.")
     private String password;
 
     @NotBlank
@@ -37,7 +37,18 @@ public class SignUpMemberRequestDto {
     private String email;
 
     @NotBlank
-    @Pattern(regexp = "^.*(?=.*\\d)(?=.{11}).*$", message = "'-'를 제외한 올바른 전화번호형식을 입력해 주십시오.")
+    @Pattern(regexp = "^.*(?=.*\\d)(?=.{11}).*$", message = "'-'를 제외한 올바른 전화번호형식으로 작성하여 주십시오.")
     private String phoneNumber;
+
+    @NotBlank
+    @Pattern(regexp = "^.*(?=.*\\d)(?=.{8}).*$",message="'-'를 제외한 ex.19990403의 형식으로 작성하여 주십시오." )
+    private String birthday;
+
+    @NotBlank
+    @Pattern(regexp = "^Male$|^Female$", message = "'Male','Female' 둘 중에 하나를 작성하여 주십시오.")
+    private String gender;
+
+    @NotBlank
+    private Boolean isOAuth;
 
 }
