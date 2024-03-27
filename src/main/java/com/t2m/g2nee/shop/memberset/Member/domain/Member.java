@@ -4,6 +4,7 @@ import com.t2m.g2nee.shop.memberset.Customer.domain.Customer;
 import com.t2m.g2nee.shop.memberset.Grade.domain.Grade;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @DiscriminatorValue("Member")
+@DynamicInsert
 public class Member extends Customer {
     
     private String username;
@@ -40,5 +42,18 @@ public class Member extends Customer {
     public enum MemberStatus{
 
         ACTIVE, QUIT, INACTIVE
+    }
+
+
+
+    @Builder
+    public Member(String email, String name, String password, String phoneNumber, String username, String nickname, String birthday, Grade grade, boolean isOAuth, String gender) {
+        super(email, name, password, phoneNumber);
+        this.username = username;
+        this.nickname = nickname;
+        this.birthday = birthday;
+        this.grade = grade;
+        this.isOAuth = isOAuth;
+        this.gender = Gender.valueOf(gender);
     }
 }
