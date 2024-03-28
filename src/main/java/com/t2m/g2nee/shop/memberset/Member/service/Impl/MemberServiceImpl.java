@@ -46,7 +46,12 @@ public class MemberServiceImpl implements MemberService {
      */
     public MemberResponse signUp(SignUpMemberRequestDto signUpDto){
 
-        //TODO : nickName, id 중복 체크 한번 더 수행, front에서 처리하지만 api로 접근하는 경우 방지
+        if (existsNickname(signUpDto.getNickName())) {
+            //TODO : custom exception 으로 받아 처리
+        }
+        if (existsUsername(signUpDto.getUserName())) {
+            //TODO : custom exception 으로 받아 처리
+        }
 
         Grade grade = gradeRepository.findByGradeId(1L);
         Member memberInfo = Member.builder()
@@ -65,6 +70,25 @@ public class MemberServiceImpl implements MemberService {
         authMemberRepository.save(new AuthMember(authRepository.findByAuthName("회원"),member));
 
         return new MemberResponse(member.getUsername(),member.getName(),member.getNickname(),member.getGrade().getGradeName().toString());
+    }
+    /**
+     * nickname의 중복을 확인하는 메소드
+     *
+     * @param nickname 중복체크하려는 nickname
+     * @return 중복 여부를 boolean으로 반환
+     */
+    public boolean existsNickname(String nickname){
+        return memberRepository.existsByNickname(nickname);
+    }
+
+    /**
+     * username의 중복을 확인하는 메소드
+     *
+     * @param username 중복체크하려는 username
+     * @return 중복 여부를 boolean으로 반환
+     */
+    public boolean existsUsername(String username){
+        return memberRepository.existsByNickname(username);
     }
 
 }
