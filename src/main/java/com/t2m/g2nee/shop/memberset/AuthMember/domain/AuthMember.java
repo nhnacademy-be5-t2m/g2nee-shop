@@ -26,4 +26,10 @@ public class AuthMember {
     @ManyToOne
     @JoinColumn(name = "memberId")
     private Member member;
+
+    @Builder
+    public AuthMember(Auth auth, Member member) {
+        this.auth = auth;
+        this.member = member;
+    }
 }
