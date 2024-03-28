@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.t2m.g2nee</groupId>
-	<artifactId>shop</artifactId>
+	<artifactId>g2nee-shop</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>shop</name>
-	<description>shop</description>
+	<name>g2nee-shop</name>
+	<description>g2nee-shop</description>
 	<properties>
 		<java.version>11</java.version>
 		<spring-cloud.version>2021.0.8</spring-cloud.version>
@@ -79,7 +79,16 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>2.0.1.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>6.2.0.Final</version>
+		</dependency>
 
 
 	</dependencies>
