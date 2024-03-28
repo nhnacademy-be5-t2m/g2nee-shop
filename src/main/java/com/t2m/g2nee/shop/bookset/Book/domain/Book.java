@@ -1,10 +1,21 @@
 package com.t2m.g2nee.shop.bookset.Book.domain;
 
 import com.t2m.g2nee.shop.bookset.Publisher.domain.Publisher;
-import lombok.*;
-
-import javax.persistence.*;
 import java.time.LocalDate;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "Books")
@@ -36,7 +47,7 @@ public class Book {
     @JoinColumn(name = "publisherId")
     private Publisher publisher;
 
-    public enum BookStatus{
+    public enum BookStatus {
 
         ONSALE, SOLDOUT, OUTOFPRINT, DELETED
 
