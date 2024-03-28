@@ -5,7 +5,6 @@ import com.t2m.g2nee.shop.properties.NhnCloudStorageProperties;
 import com.t2m.g2nee.shop.properties.NhnCloudTokenProperties;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import lombok.Data;
 import lombok.NonNull;
@@ -13,7 +12,6 @@ import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpMessageConverterExtractor;
@@ -101,12 +99,10 @@ public class ObjectService {
         String url = this.getUrl(nhnCloudStorageProperties, objectPath, objectName);
 
         // InputStream을 요청 본문에 추가할 수 있도록 RequestCallback 오버라이드
-        final RequestCallback requestCallback = new RequestCallback() {
-            public void doWithRequest(final ClientHttpRequest request) throws IOException {
-                request.getHeaders().add("Content-Type", "multipart/form-data");
-                request.getHeaders().add("X-Auth-Token", tokenId);
-                IOUtils.copy(inputStream, request.getBody());
-            }
+        final RequestCallback requestCallback = request -> {
+            request.getHeaders().add("Content-Type", "multipart/form-data");
+            request.getHeaders().add("X-Auth-Token", tokenId);
+            IOUtils.copy(inputStream, request.getBody());
         };
 
         HttpMessageConverterExtractor<String> responseExtractor
