@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @Table(name = "Members")
 @Getter
 @Setter
-@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @DiscriminatorValue("Member")

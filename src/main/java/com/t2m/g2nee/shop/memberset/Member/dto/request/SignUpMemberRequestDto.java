@@ -1,5 +1,6 @@
 package com.t2m.g2nee.shop.memberset.Member.dto.request;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import javax.validation.constraints.Pattern;
  **/
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class SignUpMemberRequestDto {
 
     @NotBlank
@@ -48,7 +50,6 @@ public class SignUpMemberRequestDto {
     @Pattern(regexp = "^Male$|^Female$", message = "'Male','Female' 둘 중에 하나를 작성하여 주십시오.")
     private String gender;
 
-    @NotBlank
     private Boolean isOAuth;
 
 }

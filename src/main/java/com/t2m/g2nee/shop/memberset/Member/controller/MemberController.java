@@ -10,10 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -28,7 +25,7 @@ import javax.validation.Valid;
 @Slf4j
 @RequestMapping("/member")
 public class MemberController {
-    private MemberServiceImpl memberService;
+    private final MemberServiceImpl memberService;
 
     /**
      * 회원가입을 처리하는 메소드
@@ -36,13 +33,14 @@ public class MemberController {
      * @param signUpDto 회원가입시 기입하는 회원정보가 입력.
      * @return 회원정보 저장 후 기본 회원정보 response 반환
      */
-    @PutMapping("/signup")
+    @PostMapping("/signup")
     public ResponseEntity<MemberResponse> memberSignUp(@Valid @RequestBody SignUpMemberRequestDto signUpDto){
         MemberResponse memberResponse = memberService.signUp(signUpDto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(memberResponse);
+
     }
 
 }
