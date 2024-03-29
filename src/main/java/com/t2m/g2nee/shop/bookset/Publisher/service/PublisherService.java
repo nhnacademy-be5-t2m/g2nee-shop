@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,7 +64,7 @@ public class PublisherService {
             return mapper.entityToDto(savePublisher);
 
         } else {
-            throw new NotFoundException(404, "출판사 정보가 없습니다.");
+            throw new NotFoundException(HttpStatus.NOT_FOUND, "출판사 정보가 없습니다.");
         }
     }
 

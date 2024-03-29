@@ -3,7 +3,6 @@ package com.t2m.g2nee.shop.advice;
 import com.t2m.g2nee.shop.exception.CustomException;
 import com.t2m.g2nee.shop.exception.ErrorResponse;
 import javax.validation.ConstraintViolationException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,11 +29,11 @@ public class CustomExceptionAdvice {
     public ResponseEntity<ErrorResponse> handleNotFoundException(CustomException e) {
 
         ErrorResponse response = ErrorResponse.builder()
-                .code(e.getCode())
+                .code(e.getHttpStatus().value())
                 .message(e.getMessage())
                 .build();
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        return ResponseEntity.status(e.getHttpStatus()).body(response);
     }
 
     /**
