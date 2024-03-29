@@ -2,9 +2,6 @@ package com.t2m.g2nee.shop.nhnstorage;
 
 import com.sun.istack.NotNull;
 import com.t2m.g2nee.shop.properties.NhnCloudStorageProperties;
-import com.t2m.g2nee.shop.properties.NhnCloudTokenProperties;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import lombok.Data;
 import lombok.NonNull;
@@ -39,40 +36,6 @@ public class ObjectService {
         this.restTemplate = new RestTemplate(requestFactory);
         this.nhnCloudStorageProperties = nhnCloudStorageProperties;
         this.authService = authService;
-    }
-
-    public static void main(String[] args) {
-        final String storageUrl = "https://kr1-api-object-storage.nhncloudservice.com/v1";
-        final String auth = "/AUTH_fcb81f74e379456b8ca0e091d351a7af";
-        final String containerName = "/g2nee";
-        final String objectPath = "/thumbnail";
-        final String objectName = "TheMartian.jpeg";
-
-        final String authUrl = "https://api-identity-infrastructure.nhncloudservice.com/v2.0";
-        final String tenantId = "fcb81f74e379456b8ca0e091d351a7af";
-        final String username = "aokagami03@gmail.com";
-        final String password = "g2nee";
-
-        NhnCloudTokenProperties nhnCloudTokenProperties =
-                new NhnCloudTokenProperties(authUrl, tenantId, username, password);
-
-        AuthService authService = new AuthService(nhnCloudTokenProperties);
-        String tokenId = authService.requestToken();
-
-        NhnCloudStorageProperties properties = new NhnCloudStorageProperties(storageUrl, auth, containerName);
-        ObjectService objectService = new ObjectService(properties, authService);
-
-        try {
-            // 파일로 부터 InputStream 생성
-            File objFile = new File(objectPath + "/" + objectName);
-            InputStream inputStream = new FileInputStream(objFile);
-
-            // 업로드
-            objectService.uploadObject(tokenId, objectPath, objectName, inputStream);
-            System.out.println("\nUpload OK");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     /**
