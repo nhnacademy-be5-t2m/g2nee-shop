@@ -11,6 +11,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * objectStorage 토큰발급 로직이 있는 Service 입니다.
+ *
+ * @author : 신동민
+ * @since : 1.0
+ */
 @Data
 @Service
 public class AuthService {
