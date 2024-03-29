@@ -1,5 +1,6 @@
 package com.t2m.g2nee.shop.memberset.Member.service.Impl;
 
+import com.t2m.g2nee.shop.exception.DuplicateException;
 import com.t2m.g2nee.shop.memberset.Auth.repository.AuthRepository;
 import com.t2m.g2nee.shop.memberset.AuthMember.domain.AuthMember;
 import com.t2m.g2nee.shop.memberset.AuthMember.repository.AuthMemberRepository;
@@ -10,8 +11,6 @@ import com.t2m.g2nee.shop.memberset.Grade.repository.GradeRepository;
 import com.t2m.g2nee.shop.memberset.Member.domain.Member;
 import com.t2m.g2nee.shop.memberset.Member.dto.request.SignUpMemberRequestDto;
 import com.t2m.g2nee.shop.memberset.Member.dto.response.MemberResponse;
-import com.t2m.g2nee.shop.memberset.Member.exception.DuplicateNicknameException;
-import com.t2m.g2nee.shop.memberset.Member.exception.DuplicateUsernameException;
 import com.t2m.g2nee.shop.memberset.Member.repository.Impl.MemberRepositoryImpl;
 import com.t2m.g2nee.shop.memberset.Member.repository.MemberRepository;
 import com.t2m.g2nee.shop.memberset.Member.service.MemberService;
@@ -45,14 +44,15 @@ public class MemberServiceImpl implements MemberService {
      *
      * @param signUpDto 회
      * @return 회원정보 저장 후 기본 회원정보 response 반환
+     * @throws DuplicateException username, nickname이 중복되는 경우 예외를 던집니다.
      */
     public MemberResponse signUp(SignUpMemberRequestDto signUpDto){
 
         if (existsNickname(signUpDto.getNickName())) {
-           throw new DuplicateNicknameException();
+           throw new DuplicateException("중복된 nickname입니다.");
         }
         if (existsUsername(signUpDto.getUserName())) {
-            throw new DuplicateUsernameException();
+            throw new DuplicateException("중복된 username입니다.");
         }
 
         Grade grade = gradeRepository.findByGradeId(1L);
