@@ -54,13 +54,13 @@ public class Member extends Customer {
 
     @Builder
     public Member(String email, String name, String password, String phoneNumber, String username, String nickname,
-                  String birthday, Grade grade, boolean isOAuth, String gender) {
+                  String birthday, Grade grade, boolean isOAuth, Gender gender) {
         super(email, name, password, phoneNumber);
         this.username = username;
         this.nickname = nickname;
         this.birthday = birthday;
         this.grade = grade;
         this.isOAuth = isOAuth;
-        this.gender = Gender.valueOf(gender);
+        this.gender = gender;
     }
 }
