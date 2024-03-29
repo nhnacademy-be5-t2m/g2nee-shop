@@ -1,10 +1,10 @@
 package com.t2m.g2nee.shop.memberset.Member.repository.Impl;
 
 import com.t2m.g2nee.shop.memberset.Member.domain.Member;
-import com.t2m.g2nee.shop.memberset.Member.repository.MemberCustomRepository;
+import com.t2m.g2nee.shop.memberset.Member.repository.MemberRepositoryCustom;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
-public class MemberRepositoryImpl extends QuerydslRepositorySupport implements MemberCustomRepository {
+public class MemberRepositoryImpl extends QuerydslRepositorySupport implements MemberRepositoryCustom {
     public MemberRepositoryImpl() {
         super(Member.class);
     }

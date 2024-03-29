@@ -9,6 +9,6 @@ import org.springframework.data.repository.NoRepositoryBean;
  * @since : 1.0
  */
 @NoRepositoryBean
-public interface MemberCustomRepository {
+public interface MemberRepositoryCustom {
 
 }
