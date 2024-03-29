@@ -13,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -27,9 +26,6 @@ import org.springframework.web.client.RestTemplate;
 public class AuthServiceTest {
 
     private RestTemplate restTemplate;
-
-    @InjectMocks
-    private AuthService authService;
     @Mock
     private NhnCloudTokenProperties properties;
     @Mock
@@ -77,9 +73,8 @@ public class AuthServiceTest {
                 httpEntity,
                 TokenResponseDto.class);
 
-        String tokenId = Objects.requireNonNull(responseEntity.getBody()).getAccess().getToken().getId();
-
         // then
+        String tokenId = Objects.requireNonNull(responseEntity.getBody()).getAccess().getToken().getId();
         assertNotNull(tokenId);
     }
 }

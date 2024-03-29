@@ -15,6 +15,12 @@ import org.springframework.web.client.HttpMessageConverterExtractor;
 import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * objectStorage 로직이 있는 Service 입니다.
+ *
+ * @author : 신동민
+ * @since : 1.0
+ */
 @Data
 @Service
 public class ObjectService {
