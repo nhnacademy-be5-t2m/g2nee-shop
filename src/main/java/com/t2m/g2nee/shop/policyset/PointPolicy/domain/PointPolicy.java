@@ -19,7 +19,7 @@ public class PointPolicy {
     private Long pointPolicyId;
     private String policyName;
     @Enumerated(EnumType.STRING)
-    private String policyType;
+    private PolicyType policyType;
     private BigDecimal amount;
 
     public enum PolicyType{

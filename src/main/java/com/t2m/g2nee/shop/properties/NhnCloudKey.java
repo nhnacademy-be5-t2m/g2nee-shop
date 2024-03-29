@@ -1,4 +1,4 @@
-package com.t2m.g2nee.shop.config;
+package com.t2m.g2nee.shop.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -8,20 +8,18 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 @Data
 public class NhnCloudKey {
 
-    private String endpoint;
+    private String url;
     private String path;
     private String appKey;
-    private String driverClassNameKeyId;
     private String urlKeyId;
     private String usernameKeyId;
     private String passwordKeyId;
 
     @ConstructorBinding
-    public NhnCloudKey(String endpoint, String path, String appKey, String driverClassNameKeyId, String urlKeyId, String usernameKeyId, String passwordKeyId) {
-        this.endpoint = endpoint;
+    public NhnCloudKey(String url, String path, String appKey, String urlKeyId, String usernameKeyId, String passwordKeyId) {
+        this.url = url;
         this.path = path;
         this.appKey = appKey;
-        this.driverClassNameKeyId = driverClassNameKeyId;
         this.urlKeyId = urlKeyId;
         this.usernameKeyId = usernameKeyId;
         this.passwordKeyId = passwordKeyId;

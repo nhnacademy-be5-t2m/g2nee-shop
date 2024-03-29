@@ -8,7 +8,6 @@ import lombok.*;
 @Builder
 public class DataSourceProperties {
 
-    private String driverClassName;
     private String url;
     private String username;
     private String password;
