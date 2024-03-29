@@ -3,6 +3,7 @@ package com.t2m.g2nee.shop.memberset.Member.dto.request;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -14,6 +15,7 @@ import javax.validation.constraints.Pattern;
  * @since : 1.0
  **/
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class SignUpMemberRequestDto {
@@ -31,7 +33,7 @@ public class SignUpMemberRequestDto {
     private String name;
 
     @NotBlank
-    @Pattern(regexp="^[a-zA-Z0-9가-힣+-\\_.]{2,10}",message = "한글,영어,숫자,'_','.'을 사용한 2-10자의 형식으로 작성하여 주십시오.")
+    @Pattern(regexp="^[a-zA-Z0-9가-힣+-\\_.]{2,10}$",message = "한글,영어,숫자,'_','.'을 사용한 2-10자의 형식으로 작성하여 주십시오.")
     private String nickName;
 
     @NotBlank
