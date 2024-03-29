@@ -1,7 +1,17 @@
 package com.t2m.g2nee.shop.memberset.Auth.domain;
-import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "Auths")
@@ -19,7 +29,7 @@ public class Auth {
     @Enumerated(EnumType.STRING)
     private AuthName authName;
 
-    public enum AuthName{
+    public enum AuthName {
         ROLE_ADMIN, ROLE_MEMBER
     }
 }

@@ -1,28 +1,31 @@
 package com.t2m.g2nee.shop.config;
 
+import com.t2m.g2nee.shop.dto.KeyResponseDto;
 import com.t2m.g2nee.shop.properties.DataSourceProperties;
-import com.t2m.g2nee.shop.properties.KeyResponseDto;
-import com.t2m.g2nee.shop.properties.NhnCloudKey;
+import com.t2m.g2nee.shop.properties.NhnCloudKeyProperties;
+import java.util.List;
+import java.util.Objects;
+import javax.sql.DataSource;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-
-import javax.sql.DataSource;
-import java.util.List;
-import java.util.Objects;
 
 @Configuration
 public class DatasourceConfig {
 
-    private final NhnCloudKey nhnCloudKey;
+    private final NhnCloudKeyProperties nhnCloudKeyProperties;
     private final String URL;
 
-    public DatasourceConfig(NhnCloudKey nhnCloudKey) {
-        this.nhnCloudKey = nhnCloudKey;
-        this.URL = nhnCloudKey.getUrl() + nhnCloudKey.getPath() + nhnCloudKey.getAppKey();
+    public DatasourceConfig(NhnCloudKeyProperties nhnCloudKeyProperties) {
+        this.nhnCloudKeyProperties = nhnCloudKeyProperties;
+        this.URL = nhnCloudKeyProperties.getUrl() + nhnCloudKeyProperties.getPath() + nhnCloudKeyProperties.getAppKey();
 
     }
 
@@ -46,13 +49,14 @@ public class DatasourceConfig {
 
     /**
      * nhncloud Api를 이용해서 DataSource properties를 가져오는 메서드
+     *
      * @return Datasource의 설정 값들이 담긴 DataSourceProperties 객체
      **/
     public DataSourceProperties getDataSourceProperties() {
 
-        String url = getProperties(nhnCloudKey.getUrlKeyId());
-        String username = getProperties(nhnCloudKey.getUsernameKeyId());
-        String password = getProperties(nhnCloudKey.getPasswordKeyId());
+        String url = getProperties(nhnCloudKeyProperties.getUrlKeyId());
+        String username = getProperties(nhnCloudKeyProperties.getUsernameKeyId());
+        String password = getProperties(nhnCloudKeyProperties.getPasswordKeyId());
 
         return DataSourceProperties.builder()
                 .url(url)
@@ -60,12 +64,14 @@ public class DatasourceConfig {
                 .password(password)
                 .build();
     }
+
     /**
      * nhncloud Api를 이용해서 properties를 가져오는 메서드
+     *
      * @param keyId nhncloud 기밀데이터를 불러오기 위한 keyId 값
-     * @return 기밀데이터의 string 값
+     * @return 기밀데이터의 string value 값
      **/
-    public String getProperties(String keyId){
+    public String getProperties(String keyId) {
 
         RestTemplate restTemplate = new RestTemplate();
 
