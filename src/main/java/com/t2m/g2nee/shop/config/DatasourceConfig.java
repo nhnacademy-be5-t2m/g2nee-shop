@@ -3,16 +3,19 @@ package com.t2m.g2nee.shop.config;
 import com.t2m.g2nee.shop.properties.DataSourceProperties;
 import com.t2m.g2nee.shop.properties.KeyResponseDto;
 import com.t2m.g2nee.shop.properties.NhnCloudKey;
+import java.util.List;
+import java.util.Objects;
+import javax.sql.DataSource;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-
-import javax.sql.DataSource;
-import java.util.List;
-import java.util.Objects;
 
 @Configuration
 public class DatasourceConfig {
@@ -46,6 +49,7 @@ public class DatasourceConfig {
 
     /**
      * nhncloud Api를 이용해서 DataSource properties를 가져오는 메서드
+     *
      * @return Datasource의 설정 값들이 담긴 DataSourceProperties 객체
      **/
     public DataSourceProperties getDataSourceProperties() {
@@ -60,12 +64,14 @@ public class DatasourceConfig {
                 .password(password)
                 .build();
     }
+
     /**
      * nhncloud Api를 이용해서 properties를 가져오는 메서드
+     *
      * @param keyId nhncloud 기밀데이터를 불러오기 위한 keyId 값
      * @return 기밀데이터의 string 값
      **/
-    public String getProperties(String keyId){
+    public String getProperties(String keyId) {
 
         RestTemplate restTemplate = new RestTemplate();
 

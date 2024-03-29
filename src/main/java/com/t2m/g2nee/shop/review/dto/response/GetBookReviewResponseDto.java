@@ -11,7 +11,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public class ResponseGetProductReviewDto {
+public class GetBookReviewResponseDto {
 
     private Long reviewId;
     private String nickname;

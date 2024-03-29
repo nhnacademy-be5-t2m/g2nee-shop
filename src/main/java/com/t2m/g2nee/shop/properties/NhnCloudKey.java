@@ -16,7 +16,8 @@ public class NhnCloudKey {
     private String passwordKeyId;
 
     @ConstructorBinding
-    public NhnCloudKey(String url, String path, String appKey, String urlKeyId, String usernameKeyId, String passwordKeyId) {
+    public NhnCloudKey(String url, String path, String appKey, String urlKeyId, String usernameKeyId,
+                       String passwordKeyId) {
         this.url = url;
         this.path = path;
         this.appKey = appKey;

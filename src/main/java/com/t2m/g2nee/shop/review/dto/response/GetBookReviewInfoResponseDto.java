@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * 회원이 본인 리뷰를 확인하는 DTO입니다.
+ * 도서 리뷰 상세를 확인하는 DTO입니다.
  *
  * @author : 박재희
  * @since : 1.0
@@ -13,12 +13,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseGetMemberReviewDto {
-    private Long reviewId;
-    private Long bookId;
-    private String title;
-    private String publisherName;
+public class GetBookReviewInfoResponseDto {
+    private Long reviewCount;
     private Integer score;
-    private String content;
 
 }
+

@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author : 박재희
  * @since : 1.0
  */
-public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewCustomRepository{
+public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewCustomRepository {
 }

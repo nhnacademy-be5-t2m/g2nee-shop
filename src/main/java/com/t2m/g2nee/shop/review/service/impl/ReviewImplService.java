@@ -2,15 +2,19 @@ package com.t2m.g2nee.shop.review.service.impl;
 
 import com.t2m.g2nee.shop.review.dto.request.RequestReviewChangeDto;
 import com.t2m.g2nee.shop.review.dto.request.RequestReviewCreateDto;
-import com.t2m.g2nee.shop.review.dto.response.ResponseGetMemberReviewDto;
-import com.t2m.g2nee.shop.review.dto.response.ResponseGetProductReviewDto;
+import com.t2m.g2nee.shop.review.dto.response.GetBookReviewInfoResponseDto;
+import com.t2m.g2nee.shop.review.dto.response.GetBookReviewResponseDto;
+import com.t2m.g2nee.shop.review.dto.response.GetMemberReviewResponseDto;
+import com.t2m.g2nee.shop.review.repository.ReviewRepository;
 import com.t2m.g2nee.shop.review.service.ReviewService;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
 /**
  * 리뷰 service 구현
  *
@@ -22,15 +26,27 @@ import org.springframework.web.multipart.MultipartFile;
 @Transactional(readOnly = true)
 public class ReviewImplService implements ReviewService {
     private static final String REVIEWTEXT = "리뷰 작성";
+    private final ReviewRepository reviewRepository;
+    //BOok repository
+    //Member repository
+    //review point
+    //point history
+    //file
 
     @Override
-    public Page<ResponseGetProductReviewDto> getProductReview(Pageable pageable, Long bookId) {
+    public Page<GetBookReviewResponseDto> getBookReview(Pageable pageable, Long bookId) {
+        return reviewRepository.findBookReviews(pageable, bookId);
+    }
+
+    @Override
+    public Optional<GetBookReviewResponseDto> getReview(Long reviewId) {
+        //return reviewRepository.findReview(reviewId).orElseThrow(() -> ChangeSetPersister.NotFoundException:new);
         return null;
     }
 
     @Override
-    public ResponseGetProductReviewDto getReview(Long reviewId) {
-        return null;
+    public GetBookReviewInfoResponseDto getReviewInfo(Long bookId) {
+        return reviewRepository.findReviewInfoByBookId(bookId);
     }
 
     @Override
@@ -39,17 +55,29 @@ public class ReviewImplService implements ReviewService {
     }
 
     @Override
-    public Page<ResponseGetMemberReviewDto> getMemberReviews(Pageable pageable, Long customerId) {
-        return null;
+    public Page<GetMemberReviewResponseDto> getMemberReviews(Pageable pageable, Long customerId) {
+        return reviewRepository.findMemberReview(pageable, customerId);
     }
 
     @Override
-    public void changeReview(Long reviewId, RequestReviewChangeDto reviewChangeDto, MultipartFile image) {
+    public void changeReview(Long reviewId, RequestReviewChangeDto reviewChangeDto,
+                             MultipartFile image) {
+        /*
+        Review review = reviewRepository.findById(reviewId)
+        .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
+         */
+
 
     }
 
     @Override
+    @Transactional
     public void reviewImageDelete(Long reviewId) {
+        /*
+        Review review = reviewRepository.findById(reviewId)
 
+                .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
+        if (Objects.nonNull(review.getFile()))
+        */
     }
 }
