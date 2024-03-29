@@ -36,15 +36,18 @@ public class MemberServiceImpl implements MemberService {
     private final AuthRepository authRepository;
     private final GradeRepository gradeRepository;
 
+
     /**
      * {@inheritDoc}
      *
      * @throws DuplicateException username, nickname이 중복되는 경우 예외를 던집니다.
      */
+    @Override
     public MemberResponse signUp(SignUpMemberRequestDto signUpDto) {
 
         if (existsNickname(signUpDto.getNickName())) {
             throw new DuplicateException("중복된 nickname입니다.");
+
         }
         if (existsUsername(signUpDto.getUserName())) {
             throw new DuplicateException("중복된 username입니다.");
@@ -61,33 +64,29 @@ public class MemberServiceImpl implements MemberService {
                 .birthday(signUpDto.getBirthday())
                 .grade(grade)
                 .isOAuth(signUpDto.getIsOAuth())
-                .gender(signUpDto.getGender())
+                .gender(Member.Gender.valueOf(signUpDto.getGender()))
                 .build();
-        Member member = (Member) customerRepository.save(memberInfo);
-        authMemberRepository.save(new AuthMember(authRepository.findByAuthName("회원"), member));
+        Member member = customerRepository.save(memberInfo);
+        authMemberRepository.save(new AuthMember(authRepository.findByAuthName("NORMAL"), member));
 
         return new MemberResponse(member.getUsername(), member.getName(), member.getNickname(),
                 member.getGrade().getGradeName().toString());
     }
 
     /**
-     * nickname의 중복을 확인하는 메소드
-     *
-     * @param nickname 중복체크하려는 nickname
-     * @return 중복 여부를 boolean으로 반환
+     * {@inheritDoc}
      */
+    @Override
     public boolean existsNickname(String nickname) {
         return memberRepository.existsByNickname(nickname);
     }
 
     /**
-     * username의 중복을 확인하는 메소드
-     *
-     * @param username 중복체크하려는 username
-     * @return 중복 여부를 boolean으로 반환
+     * {@inheritDoc}
      */
+    @Override
     public boolean existsUsername(String username) {
-        return memberRepository.existsByNickname(username);
+        return memberRepository.existsByUsername(username);
     }
 
 }

@@ -12,4 +12,20 @@ public interface MemberService {
      * @return 회원정보 저장 후 기본 회원정보 response 반환
      */
     MemberResponse signUp(SignUpMemberRequestDto signUpDto);
+
+    /**
+     * nickname의 중복을 확인하는 메소드
+     *
+     * @param nickname 중복체크하려는 nickname
+     * @return 중복 여부를 boolean으로 반환
+     */
+    boolean existsNickname(String nickname);
+
+    /**
+     * username의 중복을 확인하는 메소드
+     *
+     * @param username 중복체크하려는 username
+     * @return 중복 여부를 boolean으로 반환
+     */
+    boolean existsUsername(String username);
 }
