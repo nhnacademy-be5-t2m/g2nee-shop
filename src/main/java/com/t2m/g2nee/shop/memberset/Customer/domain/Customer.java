@@ -7,7 +7,6 @@ import javax.persistence.*;
 
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn
-@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -27,4 +26,11 @@ public class Customer {
 
     private String password;
 
+
+    public Customer(String email, String name,String password,String phoneNumber){
+        this.name = name;
+        this.phoneNumber=phoneNumber;
+        this.email=email;
+        this.password=password;
+    }
 }
