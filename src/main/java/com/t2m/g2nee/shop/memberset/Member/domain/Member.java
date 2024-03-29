@@ -2,13 +2,6 @@ package com.t2m.g2nee.shop.memberset.Member.domain;
 
 import com.t2m.g2nee.shop.memberset.Customer.domain.Customer;
 import com.t2m.g2nee.shop.memberset.Grade.domain.Grade;
-
-import lombok.*;
-import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.DynamicInsert;
-
-import javax.persistence.*;
-
 import java.time.LocalDateTime;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -18,10 +11,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.DynamicInsert;
 
 @Entity
 @Table(name = "Members")
@@ -47,7 +41,7 @@ public class Member extends Customer {
     private boolean isOAuth;
     private Gender gender;
 
-    public enum Gender{
+    public enum Gender {
         Male, Female;
     }
 
@@ -58,9 +52,9 @@ public class Member extends Customer {
     }
 
 
-
     @Builder
-    public Member(String email, String name, String password, String phoneNumber, String username, String nickname, String birthday, Grade grade, boolean isOAuth, String gender) {
+    public Member(String email, String name, String password, String phoneNumber, String username, String nickname,
+                  String birthday, Grade grade, boolean isOAuth, String gender) {
         super(email, name, password, phoneNumber);
         this.username = username;
         this.nickname = nickname;

@@ -10,8 +10,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @EnableDiscoveryClient
 public class G2neeApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(G2neeApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(G2neeApplication.class, args);
+    }
 
 }
