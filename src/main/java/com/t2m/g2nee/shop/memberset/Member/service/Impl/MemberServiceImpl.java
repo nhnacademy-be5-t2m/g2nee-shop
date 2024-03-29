@@ -10,6 +10,8 @@ import com.t2m.g2nee.shop.memberset.Grade.repository.GradeRepository;
 import com.t2m.g2nee.shop.memberset.Member.domain.Member;
 import com.t2m.g2nee.shop.memberset.Member.dto.request.SignUpMemberRequestDto;
 import com.t2m.g2nee.shop.memberset.Member.dto.response.MemberResponse;
+import com.t2m.g2nee.shop.memberset.Member.exception.DuplicateNicknameException;
+import com.t2m.g2nee.shop.memberset.Member.exception.DuplicateUsernameException;
 import com.t2m.g2nee.shop.memberset.Member.repository.Impl.MemberRepositoryImpl;
 import com.t2m.g2nee.shop.memberset.Member.repository.MemberRepository;
 import com.t2m.g2nee.shop.memberset.Member.service.MemberService;
@@ -47,10 +49,10 @@ public class MemberServiceImpl implements MemberService {
     public MemberResponse signUp(SignUpMemberRequestDto signUpDto){
 
         if (existsNickname(signUpDto.getNickName())) {
-            //TODO : custom exception 으로 받아 처리
+           throw new DuplicateNicknameException();
         }
         if (existsUsername(signUpDto.getUserName())) {
-            //TODO : custom exception 으로 받아 처리
+            throw new DuplicateUsernameException();
         }
 
         Grade grade = gradeRepository.findByGradeId(1L);
