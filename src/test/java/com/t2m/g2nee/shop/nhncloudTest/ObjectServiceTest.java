@@ -25,7 +25,7 @@ import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.RestTemplate;
 
 @ExtendWith(MockitoExtension.class)
-public class ObjectServiceTest {
+class ObjectServiceTest {
 
     private RestTemplate restTemplate;
 

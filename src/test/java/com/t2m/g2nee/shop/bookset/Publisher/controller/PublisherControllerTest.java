@@ -1,13 +1,23 @@
 package com.t2m.g2nee.shop.bookset.Publisher.controller;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.t2m.g2nee.shop.bookset.Publisher.domain.Publisher;
 import com.t2m.g2nee.shop.bookset.Publisher.dto.PublisherDto;
+import com.t2m.g2nee.shop.bookset.Publisher.mapper.PublisherMapper;
+import com.t2m.g2nee.shop.bookset.Publisher.repository.PublisherRepository;
+import com.t2m.g2nee.shop.bookset.Publisher.service.PublisherService;
+import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -15,13 +25,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class PublisherControllerTest {
+class PublisherControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -29,24 +40,115 @@ public class PublisherControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @MockBean
+    private PublisherService publisherService;
+
+    @MockBean
+    private PublisherMapper mapper;
+
+
     @Test
     @DisplayName("출판사 생성 컨트롤러 테스트")
-    public void testPostPublisher() throws Exception {
+    void testPostPublisher() throws Exception {
 
+        // given
         PublisherDto.Request request = getRequest();
+        PublisherDto.Response response = getResponse();
 
         String requestJson = objectMapper.writeValueAsString(request);
 
+        when(publisherService.registerPublisher(any(Publisher.class))).thenReturn(response);
 
+        //when
         ResultActions resultActions = mockMvc.perform(post("/shop/publisher")
-                        .content(requestJson)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print());
+                .content(requestJson)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON));
 
+        //then
         resultActions.andExpect(status().isCreated())
                 .andExpect(jsonPath("$.publisherName").value(request.getPublisherName()))
                 .andExpect(jsonPath("$.publisherEngName").value(request.getPublisherEngName()));
+    }
+
+    @Test
+    @DisplayName("출판사 수정 컨트롤러 테스트")
+    void testUpdatePublisher() throws Exception {
+
+        //given
+        PublisherDto.Request request = getModifyRequest();;
+        PublisherDto.Response modifyresponse = getModifiedResponse();
+        Publisher publisher = getPublisher();
+
+        String requestJson = objectMapper.writeValueAsString(request);
+
+        when(publisherService.updatePublisher(any(Publisher.class))).thenReturn(modifyresponse);
+
+        //when  //then
+        ResultActions resultActions = mockMvc.perform(patch("/shop/publisher/{publisherId}", publisher.getPublisherId())
+                .content(requestJson)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON));
+
+
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.publisherName").value(request.getPublisherName()))
+                .andExpect(jsonPath("$.publisherEngName").value(request.getPublisherEngName()));
+    }
+
+    @Test
+    @DisplayName("출판사 리스트 조회 컨트롤러 테스트")
+    void testGetPublisherList() throws Exception {
+
+        //given
+        List<Publisher> publisherList = getList();
+        List<PublisherDto.Response> responses = getResponseList();
+        int page = 1;
+        int size = 10;
+        int totalPage = (int) Math.ceil((double) publisherList.size() / size);
+        PageResponse<PublisherDto.Response> pageResponse = PageResponse.<PublisherDto.Response>builder()
+                .data(responses)
+                .totalPage(totalPage)
+                .currentPage(page)
+                .build();
+
+        when(publisherService.getPublisherList(page)).thenReturn(pageResponse);
+        when(mapper.entitiesToDtos(publisherList)).thenReturn(responses);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(get("/shop/publisher")
+                .param("page", String.valueOf(page))
+                .param("size", String.valueOf(size))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON));
+
+        //then
+        resultActions.andExpect(status().isOk())
+                .andExpect(jsonPath("$.data[0].publisherName").value(responses.get(0).getPublisherName()))
+                .andExpect(jsonPath("$.data[0].publisherEngName").value(responses.get(0).getPublisherEngName()))
+                .andExpect(jsonPath("$.data[1].publisherName").value(responses.get(1).getPublisherName()))
+                .andExpect(jsonPath("$.data[1].publisherEngName").value(responses.get(1).getPublisherEngName()))
+                .andExpect(jsonPath("$.data[2].publisherName").value(responses.get(2).getPublisherName()))
+                .andExpect(jsonPath("$.data[2].publisherEngName").value(responses.get(2).getPublisherEngName()))
+                .andExpect(jsonPath("$.currentPage").value(page))
+                .andExpect(jsonPath("$.totalPage").value(totalPage));
+    }
+
+    @Test
+    @DisplayName("출판사 삭제 컨트롤러 테스트")
+    void deletePublisherTest() throws Exception {
+
+        //given
+        Publisher publisher = getPublisher();
+
+
+        doNothing().when(publisherService).deletePublisher(publisher.getPublisherId());
+
+        //when
+        mockMvc.perform(delete("/shop/publisher/{publisherId}", publisher.getPublisherId()))
+                .andExpect(status().isNoContent());
+
     }
 
 
@@ -83,7 +185,7 @@ public class PublisherControllerTest {
     private PublisherDto.Request getRequest() {
 
         return PublisherDto.Request.builder()
-                .publisherEngName("출판사1")
+                .publisherName("출판사1")
                 .publisherEngName("publisher1")
                 .build();
     }
@@ -92,7 +194,7 @@ public class PublisherControllerTest {
 
 
         return PublisherDto.Request.builder()
-                .publisherEngName("출판사2")
+                .publisherName("출판사2")
                 .publisherEngName("publisher2")
                 .build();
     }
@@ -101,7 +203,7 @@ public class PublisherControllerTest {
 
         return Publisher.builder()
                 .publisherId(1L)
-                .publisherEngName("출판사1")
+                .publisherName("출판사1")
                 .publisherEngName("publisher1")
                 .build();
     }
@@ -110,7 +212,7 @@ public class PublisherControllerTest {
 
         return Publisher.builder()
                 .publisherId(1L)
-                .publisherEngName("출판사2")
+                .publisherName("출판사2")
                 .publisherEngName("publisher2")
                 .build();
     }
@@ -120,7 +222,7 @@ public class PublisherControllerTest {
 
         return PublisherDto.Response.builder()
                 .publisherId(1L)
-                .publisherEngName("출판사1")
+                .publisherName("출판사1")
                 .publisherEngName("publisher1")
                 .build();
     }
@@ -129,8 +231,9 @@ public class PublisherControllerTest {
 
         return PublisherDto.Response.builder()
                 .publisherId(1L)
-                .publisherEngName("출판사2")
+                .publisherName("출판사2")
                 .publisherEngName("publisher2")
                 .build();
     }
+
 }
