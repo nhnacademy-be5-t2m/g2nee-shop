@@ -4,22 +4,19 @@ import com.t2m.g2nee.shop.exception.DuplicateException;
 import com.t2m.g2nee.shop.memberset.Auth.repository.AuthRepository;
 import com.t2m.g2nee.shop.memberset.AuthMember.domain.AuthMember;
 import com.t2m.g2nee.shop.memberset.AuthMember.repository.AuthMemberRepository;
-import com.t2m.g2nee.shop.memberset.Customer.domain.Customer;
 import com.t2m.g2nee.shop.memberset.Customer.repository.CustomerRepository;
 import com.t2m.g2nee.shop.memberset.Grade.domain.Grade;
 import com.t2m.g2nee.shop.memberset.Grade.repository.GradeRepository;
 import com.t2m.g2nee.shop.memberset.Member.domain.Member;
 import com.t2m.g2nee.shop.memberset.Member.dto.request.SignUpMemberRequestDto;
 import com.t2m.g2nee.shop.memberset.Member.dto.response.MemberResponse;
-import com.t2m.g2nee.shop.memberset.Member.repository.Impl.MemberRepositoryImpl;
 import com.t2m.g2nee.shop.memberset.Member.repository.MemberRepository;
 import com.t2m.g2nee.shop.memberset.Member.service.MemberService;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
 
 /**
  * 회원 정보를 위한 service 입니다.
@@ -33,23 +30,21 @@ import javax.transaction.Transactional;
 @RequiredArgsConstructor
 @Transactional
 public class MemberServiceImpl implements MemberService {
-    MemberRepository memberRepository;
-    AuthMemberRepository authMemberRepository;
-    CustomerRepository customerRepository;
-    AuthRepository authRepository;
-    GradeRepository gradeRepository;
+    private final MemberRepository memberRepository;
+    private final AuthMemberRepository authMemberRepository;
+    private final CustomerRepository customerRepository;
+    private final AuthRepository authRepository;
+    private final GradeRepository gradeRepository;
 
     /**
-     * 회원의 정보를 받아 회원가입을 하는 메소드
+     * {@inheritDoc}
      *
-     * @param signUpDto 회
-     * @return 회원정보 저장 후 기본 회원정보 response 반환
      * @throws DuplicateException username, nickname이 중복되는 경우 예외를 던집니다.
      */
-    public MemberResponse signUp(SignUpMemberRequestDto signUpDto){
+    public MemberResponse signUp(SignUpMemberRequestDto signUpDto) {
 
         if (existsNickname(signUpDto.getNickName())) {
-           throw new DuplicateException("중복된 nickname입니다.");
+            throw new DuplicateException("중복된 nickname입니다.");
         }
         if (existsUsername(signUpDto.getUserName())) {
             throw new DuplicateException("중복된 username입니다.");
@@ -69,17 +64,19 @@ public class MemberServiceImpl implements MemberService {
                 .gender(signUpDto.getGender())
                 .build();
         Member member = (Member) customerRepository.save(memberInfo);
-        authMemberRepository.save(new AuthMember(authRepository.findByAuthName("회원"),member));
+        authMemberRepository.save(new AuthMember(authRepository.findByAuthName("회원"), member));
 
-        return new MemberResponse(member.getUsername(),member.getName(),member.getNickname(),member.getGrade().getGradeName().toString());
+        return new MemberResponse(member.getUsername(), member.getName(), member.getNickname(),
+                member.getGrade().getGradeName().toString());
     }
+
     /**
      * nickname의 중복을 확인하는 메소드
      *
      * @param nickname 중복체크하려는 nickname
      * @return 중복 여부를 boolean으로 반환
      */
-    public boolean existsNickname(String nickname){
+    public boolean existsNickname(String nickname) {
         return memberRepository.existsByNickname(nickname);
     }
 
@@ -89,7 +86,7 @@ public class MemberServiceImpl implements MemberService {
      * @param username 중복체크하려는 username
      * @return 중복 여부를 boolean으로 반환
      */
-    public boolean existsUsername(String username){
+    public boolean existsUsername(String username) {
         return memberRepository.existsByNickname(username);
     }
 
