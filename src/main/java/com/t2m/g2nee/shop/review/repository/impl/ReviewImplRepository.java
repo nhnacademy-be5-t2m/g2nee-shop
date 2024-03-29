@@ -41,7 +41,7 @@ public class ReviewImplRepository extends QuerydslRepositorySupport
 
     @Override
     public GetBookReviewInfoResponseDto findReviewInfoByBookId(Long bookId) {
-        return Optional.empty();
+        return null;
     }
 
 

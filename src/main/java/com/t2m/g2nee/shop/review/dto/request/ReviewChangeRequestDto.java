@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
  */
 @Getter
 @NoArgsConstructor
-public class RequestReviewChangeDto {
+public class ReviewChangeRequestDto {
     @NotNull(message = "별점을 입력하십시오")
     @Min(value = 1, message = "최소 1점이어야 합니다")
     @Max(value = 5, message = "5점 이햐여야 합니다")

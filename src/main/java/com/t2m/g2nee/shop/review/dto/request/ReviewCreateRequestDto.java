@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
  */
 @Getter
 @NoArgsConstructor
-public class RequestReviewCreateDto {
+public class ReviewCreateRequestDto {
     @NotNull(message = "회원 id를 입력해주세요")
     private Long customerId;
     @NotNull(message = "도서 id를 입력하시오")

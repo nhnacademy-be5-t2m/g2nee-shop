@@ -1,7 +1,7 @@
 package com.t2m.g2nee.shop.review.service;
 
-import com.t2m.g2nee.shop.review.dto.request.RequestReviewChangeDto;
-import com.t2m.g2nee.shop.review.dto.request.RequestReviewCreateDto;
+import com.t2m.g2nee.shop.review.dto.request.ReviewChangeRequestDto;
+import com.t2m.g2nee.shop.review.dto.request.ReviewCreateRequestDto;
 import com.t2m.g2nee.shop.review.dto.response.GetBookReviewInfoResponseDto;
 import com.t2m.g2nee.shop.review.dto.response.GetBookReviewResponseDto;
 import com.t2m.g2nee.shop.review.dto.response.GetMemberReviewResponseDto;
@@ -22,7 +22,7 @@ public interface ReviewService {
      *
      * @param reviewCreateDto 리뷰 생성에 필요한 정보 가진 dto
      */
-    void createReview(RequestReviewCreateDto reviewCreateDto, MultipartFile image);
+    void createReview(ReviewCreateRequestDto reviewCreateDto, MultipartFile image);
 
     /**
      * 도서 리뷰 리스트 page 조회
@@ -61,7 +61,7 @@ public interface ReviewService {
      *
      * @param reviewChangeDto 리뷰 수정 데이터 가진 dto
      */
-    void changeReview(Long reviewId, RequestReviewChangeDto reviewChangeDto, MultipartFile image);
+    void changeReview(Long reviewId, ReviewChangeRequestDto reviewChangeDto, MultipartFile image);
 
     /**
      * 리뷰 수정하며 이미지 삭제

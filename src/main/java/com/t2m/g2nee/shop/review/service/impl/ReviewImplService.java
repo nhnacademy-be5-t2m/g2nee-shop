@@ -1,7 +1,7 @@
 package com.t2m.g2nee.shop.review.service.impl;
 
-import com.t2m.g2nee.shop.review.dto.request.RequestReviewChangeDto;
-import com.t2m.g2nee.shop.review.dto.request.RequestReviewCreateDto;
+import com.t2m.g2nee.shop.review.dto.request.ReviewChangeRequestDto;
+import com.t2m.g2nee.shop.review.dto.request.ReviewCreateRequestDto;
 import com.t2m.g2nee.shop.review.dto.response.GetBookReviewInfoResponseDto;
 import com.t2m.g2nee.shop.review.dto.response.GetBookReviewResponseDto;
 import com.t2m.g2nee.shop.review.dto.response.GetMemberReviewResponseDto;
@@ -50,7 +50,7 @@ public class ReviewImplService implements ReviewService {
     }
 
     @Override
-    public void createReview(RequestReviewCreateDto reviewCreateDto, MultipartFile image) {
+    public void createReview(ReviewCreateRequestDto reviewCreateDto, MultipartFile image) {
 
     }
 
@@ -60,7 +60,7 @@ public class ReviewImplService implements ReviewService {
     }
 
     @Override
-    public void changeReview(Long reviewId, RequestReviewChangeDto reviewChangeDto,
+    public void changeReview(Long reviewId, ReviewChangeRequestDto reviewChangeDto,
                              MultipartFile image) {
         /*
         Review review = reviewRepository.findById(reviewId)
