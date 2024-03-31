@@ -32,7 +32,8 @@ public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport impl
          */
 
         List<Category> subCategories = from(category)
-                .innerJoin(category, categoryPath.descendant)
+                .innerJoin(categoryPath)
+                .on(category.categoryId.eq(categoryPath.descendant.categoryId))
                 .where(categoryPath.ancestor.categoryId.eq(categoryId)
                         .and(categoryPath.depth.eq(1L)))
                 .select(category)
@@ -67,7 +68,7 @@ public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport impl
          */
 
         List<Category> rootCategories = from(category)
-                .leftJoin(categoryPath.descendant, category)
+                .leftJoin(categoryPath)
                 .on(category.categoryId.eq(categoryPath.descendant.categoryId).and(categoryPath.depth.gt(0)))
                 .where(categoryPath.descendant.categoryId.isNull())
                 .select(category)
@@ -80,7 +81,7 @@ public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport impl
          * WHERE p.descendantId IS NULL;
          */
         JPQLQuery<Long> count = from(category)
-                .leftJoin(categoryPath.descendant, category)
+                .leftJoin(categoryPath)
                 .on(category.categoryId.eq(categoryPath.descendant.categoryId).and(categoryPath.depth.gt(0)))
                 .where(categoryPath.descendant.categoryId.isNull())
                 .select(category.categoryId.count());

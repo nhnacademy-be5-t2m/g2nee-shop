@@ -59,7 +59,7 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
      */
     @Override
     public Page<CategoryInfoDto> getRootCategories(Pageable pageable) {
-        Page<Category> categories = categoryRepository.findAll(pageable);
+        Page<Category> categories = categoryRepository.getRootCategories(pageable);
         List<CategoryInfoDto> categoryInfoDtoList = categories.getContent().stream()
                 .map(this::convertToCategoryInfoDto)
                 .collect(Collectors.toList());

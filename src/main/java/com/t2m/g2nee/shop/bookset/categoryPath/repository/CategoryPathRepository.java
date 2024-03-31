@@ -18,7 +18,6 @@ public interface CategoryPathRepository extends JpaRepository<CategoryPath, Long
     /**
      * existsByDescendant_CategoryId: CategoryPath에 descendantId에 해당하는 경로가 있는지 확인
      */
-    boolean existsByDescendant_CategoryId(Long descendantId);
 
     void deleteByAncestor_CategoryId(Long ancestorId);
 
