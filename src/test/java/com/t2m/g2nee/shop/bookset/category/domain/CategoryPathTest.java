@@ -1,9 +1,9 @@
-package com.t2m.g2nee.shop.bookset.categoryPath.domain;
+package com.t2m.g2nee.shop.bookset.category.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.t2m.g2nee.shop.bookset.category.domain.Category;
 import com.t2m.g2nee.shop.bookset.category.repository.CategoryRepository;
+import com.t2m.g2nee.shop.bookset.categoryPath.domain.CategoryPath;
 import com.t2m.g2nee.shop.bookset.categoryPath.repository.CategoryPathRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,4 +46,5 @@ class CategoryPathTest {
         assertThat(testCategoryPath.getDescendant()).isEqualTo(categoryPath.getDescendant());
         assertThat(testCategoryPath.getDepth()).isEqualTo(categoryPath.getDepth());
     }
+
 }
