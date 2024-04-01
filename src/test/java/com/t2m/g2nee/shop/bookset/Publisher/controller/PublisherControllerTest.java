@@ -1,7 +1,7 @@
 package com.t2m.g2nee.shop.bookset.Publisher.controller;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -11,15 +11,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.t2m.g2nee.shop.bookset.Publisher.domain.Publisher;
 import com.t2m.g2nee.shop.bookset.Publisher.dto.PublisherDto;
 import com.t2m.g2nee.shop.bookset.Publisher.mapper.PublisherMapper;
-import com.t2m.g2nee.shop.bookset.Publisher.repository.PublisherRepository;
 import com.t2m.g2nee.shop.bookset.Publisher.service.PublisherService;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -45,6 +47,51 @@ class PublisherControllerTest {
 
     @MockBean
     private PublisherMapper mapper;
+
+    @Test
+    @DisplayName("한글 유효성 검사 테스트")
+    void testKorValidation() throws Exception {
+
+        PublisherDto.Request request =  PublisherDto.Request.builder()
+                .publisherName("eng")
+                .publisherEngName("eng")
+                .build();
+
+        String requestJson = objectMapper.writeValueAsString(request);
+
+        when(publisherService.registerPublisher(any(Publisher.class))).thenReturn(
+                PublisherDto.Response.class.newInstance());
+
+        ResultActions resultActions = mockMvc.perform(post("/shop/publisher")
+                .content(requestJson)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON));
+
+        resultActions.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(400));
+    }
+    @Test
+    @DisplayName("영문 유효성 검사 테스트")
+    void testEngValidation() throws Exception {
+
+        PublisherDto.Request request =  PublisherDto.Request.builder()
+                .publisherName("eng")
+                .publisherEngName("eng")
+                .build();
+
+        String requestJson = objectMapper.writeValueAsString(request);
+
+        when(publisherService.registerPublisher(any(Publisher.class))).thenReturn(
+                PublisherDto.Response.class.newInstance());
+
+        ResultActions resultActions = mockMvc.perform(post("/shop/publisher")
+                .content(requestJson)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON));
+
+        resultActions.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(400));
+    }
 
 
     @Test
@@ -125,15 +172,18 @@ class PublisherControllerTest {
 
         //then
         resultActions.andExpect(status().isOk())
-                .andExpect(jsonPath("$.data[0].publisherName").value(responses.get(0).getPublisherName()))
-                .andExpect(jsonPath("$.data[0].publisherEngName").value(responses.get(0).getPublisherEngName()))
-                .andExpect(jsonPath("$.data[1].publisherName").value(responses.get(1).getPublisherName()))
-                .andExpect(jsonPath("$.data[1].publisherEngName").value(responses.get(1).getPublisherEngName()))
-                .andExpect(jsonPath("$.data[2].publisherName").value(responses.get(2).getPublisherName()))
-                .andExpect(jsonPath("$.data[2].publisherEngName").value(responses.get(2).getPublisherEngName()))
                 .andExpect(jsonPath("$.currentPage").value(page))
                 .andExpect(jsonPath("$.totalPage").value(totalPage));
+
+        for (int i = 0; i < responses.size(); i++) {
+            resultActions.andExpect(
+                            jsonPath("$.data[" + i + "].publisherName").value(responses.get(i).getPublisherName()))
+                    .andExpect(jsonPath("$.data[" + i + "].publisherEngName").value(
+                            responses.get(i).getPublisherEngName()));
+        }
+
     }
+
 
     @Test
     @DisplayName("출판사 삭제 컨트롤러 테스트")
