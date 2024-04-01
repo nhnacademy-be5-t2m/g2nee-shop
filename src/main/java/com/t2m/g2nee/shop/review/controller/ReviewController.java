@@ -3,7 +3,6 @@ package com.t2m.g2nee.shop.review.controller;
 import com.t2m.g2nee.shop.review.dto.response.GetBookReviewInfoResponseDto;
 import com.t2m.g2nee.shop.review.dto.response.GetBookReviewResponseDto;
 import com.t2m.g2nee.shop.review.service.ReviewService;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -44,7 +43,7 @@ public class ReviewController {
      * @return 리뷰 담은 dto
      */
     @GetMapping("/api/review/{reviewId}")
-    public ResponseEntity<Optional<GetBookReviewResponseDto>> reviewInfo(@PathVariable Long reviewId) {
+    public ResponseEntity<GetBookReviewResponseDto> reviewInfo(@PathVariable Long reviewId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(reviewService.getReview(reviewId));

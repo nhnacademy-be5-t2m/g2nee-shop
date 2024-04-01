@@ -7,7 +7,6 @@ import com.t2m.g2nee.shop.review.dto.response.GetBookReviewResponseDto;
 import com.t2m.g2nee.shop.review.dto.response.GetMemberReviewResponseDto;
 import com.t2m.g2nee.shop.review.repository.ReviewRepository;
 import com.t2m.g2nee.shop.review.service.ReviewService;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,8 +38,8 @@ public class ReviewImplService implements ReviewService {
     }
 
     @Override
-    public Optional<GetBookReviewResponseDto> getReview(Long reviewId) {
-        //return reviewRepository.findReview(reviewId).orElseThrow(() -> ChangeSetPersister.NotFoundException:new);
+    public GetBookReviewResponseDto getReview(Long reviewId) {
+        //return reviewRepository.findReview(reviewId);
         return null;
     }
 

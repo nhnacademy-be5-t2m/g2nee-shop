@@ -5,7 +5,6 @@ import com.t2m.g2nee.shop.review.dto.request.ReviewCreateRequestDto;
 import com.t2m.g2nee.shop.review.dto.response.GetBookReviewInfoResponseDto;
 import com.t2m.g2nee.shop.review.dto.response.GetBookReviewResponseDto;
 import com.t2m.g2nee.shop.review.dto.response.GetMemberReviewResponseDto;
-import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,7 +37,7 @@ public interface ReviewService {
      * @param reviewId 리뷰 번호
      * @return 리뷰 dto
      */
-    Optional<GetBookReviewResponseDto> getReview(Long reviewId);
+    GetBookReviewResponseDto getReview(Long reviewId);
 
     /**
      * 도서 리뷰 정보 간단 조회
