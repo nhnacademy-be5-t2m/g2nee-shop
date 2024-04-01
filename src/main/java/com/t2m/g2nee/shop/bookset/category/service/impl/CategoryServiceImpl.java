@@ -4,6 +4,7 @@ package com.t2m.g2nee.shop.bookset.category.service.impl;
 import com.t2m.g2nee.shop.bookset.category.domain.Category;
 import com.t2m.g2nee.shop.bookset.category.dto.request.CategorySaveDto;
 import com.t2m.g2nee.shop.bookset.category.dto.request.CategoryUpdateDto;
+import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryInfoDto;
 import com.t2m.g2nee.shop.bookset.category.service.CategoryBasicService;
 import com.t2m.g2nee.shop.bookset.category.service.CategoryService;
 import com.t2m.g2nee.shop.bookset.categoryPath.domain.CategoryPath;
@@ -38,7 +39,7 @@ public class CategoryServiceImpl implements CategoryService {
      */
 
     @Override
-    public Category saveCategory(CategorySaveDto categorySaveDto) {
+    public CategoryInfoDto saveCategory(CategorySaveDto categorySaveDto) {
         Category category = new Category(
                 categorySaveDto.getCategoryName(), categorySaveDto.getCategoryEngName()
         );
@@ -49,18 +50,22 @@ public class CategoryServiceImpl implements CategoryService {
 
         categoryPathBasicService.saveCategoryPath(new CategoryPath(category, category, depth++));
 
-        List<Category> ancestorIdList = categoryBasicService.getAncestorList(categorySaveDto.getAncestorCategoryId());
-        if (!ancestorIdList.isEmpty()) {
-            for (Category ancestor : ancestorIdList) {
-                CategoryPath categoryPath = new CategoryPath(
-                        ancestor, category, depth++
-                );
+        if (categorySaveDto.getAncestorCategoryId() != 0L) {
+            List<Category> ancestorIdList =
+                    categoryBasicService.getAncestorList(categorySaveDto.getAncestorCategoryId());
 
-                categoryPathBasicService.saveCategoryPath(categoryPath);
+            if (!ancestorIdList.isEmpty()) {
+                for (Category ancestor : ancestorIdList) {
+                    CategoryPath categoryPath = new CategoryPath(
+                            ancestor, category, depth++
+                    );
+
+                    categoryPathBasicService.saveCategoryPath(categoryPath);
+                }
             }
         }
 
-        return category;
+        return new CategoryInfoDto(category);
     }
 
     /**
@@ -71,7 +76,7 @@ public class CategoryServiceImpl implements CategoryService {
      * @return
      */
     @Override
-    public Category updateCategory(CategoryUpdateDto categoryUpdateDto) {
+    public CategoryInfoDto updateCategory(CategoryUpdateDto categoryUpdateDto) {
         Category category = new Category(
                 categoryUpdateDto.getCategoryId(), categoryUpdateDto.getCategoryName(),
                 categoryUpdateDto.getCategoryEngName()
@@ -82,16 +87,19 @@ public class CategoryServiceImpl implements CategoryService {
 
         Long depth = 1L;
 
-        List<Category> ancestorIdList = categoryBasicService.getAncestorList(categoryUpdateDto.getAncestorCategoryId());
-        for (Category ancestor : ancestorIdList) {
-            CategoryPath categoryPath = new CategoryPath(
-                    ancestor, category, depth++
-            );
+        if (categoryUpdateDto.getAncestorCategoryId() != 0L) {
+            List<Category> ancestorIdList =
+                    categoryBasicService.getAncestorList(categoryUpdateDto.getAncestorCategoryId());
+            for (Category ancestor : ancestorIdList) {
+                CategoryPath categoryPath = new CategoryPath(
+                        ancestor, category, depth++
+                );
 
-            categoryPathBasicService.saveCategoryPath(categoryPath);
+                categoryPathBasicService.saveCategoryPath(categoryPath);
+            }
         }
 
-        return category;
+        return new CategoryInfoDto(category);
     }
 
     /**
@@ -102,7 +110,7 @@ public class CategoryServiceImpl implements CategoryService {
      */
     @Override
     public void deleteCategory(Long categoryId) {
+        categoryPathBasicService.deleteCategoryPathBasic(categoryId);//FK제약조건 때문에 path먼저 지워야 함
         categoryBasicService.deleteCategoryBasic(categoryId);
-        categoryPathBasicService.deleteCategoryPathBasic(categoryId);
     }
 }
