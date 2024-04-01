@@ -1,6 +1,6 @@
 package com.t2m.g2nee.shop.bookset.Book.domain;
 
-import com.t2m.g2nee.shop.bookset.Publisher.domain.Publisher;
+import com.t2m.g2nee.shop.bookset.publisher.domain.Publisher;
 import java.time.LocalDate;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
