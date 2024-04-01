@@ -4,6 +4,7 @@ import com.t2m.g2nee.shop.bookset.tag.domain.Tag;
 import com.t2m.g2nee.shop.bookset.tag.dto.TagDto;
 import com.t2m.g2nee.shop.bookset.tag.mapper.TagMapper;
 import com.t2m.g2nee.shop.bookset.tag.repository.TagRepository;
+import com.t2m.g2nee.shop.exception.AlreadyExistException;
 import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import java.util.List;
@@ -37,6 +38,9 @@ public class TagService {
      * @return 출판사 객체 응답
      */
     public TagDto.Response registerTag(Tag tag) {
+
+        // 태그 이름이 존재하는지 확인 후 저장합니다.
+        verifyExistTag(tag.getTagName());
 
         Tag saveTag = tagRepository.save(tag);
 
@@ -93,9 +97,8 @@ public class TagService {
      */
     public void deleteTag(Long tagId) {
 
-        findTagById(tagId);
-
-        tagRepository.deleteById(tagId);
+        Tag tag = findTagById(tagId);
+        tag.setActivated(false);
     }
 
     /**
@@ -104,7 +107,7 @@ public class TagService {
      * @param tagId 출판사 id
      * @return 태그 id에 해당하는 tag entity
      */
-    public Tag findTagById(Long tagId) {
+    private Tag findTagById(Long tagId) {
 
         Optional<Tag> optionalTag = tagRepository.findById(tagId);
         if (optionalTag.isPresent()) {
@@ -112,6 +115,20 @@ public class TagService {
             return optionalTag.get();
         } else {
             throw new NotFoundException("태그 정보가 없습니다.");
+        }
+    }
+
+    /**
+     * 이미 동일한 이름의 태그가 존재하는지 확인하는 메서드 입니다.
+     *
+     * @param tagName 태그 이름
+     */
+    private void verifyExistTag(String tagName) {
+
+        Optional<Tag> optionalTag = tagRepository.findByTagName(tagName);
+
+        if (optionalTag.isPresent()) {
+            throw new AlreadyExistException("이미 존재하는 태그입니다.");
         }
     }
 }
