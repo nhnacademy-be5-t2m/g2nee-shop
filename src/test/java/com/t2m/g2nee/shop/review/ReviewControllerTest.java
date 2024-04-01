@@ -1,5 +1,10 @@
 package com.t2m.g2nee.shop.review;
 
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.t2m.g2nee.shop.review.controller.ReviewController;
@@ -15,6 +20,8 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
+import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -56,6 +63,22 @@ public class ReviewControllerTest {
     void bookReviewSuccess() throws Exception {
         GetBookReviewResponseDto dto =
                 new GetBookReviewResponseDto(1L, "nickname", 5, "content");
-        
+
+        when(reviewService.getReview(anyLong())).thenReturn(dto);
+
+        mockMvc.perform(RestDocumentationRequestBuilders.get(path + "/{reivewId}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.reviewId").value(dto.getReviewId()))
+                .andExpect(jsonPath("$.content").value(dto.getContent()))
+                .andExpect(jsonPath("$.score").value(dto.getScore()))
+                .andExpect(jsonPath("$.score").value(dto.getScore()))
+
+    }
+
+    @Test
+    @DisplayName("리뷰 생성 성공 테스트")
+    void reviewCreateSuccess() throws Exception {
+
     }
 }

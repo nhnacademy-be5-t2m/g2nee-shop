@@ -23,9 +23,11 @@ public class ReviewImplRepository extends QuerydslRepositorySupport
         super(Review.class);
     }
 
+    Review review;
 
     @Override
     public Page<GetBookReviewResponseDto> findBookReviews(Pageable pageable, Long bookId) {
+        //JPQLQuery<Long> count = from(review).join(review.g)
         return null;
     }
 
