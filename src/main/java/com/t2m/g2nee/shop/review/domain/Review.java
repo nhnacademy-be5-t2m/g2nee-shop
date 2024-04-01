@@ -44,6 +44,7 @@ public class Review {
     @JoinColumn(name = "bookId")
     private Book book;
 
+
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "memberId")
