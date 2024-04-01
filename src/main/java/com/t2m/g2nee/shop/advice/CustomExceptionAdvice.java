@@ -2,8 +2,13 @@ package com.t2m.g2nee.shop.advice;
 
 import com.t2m.g2nee.shop.exception.CustomException;
 import com.t2m.g2nee.shop.exception.ErrorResponse;
+import java.util.Objects;
+import java.util.Set;
+import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -26,7 +31,7 @@ public class CustomExceptionAdvice {
      * @return 에러에 관한 정보가 있는 ErrorResponse 객체
      */
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity<ErrorResponse> handleNotFoundException(CustomException e) {
+    public ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
 
         ErrorResponse response = ErrorResponse.builder()
                 .code(e.getHttpStatus().value())
@@ -44,18 +49,38 @@ public class CustomExceptionAdvice {
      */
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException e) {
-        return null;
+
+
+        Set<ConstraintViolation<?>> constraintViolations = Objects.requireNonNull(e.getConstraintViolations());
+
+        String message = constraintViolations.stream()
+                .map(ConstraintViolation::getMessage)
+                .toString();
+
+
+        ErrorResponse response = ErrorResponse.builder()
+                .code(HttpStatus.BAD_REQUEST.value())
+                .message(message)
+                .build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     /**
-     * RequestBody 예외를 다루는 hnadler
+     * RequestBody 예외를 다루는 handler
      *
      * @param e 예외 객체
      * @return 에러에 관한 정보가 있는 ErrorResponse 객체
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> MethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        return null;
+    public ResponseEntity<ErrorResponse> methodArgumentNotValidException(MethodArgumentNotValidException e) {
+
+        String defaultMessage = Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage();
+
+        ErrorResponse response = ErrorResponse.builder()
+                .code(HttpStatus.BAD_REQUEST.value())
+                .message(defaultMessage)
+                .build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
 }

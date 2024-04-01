@@ -2,12 +2,18 @@ package com.t2m.g2nee.shop.bookset.Publisher.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.t2m.g2nee.shop.bookset.Publisher.domain.Publisher;
 import com.t2m.g2nee.shop.bookset.Publisher.dto.PublisherDto;
 import com.t2m.g2nee.shop.bookset.Publisher.mapper.PublisherMapper;
 import com.t2m.g2nee.shop.bookset.Publisher.repository.PublisherRepository;
+import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import java.util.ArrayList;
 import java.util.List;
@@ -123,14 +129,25 @@ class PublisherServiceTest {
 
         //given
         Publisher publisher = getPublisher();
-        publisherRepository.save(publisher);
 
-        //when
+        when(publisherRepository.findById(publisher.getPublisherId())).thenReturn(Optional.of(publisher));
+        doNothing().when(publisherRepository).deleteById(publisher.getPublisherId());
+
+        //when //then
         publisherService.deletePublisher(publisher.getPublisherId());
-        Optional<Publisher> optionalPublisher = publisherRepository.findById(publisher.getPublisherId());
 
-        //then
-        assertFalse(optionalPublisher.isPresent());
+        verify(publisherRepository, times(1)).deleteById(publisher.getPublisherId());
+
+    }
+    @Test
+    @DisplayName("출판사가 없을 때 예외 테스트")
+    void testExistPublisher(){
+        Publisher publisher = getPublisher();
+
+        when(publisherRepository.findById(publisher.getPublisherId())).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> publisherService.deletePublisher(publisher.getPublisherId()));
+
     }
 
     private List<Publisher> getList() {
@@ -166,7 +183,7 @@ class PublisherServiceTest {
     private PublisherDto.Request getRequest() {
 
         return PublisherDto.Request.builder()
-                .publisherEngName("출판사1")
+                .publisherName("출판사1")
                 .publisherEngName("publisher1")
                 .build();
     }
@@ -175,7 +192,7 @@ class PublisherServiceTest {
 
 
         return PublisherDto.Request.builder()
-                .publisherEngName("출판사2")
+                .publisherName("출판사2")
                 .publisherEngName("publisher2")
                 .build();
     }
@@ -184,7 +201,7 @@ class PublisherServiceTest {
 
         return Publisher.builder()
                 .publisherId(1L)
-                .publisherEngName("출판사1")
+                .publisherName("출판사1")
                 .publisherEngName("publisher1")
                 .build();
     }
@@ -193,7 +210,7 @@ class PublisherServiceTest {
 
         return Publisher.builder()
                 .publisherId(1L)
-                .publisherEngName("출판사2")
+                .publisherName("출판사2")
                 .publisherEngName("publisher2")
                 .build();
     }
@@ -203,7 +220,7 @@ class PublisherServiceTest {
 
         return PublisherDto.Response.builder()
                 .publisherId(1L)
-                .publisherEngName("출판사1")
+                .publisherName("출판사1")
                 .publisherEngName("publisher1")
                 .build();
     }
@@ -212,7 +229,7 @@ class PublisherServiceTest {
 
         return PublisherDto.Response.builder()
                 .publisherId(1L)
-                .publisherEngName("출판사2")
+                .publisherName("출판사2")
                 .publisherEngName("publisher2")
                 .build();
     }

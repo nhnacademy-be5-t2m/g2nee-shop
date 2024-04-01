@@ -1,7 +1,7 @@
 package com.t2m.g2nee.shop.bookset.Publisher.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,9 +20,9 @@ public class PublisherDto {
     @Builder
     public static class Request {
 
-        @NotNull(message = "출판사 한글 이름을 입력해주세요.")
+        @Pattern(regexp = "^[가-힣0-9]*$", message = "출판사 한글 이름을 입력해주세요.")
         private String publisherName;
-        @NotNull(message = "출판사 영문 이름을 입력해주세요")
+        @Pattern(regexp = "^[A-Za-z0-9]*$", message = "출판사 영문 이름을 입력해주세요")
         private String publisherEngName;
     }
 

@@ -32,7 +32,7 @@ public class PublisherService {
     /**
      * 출판사 정보를 저장하는 메서드
      *
-     * @param publisher
+     * @param publisher 저장할 정보가 담긴 엔티티
      * @return 출판사 객체 응답
      */
     public PublisherDto.Response registerPublisher(Publisher publisher) {
@@ -45,26 +45,20 @@ public class PublisherService {
     /**
      * 출판사를 수정하는 메서드
      *
-     * @param publisher
+     * @param publisher 수정할 정보가 담긴 엔티티
      * @return 출판사 객체 응답
      */
     public PublisherDto.Response updatePublisher(Publisher publisher) {
 
-        Optional<Publisher> optionalPublisher = publisherRepository.findById(publisher.getPublisherId());
+        Publisher findPublisher = findPublisherById(publisher.getPublisherId());
 
-        if (optionalPublisher.isPresent()) {
+        Optional.ofNullable(publisher.getPublisherName()).ifPresent(findPublisher::setPublisherName);
+        Optional.ofNullable(publisher.getPublisherEngName()).ifPresent(findPublisher::setPublisherEngName);
 
-            Publisher findPublisher = optionalPublisher.get();
-            Optional.ofNullable(publisher.getPublisherName()).ifPresent(findPublisher::setPublisherName);
-            Optional.ofNullable(publisher.getPublisherEngName()).ifPresent(findPublisher::setPublisherEngName);
+        Publisher savePublisher = publisherRepository.save(findPublisher);
 
-            Publisher savePublisher = publisherRepository.save(findPublisher);
+        return mapper.entityToDto(savePublisher);
 
-            return mapper.entityToDto(savePublisher);
-
-        } else {
-            throw new NotFoundException("출판사 정보가 없습니다.");
-        }
     }
 
     /**
@@ -74,8 +68,8 @@ public class PublisherService {
      * @return 페이징에 필요한 정보가 담긴 PageResponse 객체
      */
     public PageResponse<PublisherDto.Response> getPublisherList(int page) {
-        int size = 10;
 
+        int size = 10;
         Page<Publisher> publisherPage =
                 publisherRepository.findAll(PageRequest.of(page - 1, size, Sort.by("publisherName")));
 
@@ -99,6 +93,25 @@ public class PublisherService {
      */
     public void deletePublisher(Long publisherId) {
 
+        findPublisherById(publisherId);
+
         publisherRepository.deleteById(publisherId);
+    }
+
+    /**
+     * id에 해당하는 출판사 객체를 확인하는 메서드
+     *
+     * @param publisherId 출판사 id
+     * @return 출판사 id에 해당하는 publisher entity
+     */
+    public Publisher findPublisherById(Long publisherId) {
+
+        Optional<Publisher> optionalPublisher = publisherRepository.findById(publisherId);
+        if (optionalPublisher.isPresent()) {
+
+            return optionalPublisher.get();
+        } else {
+            throw new NotFoundException("출판사 정보가 없습니다.");
+        }
     }
 }
