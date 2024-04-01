@@ -4,7 +4,6 @@ import com.t2m.g2nee.shop.bookset.tag.domain.Tag;
 import com.t2m.g2nee.shop.bookset.tag.dto.TagDto;
 import com.t2m.g2nee.shop.bookset.tag.mapper.TagMapper;
 import com.t2m.g2nee.shop.bookset.tag.repository.TagRepository;
-import com.t2m.g2nee.shop.exception.AlreadyExistException;
 import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import java.util.List;
@@ -39,12 +38,20 @@ public class TagService {
      */
     public TagDto.Response registerTag(Tag tag) {
 
-        // 태그 이름이 존재하는지 확인 후 저장합니다.
-        verifyExistTag(tag.getTagName());
+        // 태그 이름이 존재하는지 확인 후 있으면 상태를 변경하고 없으면 저장합니다.
+        Optional<Tag> optionalTag = tagRepository.findByTagName(tag.getTagName());
 
-        Tag saveTag = tagRepository.save(tag);
+        if (optionalTag.isPresent()) {
 
-        return mapper.entityToDto(saveTag);
+            Tag findTag = optionalTag.get();
+            findTag.setActivated(true);
+
+            return mapper.entityToDto(findTag);
+        } else {
+
+            Tag saveTag = tagRepository.save(tag);
+            return mapper.entityToDto(saveTag);
+        }
     }
 
     /**
@@ -115,20 +122,6 @@ public class TagService {
             return optionalTag.get();
         } else {
             throw new NotFoundException("태그 정보가 없습니다.");
-        }
-    }
-
-    /**
-     * 이미 동일한 이름의 태그가 존재하는지 확인하는 메서드 입니다.
-     *
-     * @param tagName 태그 이름
-     */
-    private void verifyExistTag(String tagName) {
-
-        Optional<Tag> optionalTag = tagRepository.findByTagName(tagName);
-
-        if (optionalTag.isPresent()) {
-            throw new AlreadyExistException("이미 존재하는 태그입니다.");
         }
     }
 }

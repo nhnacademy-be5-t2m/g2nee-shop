@@ -17,4 +17,5 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roleId;
     private String roleName;
+    private boolean isActivated;
 }

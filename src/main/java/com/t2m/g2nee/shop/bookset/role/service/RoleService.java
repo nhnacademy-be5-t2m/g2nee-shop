@@ -1,9 +1,12 @@
 package com.t2m.g2nee.shop.bookset.role.service;
 
+import com.t2m.g2nee.shop.bookset.publisher.domain.Publisher;
 import com.t2m.g2nee.shop.bookset.role.domain.Role;
 import com.t2m.g2nee.shop.bookset.role.dto.RoleDto;
 import com.t2m.g2nee.shop.bookset.role.mapper.RoleMapper;
 import com.t2m.g2nee.shop.bookset.role.repository.RoleRepository;
+import com.t2m.g2nee.shop.bookset.tag.domain.Tag;
+import com.t2m.g2nee.shop.exception.AlreadyExistException;
 import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import java.util.List;
@@ -31,9 +34,21 @@ public class RoleService {
      */
     public RoleDto.Response registerRole(Role role) {
 
-        Role saveRole = roleRepository.save(role);
+        // 역할 이름이 존재하는지 확인 후 있으면 상태를 변경하고 없으면 저장합니다.
+        Optional<Role> optionalRole = roleRepository.findByRoleName(role.getRoleName());
 
-        return mapper.entityToDto(saveRole);
+        if (optionalRole.isPresent()) {
+
+            Role findRole = optionalRole.get();
+            findRole.setActivated(true);
+
+            return mapper.entityToDto(findRole);
+        }else {
+
+            Role saveRole = roleRepository.save(role);
+
+            return mapper.entityToDto(saveRole);
+        }
     }
 
     /**
@@ -107,4 +122,5 @@ public class RoleService {
             throw new NotFoundException("역할 정보가 없습니다.");
         }
     }
+
 }

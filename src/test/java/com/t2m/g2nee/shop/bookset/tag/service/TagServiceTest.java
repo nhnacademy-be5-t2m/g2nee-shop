@@ -3,9 +3,8 @@ package com.t2m.g2nee.shop.bookset.tag.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doNothing;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -42,18 +41,6 @@ class TagServiceTest {
     private TagService tagService;
 
     @Test
-    @DisplayName("태그 중복 테스트")
-    void duplicateTagTest(){
-
-        Tag tag = Tag.builder()
-                .tagName("태그1")
-                .build();
-        when(tagRepository.findByTagName("태그1")).thenReturn(Optional.of(tag));
-
-        assertThrows(AlreadyExistException.class, () -> tagService.registerTag(tag));
-        verify(tagRepository, never()).save(tag);
-    }
-    @Test
     @DisplayName("태그 등록 테스트")
     void registerTagTest() {
 
@@ -70,7 +57,25 @@ class TagServiceTest {
 
         // then
         assertEquals(response.getTagName(), request.getTagName());
+    }
+    @Test
+    @DisplayName("태그 재활성화 테스트")
+    void activateTagTest(){
 
+        //given
+        TagDto.Request request = getRequest();
+        Tag tag = Tag.builder()
+                .tagName("태그1")
+                .isActivated(false)
+                .build();
+
+        when(tagRepository.findByTagName(request.getTagName())).thenReturn(Optional.ofNullable(tag));
+
+        //when
+        tagService.registerTag(tag);
+
+        //then
+        assertTrue(tag.isActivated());
     }
 
     @Test
@@ -135,9 +140,9 @@ class TagServiceTest {
         Tag tag = getTag();
 
         when(tagRepository.findById(tag.getTagId())).thenReturn(Optional.of(tag));
-        //when //then
+        //when
         tagService.deleteTag(tag.getTagId());
-
+        //then
         assertFalse(tag.isActivated());
 
     }

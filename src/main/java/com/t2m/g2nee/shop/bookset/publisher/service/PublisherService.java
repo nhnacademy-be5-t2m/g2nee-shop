@@ -37,9 +37,19 @@ public class PublisherService {
      */
     public PublisherDto.Response registerPublisher(Publisher publisher) {
 
-        Publisher savePublisher = publisherRepository.save(publisher);
+        Optional<Publisher> optionalPublisher = publisherRepository.findByPublisherName(publisher.getPublisherName());
+        if (optionalPublisher.isPresent()) {
 
-        return mapper.entityToDto(savePublisher);
+            Publisher findPublisher = optionalPublisher.get();
+            findPublisher.setActivated(true);
+
+            return mapper.entityToDto(findPublisher);
+        } else {
+
+            Publisher savePublisher = publisherRepository.save(publisher);
+
+            return mapper.entityToDto(savePublisher);
+        }
     }
 
     /**
