@@ -1,8 +1,9 @@
-package com.t2m.g2nee.shop.bookset.Publisher.controller;
+package com.t2m.g2nee.shop.bookset.Tag.controller;
 
-import com.t2m.g2nee.shop.bookset.Publisher.domain.Publisher;
-import com.t2m.g2nee.shop.bookset.Publisher.dto.PublisherDto;
-import com.t2m.g2nee.shop.bookset.Publisher.service.PublisherService;
+
+import com.t2m.g2nee.shop.bookset.Tag.domain.Tag;
+import com.t2m.g2nee.shop.bookset.Tag.dto.TagDto;
+import com.t2m.g2nee.shop.bookset.Tag.service.TagService;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,13 +20,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RestController
 @Validated
-@RequestMapping("/shop/publisher")
+@RequestMapping("/shop/tag")
 @RequiredArgsConstructor
-public class PublisherController {
-
-    private final PublisherService publisherService;
+public class TagController {
+    private final TagService tagService;
 
     /**
      * 출판사를 생성하는 컨트롤러 입니다.
@@ -34,14 +35,13 @@ public class PublisherController {
      * @return 생성한 출판사 정보
      */
     @PostMapping
-    public ResponseEntity<PublisherDto.Response> postPublisher(@RequestBody @Valid PublisherDto.Request request) {
+    public ResponseEntity<TagDto.Response> postTag(@RequestBody @Valid TagDto.Request request) {
 
-        Publisher publisher = Publisher.builder()
-                .publisherName(request.getPublisherName())
-                .publisherEngName(request.getPublisherEngName())
+        Tag tag = Tag.builder()
+                .tagName(request.getTagName())
                 .build();
 
-        PublisherDto.Response response = publisherService.registerPublisher(publisher);
+        TagDto.Response response = tagService.registerTag(tag);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -50,20 +50,19 @@ public class PublisherController {
      * 출판사 정보를 수정하는 컨트롤러 입니다.
      *
      * @param request     수정할 출판사 정보가 담긴 객체
-     * @param publisherId 수정할 출판사 id
+     * @param tagId 수정할 출판사 id
      * @return 수정 후 출판사 객체 정보
      */
-    @PatchMapping("/{publisherId}")
-    public ResponseEntity<PublisherDto.Response> modifyPublisher(@RequestBody @Valid PublisherDto.Request request,
-                                                                 @PathVariable("publisherId") Long publisherId) {
+    @PatchMapping("/{tagId}")
+    public ResponseEntity<TagDto.Response> modifyTag(@RequestBody @Valid TagDto.Request request,
+                                                                 @PathVariable("tagId") Long tagId) {
 
-        Publisher publisher = Publisher.builder()
-                .publisherId(publisherId)
-                .publisherName(request.getPublisherName())
-                .publisherEngName(request.getPublisherEngName())
+        Tag tag = Tag.builder()
+                .tagId(tagId)
+                .tagName(request.getTagName())
                 .build();
 
-        PublisherDto.Response response = publisherService.updatePublisher(publisher);
+        TagDto.Response response = tagService.updateTag(tag);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
@@ -75,23 +74,22 @@ public class PublisherController {
      * @return 출판사 정보들과 페이지 정보
      */
     @GetMapping
-    public ResponseEntity<PageResponse<PublisherDto.Response>> getPublishers(@RequestParam int page) {
+    public ResponseEntity<PageResponse<TagDto.Response>> getTags(@RequestParam int page) {
 
-        PageResponse<PublisherDto.Response> response = publisherService.getPublisherList(page);
+        PageResponse<TagDto.Response> response = tagService.getTagList(page);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     /**
-     * 출판사를 삭제하는 컨트롤러 입니다.
-     * @param publisherId
+     * 태그를 삭제하는 컨트롤러 입니다.
+     * @param tagId
      * @return X
      */
+    @DeleteMapping("/{tagId}")
+    public ResponseEntity deleteTag(@PathVariable("tagId") Long tagId) {
 
-    @DeleteMapping("/{publisherId}")
-    public ResponseEntity deletePublisher(@PathVariable("publisherId") Long publisherId) {
-
-        publisherService.deletePublisher(publisherId);
+        tagService.deleteTag(tagId);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

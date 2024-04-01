@@ -42,10 +42,6 @@ class PublisherServiceTest {
     @InjectMocks
     private PublisherService publisherService;
 
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
-
 
     @Test
     @DisplayName("출판사 등록 테스트")
@@ -101,8 +97,7 @@ class PublisherServiceTest {
                 .totalPage(2)
                 .build();
 
-        Pageable pageable = PageRequest.of(1, 10);
-
+        Pageable pageable = PageRequest.of(0, 10,Sort.by("publisherName"));
         Page<Publisher> publisherPage = new PageImpl<>(publisherList, pageable, publisherList.size());
 
         when(publisherRepository.findAll(PageRequest.of(0, 10, Sort.by("publisherName"))))
@@ -114,12 +109,13 @@ class PublisherServiceTest {
 
         //then
         assertEquals(10, responses.getData().size());
-        assertEquals(publisherList.get(0).getPublisherName(), responses.getData().get(0).getPublisherName());
-        assertEquals(publisherList.get(1).getPublisherName(), responses.getData().get(1).getPublisherName());
-        assertEquals(publisherList.get(2).getPublisherName(), responses.getData().get(2).getPublisherName());
         assertEquals(1, responses.getCurrentPage());
         assertEquals(2, responses.getTotalPage());
         assertEquals(20, publisherPage.getTotalElements());
+        for (int i = 0; i < responseList.size(); i++) {
+            assertEquals(responseList.get(i).getPublisherName(), responses.getData().get(i).getPublisherName());
+            assertEquals(responseList.get(i).getPublisherEngName(), responses.getData().get(i).getPublisherEngName());
+        }
 
     }
 

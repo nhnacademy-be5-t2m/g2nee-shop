@@ -49,7 +49,7 @@ class PublisherControllerTest {
     private PublisherMapper mapper;
 
     @Test
-    @DisplayName("한글 유효성 검사 테스트")
+    @DisplayName("한글 유효성 검사 실패 후 응답값 테스트")
     void testKorValidation() throws Exception {
 
         PublisherDto.Request request =  PublisherDto.Request.builder()
@@ -71,7 +71,7 @@ class PublisherControllerTest {
                 .andExpect(jsonPath("$.code").value(400));
     }
     @Test
-    @DisplayName("영문 유효성 검사 테스트")
+    @DisplayName("영문 유효성 검사 실패 후 응답값 테스트")
     void testEngValidation() throws Exception {
 
         PublisherDto.Request request =  PublisherDto.Request.builder()
