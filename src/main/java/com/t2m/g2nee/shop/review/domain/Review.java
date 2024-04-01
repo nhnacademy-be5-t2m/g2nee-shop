@@ -1,6 +1,6 @@
 package com.t2m.g2nee.shop.review.domain;
 
-import com.t2m.g2nee.shop.bookset.Book.domain.Book;
+import com.t2m.g2nee.shop.bookset.book.domain.Book;
 import com.t2m.g2nee.shop.memberset.Member.domain.Member;
 import lombok.*;
 

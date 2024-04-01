@@ -12,7 +12,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.t2m.g2nee.shop.bookset.Role.controller.RoleController;
 import com.t2m.g2nee.shop.bookset.tag.domain.Tag;
 import com.t2m.g2nee.shop.bookset.tag.dto.TagDto;
 import com.t2m.g2nee.shop.bookset.tag.mapper.TagMapper;
@@ -24,14 +23,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-
-@WebMvcTest(RoleController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 class RoleControllerTest {
     @Autowired
     private MockMvc mockMvc;

@@ -1,29 +1,30 @@
-package com.t2m.g2nee.shop.like.domain;
+package com.t2m.g2nee.shop.bookset.booktag.domain;
 
 import com.t2m.g2nee.shop.bookset.book.domain.Book;
-import com.t2m.g2nee.shop.memberset.Member.domain.Member;
+import com.t2m.g2nee.shop.bookset.tag.domain.Tag;
 import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "BookLikes")
+@Table(name = "BookTags")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookLike {
+public class BookTag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long bookLikeId;
+    private Long bookTagId;
+
+    @ManyToOne
+    @JoinColumn(name = "tagId")
+    private Tag tag;
 
     @ManyToOne
     @JoinColumn(name = "bookId")
     private Book book;
 
-    @ManyToOne
-    @JoinColumn(name = "memberId")
-    private Member member;
 }

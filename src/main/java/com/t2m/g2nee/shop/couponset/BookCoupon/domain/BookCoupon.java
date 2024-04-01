@@ -1,6 +1,6 @@
 package com.t2m.g2nee.shop.couponset.BookCoupon.domain;
 
-import com.t2m.g2nee.shop.bookset.Book.domain.Book;
+import com.t2m.g2nee.shop.bookset.book.domain.Book;
 import com.t2m.g2nee.shop.couponset.CouponType.domain.CouponType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;

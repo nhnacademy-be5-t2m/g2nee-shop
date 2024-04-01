@@ -7,11 +7,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.t2m.g2nee.shop.bookset.Role.domain.Role;
-import com.t2m.g2nee.shop.bookset.Role.dto.RoleDto;
-import com.t2m.g2nee.shop.bookset.Role.mapper.RoleMapper;
-import com.t2m.g2nee.shop.bookset.Role.repository.RoleRepository;
-import com.t2m.g2nee.shop.bookset.Role.service.RoleService;
+import com.t2m.g2nee.shop.bookset.role.domain.Role;
+import com.t2m.g2nee.shop.bookset.role.dto.RoleDto;
+import com.t2m.g2nee.shop.bookset.role.mapper.RoleMapper;
+import com.t2m.g2nee.shop.bookset.role.repository.RoleRepository;
 import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import java.util.ArrayList;

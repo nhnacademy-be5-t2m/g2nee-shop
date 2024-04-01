@@ -1,6 +1,6 @@
 package com.t2m.g2nee.shop.fileset.bookfile.domain;
 
-import com.t2m.g2nee.shop.bookset.Book.domain.Book;
+import com.t2m.g2nee.shop.bookset.book.domain.Book;
 import com.t2m.g2nee.shop.fileset.file.domain.File;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
