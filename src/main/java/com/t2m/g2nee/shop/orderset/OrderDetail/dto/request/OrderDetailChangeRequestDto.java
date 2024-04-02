@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * 주문 생성하는 dto
+ * 도서주문 변경하는 dto
  *
  * @author 박재희
  * @since 1.0

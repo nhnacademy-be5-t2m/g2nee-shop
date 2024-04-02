@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * 주문 생성하는 dto
+ * 도서주문 생성하는 dto
  *
  * @author 박재희
  * @since 1.0
@@ -22,5 +22,5 @@ public class OrderDetailCreateRequestDto {
     private BigDecimal price;
     @NotNull(message = "도서 포장정보는 필수입니다.")
     private Long packageTypeId;
-    
+
 }
