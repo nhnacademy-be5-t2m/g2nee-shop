@@ -79,9 +79,10 @@ public class BookMgmtService {
         // storage 사용을 위한 토큰을 발급합니다.
         String tokenId = authService.requestToken();
         // storage에 이미지를 업로드합니다
-        uploadImage(thumbnail, book, tokenId, "thumb." + request.getEngTitle(), ImageType.THUMBNAIL);
-        for (MultipartFile detail : details) {
-            uploadImage(detail, book, tokenId, "detail." + request.getEngTitle(), ImageType.DETAIL);
+        uploadImage(thumbnail, book, tokenId, "thumb_" + request.getEngTitle(), ImageType.THUMBNAIL);
+        for (int i = 0; i < details.length; i++) {
+            String objectName = "detail_" + request.getEngTitle() + (i + 1);
+            uploadImage(details[i], book, tokenId, objectName, ImageType.DETAIL);
         }
         // 도서카테고리 연관 관계를 설정합니다.
         saveBookCategory(request.getCategoryNameList(), book);
@@ -102,11 +103,11 @@ public class BookMgmtService {
      * @param bookId    도서 아이디
      * @param request   도서 수정할 정보가 담긴 객체
      * @param thumbnail 바꿀 섬네일 이미지 파일
-     * @param detail    바꿀 세부 이미지 파일
+     * @param details    바꿀 세부 이미지 파일
      * @return 수정된 도서 응답 객체
      */
     public BookDto.Response updateBook(Long bookId, BookDto.Request request, MultipartFile thumbnail,
-                                       MultipartFile[] detail) {
+                                       MultipartFile[] details) {
 
         Optional<Book> optionalBook = bookRepository.findById(bookId);
 
@@ -114,14 +115,14 @@ public class BookMgmtService {
 
             Book book = optionalBook.get();
 
-            if (thumbnail != null || detail != null) {
+            if (thumbnail != null || details != null) {
                 // storage 사용을 위한 토큰을 발급합니다.
                 String tokenId = authService.requestToken();
 
                 // 섬네일 이미지 파일을 변경했을 때 실행합니다.
                 if (thumbnail != null) {
 
-                    String objectName = "thumb." + request.getEngTitle();
+                    String objectName = "thumb_" + request.getEngTitle();
                     // 기존 이미지를 삭제합니다'
                     BookFile bookFile = bookFileRepository.findByBookIdAndImageType(bookId, ImageType.THUMBNAIL);
                     String imageUrl = bookFile.getUrl();
@@ -133,9 +134,8 @@ public class BookMgmtService {
 
                 }
                 // 세부 이미지 파일을 변경했을 때 실행합니다.
-                if (detail != null) {
+                if (details != null) {
 
-                    String objectName = "detail." + request.getEngTitle();
                     // 기존 이미지를 삭제합니다'
                     BookFile bookFile = bookFileRepository.findByBookIdAndImageType(bookId, ImageType.DETAIL);
                     String imageUrl = bookFile.getUrl();
@@ -143,8 +143,11 @@ public class BookMgmtService {
                     // 기존 이미지의 연관관계를 없앱니다.
                     bookFileRepository.deleteByBookIdAndImageType(bookId, ImageType.DETAIL);
                     // storage에 새 이미지를 업로드합니다
-                    for (MultipartFile file : detail) {
-                        uploadImage(file, book, tokenId, objectName, ImageType.DETAIL);
+
+                    for (int i = 0; i < details.length; i++) {
+                        String objectName = "detail_" + request.getEngTitle() + (i + 1);
+                        uploadImage(details[i], book, tokenId, objectName, ImageType.DETAIL);
+
                     }
                 }
 
