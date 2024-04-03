@@ -26,12 +26,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(TagController.class)
 class TagControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -44,6 +42,8 @@ class TagControllerTest {
 
     @MockBean
     private TagMapper mapper;
+
+    private final String url = "/shop/tags/";
 
     @Test
     @DisplayName("유효성 검사 실패 후 응답값 테스트")
@@ -58,7 +58,7 @@ class TagControllerTest {
         when(tagService.registerTag(any(Tag.class))).thenReturn(
                 TagDto.Response.class.newInstance());
 
-        ResultActions resultActions = mockMvc.perform(post("/shop/tag")
+        ResultActions resultActions = mockMvc.perform(post(url)
                 .content(requestJson)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON));
@@ -80,7 +80,7 @@ class TagControllerTest {
         when(tagService.registerTag(any(Tag.class))).thenReturn(response);
 
         //when
-        ResultActions resultActions = mockMvc.perform(post("/shop/tag")
+        ResultActions resultActions = mockMvc.perform(post(url)
                 .content(requestJson)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON));
@@ -104,7 +104,7 @@ class TagControllerTest {
         when(tagService.updateTag(any(Tag.class))).thenReturn(modifyresponse);
 
         //when  //then
-        ResultActions resultActions = mockMvc.perform(patch("/shop/tag/{tagId}", tag.getTagId())
+        ResultActions resultActions = mockMvc.perform(patch(url + tag.getTagId())
                 .content(requestJson)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON));
@@ -135,7 +135,7 @@ class TagControllerTest {
         when(mapper.entitiesToDtos(tagList)).thenReturn(responses);
 
         //when
-        ResultActions resultActions = mockMvc.perform(get("/shop/tag")
+        ResultActions resultActions = mockMvc.perform(get(url)
                 .param("page", String.valueOf(page))
                 .param("size", String.valueOf(size))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -165,7 +165,7 @@ class TagControllerTest {
         doNothing().when(tagService).deleteTag(tag.getTagId());
 
         //when
-        mockMvc.perform(delete("/shop/tag/{tagId}", tag.getTagId()))
+        mockMvc.perform(delete(url + tag.getTagId()))
                 .andExpect(status().isNoContent());
 
     }

@@ -2,6 +2,7 @@ package com.t2m.g2nee.shop.bookset.role.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -11,6 +12,7 @@ import com.t2m.g2nee.shop.bookset.role.domain.Role;
 import com.t2m.g2nee.shop.bookset.role.dto.RoleDto;
 import com.t2m.g2nee.shop.bookset.role.mapper.RoleMapper;
 import com.t2m.g2nee.shop.bookset.role.repository.RoleRepository;
+
 import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import java.util.ArrayList;
@@ -58,6 +60,27 @@ class RoleServiceTest {
         assertEquals(response.getRoleName(), request.getRoleName());
 
     }
+
+    @Test
+    @DisplayName("역할 재활성화 테스트")
+    void activateRoleTest(){
+
+        //given
+        RoleDto.Request request = getRequest();
+        Role role = Role.builder()
+                .roleName("역할1")
+                .isActivated(false)
+                .build();
+
+        when(roleRepository.findByRoleName(request.getRoleName())).thenReturn(Optional.ofNullable(role));
+
+        //when
+        roleService.registerRole(role);
+
+        //then
+        assertTrue(role.isActivated());
+    }
+
 
     @Test
     @DisplayName("역할 수정 테스트")

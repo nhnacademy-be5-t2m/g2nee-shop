@@ -19,4 +19,6 @@ public class Contributor {
     private String contributorName;
     private String contributorEngName;
 
+    private boolean isActivated;
+
 }
