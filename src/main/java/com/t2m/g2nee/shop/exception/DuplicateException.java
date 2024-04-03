@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
  * @author : 정지은
  * @since : 1.0
  */
-public class DuplicateException extends CustomException{
+public class DuplicateException extends CustomException {
     public DuplicateException(String message) {
         super(HttpStatus.CONFLICT, message);
     }

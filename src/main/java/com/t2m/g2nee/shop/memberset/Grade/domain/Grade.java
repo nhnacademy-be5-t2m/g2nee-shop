@@ -31,8 +31,17 @@ public class Grade {
 
 
     public enum GradeName {
-        NORMAL, ROYAL, GOLD, PLATINUM
+        NORMAL("일반"), ROYAL("로얄"), GOLD("골드"), PLATINUM("플래티넘");
 
+        private final String name;
+
+        GradeName(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
 
 }

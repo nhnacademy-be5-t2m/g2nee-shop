@@ -3,7 +3,6 @@ package com.t2m.g2nee.shop.memberset.Member.service;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -72,7 +71,7 @@ class MemberServiceTest {
                 "홍길동",
                 "홍길동",
                 "gildong@naver.com",
-                "01011111111",
+                "010-1111-1111",
                 "19990203",
                 "Male",
                 false
@@ -92,9 +91,9 @@ class MemberServiceTest {
         when(memberRepository.existsByNickname(anyString())).thenReturn(false);
         when(memberRepository.existsByUsername(anyString())).thenReturn(false);
 
-        when(gradeRepository.findByGradeId(anyLong())).thenReturn(grade);
+        when(gradeRepository.findByGradeName(any())).thenReturn(grade);
         when(customerRepository.save(any())).thenReturn(member);
-        when(authRepository.findByAuthName(anyString())).thenReturn(auth);
+        when(authRepository.findByAuthName(any())).thenReturn(auth);
         memberService.signUp(memberRequestDto);
 
         verify(customerRepository, times(1))
@@ -111,9 +110,9 @@ class MemberServiceTest {
     void memberCreateFail_duplicateUsername() {
         when(memberRepository.existsByNickname(anyString())).thenReturn(false);
         when(memberRepository.existsByUsername(anyString())).thenReturn(true);
-        when(gradeRepository.findByGradeId(anyLong())).thenReturn(grade);
+        when(gradeRepository.findByGradeName(any())).thenReturn(grade);
         when(customerRepository.save(any())).thenReturn(member);
-        when(authRepository.findByAuthName(anyString())).thenReturn(auth);
+        when(authRepository.findByAuthName(any())).thenReturn(auth);
         assertThatThrownBy(() -> memberService.signUp(memberRequestDto))
                 .isInstanceOf(DuplicateException.class);
     }

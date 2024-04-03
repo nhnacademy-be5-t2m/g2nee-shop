@@ -1,6 +1,7 @@
 package com.t2m.g2nee.shop.memberset.Member.service.Impl;
 
 import com.t2m.g2nee.shop.exception.DuplicateException;
+import com.t2m.g2nee.shop.memberset.Auth.domain.Auth;
 import com.t2m.g2nee.shop.memberset.Auth.repository.AuthRepository;
 import com.t2m.g2nee.shop.memberset.AuthMember.domain.AuthMember;
 import com.t2m.g2nee.shop.memberset.AuthMember.repository.AuthMemberRepository;
@@ -53,7 +54,7 @@ public class MemberServiceImpl implements MemberService {
             throw new DuplicateException("중복된 username입니다.");
         }
 
-        Grade grade = gradeRepository.findByGradeId(1L);
+        Grade grade = gradeRepository.findByGradeName(Grade.GradeName.NORMAL);
         Member memberInfo = Member.builder()
                 .email(signUpDto.getEmail())
                 .name(signUpDto.getName())
@@ -67,7 +68,7 @@ public class MemberServiceImpl implements MemberService {
                 .gender(Member.Gender.valueOf(signUpDto.getGender()))
                 .build();
         Member member = customerRepository.save(memberInfo);
-        authMemberRepository.save(new AuthMember(authRepository.findByAuthName("NORMAL"), member));
+        authMemberRepository.save(new AuthMember(authRepository.findByAuthName(Auth.AuthName.ROLE_MEMBER), member));
 
         return new MemberResponse(member.getUsername(), member.getName(), member.getNickname(),
                 member.getGrade().getGradeName().toString());

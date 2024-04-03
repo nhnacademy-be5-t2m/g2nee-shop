@@ -91,7 +91,7 @@ class TagServiceTest {
                 .totalPage(2)
                 .build();
 
-        Pageable pageable = PageRequest.of(0, 10,Sort.by("tagName"));
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("tagName"));
 
         Page<Tag> tagPage = new PageImpl<>(tagList, pageable, tagList.size());
 
@@ -100,7 +100,7 @@ class TagServiceTest {
         when(mapper.entitiesToDtos(tagList)).thenReturn(responseList);
 
         //when
-       tagService.getTagList(1);
+        tagService.getTagList(1);
 
         //then
         assertEquals(10, responses.getData().size());
@@ -128,9 +128,10 @@ class TagServiceTest {
         verify(tagRepository, times(1)).deleteById(tag.getTagId());
 
     }
+
     @Test
     @DisplayName("태그가 없을 때 예외 테스트")
-    void testExistTag(){
+    void testExistTag() {
         Tag tag = getTag();
 
         when(tagRepository.findById(tag.getTagId())).thenReturn(Optional.empty());

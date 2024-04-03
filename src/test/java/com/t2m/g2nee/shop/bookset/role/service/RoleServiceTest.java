@@ -129,9 +129,10 @@ class RoleServiceTest {
         verify(roleRepository, times(1)).deleteById(role.getRoleId());
 
     }
+
     @Test
     @DisplayName("역할이 없을 때 예외 테스트")
-    void testExistRole(){
+    void testExistRole() {
         Role role = getRole();
 
         when(roleRepository.findById(role.getRoleId())).thenReturn(Optional.empty());

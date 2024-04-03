@@ -22,11 +22,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -49,7 +47,7 @@ class TagControllerTest {
     @DisplayName("유효성 검사 실패 후 응답값 테스트")
     void testKorValidation() throws Exception {
 
-        TagDto.Request request =  TagDto.Request.builder()
+        TagDto.Request request = TagDto.Request.builder()
                 .tagName(" ")
                 .build();
 
@@ -95,7 +93,8 @@ class TagControllerTest {
     void testUpdateTag() throws Exception {
 
         //given
-        TagDto.Request request = getModifyRequest();;
+        TagDto.Request request = getModifyRequest();
+        ;
         TagDto.Response modifyresponse = getModifiedResponse();
         Tag tag = getTag();
 
@@ -148,7 +147,7 @@ class TagControllerTest {
 
         for (int i = 0; i < responses.size(); i++) {
             resultActions.andExpect(
-                            jsonPath("$.data[" + i + "].tagName").value(responses.get(i).getTagName()));
+                    jsonPath("$.data[" + i + "].tagName").value(responses.get(i).getTagName()));
         }
 
     }
@@ -169,6 +168,7 @@ class TagControllerTest {
                 .andExpect(status().isNoContent());
 
     }
+
     private List<Tag> getList() {
 
         List<Tag> tagList = new ArrayList<>();

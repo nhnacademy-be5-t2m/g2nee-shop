@@ -1,7 +1,6 @@
 package com.t2m.g2nee.shop.bookset.publisher.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
@@ -95,7 +94,7 @@ class PublisherServiceTest {
                 .totalPage(2)
                 .build();
 
-        Pageable pageable = PageRequest.of(0, 10,Sort.by("publisherName"));
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("publisherName"));
         Page<Publisher> publisherPage = new PageImpl<>(publisherList, pageable, publisherList.size());
 
         when(publisherRepository.findAll(PageRequest.of(0, 10, Sort.by("publisherName"))))
@@ -133,9 +132,10 @@ class PublisherServiceTest {
         verify(publisherRepository, times(1)).deleteById(publisher.getPublisherId());
 
     }
+
     @Test
     @DisplayName("출판사가 없을 때 예외 테스트")
-    void testExistPublisher(){
+    void testExistPublisher() {
         Publisher publisher = getPublisher();
 
         when(publisherRepository.findById(publisher.getPublisherId())).thenReturn(Optional.empty());
