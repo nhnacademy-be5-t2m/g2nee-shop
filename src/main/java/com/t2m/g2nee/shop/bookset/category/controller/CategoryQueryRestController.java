@@ -3,9 +3,7 @@ package com.t2m.g2nee.shop.bookset.category.controller;
 import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryInfoDto;
 import com.t2m.g2nee.shop.bookset.category.service.CategoryQueryService;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,26 +23,18 @@ public class CategoryQueryRestController {
     }
 
     @GetMapping
-    public ResponseEntity<Map<String, List<CategoryInfoDto>>> getRootCategories() {
-        List<CategoryInfoDto> rootCategories = service.getRootCategories();
-
-        Map<String, List<CategoryInfoDto>> response = new HashMap<>();
-        response.put("data", rootCategories);
+    public ResponseEntity<List<CategoryInfoDto>> getRootCategories() {
 
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
-                .body(response);
+                .body(service.getRootCategories());
     }
 
     @GetMapping("/{categoryId}/sub")
-    public ResponseEntity<Map<String, List<CategoryInfoDto>>> getSubCategories(
+    public ResponseEntity<List<CategoryInfoDto>> getSubCategories(
             @PathVariable("categoryId") Long categoryId) {
-        List<CategoryInfoDto> subCategories = service.getSubCategories(categoryId);
-
-        Map<String, List<CategoryInfoDto>> response = new HashMap<>();
-        response.put("data", subCategories);
 
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
-                .body(response);
+                .body(service.getSubCategories(categoryId));
     }
 
     @GetMapping("/all")
@@ -55,14 +45,10 @@ public class CategoryQueryRestController {
     }
 
     @GetMapping("/{categoryId}")
-    public ResponseEntity<Map<String, CategoryInfoDto>> getCategory(@PathVariable("categoryId") Long categoryId) {
-        CategoryInfoDto category = service.getCategory(categoryId);
-
-        Map<String, CategoryInfoDto> response = new HashMap<>();
-        response.put("data", category);
+    public ResponseEntity<CategoryInfoDto> getCategory(@PathVariable("categoryId") Long categoryId) {
 
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
-                .body(response);
+                .body(service.getCategory(categoryId));
     }
 
     @GetMapping("/search/{categoryName}")

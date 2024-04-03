@@ -57,13 +57,13 @@ class CategoryQueryRestControllerTest {
         mockMvc.perform(get("/shop/categories"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.data", hasSize(2)))
-                .andExpect(jsonPath("$.data[0].categoryId", equalTo(1)))
-                .andExpect(jsonPath("$.data[0].categoryName", equalTo("카테고리1")))
-                .andExpect(jsonPath("$.data[0].categoryEngName", equalTo("test1")))
-                .andExpect(jsonPath("$.data[1].categoryId", equalTo(2)))
-                .andExpect(jsonPath("$.data[1].categoryName", equalTo("카테고리2")))
-                .andExpect(jsonPath("$.data[1].categoryEngName", equalTo("test2")));
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$.[0].categoryId", equalTo(1)))
+                .andExpect(jsonPath("$.[0].categoryName", equalTo("카테고리1")))
+                .andExpect(jsonPath("$.[0].categoryEngName", equalTo("test1")))
+                .andExpect(jsonPath("$.[1].categoryId", equalTo(2)))
+                .andExpect(jsonPath("$.[1].categoryName", equalTo("카테고리2")))
+                .andExpect(jsonPath("$.[1].categoryEngName", equalTo("test2")));
     }
 
     @Test
@@ -76,13 +76,13 @@ class CategoryQueryRestControllerTest {
         mockMvc.perform(get("/shop/categories/{categoryId}/sub", 1L))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.data", hasSize(2)))
-                .andExpect(jsonPath("$.data[0].categoryId", equalTo(3)))
-                .andExpect(jsonPath("$.data[0].categoryName", equalTo("카테고리3")))
-                .andExpect(jsonPath("$.data[0].categoryEngName", equalTo("test3")))
-                .andExpect(jsonPath("$.data[1].categoryId", equalTo(4)))
-                .andExpect(jsonPath("$.data[1].categoryName", equalTo("카테고리4")))
-                .andExpect(jsonPath("$.data[1].categoryEngName", equalTo("test4")));
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$.[0].categoryId", equalTo(3)))
+                .andExpect(jsonPath("$.[0].categoryName", equalTo("카테고리3")))
+                .andExpect(jsonPath("$.[0].categoryEngName", equalTo("test3")))
+                .andExpect(jsonPath("$.[1].categoryId", equalTo(4)))
+                .andExpect(jsonPath("$.[1].categoryName", equalTo("카테고리4")))
+                .andExpect(jsonPath("$.[1].categoryEngName", equalTo("test4")));
     }
 
     @Test
@@ -93,9 +93,9 @@ class CategoryQueryRestControllerTest {
         mockMvc.perform(get("/shop/categories/{categoryId}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.data.categoryId", equalTo(1)))
-                .andExpect(jsonPath("$.data.categoryName", equalTo("카테고리1")))
-                .andExpect(jsonPath("$.data.categoryEngName", equalTo("test1")));
+                .andExpect(jsonPath("$.categoryId", equalTo(1)))
+                .andExpect(jsonPath("$.categoryName", equalTo("카테고리1")))
+                .andExpect(jsonPath("$.categoryEngName", equalTo("test1")));
     }
 
     @Test

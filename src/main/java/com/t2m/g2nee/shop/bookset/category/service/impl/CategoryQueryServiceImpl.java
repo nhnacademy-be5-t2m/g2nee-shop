@@ -38,7 +38,7 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
             return categoryRepository.getSubCategoriesByCategoryId(categoryId)
                     .stream()
                     .map(this::convertToCategoryInfoDto)
-                    .collect(Collectors.toList())
+                    .collect(Collectors.toList());
         }
         throw new NotFoundException("카테고리가 존재하지 않습니다.");
     }
