@@ -1,5 +1,6 @@
 package com.t2m.g2nee.shop;
 
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,5 +27,11 @@ public class TestController {
     public ResponseEntity<String> getHello() {
         String result = "hello g2nee shop : " + port;
         return new ResponseEntity<>(result, header, HttpStatus.OK);
+    }
+
+    @GetMapping("/image")
+    public String imageTest(){
+
+        return "imageTest.html";
     }
 }

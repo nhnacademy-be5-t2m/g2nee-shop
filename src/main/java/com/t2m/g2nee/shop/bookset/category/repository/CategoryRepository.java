@@ -1,9 +1,12 @@
 package com.t2m.g2nee.shop.bookset.category.repository;
 
 import com.t2m.g2nee.shop.bookset.category.domain.Category;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * Category Repository
@@ -17,4 +20,10 @@ public interface CategoryRepository extends JpaRepository<Category, Long>, Categ
     boolean existsByCategoryName(String name);
 
     Page<Category> findAll(Pageable pageable);
+
+    Optional<Category> findByCategoryName(String categoryName);
+
+    @Modifying
+    @Query("DELETE FROM BookCategory bc WHERE bc.book.bookId = :bookId")
+    void deleteByBookId(Long bookId);
 }

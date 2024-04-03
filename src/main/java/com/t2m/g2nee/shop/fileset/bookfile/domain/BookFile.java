@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import org.hibernate.type.ImageType;
 
 
 @Entity
@@ -24,4 +25,12 @@ public class BookFile extends File {
     @ManyToOne
     @JoinColumn(name = "bookId")
     private Book book;
+
+    @Enumerated(EnumType.STRING)
+    private ImageType imageType;
+
+    public enum ImageType{
+        THUMBNAIL, DETAIL;
+
+    }
 }

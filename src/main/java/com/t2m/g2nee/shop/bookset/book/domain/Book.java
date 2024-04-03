@@ -16,6 +16,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Table(name = "Books")
@@ -32,7 +33,7 @@ public class Book {
     private int quantity;
     private String title;
     private String engTitle;
-    private String index;
+    private String bookIndex;
     private String description;
     private LocalDate publishedDate;
     private int price;
@@ -47,10 +48,19 @@ public class Book {
     @JoinColumn(name = "publisherId")
     private Publisher publisher;
 
+
+
+    @Getter
     public enum BookStatus {
 
-        ONSALE, SOLDOUT, OUTOFPRINT, DELETED
 
+        ONSALE("정상판매"), SOLDOUT("매진"), OUTOFPRINT("절판"), DELETED("삭제");
+
+        private final String status;
+
+        BookStatus(String status) {
+            this.status = status;
+        }
     }
 
 }

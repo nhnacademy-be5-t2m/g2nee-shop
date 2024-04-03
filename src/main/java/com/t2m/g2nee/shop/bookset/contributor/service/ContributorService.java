@@ -70,6 +70,7 @@ public class ContributorService {
      * @param page 현재 페이지
      * @return 페이징에 필요한 정보가 담긴 PageResponse 객체
      */
+    @Transactional(readOnly = true)
     public PageResponse<ContributorDto.Response> getContributorList(int page) {
 
         int size = 10;
