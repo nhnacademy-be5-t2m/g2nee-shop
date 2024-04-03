@@ -1,7 +1,8 @@
-package com.t2m.g2nee.shop.bookset.publisher.service;
+package com.t2m.g2nee.shop.bookset.contributor.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -11,6 +12,9 @@ import com.t2m.g2nee.shop.bookset.publisher.domain.Publisher;
 import com.t2m.g2nee.shop.bookset.publisher.dto.PublisherDto;
 import com.t2m.g2nee.shop.bookset.publisher.mapper.PublisherMapper;
 import com.t2m.g2nee.shop.bookset.publisher.repository.PublisherRepository;
+import com.t2m.g2nee.shop.bookset.publisher.service.PublisherService;
+import com.t2m.g2nee.shop.bookset.tag.domain.Tag;
+import com.t2m.g2nee.shop.bookset.tag.dto.TagDto;
 import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import java.util.ArrayList;
@@ -62,10 +66,29 @@ class PublisherServiceTest {
     }
 
     @Test
+    @DisplayName("출판사 재활성화 테스트")
+    void activatePublisherTest(){
+
+        //given
+        PublisherDto.Request request = getRequest();
+        Publisher publisher = Publisher.builder()
+                .publisherName("출판사1")
+                .isActivated(false)
+                .build();
+
+        when(publisherRepository.findByPublisherName(request.getPublisherName())).thenReturn(Optional.ofNullable(publisher));
+
+        //when
+        publisherService.registerPublisher(publisher);
+
+        //then
+        assertTrue(publisher.isActivated());
+    }
+
+    @Test
     @DisplayName("출판사 수정 테스트")
     void updatePublisher() {
 
-        //given
         PublisherDto.Request request = getModifyRequest();
         Publisher publisher = getModifiedPublisher();
         PublisherDto.Response response = getModifiedResponse();

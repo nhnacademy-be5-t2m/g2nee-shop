@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Validated
-@RequestMapping("/shop/tag")
+@RequestMapping("/shop/tags")
 @RequiredArgsConstructor
 public class TagController {
     private final TagService tagService;
