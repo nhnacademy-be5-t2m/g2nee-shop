@@ -18,14 +18,28 @@ public interface CategoryRepositoryCustom {
     /**
      * 최상위 카테고리만 반환
      *
-     * @param pageable
      * @return
      */
-    Page<Category> getRootCategories(Pageable pageable);
+    List<Category> getRootCategories();
 
     /**
      * categoryId를 포함하여 상위 카테고리를 반환
      * insert시 사용
      */
     List<Category> getFindAncestorIdsByCategoryId(Long categoryId);
+
+    /**
+     * 해당 카테고리가 존재하면서 active인지 확인
+     */
+    boolean getExistsByCategoryIdAndIsActive(Long categoryId, boolean active);
+
+    /**
+     * 카테고리를 비활성화로 변경
+     */
+    void softDeleteByCategoryId(Long categoryId);
+
+    /**
+     * 카테고리를 활성화로 변경
+     */
+    void activeCategoryByCategoryId(Long categoryId);
 }

@@ -5,7 +5,6 @@ import com.t2m.g2nee.shop.bookset.categoryPath.domain.CategoryPath;
 import com.t2m.g2nee.shop.bookset.categoryPath.repository.CategoryPathRepository;
 import com.t2m.g2nee.shop.bookset.categoryPath.service.CategoryPathBasicService;
 import com.t2m.g2nee.shop.exception.AlreadyExistException;
-import com.t2m.g2nee.shop.exception.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,22 +39,6 @@ public class CategoryPathBasicServiceImpl implements CategoryPathBasicService {
     }
 
     /**
-     * 카테고리 경로 업데이트
-     * 존재하지 않는 categoryPathId의 경우, NotFoundCategoryPath 예외 발생
-     *
-     * @param categoryPath
-     * @return
-     */
-    @Override
-    public CategoryPath updateCategoryPathBasic(CategoryPath categoryPath) {
-        if (categoryPathRepository.existsById(categoryPath.getCategoryPathId())) {
-            return categoryPathRepository.save(categoryPath);
-        } else {
-            throw new NotFoundException("수정하려는 카테고리가 존재하지 않습니다.");
-        }
-    }
-
-    /**
      * 카테고리 경로 삭제
      * 카테고리가 삭제될 때, 관련된 조상 및 후손 경로도 삭제
      *
@@ -64,12 +47,7 @@ public class CategoryPathBasicServiceImpl implements CategoryPathBasicService {
     @Override
     @Transactional
     public void deleteCategoryPathBasic(Long categoryId) {
-        if (categoryPathRepository.existsById(categoryId)) {
-            categoryPathRepository.deleteByAncestor_CategoryId(categoryId);
-            categoryPathRepository.deleteByDescendant_CategoryId(categoryId);
-        } else {
-            throw new NotFoundException("삭제하려는 카테고리가 존재하지 않습니다.");
-        }
-
+        categoryPathRepository.deleteByDescendant_CategoryId(categoryId);
+        categoryPathRepository.deleteByAncestor_CategoryId(categoryId);
     }
 }

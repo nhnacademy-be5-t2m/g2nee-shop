@@ -10,7 +10,5 @@ public interface CategoryPathBasicService {
 
     CategoryPath saveCategoryPath(CategoryPath categoryPath);
 
-    CategoryPath updateCategoryPathBasic(CategoryPath categoryPath);
-
     void deleteCategoryPathBasic(Long categoryId);
 }

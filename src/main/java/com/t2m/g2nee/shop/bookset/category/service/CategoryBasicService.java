@@ -16,7 +16,9 @@ public interface CategoryBasicService {
     Category updateCategoryBasic(Category category);
 
     //category 삭제
-    void deleteCategoryBasic(Long categoryId);
+    boolean deleteCategoryBasic(Long categoryId);
 
     List<Category> getAncestorList(Long descendantId);
+
+    Category activeCategory(Long categoryId);
 }

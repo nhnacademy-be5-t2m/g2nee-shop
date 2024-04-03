@@ -17,5 +17,7 @@ public interface CategoryService {
     CategoryInfoDto updateCategory(CategoryUpdateDto updateCategoryDto);
 
     //카테고리 및 관련 카테고리 경로 삭제
-    void deleteCategory(Long categoryId);
+    boolean deleteCategory(Long categoryId);
+
+    boolean activeCategory(Long categoryId);
 }

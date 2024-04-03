@@ -10,6 +10,8 @@ import com.t2m.g2nee.shop.bookset.category.service.CategoryService;
 import com.t2m.g2nee.shop.bookset.categoryPath.domain.CategoryPath;
 import com.t2m.g2nee.shop.bookset.categoryPath.service.CategoryPathBasicService;
 import java.util.List;
+import java.util.Objects;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
+@Slf4j
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryBasicService categoryBasicService;
@@ -50,7 +53,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         categoryPathBasicService.saveCategoryPath(new CategoryPath(category, category, depth++));
 
-        if (categorySaveDto.getAncestorCategoryId() != 0L) {
+        if (categorySaveDto.getAncestorCategoryId() != 0) {
             List<Category> ancestorIdList =
                     categoryBasicService.getAncestorList(categorySaveDto.getAncestorCategoryId());
 
@@ -77,6 +80,7 @@ public class CategoryServiceImpl implements CategoryService {
      */
     @Override
     public CategoryInfoDto updateCategory(CategoryUpdateDto categoryUpdateDto) {
+        log.debug("in update!!!!!");
         Category category = new Category(
                 categoryUpdateDto.getCategoryId(), categoryUpdateDto.getCategoryName(),
                 categoryUpdateDto.getCategoryEngName()
@@ -85,18 +89,43 @@ public class CategoryServiceImpl implements CategoryService {
 
         //CategoryPaths 수정
 
-        Long depth = 1L;
+        //기존 상위 카테고리 확인: 자기자신, 부모, 조부모~ 순으로 나옴
+        List<Category> oldAncestorList = categoryBasicService.getAncestorList(categoryUpdateDto.getCategoryId());
+        Long oldAncestorId = null;
+        if (oldAncestorList.isEmpty()) {//삭제되어 경로가 없는 경우: 카테고리를 활성화로 변경
+            categoryBasicService.activeCategory(categoryUpdateDto.getCategoryId());
+        } else if (oldAncestorList.size() == 1) { //최상위 카테고리였음
+            oldAncestorId = oldAncestorList.get(0).getCategoryId();
+        } else { //그 밖의 경우
+            oldAncestorId = oldAncestorList.get(1).getCategoryId();
+        }
 
-        if (categoryUpdateDto.getAncestorCategoryId() != 0L) {
-            List<Category> ancestorIdList =
-                    categoryBasicService.getAncestorList(categoryUpdateDto.getAncestorCategoryId());
-            for (Category ancestor : ancestorIdList) {
-                CategoryPath categoryPath = new CategoryPath(
-                        ancestor, category, depth++
-                );
+        //상위 카테고리 변경이 됐는지 확인
+        //변경이 없으면 아무것도 안 함
+        if (Objects.isNull(oldAncestorId) || !oldAncestorId.equals(categoryUpdateDto.getAncestorCategoryId())) {
+            //soft delete한 카테고리 수정이나 카테고리가 변경되면 기존 경로 싹 지우고 다시 설정
 
-                categoryPathBasicService.saveCategoryPath(categoryPath);
+            categoryPathBasicService.deleteCategoryPathBasic(categoryUpdateDto.getCategoryId());
+
+            Long depth = 0L;
+
+            categoryPathBasicService.saveCategoryPath(new CategoryPath(category, category, depth++));
+
+            if (categoryUpdateDto.getAncestorCategoryId() != 0) {
+                List<Category> ancestorIdList =
+                        categoryBasicService.getAncestorList(categoryUpdateDto.getAncestorCategoryId());
+
+                if (!ancestorIdList.isEmpty()) {
+                    for (Category ancestor : ancestorIdList) {
+                        CategoryPath categoryPath = new CategoryPath(
+                                ancestor, category, depth++
+                        );
+
+                        categoryPathBasicService.saveCategoryPath(categoryPath);
+                    }
+                }
             }
+
         }
 
         return new CategoryInfoDto(category);
@@ -109,8 +138,22 @@ public class CategoryServiceImpl implements CategoryService {
      * @param categoryId
      */
     @Override
-    public void deleteCategory(Long categoryId) {
-        categoryPathBasicService.deleteCategoryPathBasic(categoryId);//FK제약조건 때문에 path먼저 지워야 함
-        categoryBasicService.deleteCategoryBasic(categoryId);
+    public boolean deleteCategory(Long categoryId) {
+        categoryPathBasicService.deleteCategoryPathBasic(categoryId);
+        return categoryBasicService.deleteCategoryBasic(categoryId);
+    }
+
+    /**
+     * 비활성화된 카테고리 활성화
+     *
+     * @param categoryId
+     * @return
+     */
+    @Override
+    public boolean activeCategory(Long categoryId) {
+        Category category = categoryBasicService.activeCategory(categoryId);
+        categoryPathBasicService.saveCategoryPath(new CategoryPath(category, category, 0L));
+
+        return category.isActive();
     }
 }
