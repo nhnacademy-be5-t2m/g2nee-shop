@@ -11,7 +11,7 @@ import java.util.List;
 public interface CategoryQueryService {
 
     //categoryId에 해당하는 카테고리의 바로 1단계 아래 서브 카테고리 리스트
-    PageResponse<CategoryInfoDto> getSubCategories(Long categoryId, int page);
+    List<CategoryInfoDto> getSubCategories(Long categoryId);
 
     //categoryId에 해당하는 카테고리
     CategoryInfoDto getCategory(Long categoryId);

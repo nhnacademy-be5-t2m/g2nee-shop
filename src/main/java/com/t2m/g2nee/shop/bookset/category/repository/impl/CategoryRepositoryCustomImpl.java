@@ -1,16 +1,12 @@
 package com.t2m.g2nee.shop.bookset.category.repository.impl;
 
-import com.querydsl.jpa.JPQLQuery;
 import com.t2m.g2nee.shop.bookset.category.domain.Category;
 import com.t2m.g2nee.shop.bookset.category.domain.QCategory;
 import com.t2m.g2nee.shop.bookset.category.repository.CategoryRepositoryCustom;
 import com.t2m.g2nee.shop.bookset.categoryPath.domain.QCategoryPath;
 import java.util.List;
 import javax.persistence.EntityManager;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
-import org.springframework.data.support.PageableExecutionUtils;
 
 public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport implements CategoryRepositoryCustom {
 
@@ -22,7 +18,7 @@ public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport impl
     }
 
     @Override
-    public Page<Category> getSubCategoriesByCategoryId(Long categoryId, Pageable pageable) {
+    public List<Category> getSubCategoriesByCategoryId(Long categoryId) {
         QCategory category = QCategory.category;
         QCategoryPath categoryPath = QCategoryPath.categoryPath;
 
@@ -36,30 +32,14 @@ public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport impl
          * ORDER BY c.categoryName asc;
          */
 
-        List<Category> subCategories = from(category)
+        return from(category)
                 .innerJoin(categoryPath)
                 .on(category.categoryId.eq(categoryPath.descendant.categoryId))
                 .where(categoryPath.ancestor.categoryId.eq(categoryId)
                         .and(categoryPath.depth.eq(1L))
                         .and(category.isActive.isTrue()))
                 .select(category)
-                .orderBy(category.categoryName.asc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize()).fetch();
-
-        /**
-         * SELECT count(categoryPathId)
-         * FROM CategoryPaths p
-         * WHERE p.ancestorId = ?
-         *   AND p.depth = 1;
-         */
-        JPQLQuery<Long> count = from(categoryPath)
-                .where(categoryPath.ancestor.categoryId.eq(categoryId)
-                        .and(categoryPath.depth.eq(1L))
-                        .and(category.isActive.isTrue()))
-                .select(categoryPath.categoryPathId.count());
-
-        return PageableExecutionUtils.getPage(subCategories, pageable, count::fetchOne);
+                .orderBy(category.categoryName.asc()).fetch();
     }
 
     @Override

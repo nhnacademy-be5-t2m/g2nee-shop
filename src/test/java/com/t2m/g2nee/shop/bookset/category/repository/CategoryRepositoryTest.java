@@ -82,14 +82,12 @@ class CategoryRepositoryTest {
 
     @Test
     void testGetSubCategoriesByCategoryId() {
+        List<Category> categoryPage =
+                categoryRepository.getSubCategoriesByCategoryId(category1.getCategoryId());
 
-        Pageable pageable = Pageable.ofSize(10).withPage(0);
-
-        Page<Category> categoryPage =
-                categoryRepository.getSubCategoriesByCategoryId(category1.getCategoryId(), pageable);
-
-        assertThat(categoryPage).isNotNull();
-        assertThat(categoryPage.getContent()).contains(category2);
+        assertThat(categoryPage)
+                .isNotNull()
+                .contains(category2);
     }
 
     @Test

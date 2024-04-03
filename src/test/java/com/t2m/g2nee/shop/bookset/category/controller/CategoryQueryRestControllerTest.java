@@ -71,16 +71,9 @@ class CategoryQueryRestControllerTest {
 
         List<CategoryInfoDto> subCategory = List.of(category3, category4);
 
-        PageResponse<CategoryInfoDto> categoryPage =
-                PageResponse.<CategoryInfoDto>builder()
-                        .data(subCategory)
-                        .currentPage(1)
-                        .totalPage(1)
-                        .build();
+        when(service.getSubCategories(anyLong())).thenReturn(subCategory);
 
-        when(service.getSubCategories(anyLong(), anyInt())).thenReturn(categoryPage);
-
-        mockMvc.perform(get("/shop/categories/{categoryId}/sub", 1L).param("page", "1"))
+        mockMvc.perform(get("/shop/categories/{categoryId}/sub", 1L))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.data", hasSize(2)))

@@ -32,30 +32,13 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
      *      존재하면 Page<CategoryInfoDto>를 리턴
      */
     @Override
-    public PageResponse<CategoryInfoDto> getSubCategories(Long categoryId, int page) {
+    public List<CategoryInfoDto> getSubCategories(Long categoryId) {
         if (categoryRepository.existsById(categoryId)) {
-            Page<Category> subCategories = categoryRepository.getSubCategoriesByCategoryId(categoryId,
-                    PageRequest.of(page - 1, 10, Sort.by("categoryName")));
 
-            List<CategoryInfoDto> categoryInfoDtoList = subCategories.getContent().stream()
+            return categoryRepository.getSubCategoriesByCategoryId(categoryId)
+                    .stream()
                     .map(this::convertToCategoryInfoDto)
-                    .collect(Collectors.toList());
-
-            int startPage = (int) Math.max(1, subCategories.getNumber() - Math.floor((double) maxPageButtons / 2));
-            int endPage = Math.min(startPage + maxPageButtons - 1, subCategories.getTotalPages());
-
-            if (endPage - startPage + 1 < maxPageButtons) {
-                startPage = Math.max(1, endPage - maxPageButtons + 1);
-            }
-
-            return PageResponse.<CategoryInfoDto>builder()
-                    .data(categoryInfoDtoList)
-                    .currentPage(page)
-                    .totalPage(subCategories.getTotalPages())
-                    .startPage(startPage)
-                    .endPage(endPage)
-                    .totalElements(subCategories.getTotalElements())
-                    .build();
+                    .collect(Collectors.toList())
         }
         throw new NotFoundException("카테고리가 존재하지 않습니다.");
     }
@@ -77,11 +60,10 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
      */
     @Override
     public List<CategoryInfoDto> getRootCategories() {
-        List<CategoryInfoDto> categoryInfoDtoList = categoryRepository.getRootCategories().stream()
+        
+        return categoryRepository.getRootCategories().stream()
                 .map(this::convertToCategoryInfoDto)
                 .collect(Collectors.toList());
-
-        return categoryInfoDtoList;
     }
 
     /**

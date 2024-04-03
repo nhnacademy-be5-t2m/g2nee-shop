@@ -20,15 +20,14 @@ class CategoryQueryServiceTest {
 
     @Test
     void testGetSubCategories() {
-        PageResponse<CategoryInfoDto> subCategories = categoryQueryService.getSubCategories(1L, 1);
+        List<CategoryInfoDto> subCategories = categoryQueryService.getSubCategories(1L);
 
-        assertThat(subCategories).isNotNull();
-        assertThat(subCategories.getData()).hasSize(3);
+        assertThat(subCategories).isNotNull().hasSize(3);
     }
 
     @Test
     void testGetSubCategoriesFail() {
-        assertThrows(NotFoundException.class, () -> categoryQueryService.getSubCategories(1000L, 1));
+        assertThrows(NotFoundException.class, () -> categoryQueryService.getSubCategories(1000L));
     }
 
     @Test

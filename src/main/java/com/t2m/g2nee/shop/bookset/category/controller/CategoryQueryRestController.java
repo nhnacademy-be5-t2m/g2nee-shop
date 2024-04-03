@@ -36,11 +36,15 @@ public class CategoryQueryRestController {
     }
 
     @GetMapping("/{categoryId}/sub")
-    public ResponseEntity<PageResponse<CategoryInfoDto>> getSubCategories(@PathVariable("categoryId") Long categoryId,
-                                                                          @RequestParam int page) {
+    public ResponseEntity<Map<String, List<CategoryInfoDto>>> getSubCategories(
+            @PathVariable("categoryId") Long categoryId) {
+        List<CategoryInfoDto> subCategories = service.getSubCategories(categoryId);
+
+        Map<String, List<CategoryInfoDto>> response = new HashMap<>();
+        response.put("data", subCategories);
 
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
-                .body(service.getSubCategories(categoryId, page));
+                .body(response);
     }
 
     @GetMapping("/all")
