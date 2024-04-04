@@ -43,7 +43,7 @@ class MemberControllerTest {
                 "홍길동",
                 "홍길동",
                 "gildong@naver.com",
-                "01011111111",
+                "010-1111-1111",
                 "19990203",
                 "Male",
                 false
@@ -58,7 +58,7 @@ class MemberControllerTest {
 
     @Test
     @DisplayName("정상적인 회원가입 성공 Test")
-    void memberSignUpComplate() throws Exception {
+    void memberSignUpComplete() throws Exception {
         when(memberService.signUp(any())).thenReturn(memberResponse);
         mvc.perform(post(signUpPath)
                         .content(objectMapper.writeValueAsString(signUpMemberRequestDto))
