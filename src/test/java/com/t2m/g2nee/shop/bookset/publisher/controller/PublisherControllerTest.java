@@ -21,9 +21,7 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -50,7 +48,7 @@ class PublisherControllerTest {
     @DisplayName("한글 유효성 검사 실패 후 응답값 테스트")
     void testKorValidation() throws Exception {
 
-        PublisherDto.Request request =  PublisherDto.Request.builder()
+        PublisherDto.Request request = PublisherDto.Request.builder()
                 .publisherName("eng")
                 .publisherEngName("eng")
                 .build();
@@ -68,13 +66,16 @@ class PublisherControllerTest {
         resultActions.andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(400));
     }
+
     @Test
     @DisplayName("영문 유효성 검사 실패 후 응답값 테스트")
     void testEngValidation() throws Exception {
 
-        PublisherDto.Request request =  PublisherDto.Request.builder()
+
+        PublisherDto.Request request = PublisherDto.Request.builder()
                 .publisherName("한글")
                 .publisherEngName("한글")
+
                 .build();
 
         String requestJson = objectMapper.writeValueAsString(request);
@@ -121,7 +122,8 @@ class PublisherControllerTest {
     void testUpdatePublisher() throws Exception {
 
         //given
-        PublisherDto.Request request = getModifyRequest();;
+        PublisherDto.Request request = getModifyRequest();
+        ;
         PublisherDto.Response modifyresponse = getModifiedResponse();
         Publisher publisher = getPublisher();
 

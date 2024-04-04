@@ -9,21 +9,36 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * Category Repository
+ * 카테고리 레포지토리
+ *
+ * @author : 김수빈
+ * @since : 1.0
  * JpaRepository와 CategoryRepositoryCustom을 상속받아 메소드를 사용하게 함
  */
 public interface CategoryRepository extends JpaRepository<Category, Long>, CategoryRepositoryCustom {
 
     /**
-     * existsByCategoryName: name을 받아 name과 동일한 CategoryName이 있는지 확인
+     * name을 포함하는 카테고리가 존재하는지 확인하는 메소드
+     *
+     * @param name
+     * @return
      */
     boolean existsByCategoryName(String name);
 
+    /**
+     * 모든 카테고리를 찾아 페이징 처리하는 메소드
+     *
+     * @param pageable
+     * @return
+     */
     Page<Category> findAll(Pageable pageable);
 
-    Optional<Category> findByCategoryName(String categoryName);
-
-    @Modifying
-    @Query("DELETE FROM BookCategory bc WHERE bc.book.bookId = :bookId")
-    void deleteByBookId(Long bookId);
+    /**
+     * 카테고리를 name으로 찾아 결과를 페이징 처리하는 메소드
+     *
+     * @param name
+     * @param pageable
+     * @return
+     */
+    Page<Category> findByCategoryNameContaining(String name, Pageable pageable);
 }

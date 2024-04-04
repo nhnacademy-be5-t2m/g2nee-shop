@@ -49,8 +49,8 @@ public class TagController {
     /**
      * 태그 정보를 수정하는 컨트롤러 입니다.
      *
-     * @param request     수정할 태그 정보가 담긴 객체
-     * @param tagId 수정할 태그 id
+     * @param request 수정할 태그 정보가 담긴 객체
+     * @param tagId   수정할 태그 id
      * @return 수정 후 태그 객체 정보
      */
     @PatchMapping("/{tagId}")
@@ -83,6 +83,7 @@ public class TagController {
 
     /**
      * 태그를 삭제하는 컨트롤러 입니다.
+     *
      * @param tagId
      * @return X
      */

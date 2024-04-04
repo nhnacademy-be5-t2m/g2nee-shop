@@ -12,7 +12,6 @@ import com.t2m.g2nee.shop.bookset.role.domain.Role;
 import com.t2m.g2nee.shop.bookset.role.dto.RoleDto;
 import com.t2m.g2nee.shop.bookset.role.mapper.RoleMapper;
 import com.t2m.g2nee.shop.bookset.role.repository.RoleRepository;
-
 import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import java.util.ArrayList;
@@ -63,7 +62,7 @@ class RoleServiceTest {
 
     @Test
     @DisplayName("역할 재활성화 테스트")
-    void activateRoleTest(){
+    void activateRoleTest() {
 
         //given
         RoleDto.Request request = getRequest();
@@ -152,9 +151,10 @@ class RoleServiceTest {
         verify(roleRepository, times(1)).deleteById(role.getRoleId());
 
     }
+
     @Test
     @DisplayName("역할이 없을 때 예외 테스트")
-    void testExistRole(){
+    void testExistRole() {
         Role role = getRole();
 
         when(roleRepository.findById(role.getRoleId())).thenReturn(Optional.empty());
