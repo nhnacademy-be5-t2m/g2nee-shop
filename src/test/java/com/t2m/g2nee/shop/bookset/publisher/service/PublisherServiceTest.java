@@ -1,4 +1,4 @@
-package com.t2m.g2nee.shop.bookset.contributor.service;
+package com.t2m.g2nee.shop.bookset.publisher.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -12,7 +12,6 @@ import com.t2m.g2nee.shop.bookset.publisher.domain.Publisher;
 import com.t2m.g2nee.shop.bookset.publisher.dto.PublisherDto;
 import com.t2m.g2nee.shop.bookset.publisher.mapper.PublisherMapper;
 import com.t2m.g2nee.shop.bookset.publisher.repository.PublisherRepository;
-import com.t2m.g2nee.shop.bookset.publisher.service.PublisherService;
 import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import java.util.ArrayList;
