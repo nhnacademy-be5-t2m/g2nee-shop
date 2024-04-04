@@ -72,6 +72,7 @@ public class RoleService {
      * @param page 현재 페이지
      * @return 페이징에 필요한 정보가 담긴 PageResponse 객체
      */
+    @Transactional(readOnly = true)
     public PageResponse<RoleDto.Response> getRoleList(int page) {
 
         int size = 10;

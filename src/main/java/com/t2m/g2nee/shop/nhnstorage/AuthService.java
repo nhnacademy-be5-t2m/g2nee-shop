@@ -41,7 +41,8 @@ public class AuthService {
      * @return tokenId String 값
      */
     public String requestToken() {
-        String identityUrl = properties.getUrl() + "/tokens";
+
+        String identityUrl = properties.getUrl();
 
         // 헤더 생성
         HttpHeaders headers = new HttpHeaders();
