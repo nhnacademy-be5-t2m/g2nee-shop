@@ -4,8 +4,6 @@ import com.t2m.g2nee.shop.bookset.category.dto.request.CategorySaveDto;
 import com.t2m.g2nee.shop.bookset.category.dto.request.CategoryUpdateDto;
 import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryInfoDto;
 import com.t2m.g2nee.shop.bookset.category.service.CategoryService;
-import java.util.HashMap;
-import java.util.Map;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -51,19 +49,15 @@ public class CategoryRestController {
                 .body(service.updateCategory(updateDto));
     }
 
-    @DeleteMapping("/{categoryId}/delete")
-    public ResponseEntity<Map<String, Boolean>> deleteCategory(@PathVariable("categoryId") Long categoryId) {
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("data", service.deleteCategory(categoryId));
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);
+    @DeleteMapping("/{categoryId}")
+    public ResponseEntity<Boolean> deleteCategory(@PathVariable("categoryId") Long categoryId) {
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(service.deleteCategory(categoryId));
 
     }
 
     @PutMapping("/{categoryId}/active")
-    public ResponseEntity<Map<String, Boolean>> activeCategory(@PathVariable("categoryId") Long categoryId) {
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("data", service.activeCategory(categoryId));
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);
+    public ResponseEntity<Boolean> activeCategory(@PathVariable("categoryId") Long categoryId) {
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(service.activeCategory(categoryId));
 
     }
 }

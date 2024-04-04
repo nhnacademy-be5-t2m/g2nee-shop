@@ -138,9 +138,9 @@ class CategoryRepositoryTest {
     }
 
     @Test
-    void testGetExistsByCategoryIdAndIsActive() {
-        assertTrue(categoryRepository.getExistsByCategoryIdAndIsActive(category1.getCategoryId(), true));
-        assertFalse(categoryRepository.getExistsByCategoryIdAndIsActive(category1.getCategoryId(), false));
+    void testGetExistsByCategoryIdAndisActivated() {
+        assertTrue(categoryRepository.getExistsByCategoryIdAndisActivated(category1.getCategoryId(), true));
+        assertFalse(categoryRepository.getExistsByCategoryIdAndisActivated(category1.getCategoryId(), false));
     }
 
     @Test
@@ -149,17 +149,17 @@ class CategoryRepositoryTest {
 
         Category updatedCategory = categoryRepository.findById(category1.getCategoryId()).orElse(null);
 
-        assertThat(updatedCategory.isActive()).isFalse();
+        assertThat(updatedCategory.isActivated()).isFalse();
     }
 
     @Test
     void testActiveCategoryByCategoryId() {
-        category1.setActive(false);
+        category1.setActivated(false);
 
         categoryRepository.activeCategoryByCategoryId(category1.getCategoryId());
 
         Category updatedCategory = categoryRepository.findById(category1.getCategoryId()).orElse(null);
 
-        assertThat(updatedCategory.isActive()).isTrue();
+        assertThat(updatedCategory.isActivated()).isTrue();
     }
 }

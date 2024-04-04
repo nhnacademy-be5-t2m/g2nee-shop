@@ -40,10 +40,10 @@ class CategoryQueryRestControllerTest {
 
     @BeforeEach
     void setUp() {
-        category1 = new CategoryInfoDto(1L, "카테고리1", "test1");
-        category2 = new CategoryInfoDto(2L, "카테고리2", "test2");
-        category3 = new CategoryInfoDto(3L, "카테고리3", "test3");
-        category4 = new CategoryInfoDto(4L, "카테고리4", "test4");
+        category1 = new CategoryInfoDto(1L, "카테고리1", "test1", true);
+        category2 = new CategoryInfoDto(2L, "카테고리2", "test2", true);
+        category3 = new CategoryInfoDto(3L, "카테고리3", "test3", true);
+        category4 = new CategoryInfoDto(4L, "카테고리4", "test4", true);
 
         MockitoAnnotations.openMocks(this);
     }
@@ -134,7 +134,9 @@ class CategoryQueryRestControllerTest {
 
         when(service.getCategoriesByName(anyString(), anyInt())).thenReturn(categoryPage);
 
-        mockMvc.perform(get("/shop/categories/search/{categoryName}", "카테고리").param("page", "1"))
+        mockMvc.perform(get("/shop/categories/search")
+                        .param("name", "카테고리")
+                        .param("page", "1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.data", hasSize(4)))

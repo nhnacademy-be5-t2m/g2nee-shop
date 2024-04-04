@@ -28,18 +28,18 @@ public class Category {
     private String categoryName;
     private String categoryEngName;
 
-    private boolean isActive;
+    private boolean isActivated;
 
     public Category(String categoryName, String categoryEngName) {
         this.categoryName = categoryName;
         this.categoryEngName = categoryEngName;
-        isActive = true;
+        isActivated = true;
     }
 
     public Category(Long categoryId, String categoryName, String categoryEngName) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
         this.categoryEngName = categoryEngName;
-        isActive = true;
+        isActivated = true;
     }
 }

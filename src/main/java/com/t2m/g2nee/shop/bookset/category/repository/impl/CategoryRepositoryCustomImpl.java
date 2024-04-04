@@ -37,7 +37,7 @@ public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport impl
                 .on(category.categoryId.eq(categoryPath.descendant.categoryId))
                 .where(categoryPath.ancestor.categoryId.eq(categoryId)
                         .and(categoryPath.depth.eq(1L))
-                        .and(category.isActive.isTrue()))
+                        .and(category.isActivated.isTrue()))
                 .select(category)
                 .orderBy(category.categoryName.asc()).fetch();
     }
@@ -58,7 +58,7 @@ public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport impl
                 .leftJoin(categoryPath)
                 .on(category.categoryId.eq(categoryPath.descendant.categoryId).and(categoryPath.depth.gt(0)))
                 .where(categoryPath.descendant.categoryId.isNull()
-                        .and(category.isActive.isTrue()))
+                        .and(category.isActivated.isTrue()))
                 .select(category)
                 .fetch();
     }
@@ -89,24 +89,24 @@ public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport impl
     }
 
     @Override
-    public boolean getExistsByCategoryIdAndIsActive(Long categoryId, boolean active) {
+    public boolean getExistsByCategoryIdAndisActivated(Long categoryId, boolean active) {
         QCategory category = QCategory.category;
 
         /**
          *   SELECT CASE WHEN COUNT(categoryId) > 0 THEN true ELSE false END
          *   FROM Categories c
          *   WHERE c.categoryId = ?
-         * 	AND c.isActive is ?;
+         * 	AND c.isActivated is ?;
          */
         if (active) {
             return from(category)
                     .where(category.categoryId.eq(categoryId)
-                            .and(category.isActive.isTrue()))
+                            .and(category.isActivated.isTrue()))
                     .select(category.categoryId.count().gt(0)).fetchOne();
         } else {
             return from(category)
                     .where(category.categoryId.eq(categoryId)
-                            .and(category.isActive.isFalse()))
+                            .and(category.isActivated.isFalse()))
                     .select(category.categoryId.count().gt(0)).fetchOne();
         }
 
@@ -117,11 +117,11 @@ public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport impl
         QCategory category = QCategory.category;
 
         /**
-         * UPDATE Categories c SET c.isActive = false WHERE c.categoryId = 1;
+         * UPDATE Categories c SET c.isActivated = false WHERE c.categoryId = 1;
          */
 
         update(category)
-                .set(category.isActive, false)
+                .set(category.isActivated, false)
                 .where(category.categoryId.eq(categoryId)).execute();
 
         entityManager.clear();
@@ -133,7 +133,7 @@ public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport impl
         QCategory category = QCategory.category;
 
         update(category)
-                .set(category.isActive, true)
+                .set(category.isActivated, true)
                 .where(category.categoryId.eq(categoryId)).execute();
 
         entityManager.clear();

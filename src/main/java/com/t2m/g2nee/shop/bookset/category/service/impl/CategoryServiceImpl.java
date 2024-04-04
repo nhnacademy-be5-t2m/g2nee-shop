@@ -154,6 +154,6 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = categoryBasicService.activeCategory(categoryId);
         categoryPathBasicService.saveCategoryPath(new CategoryPath(category, category, 0L));
 
-        return category.isActive();
+        return category.isActivated();
     }
 }

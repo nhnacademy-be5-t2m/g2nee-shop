@@ -29,7 +29,7 @@ public interface CategoryRepositoryCustom {
     /**
      * 해당 카테고리가 존재하면서 active인지 확인
      */
-    boolean getExistsByCategoryIdAndIsActive(Long categoryId, boolean active);
+    boolean getExistsByCategoryIdAndisActivated(Long categoryId, boolean active);
 
     /**
      * 카테고리를 비활성화로 변경

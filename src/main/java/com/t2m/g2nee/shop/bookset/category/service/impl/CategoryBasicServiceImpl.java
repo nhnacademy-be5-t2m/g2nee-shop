@@ -56,10 +56,10 @@ public class CategoryBasicServiceImpl implements CategoryBasicService {
      */
     @Override
     public boolean deleteCategoryBasic(Long categoryId) {
-        if (categoryRepository.getExistsByCategoryIdAndIsActive(categoryId, true)) {
+        if (categoryRepository.getExistsByCategoryIdAndisActivated(categoryId, true)) {
             categoryRepository.softDeleteByCategoryId(categoryId);
             return categoryRepository.findById(categoryId).orElseThrow(() -> new NotFoundException("카테고리가 존재하지 않습니다."))
-                    .isActive();
+                    .isActivated();
         } else {
             throw new NotFoundException("삭제할 카테고리가 존재하지 않습니다.");
         }
@@ -76,7 +76,7 @@ public class CategoryBasicServiceImpl implements CategoryBasicService {
 
     @Override
     public Category activeCategory(Long categoryId) {
-        if (categoryRepository.getExistsByCategoryIdAndIsActive(categoryId, false)) {
+        if (categoryRepository.getExistsByCategoryIdAndisActivated(categoryId, false)) {
             categoryRepository.activeCategoryByCategoryId(categoryId);
             return categoryRepository.findById(categoryId).orElseThrow(() -> new NotFoundException("카테고리가 존재하지 않습니다."));
         } else {

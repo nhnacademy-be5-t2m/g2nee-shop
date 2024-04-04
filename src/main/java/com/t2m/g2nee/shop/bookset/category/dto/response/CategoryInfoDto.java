@@ -16,9 +16,12 @@ public class CategoryInfoDto {
     private String categoryName;
     private String categoryEngName;
 
+    private Boolean isActivated;
+
     public CategoryInfoDto(Category category) {
         this.categoryId = category.getCategoryId();
         this.categoryName = category.getCategoryName();
         this.categoryEngName = category.getCategoryEngName();
+        this.isActivated = category.isActivated();
     }
 }

@@ -43,7 +43,7 @@ class CategoryControllerTest {
     @Test
     void testCreateCategory() throws Exception {
         CategorySaveDto request = new CategorySaveDto("테스트", "test", 0L);
-        CategoryInfoDto category = new CategoryInfoDto(1L, "테스트", "test");
+        CategoryInfoDto category = new CategoryInfoDto(1L, "테스트", "test", true);
 
         when(service.saveCategory(any(CategorySaveDto.class))).thenReturn(category);
 
@@ -59,7 +59,7 @@ class CategoryControllerTest {
     @Test
     void testUpdateCategory() throws Exception {
         CategorySaveDto request = new CategorySaveDto("수정", "modify", 0L);
-        CategoryInfoDto updatedCategory = new CategoryInfoDto(1L, "수정", "modify");
+        CategoryInfoDto updatedCategory = new CategoryInfoDto(1L, "수정", "modify", true);
 
         when(service.updateCategory(any(CategoryUpdateDto.class))).thenReturn(updatedCategory);
 
@@ -77,9 +77,9 @@ class CategoryControllerTest {
     void testDeleteCategory() throws Exception {
         when(service.deleteCategory(anyLong())).thenReturn(false);
 
-        mockMvc.perform(delete("/shop/categories/{categoryId}/delete", 1L))
+        mockMvc.perform(delete("/shop/categories/{categoryId}", 1L))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data", equalTo(false)));
+                .andExpect(jsonPath("$", equalTo(false)));
 
     }
 
@@ -89,6 +89,6 @@ class CategoryControllerTest {
 
         mockMvc.perform(put("/shop/categories/{categoryId}/active", 1L))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data", equalTo(true)));
+                .andExpect(jsonPath("$", equalTo(true)));
     }
 }

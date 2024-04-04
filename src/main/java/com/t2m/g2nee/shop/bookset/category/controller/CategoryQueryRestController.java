@@ -51,12 +51,12 @@ public class CategoryQueryRestController {
                 .body(service.getCategory(categoryId));
     }
 
-    @GetMapping("/search/{categoryName}")
+    @GetMapping("/search")
     public ResponseEntity<PageResponse<CategoryInfoDto>> getCategories(
-            @PathVariable("categoryName") String categoryName,
+            @RequestParam("name") String name,
             @RequestParam int page) {
 
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
-                .body(service.getCategoriesByName(categoryName, page));
+                .body(service.getCategoriesByName(name, page));
     }
 }
