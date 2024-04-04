@@ -1,12 +1,9 @@
 package com.t2m.g2nee.shop.bookset.role.service;
 
-import com.t2m.g2nee.shop.bookset.publisher.domain.Publisher;
 import com.t2m.g2nee.shop.bookset.role.domain.Role;
 import com.t2m.g2nee.shop.bookset.role.dto.RoleDto;
 import com.t2m.g2nee.shop.bookset.role.mapper.RoleMapper;
 import com.t2m.g2nee.shop.bookset.role.repository.RoleRepository;
-import com.t2m.g2nee.shop.bookset.tag.domain.Tag;
-import com.t2m.g2nee.shop.exception.AlreadyExistException;
 import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import java.util.List;
@@ -43,7 +40,7 @@ public class RoleService {
             findRole.setActivated(true);
 
             return mapper.entityToDto(findRole);
-        }else {
+        } else {
 
             Role saveRole = roleRepository.save(role);
 

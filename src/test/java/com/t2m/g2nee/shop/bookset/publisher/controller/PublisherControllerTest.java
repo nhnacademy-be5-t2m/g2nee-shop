@@ -21,8 +21,7 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -73,7 +72,7 @@ class PublisherControllerTest {
     void testEngValidation() throws Exception {
 
 
-        PublisherDto.Request request =  PublisherDto.Request.builder()
+        PublisherDto.Request request = PublisherDto.Request.builder()
                 .publisherName("한글")
                 .publisherEngName("한글")
 

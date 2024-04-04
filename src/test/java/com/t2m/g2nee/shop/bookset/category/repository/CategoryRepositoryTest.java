@@ -66,16 +66,6 @@ class CategoryRepositoryTest {
     }
 
     @Test
-    void testDelete() {
-        categoryPathRepository.deleteByAncestor_CategoryId(category1.getCategoryId());
-        categoryRepository.deleteById(category1.getCategoryId());
-        assertFalse(categoryRepository.existsById(category1.getCategoryId()));
-
-        categoryPathRepository.deleteById(categoryPath2.getCategoryPathId());
-        assertFalse(categoryPathRepository.existsById(categoryPath2.getCategoryPathId()));
-    }
-
-    @Test
     void testExistsByCategoryName() {
         assertTrue(categoryRepository.existsByCategoryName("테스트카테고리1"));
     }
@@ -92,24 +82,21 @@ class CategoryRepositoryTest {
 
     @Test
     void testGetSubCategoriesByCategoryId() {
+        List<Category> categoryPage =
+                categoryRepository.getSubCategoriesByCategoryId(category1.getCategoryId());
 
-        Pageable pageable = Pageable.ofSize(10).withPage(0);
-
-        Page<Category> categoryPage =
-                categoryRepository.getSubCategoriesByCategoryId(category1.getCategoryId(), pageable);
-
-        assertThat(categoryPage).isNotNull();
-        assertThat(categoryPage.getContent()).contains(category2);
+        assertThat(categoryPage)
+                .isNotNull()
+                .contains(category2);
     }
 
     @Test
-    void testGetRootCategories() {//page
-        Pageable pageable = Pageable.ofSize(10).withPage(0);
+    void testGetRootCategories() {
 
-        Page<Category> categoryPage = categoryRepository.getRootCategories(pageable);
+        List<Category> category = categoryRepository.getRootCategories();
 
-        assertThat(categoryPage).isNotNull();
-        assertThat(categoryPage.getContent()).contains(category1);
+        assertThat(category).isNotNull()
+                .contains(category1);
     }
 
     @Test
@@ -138,5 +125,41 @@ class CategoryRepositoryTest {
         assertFalse(categoryPathRepository.existsById(categoryPath1.getCategoryPathId()));
         assertTrue(categoryPathRepository.existsById(categoryPath2.getCategoryPathId()));
         assertTrue(categoryPathRepository.existsById(categoryPath3.getCategoryPathId()));
+    }
+
+    @Test
+    void testfindByCategoryNameContaining() {
+        Pageable pageable = Pageable.ofSize(10).withPage(0);
+
+        Page<Category> categoryPage = categoryRepository.findByCategoryNameContaining("테스트", pageable);
+
+        assertThat(categoryPage).isNotNull();
+        assertThat(categoryPage.getContent()).contains(category1, category2);
+    }
+
+    @Test
+    void testGetExistsByCategoryIdAndisActivated() {
+        assertTrue(categoryRepository.getExistsByCategoryIdAndisActivated(category1.getCategoryId(), true));
+        assertFalse(categoryRepository.getExistsByCategoryIdAndisActivated(category1.getCategoryId(), false));
+    }
+
+    @Test
+    void testSoftDeleteByCategoryId() {
+        categoryRepository.softDeleteByCategoryId(category1.getCategoryId());
+
+        Category updatedCategory = categoryRepository.findById(category1.getCategoryId()).orElse(null);
+
+        assertThat(updatedCategory.isActivated()).isFalse();
+    }
+
+    @Test
+    void testActiveCategoryByCategoryId() {
+        category1.setActivated(false);
+
+        categoryRepository.activeCategoryByCategoryId(category1.getCategoryId());
+
+        Category updatedCategory = categoryRepository.findById(category1.getCategoryId()).orElse(null);
+
+        assertThat(updatedCategory.isActivated()).isTrue();
     }
 }

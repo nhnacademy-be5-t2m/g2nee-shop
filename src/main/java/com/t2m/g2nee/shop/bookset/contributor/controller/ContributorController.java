@@ -4,9 +4,6 @@ package com.t2m.g2nee.shop.bookset.contributor.controller;
 import com.t2m.g2nee.shop.bookset.contributor.domain.Contributor;
 import com.t2m.g2nee.shop.bookset.contributor.dto.ContributorDto;
 import com.t2m.g2nee.shop.bookset.contributor.service.ContributorService;
-import com.t2m.g2nee.shop.bookset.publisher.domain.Publisher;
-import com.t2m.g2nee.shop.bookset.publisher.dto.PublisherDto;
-import com.t2m.g2nee.shop.bookset.publisher.service.PublisherService;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -53,13 +50,14 @@ public class ContributorController {
     /**
      * 기여자 정보를 수정하는 컨트롤러 입니다.
      *
-     * @param request     수정할 기여자 정보가 담긴 객체
+     * @param request       수정할 기여자 정보가 담긴 객체
      * @param contributorId 수정할 기여자 id
      * @return 수정 후 기여자 객체 정보
      */
     @PatchMapping("/{contributorId}")
     public ResponseEntity<ContributorDto.Response> modifyContributor(@RequestBody @Valid ContributorDto.Request request,
-                                                                 @PathVariable("contributorId") Long contributorId) {
+                                                                     @PathVariable("contributorId")
+                                                                     Long contributorId) {
 
         Contributor contributor = Contributor.builder()
                 .contributorId(contributorId)
@@ -88,6 +86,7 @@ public class ContributorController {
 
     /**
      * 기여자 삭제하는 컨트롤러 입니다.
+     *
      * @param contributorId 기여자 id
      * @return X
      */

@@ -6,6 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 카테고리 정보를 반환하는 dto
+ *
+ * @author : 김수빈
+ * @since : 1.0
+ */
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,9 +22,12 @@ public class CategoryInfoDto {
     private String categoryName;
     private String categoryEngName;
 
+    private Boolean isActivated;
+
     public CategoryInfoDto(Category category) {
         this.categoryId = category.getCategoryId();
         this.categoryName = category.getCategoryName();
         this.categoryEngName = category.getCategoryEngName();
+        this.isActivated = category.isActivated();
     }
 }

@@ -1,6 +1,6 @@
 package com.t2m.g2nee.shop.memberset.Member.service.Impl;
 
-import com.t2m.g2nee.shop.exception.DuplicateException;
+import com.t2m.g2nee.shop.exception.AlreadyExistException;
 import com.t2m.g2nee.shop.memberset.Auth.domain.Auth;
 import com.t2m.g2nee.shop.memberset.Auth.repository.AuthRepository;
 import com.t2m.g2nee.shop.memberset.AuthMember.domain.AuthMember;
@@ -47,11 +47,11 @@ public class MemberServiceImpl implements MemberService {
     public MemberResponse signUp(SignUpMemberRequestDto signUpDto) {
 
         if (existsNickname(signUpDto.getNickName())) {
-            throw new DuplicateException("중복된 nickname입니다.");
+            throw new AlreadyExistException("중복된 nickname입니다.");
 
         }
         if (existsUsername(signUpDto.getUserName())) {
-            throw new DuplicateException("중복된 username입니다.");
+            throw new AlreadyExistException("중복된 username입니다.");
         }
 
         Grade grade = gradeRepository.findByGradeName(Grade.GradeName.NORMAL);
