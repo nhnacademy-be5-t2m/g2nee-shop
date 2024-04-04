@@ -176,7 +176,7 @@ public class BookMgmtService {
                     });
             Optional.ofNullable(request.getCategoryNameList())
                     .ifPresent(categoryNameList -> {
-                        categoryRepository.deleteByBookId(bookId);
+                        bookCategoryRepository.deleteByBookId(bookId);
                         saveBookCategory(categoryNameList, book);
                     });
             Optional.ofNullable(request.getTagNameList())

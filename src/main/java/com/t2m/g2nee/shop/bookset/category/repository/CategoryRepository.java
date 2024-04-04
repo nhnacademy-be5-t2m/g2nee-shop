@@ -41,4 +41,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long>, Categ
      * @return
      */
     Page<Category> findByCategoryNameContaining(String name, Pageable pageable);
+
+    Optional<Category> findByCategoryName(String categoryName);
 }

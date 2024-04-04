@@ -41,7 +41,7 @@ public class MemberServiceImpl implements MemberService {
     /**
      * {@inheritDoc}
      *
-     * @throws DuplicateException username, nickname이 중복되는 경우 예외를 던집니다.
+     * @throws AlreadyExistException username, nickname이 중복되는 경우 예외를 던집니다.
      */
     @Override
     public MemberResponse signUp(SignUpMemberRequestDto signUpDto) {
