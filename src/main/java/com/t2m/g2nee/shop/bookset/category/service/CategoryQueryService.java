@@ -24,6 +24,7 @@ public interface CategoryQueryService {
 
     /**
      * 특정 카테고리 한 개
+     *
      * @param categoryId
      * @return
      */
@@ -31,12 +32,14 @@ public interface CategoryQueryService {
 
     /**
      * 최상위 카테고리만 반환
+     *
      * @return
      */
     List<CategoryInfoDto> getRootCategories();
 
     /**
      * 전체 카테고리를 페이징 처리하여 반환
+     *
      * @param page
      * @return
      */
@@ -44,6 +47,7 @@ public interface CategoryQueryService {
 
     /**
      * 카테고리를 이름으로 검색하여 페이징 처리
+     *
      * @param name
      * @param page
      * @return

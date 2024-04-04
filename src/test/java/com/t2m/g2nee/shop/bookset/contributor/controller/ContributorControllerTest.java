@@ -47,7 +47,7 @@ class ContributorControllerTest {
     @DisplayName("한글 유효성 검사 실패 후 응답값 테스트")
     void testKorValidation() throws Exception {
 
-        ContributorDto.Request request =  ContributorDto.Request.builder()
+        ContributorDto.Request request = ContributorDto.Request.builder()
                 .contributorName("eng")
                 .contributorEngName("eng")
                 .build();
@@ -65,11 +65,12 @@ class ContributorControllerTest {
         resultActions.andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(400));
     }
+
     @Test
     @DisplayName("영문 유효성 검사 실패 후 응답값 테스트")
     void testEngValidation() throws Exception {
 
-        ContributorDto.Request request =  ContributorDto.Request.builder()
+        ContributorDto.Request request = ContributorDto.Request.builder()
                 .contributorName("한글")
                 .contributorEngName("한글")
                 .build();
@@ -118,7 +119,8 @@ class ContributorControllerTest {
     void testUpdateContributor() throws Exception {
 
         //given
-        ContributorDto.Request request = getModifyRequest();;
+        ContributorDto.Request request = getModifyRequest();
+        ;
         ContributorDto.Response modifyresponse = getModifiedResponse();
         Contributor contributor = getContributor();
 
@@ -191,7 +193,7 @@ class ContributorControllerTest {
         doNothing().when(contributorService).deleteContributor(contributor.getContributorId());
 
         //when
-        mockMvc.perform(delete(url +contributor.getContributorId()))
+        mockMvc.perform(delete(url + contributor.getContributorId()))
                 .andExpect(status().isNoContent());
 
     }

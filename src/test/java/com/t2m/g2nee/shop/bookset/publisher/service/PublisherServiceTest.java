@@ -13,8 +13,6 @@ import com.t2m.g2nee.shop.bookset.publisher.dto.PublisherDto;
 import com.t2m.g2nee.shop.bookset.publisher.mapper.PublisherMapper;
 import com.t2m.g2nee.shop.bookset.publisher.repository.PublisherRepository;
 import com.t2m.g2nee.shop.bookset.publisher.service.PublisherService;
-import com.t2m.g2nee.shop.bookset.tag.domain.Tag;
-import com.t2m.g2nee.shop.bookset.tag.dto.TagDto;
 import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import java.util.ArrayList;
@@ -67,7 +65,7 @@ class PublisherServiceTest {
 
     @Test
     @DisplayName("출판사 재활성화 테스트")
-    void activatePublisherTest(){
+    void activatePublisherTest() {
 
         //given
         PublisherDto.Request request = getRequest();
@@ -76,7 +74,8 @@ class PublisherServiceTest {
                 .isActivated(false)
                 .build();
 
-        when(publisherRepository.findByPublisherName(request.getPublisherName())).thenReturn(Optional.ofNullable(publisher));
+        when(publisherRepository.findByPublisherName(request.getPublisherName())).thenReturn(
+                Optional.ofNullable(publisher));
 
         //when
         publisherService.registerPublisher(publisher);
@@ -155,9 +154,10 @@ class PublisherServiceTest {
         verify(publisherRepository, times(1)).deleteById(publisher.getPublisherId());
 
     }
+
     @Test
     @DisplayName("출판사가 없을 때 예외 테스트")
-    void testExistPublisher(){
+    void testExistPublisher() {
         Publisher publisher = getPublisher();
 
         when(publisherRepository.findById(publisher.getPublisherId())).thenReturn(Optional.empty());

@@ -113,6 +113,7 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
 
     /**
      * 카테고리 객체를 CategoryInfoDto로 변환
+     *
      * @param category
      * @return
      */

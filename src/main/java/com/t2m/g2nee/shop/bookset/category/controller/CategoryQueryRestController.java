@@ -42,6 +42,7 @@ public class CategoryQueryRestController {
 
     /**
      * 특정 카테고리의 서브 카테고리를 반환하는 컨트롤러
+     *
      * @param categoryId
      * @return
      */
@@ -55,6 +56,7 @@ public class CategoryQueryRestController {
 
     /**
      * 모든 카테고리를 페이징 처리하여 반환하는 컨트롤러
+     *
      * @param page
      * @return
      */
@@ -67,6 +69,7 @@ public class CategoryQueryRestController {
 
     /**
      * 하나의 카테고리를 반환하는 컨트롤러
+     *
      * @param categoryId
      * @return
      */
@@ -79,6 +82,7 @@ public class CategoryQueryRestController {
 
     /**
      * 카테고리 이름으로 검색하여 페이징처리 하여 반환하는 컨트롤러
+     *
      * @param name
      * @param page
      * @return

@@ -23,6 +23,7 @@ public interface CategoryService {
 
     /**
      * 카테고리 및 카테고리 경로 수정
+     *
      * @param updateCategoryDto
      * @return
      */
@@ -30,6 +31,7 @@ public interface CategoryService {
 
     /**
      * 카테고리 soft delete, 카테고리 경로는 delete
+     *
      * @param categoryId
      * @return
      */
@@ -37,6 +39,7 @@ public interface CategoryService {
 
     /**
      * 카테고리 활성화
+     *
      * @param categoryId
      * @return
      */

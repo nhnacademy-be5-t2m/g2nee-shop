@@ -2,6 +2,7 @@ package com.t2m.g2nee.shop.bookset.category.service;
 
 import com.t2m.g2nee.shop.bookset.category.domain.Category;
 import java.util.List;
+
 /**
  * Categories 테이블의 기본적인 생성, 수정, 삭제를 위한 BasicService
  *
@@ -21,6 +22,7 @@ public interface CategoryBasicService {
 
     /**
      * 카테고리 수정
+     *
      * @param category
      * @return
      */
@@ -28,6 +30,7 @@ public interface CategoryBasicService {
 
     /**
      * 카테고리 soft delete
+     *
      * @param categoryId
      * @return
      */
@@ -37,6 +40,7 @@ public interface CategoryBasicService {
      * 특정 카테고리의 조상 목록 반환
      * insert 시 사용
      * 가장 depth가 작은 조상부터 저장되어 있음
+     *
      * @param descendantId
      * @return
      */
@@ -44,6 +48,7 @@ public interface CategoryBasicService {
 
     /**
      * 카테고리 활성화
+     *
      * @param categoryId
      * @return
      */

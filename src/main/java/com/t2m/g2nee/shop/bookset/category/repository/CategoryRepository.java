@@ -16,6 +16,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long>, Categ
 
     /**
      * name을 포함하는 카테고리가 존재하는지 확인하는 메소드
+     *
      * @param name
      * @return
      */
@@ -31,6 +32,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long>, Categ
 
     /**
      * 카테고리를 name으로 찾아 결과를 페이징 처리하는 메소드
+     *
      * @param name
      * @param pageable
      * @return

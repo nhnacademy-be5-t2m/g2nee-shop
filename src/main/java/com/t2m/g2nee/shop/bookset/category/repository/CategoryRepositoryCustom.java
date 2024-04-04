@@ -13,6 +13,7 @@ public interface CategoryRepositoryCustom {
 
     /**
      * 특정 카테고리의 바로 하위 카테고리를 반환하는 메소드
+     *
      * @param categoryId
      * @return
      */
@@ -20,6 +21,7 @@ public interface CategoryRepositoryCustom {
 
     /**
      * 최상위 카테고리만 반환하는 메소드
+     *
      * @return
      */
     List<Category> getRootCategories();
@@ -27,6 +29,7 @@ public interface CategoryRepositoryCustom {
     /**
      * 특정 카테고리의 조상을 찾는 메소드
      * 특정 카테고리와 가장 depth가 작은 조상부터 출력
+     *
      * @param categoryId
      * @return
      */
@@ -34,6 +37,7 @@ public interface CategoryRepositoryCustom {
 
     /**
      * 해당 카테고리가 존재하면서 활성/비황성되어 있는지 확인
+     *
      * @param categoryId
      * @param active
      * @return
@@ -42,12 +46,14 @@ public interface CategoryRepositoryCustom {
 
     /**
      * 카테고리를 비활성화
+     *
      * @param categoryId
      */
     void softDeleteByCategoryId(Long categoryId);
 
     /**
      * 카테고리를 활성화
+     *
      * @param categoryId
      */
     void activeCategoryByCategoryId(Long categoryId);

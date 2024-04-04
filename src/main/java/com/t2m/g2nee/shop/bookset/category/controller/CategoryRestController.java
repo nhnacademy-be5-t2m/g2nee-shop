@@ -67,6 +67,7 @@ public class CategoryRestController {
 
     /**
      * 카테고리를 soft delete 하는 컨트롤러
+     *
      * @param categoryId
      * @return
      */

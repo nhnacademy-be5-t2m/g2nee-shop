@@ -64,7 +64,7 @@ class ContributorServiceTest {
 
     @Test
     @DisplayName("기여자 재활성화 테스트")
-    void activateContributorTest(){
+    void activateContributorTest() {
 
         //given
         ContributorDto.Request request = getRequest();
@@ -73,7 +73,8 @@ class ContributorServiceTest {
                 .isActivated(false)
                 .build();
 
-        when(contributorRepository.findByContributorName(request.getContributorName())).thenReturn(Optional.ofNullable(contributor));
+        when(contributorRepository.findByContributorName(request.getContributorName())).thenReturn(
+                Optional.ofNullable(contributor));
 
         //when
         contributorService.registerContributor(contributor);
@@ -115,7 +116,7 @@ class ContributorServiceTest {
                 .totalPage(2)
                 .build();
 
-        Pageable pageable = PageRequest.of(0, 10,Sort.by("contributorName"));
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("contributorName"));
         Page<Contributor> contributorPage = new PageImpl<>(contributorList, pageable, contributorList.size());
 
         when(contributorRepository.findAll(PageRequest.of(0, 10, Sort.by("contributorName"))))
@@ -132,7 +133,8 @@ class ContributorServiceTest {
         assertEquals(20, contributorPage.getTotalElements());
         for (int i = 0; i < responseList.size(); i++) {
             assertEquals(responseList.get(i).getContributorName(), responses.getData().get(i).getContributorName());
-            assertEquals(responseList.get(i).getContributorEngName(), responses.getData().get(i).getContributorEngName());
+            assertEquals(responseList.get(i).getContributorEngName(),
+                    responses.getData().get(i).getContributorEngName());
         }
 
     }
@@ -153,14 +155,16 @@ class ContributorServiceTest {
         verify(contributorRepository, times(1)).deleteById(contributor.getContributorId());
 
     }
+
     @Test
     @DisplayName("기여자가 없을 때 예외 테스트")
-    void testExistPublisher(){
+    void testExistPublisher() {
         Contributor contributor = getContributor();
 
         when(contributorRepository.findById(contributor.getContributorId())).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> contributorService.deleteContributor(contributor.getContributorId()));
+        assertThrows(NotFoundException.class,
+                () -> contributorService.deleteContributor(contributor.getContributorId()));
 
     }
 

@@ -30,7 +30,10 @@ public class Auth {
     private AuthName authName;
 
     public enum AuthName {
-        ROLE_ADMIN, ROLE_MEMBER
+        ROLE_ADMIN("관리자"), ROLE_MEMBER("회원");
+
+        AuthName(String name) {
+        }
     }
 }
 

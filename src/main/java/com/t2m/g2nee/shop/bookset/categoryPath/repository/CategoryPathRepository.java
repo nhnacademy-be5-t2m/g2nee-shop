@@ -15,6 +15,7 @@ public interface CategoryPathRepository extends JpaRepository<CategoryPath, Long
 
     /**
      * path의 (조상, 자식)경로가 있는지 확인
+     *
      * @param ancestor
      * @param descendant
      * @return
@@ -23,6 +24,7 @@ public interface CategoryPathRepository extends JpaRepository<CategoryPath, Long
 
     /**
      * 조상에 해당 아이디를 가진 경로를 모두 삭제
+     *
      * @param ancestorId
      */
 
