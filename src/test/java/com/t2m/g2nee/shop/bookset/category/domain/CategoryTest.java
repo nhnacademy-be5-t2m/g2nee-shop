@@ -31,6 +31,7 @@ class CategoryTest {
         assertThat(testCategory.getCategoryId()).isEqualTo(category.getCategoryId());
         assertThat(testCategory.getCategoryName()).isEqualTo(category.getCategoryName());
         assertThat(testCategory.getCategoryEngName()).isEqualTo(category.getCategoryEngName());
+        assertThat(testCategory.isActivated()).isTrue();
     }
 
 }
