@@ -32,7 +32,7 @@ class MemberControllerTest {
 
     SignUpMemberRequestDto signUpMemberRequestDto;
     MemberResponse memberResponse;
-    String signUpPath = "/member/signup";
+    String signUpPath = "shop/member/signup";
 
     @BeforeEach
     void setUp() {
