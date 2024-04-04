@@ -29,15 +29,15 @@ public class BookController {
      *
      * @param request   책 등록에 필요한 정보가 담긴 객체
      * @param thumbnail 섬네일 이미지 파일
-     * @param detail    상세 이미지 파일
+     * @param details    상세 이미지 파일
      * @return
      */
     @PostMapping
     public ResponseEntity<BookDto.Response> postBook(@RequestPart BookDto.Request request,
                                                      @RequestPart MultipartFile thumbnail,
-                                                     @RequestPart MultipartFile[] detail
+                                                     @RequestPart MultipartFile[] details
     ) {
-        BookDto.Response response = bookMgmtService.registerBook(request, thumbnail, detail);
+        BookDto.Response response = bookMgmtService.registerBook(request, thumbnail, details);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -47,16 +47,16 @@ public class BookController {
      *
      * @param request   책 등록에 필요한 정보가 담긴 객체
      * @param thumbnail 섬네일 이미지 파일
-     * @param detail    상세 이미지 파일
+     * @param details    상세 이미지 파일
      * @return
      */
     @PutMapping("/{bookId}")
     public ResponseEntity<BookDto.Response> updateBook(@PathVariable("bookId") Long bookId,
                                                        @RequestPart BookDto.Request request,
                                                        @RequestPart(required = false) MultipartFile thumbnail,
-                                                       @RequestPart(required = false) MultipartFile[] detail) {
+                                                       @RequestPart(required = false) MultipartFile[] details) {
 
-        BookDto.Response response = bookMgmtService.updateBook(bookId, request, thumbnail, detail);
+        BookDto.Response response = bookMgmtService.updateBook(bookId, request, thumbnail, details);
         return ResponseEntity.status(HttpStatus.OK).body(response);
 
     }

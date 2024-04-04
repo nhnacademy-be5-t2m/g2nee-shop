@@ -265,14 +265,17 @@ public class BookMgmtService {
      */
     public void saveBookTag(Book book, List<String> tagNameList) {
 
-        for (String tagName : tagNameList) {
-            Tag findTag = tagRepository.findByTagName(tagName).orElseThrow(() -> new NotFoundException("태그 정보가 없습니다."));
-            BookTag bookTag = BookTag.builder()
-                    .book(book)
-                    .tag(findTag)
-                    .build();
-            bookTagRepository.save(bookTag);
-
+        // 태그가 없으면 설정하지 않습니다.
+        if (!tagNameList.isEmpty()) {
+            for (String tagName : tagNameList) {
+                Tag findTag =
+                        tagRepository.findByTagName(tagName).orElseThrow(() -> new NotFoundException("태그 정보가 없습니다."));
+                BookTag bookTag = BookTag.builder()
+                        .book(book)
+                        .tag(findTag)
+                        .build();
+                bookTagRepository.save(bookTag);
+            }
         }
     }
 
