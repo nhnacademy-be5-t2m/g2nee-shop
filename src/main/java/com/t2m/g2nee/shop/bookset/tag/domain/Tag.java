@@ -17,4 +17,6 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tagId;
     private String tagName;
+
+    private boolean isActivated;
 }

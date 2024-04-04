@@ -28,8 +28,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(PublisherController.class)
 class PublisherControllerTest {
 
     @Autowired
@@ -43,6 +42,8 @@ class PublisherControllerTest {
 
     @MockBean
     private PublisherMapper mapper;
+
+    private final String url = "/shop/publishers/";
 
     @Test
     @DisplayName("한글 유효성 검사 실패 후 응답값 테스트")
@@ -58,7 +59,7 @@ class PublisherControllerTest {
         when(publisherService.registerPublisher(any(Publisher.class))).thenReturn(
                 PublisherDto.Response.class.newInstance());
 
-        ResultActions resultActions = mockMvc.perform(post("/shop/publisher")
+        ResultActions resultActions = mockMvc.perform(post(url)
                 .content(requestJson)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON));
@@ -71,9 +72,11 @@ class PublisherControllerTest {
     @DisplayName("영문 유효성 검사 실패 후 응답값 테스트")
     void testEngValidation() throws Exception {
 
-        PublisherDto.Request request = PublisherDto.Request.builder()
-                .publisherName("eng")
-                .publisherEngName("eng")
+
+        PublisherDto.Request request =  PublisherDto.Request.builder()
+                .publisherName("한글")
+                .publisherEngName("한글")
+
                 .build();
 
         String requestJson = objectMapper.writeValueAsString(request);
@@ -81,7 +84,7 @@ class PublisherControllerTest {
         when(publisherService.registerPublisher(any(Publisher.class))).thenReturn(
                 PublisherDto.Response.class.newInstance());
 
-        ResultActions resultActions = mockMvc.perform(post("/shop/publisher")
+        ResultActions resultActions = mockMvc.perform(post(url)
                 .content(requestJson)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON));
@@ -104,7 +107,7 @@ class PublisherControllerTest {
         when(publisherService.registerPublisher(any(Publisher.class))).thenReturn(response);
 
         //when
-        ResultActions resultActions = mockMvc.perform(post("/shop/publisher")
+        ResultActions resultActions = mockMvc.perform(post(url)
                 .content(requestJson)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON));
@@ -130,7 +133,7 @@ class PublisherControllerTest {
         when(publisherService.updatePublisher(any(Publisher.class))).thenReturn(modifyresponse);
 
         //when  //then
-        ResultActions resultActions = mockMvc.perform(patch("/shop/publisher/{publisherId}", publisher.getPublisherId())
+        ResultActions resultActions = mockMvc.perform(patch(url + publisher.getPublisherId())
                 .content(requestJson)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON));
@@ -162,7 +165,7 @@ class PublisherControllerTest {
         when(mapper.entitiesToDtos(publisherList)).thenReturn(responses);
 
         //when
-        ResultActions resultActions = mockMvc.perform(get("/shop/publisher")
+        ResultActions resultActions = mockMvc.perform(get(url)
                 .param("page", String.valueOf(page))
                 .param("size", String.valueOf(size))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -194,7 +197,7 @@ class PublisherControllerTest {
         doNothing().when(publisherService).deletePublisher(publisher.getPublisherId());
 
         //when
-        mockMvc.perform(delete("/shop/publisher/{publisherId}", publisher.getPublisherId()))
+        mockMvc.perform(delete(url + publisher.getPublisherId()))
                 .andExpect(status().isNoContent());
 
     }

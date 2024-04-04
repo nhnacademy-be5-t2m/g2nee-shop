@@ -28,4 +28,6 @@ public class Publisher {
 
     private String publisherEngName;
 
+    private boolean isActivated;
+
 }

@@ -12,25 +12,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.t2m.g2nee.shop.bookset.tag.domain.Tag;
-import com.t2m.g2nee.shop.bookset.tag.dto.TagDto;
-import com.t2m.g2nee.shop.bookset.tag.mapper.TagMapper;
-import com.t2m.g2nee.shop.bookset.tag.service.TagService;
+import com.t2m.g2nee.shop.bookset.role.domain.Role;
+import com.t2m.g2nee.shop.bookset.role.dto.RoleDto;
+import com.t2m.g2nee.shop.bookset.role.mapper.RoleMapper;
+import com.t2m.g2nee.shop.bookset.role.service.RoleService;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+
+@WebMvcTest(RoleController.class)
 class RoleControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -39,25 +38,27 @@ class RoleControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private TagService tagService;
+    private RoleService roleService;
 
     @MockBean
-    private TagMapper mapper;
+    private RoleMapper mapper;
+
+    private final String url = "/shop/roles/";
 
     @Test
     @DisplayName("유효성 검사 실패 후 응답값 테스트")
     void testKorValidation() throws Exception {
 
-        TagDto.Request request = TagDto.Request.builder()
-                .tagName(" ")
+        RoleDto.Request request = RoleDto.Request.builder()
+                .roleName(" ")
                 .build();
 
         String requestJson = objectMapper.writeValueAsString(request);
 
-        when(tagService.registerTag(any(Tag.class))).thenReturn(
-                TagDto.Response.class.newInstance());
+        when(roleService.registerRole(any(Role.class))).thenReturn(
+                RoleDto.Response.class.newInstance());
 
-        ResultActions resultActions = mockMvc.perform(post("/shop/tag")
+        ResultActions resultActions = mockMvc.perform(post(url)
                 .content(requestJson)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON));
@@ -67,44 +68,44 @@ class RoleControllerTest {
     }
 
     @Test
-    @DisplayName("태그 생성 컨트롤러 테스트")
-    void testPostTag() throws Exception {
+    @DisplayName("역할 생성 컨트롤러 테스트")
+    void testPostRole() throws Exception {
 
         // given
-        TagDto.Request request = getRequest();
-        TagDto.Response response = getResponse();
+        RoleDto.Request request = getRequest();
+        RoleDto.Response response = getResponse();
 
         String requestJson = objectMapper.writeValueAsString(request);
 
-        when(tagService.registerTag(any(Tag.class))).thenReturn(response);
+        when(roleService.registerRole(any(Role.class))).thenReturn(response);
 
         //when
-        ResultActions resultActions = mockMvc.perform(post("/shop/tag")
+        ResultActions resultActions = mockMvc.perform(post(url)
                 .content(requestJson)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON));
 
         //then
         resultActions.andExpect(status().isCreated())
-                .andExpect(jsonPath("$.tagName").value(request.getTagName()));
+                .andExpect(jsonPath("$.roleName").value(request.getRoleName()));
     }
 
     @Test
-    @DisplayName("태그 수정 컨트롤러 테스트")
-    void testUpdateTag() throws Exception {
+    @DisplayName("역할 수정 컨트롤러 테스트")
+    void testUpdateRole() throws Exception {
 
         //given
-        TagDto.Request request = getModifyRequest();
+        RoleDto.Request request = getModifyRequest();
         ;
-        TagDto.Response modifyresponse = getModifiedResponse();
-        Tag tag = getTag();
+        RoleDto.Response modifyresponse = getModifiedResponse();
+        Role role = getRole();
 
         String requestJson = objectMapper.writeValueAsString(request);
 
-        when(tagService.updateTag(any(Tag.class))).thenReturn(modifyresponse);
+        when(roleService.updateRole(any(Role.class))).thenReturn(modifyresponse);
 
         //when  //then
-        ResultActions resultActions = mockMvc.perform(patch("/shop/tag/{tagId}", tag.getTagId())
+        ResultActions resultActions = mockMvc.perform(patch(url + role.getRoleId())
                 .content(requestJson)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON));
@@ -112,30 +113,30 @@ class RoleControllerTest {
 
         resultActions
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.tagName").value(request.getTagName()));
+                .andExpect(jsonPath("$.roleName").value(request.getRoleName()));
     }
 
     @Test
-    @DisplayName("태그 리스트 조회 컨트롤러 테스트")
-    void testGetTagList() throws Exception {
+    @DisplayName("역할 리스트 조회 컨트롤러 테스트")
+    void testGetRoleList() throws Exception {
 
         //given
-        List<Tag> tagList = getList();
-        List<TagDto.Response> responses = getResponseList();
+        List<Role> roleList = getList();
+        List<RoleDto.Response> responses = getResponseList();
         int page = 1;
         int size = 10;
-        int totalPage = (int) Math.ceil((double) tagList.size() / size);
-        PageResponse<TagDto.Response> pageResponse = PageResponse.<TagDto.Response>builder()
+        int totalPage = (int) Math.ceil((double) roleList.size() / size);
+        PageResponse<RoleDto.Response> pageResponse = PageResponse.<RoleDto.Response>builder()
                 .data(responses)
                 .totalPage(totalPage)
                 .currentPage(page)
                 .build();
 
-        when(tagService.getTagList(page)).thenReturn(pageResponse);
-        when(mapper.entitiesToDtos(tagList)).thenReturn(responses);
+        when(roleService.getRoleList(page)).thenReturn(pageResponse);
+        when(mapper.entitiesToDtos(roleList)).thenReturn(responses);
 
         //when
-        ResultActions resultActions = mockMvc.perform(get("/shop/tag")
+        ResultActions resultActions = mockMvc.perform(get(url)
                 .param("page", String.valueOf(page))
                 .param("size", String.valueOf(size))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -148,102 +149,101 @@ class RoleControllerTest {
 
         for (int i = 0; i < responses.size(); i++) {
             resultActions.andExpect(
-                    jsonPath("$.data[" + i + "].tagName").value(responses.get(i).getTagName()));
+                    jsonPath("$.data[" + i + "].roleName").value(responses.get(i).getRoleName()));
         }
 
     }
 
 
     @Test
-    @DisplayName("태그 삭제 컨트롤러 테스트")
-    void deleteTagTest() throws Exception {
+    @DisplayName("역할 삭제 컨트롤러 테스트")
+    void deleteRoleTest() throws Exception {
 
         //given
-        Tag tag = getTag();
+        Role role = getRole();
 
-
-        doNothing().when(tagService).deleteTag(tag.getTagId());
+        doNothing().when(roleService).deleteRole(role.getRoleId());
 
         //when
-        mockMvc.perform(delete("/shop/tag/{tagId}", tag.getTagId()))
+        mockMvc.perform(delete(url + role.getRoleId()))
                 .andExpect(status().isNoContent());
 
     }
 
-    private List<Tag> getList() {
+    private List<Role> getList() {
 
-        List<Tag> tagList = new ArrayList<>();
+        List<Role> roleList = new ArrayList<>();
         for (int i = 1; i < 21; i++) {
-            Tag tag = Tag.builder()
-                    .tagId((long) i)
-                    .tagName("태그" + i)
+            Role role = Role.builder()
+                    .roleId((long) i)
+                    .roleName("역할" + i)
                     .build();
 
-            tagList.add(tag);
+            roleList.add(role);
         }
-        return tagList;
+        return roleList;
     }
 
-    private List<TagDto.Response> getResponseList() {
+    private List<RoleDto.Response> getResponseList() {
 
-        List<TagDto.Response> tagList = new ArrayList<>();
+        List<RoleDto.Response> roleList = new ArrayList<>();
         for (int i = 1; i < 11; i++) {
-            TagDto.Response tag = TagDto.Response.builder()
-                    .tagId((long) i)
-                    .tagName("태그" + i)
+            RoleDto.Response tag = RoleDto.Response.builder()
+                    .roleId((long) i)
+                    .roleName("역할" + i)
 
                     .build();
 
-            tagList.add(tag);
+            roleList.add(tag);
         }
-        return tagList;
+        return roleList;
     }
 
-    private TagDto.Request getRequest() {
+    private RoleDto.Request getRequest() {
 
-        return TagDto.Request.builder()
-                .tagName("태그1")
+        return RoleDto.Request.builder()
+                .roleName("역할1")
                 .build();
     }
 
-    private TagDto.Request getModifyRequest() {
+    private RoleDto.Request getModifyRequest() {
 
 
-        return TagDto.Request.builder()
-                .tagName("태그2")
+        return RoleDto.Request.builder()
+                .roleName("역할2")
                 .build();
     }
 
-    private Tag getTag() {
+    private Role getRole() {
 
-        return Tag.builder()
-                .tagId(1L)
-                .tagName("태그1")
+        return Role.builder()
+                .roleId(1L)
+                .roleName("역할1")
                 .build();
     }
 
-    private Tag getModifiedTag() {
+    private Role getModifiedRole() {
 
-        return Tag.builder()
-                .tagId(1L)
-                .tagName("태그2")
+        return Role.builder()
+                .roleId(1L)
+                .roleName("역할2")
                 .build();
     }
 
 
-    private TagDto.Response getResponse() {
+    private RoleDto.Response getResponse() {
 
-        return TagDto.Response.builder()
-                .tagId(1L)
-                .tagName("태그1")
+        return RoleDto.Response.builder()
+                .roleId(1L)
+                .roleName("역할1")
                 .build();
     }
 
-    private TagDto.Response getModifiedResponse() {
+    private RoleDto.Response getModifiedResponse() {
 
-        return TagDto.Response.builder()
-                .tagId(1L)
-                .tagName("태그2")
+        return RoleDto.Response.builder()
+                .roleId(1L)
+                .roleName("역할2")
                 .build();
     }
 }
