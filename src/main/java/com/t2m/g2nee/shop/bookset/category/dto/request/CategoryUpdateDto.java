@@ -10,7 +10,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * 카테고리 업데이트 시 필요한 dto
+ * 카테고리 업데이트를 위한 dto
+ *
+ * @author : 김수빈
+ * @since : 1.0
  */
 @Getter
 @AllArgsConstructor

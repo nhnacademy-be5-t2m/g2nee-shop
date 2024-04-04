@@ -8,6 +8,12 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
+/**
+ * QueryDSL을 사용하여 복잡한 쿼리를 작성하기 위한 구현체
+ *
+ * @author : 김수빈
+ * @since : 1.0
+ */
 public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport implements CategoryRepositoryCustom {
 
     private final EntityManager entityManager;
@@ -132,6 +138,9 @@ public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport impl
     public void activeCategoryByCategoryId(Long categoryId) {
         QCategory category = QCategory.category;
 
+        /**
+         * UPDATE Categories c SET c.isActivated = true WHERE c.categoryId = 1;
+         */
         update(category)
                 .set(category.isActivated, true)
                 .where(category.categoryId.eq(categoryId)).execute();

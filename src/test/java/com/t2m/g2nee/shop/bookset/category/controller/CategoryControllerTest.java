@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -63,7 +64,7 @@ class CategoryControllerTest {
 
         when(service.updateCategory(any(CategoryUpdateDto.class))).thenReturn(updatedCategory);
 
-        mockMvc.perform(put("/shop/categories/{categoryId}/update", 1L)
+        mockMvc.perform(put("/shop/categories/{categoryId}", 1L)
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -87,7 +88,7 @@ class CategoryControllerTest {
     void testActiveCategory() throws Exception {
         when(service.activeCategory(anyLong())).thenReturn(true);
 
-        mockMvc.perform(put("/shop/categories/{categoryId}/active", 1L))
+        mockMvc.perform(patch("/shop/categories/{categoryId}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", equalTo(true)));
     }

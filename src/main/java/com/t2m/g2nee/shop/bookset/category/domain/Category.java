@@ -12,6 +12,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * 카테고리 엔티티
+ *
+ * @author : 김수빈
+ * @since : 1.0
+ */
 @Entity
 @Table(name = "Categories")
 @Getter

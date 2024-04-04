@@ -12,6 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * select 하는 쿼리를 처리하는 controller
+ *
+ * @author : 김수빈
+ * @since : 1.0
+ */
 @RestController
 @RequestMapping("/shop/categories")
 public class CategoryQueryRestController {
@@ -22,6 +28,11 @@ public class CategoryQueryRestController {
         this.service = service;
     }
 
+    /**
+     * 최상위 카테고리를 반환하는 컨트롤러
+     *
+     * @return
+     */
     @GetMapping
     public ResponseEntity<List<CategoryInfoDto>> getRootCategories() {
 
@@ -29,6 +40,11 @@ public class CategoryQueryRestController {
                 .body(service.getRootCategories());
     }
 
+    /**
+     * 특정 카테고리의 서브 카테고리를 반환하는 컨트롤러
+     * @param categoryId
+     * @return
+     */
     @GetMapping("/{categoryId}/sub")
     public ResponseEntity<List<CategoryInfoDto>> getSubCategories(
             @PathVariable("categoryId") Long categoryId) {
@@ -37,6 +53,11 @@ public class CategoryQueryRestController {
                 .body(service.getSubCategories(categoryId));
     }
 
+    /**
+     * 모든 카테고리를 페이징 처리하여 반환하는 컨트롤러
+     * @param page
+     * @return
+     */
     @GetMapping("/all")
     public ResponseEntity<PageResponse<CategoryInfoDto>> getAllCategories(@RequestParam int page) {
 
@@ -44,6 +65,11 @@ public class CategoryQueryRestController {
                 .body(service.getAllCategories(page));
     }
 
+    /**
+     * 하나의 카테고리를 반환하는 컨트롤러
+     * @param categoryId
+     * @return
+     */
     @GetMapping("/{categoryId}")
     public ResponseEntity<CategoryInfoDto> getCategory(@PathVariable("categoryId") Long categoryId) {
 
@@ -51,6 +77,12 @@ public class CategoryQueryRestController {
                 .body(service.getCategory(categoryId));
     }
 
+    /**
+     * 카테고리 이름으로 검색하여 페이징처리 하여 반환하는 컨트롤러
+     * @param name
+     * @param page
+     * @return
+     */
     @GetMapping("/search")
     public ResponseEntity<PageResponse<CategoryInfoDto>> getCategories(
             @RequestParam("name") String name,
