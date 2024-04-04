@@ -1,0 +1,14 @@
+POST http://localhost:8081/member/signup
+Content-Type: application/json
+
+{
+  "userName": "jieun14766",
+  "password": "asdf1234!",
+  "name": "정지은",
+  "nickName": "지은17",
+  "email": "asdf@naver.com",
+  "phoneNumber": "010-1111-1111",
+  "birthday": "20000102",
+  "gender": "Female",
+  "isOAuth": false
+}
