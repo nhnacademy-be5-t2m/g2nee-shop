@@ -8,7 +8,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.t2m.g2nee.shop.exception.DuplicateException;
+import com.t2m.g2nee.shop.exception.AlreadyExistException;
 import com.t2m.g2nee.shop.memberset.Auth.domain.Auth;
 import com.t2m.g2nee.shop.memberset.Auth.repository.AuthRepository;
 import com.t2m.g2nee.shop.memberset.AuthMember.domain.AuthMember;
@@ -27,7 +27,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -36,7 +35,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @Import(MemberServiceImpl.class)
 class MemberServiceTest {
 
-    @Autowired
     MemberService memberService;
     @MockBean
     MemberRepository memberRepository;
@@ -114,7 +112,7 @@ class MemberServiceTest {
         when(customerRepository.save(any())).thenReturn(member);
         when(authRepository.findByAuthName(any())).thenReturn(auth);
         assertThatThrownBy(() -> memberService.signUp(memberRequestDto))
-                .isInstanceOf(DuplicateException.class);
+                .isInstanceOf(AlreadyExistException.class);
     }
 
     @Test
@@ -123,6 +121,6 @@ class MemberServiceTest {
         when(memberRepository.existsByNickname(anyString())).thenReturn(true);
         when(memberRepository.existsByUsername(anyString())).thenReturn(false);
         assertThatThrownBy(() -> memberService.signUp(memberRequestDto))
-                .isInstanceOf(DuplicateException.class);
+                .isInstanceOf(AlreadyExistException.class);
     }
 }
