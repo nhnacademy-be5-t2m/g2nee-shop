@@ -44,6 +44,7 @@ public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport impl
                 .where(categoryPath.ancestor.categoryId.eq(categoryId)
                         .and(categoryPath.depth.eq(1L))
                         .and(category.isActivated.isTrue()))
+                .orderBy(category.categoryName.asc())
                 .select(category)
                 .orderBy(category.categoryName.asc()).fetch();
     }
@@ -65,6 +66,7 @@ public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport impl
                 .on(category.categoryId.eq(categoryPath.descendant.categoryId).and(categoryPath.depth.gt(0)))
                 .where(categoryPath.descendant.categoryId.isNull()
                         .and(category.isActivated.isTrue()))
+                .orderBy(category.categoryName.asc())
                 .select(category)
                 .fetch();
     }
