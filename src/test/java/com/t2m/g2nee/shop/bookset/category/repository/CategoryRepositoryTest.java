@@ -72,12 +72,9 @@ class CategoryRepositoryTest {
 
     @Test
     void testFindAll() {
-        Pageable pageable = Pageable.ofSize(10).withPage(0);
+        List<Category> categoryPage = categoryRepository.findAll();
 
-        Page<Category> categoryPage = categoryRepository.findAll(pageable);
-
-        assertThat(categoryPage).isNotNull();
-        assertThat(categoryPage.getContent()).contains(category1, category2);
+        assertThat(categoryPage).isNotNull().contains(category1, category2);
     }
 
     @Test

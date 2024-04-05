@@ -102,23 +102,16 @@ class CategoryQueryRestControllerTest {
     void testGetAllCategories() throws Exception {
         List<CategoryInfoDto> categories = List.of(category1, category2, category3, category4);
 
-        PageResponse<CategoryInfoDto> categoryPage =
-                PageResponse.<CategoryInfoDto>builder()
-                        .data(categories)
-                        .currentPage(1)
-                        .totalPage(1)
-                        .build();
+        when(service.getAllCategories()).thenReturn(categories);
 
-        when(service.getAllCategories(anyInt())).thenReturn(categoryPage);
-
-        mockMvc.perform(get("/shop/categories/all").param("page", "1"))
+        mockMvc.perform(get("/shop/categories/all"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.data", hasSize(4)))
-                .andExpect(jsonPath("$.data[0].categoryId", equalTo(1)))
-                .andExpect(jsonPath("$.data[1].categoryId", equalTo(2)))
-                .andExpect(jsonPath("$.data[2].categoryId", equalTo(3)))
-                .andExpect(jsonPath("$.data[3].categoryId", equalTo(4)));
+                .andExpect(jsonPath("$", hasSize(4)))
+                .andExpect(jsonPath("$[0].categoryId", equalTo(1)))
+                .andExpect(jsonPath("$[1].categoryId", equalTo(2)))
+                .andExpect(jsonPath("$[2].categoryId", equalTo(3)))
+                .andExpect(jsonPath("$[3].categoryId", equalTo(4)));
     }
 
     @Test

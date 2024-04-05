@@ -54,10 +54,10 @@ class CategoryQueryServiceTest {
     @Test
     void testGetAllCategories() {
 
-        PageResponse<CategoryInfoDto> allCategories = categoryQueryService.getAllCategories(1);
+        List<CategoryInfoDto> allCategories = categoryQueryService.getAllCategories();
 
-        assertThat(allCategories).isNotNull();
-        assertThat(allCategories.getData()).hasSize(10);
+        assertThat(allCategories).isNotNull()
+                .hasSize(12);
 
     }
 

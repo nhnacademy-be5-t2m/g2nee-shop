@@ -40,7 +40,7 @@ public interface CategoryQueryService {
      * @param page
      * @return
      */
-    PageResponse<CategoryInfoDto> getAllCategories(int page);
+    List<CategoryInfoDto> getAllCategories();
 
     /**
      * 카테고리를 이름으로 검색하여 페이징 처리

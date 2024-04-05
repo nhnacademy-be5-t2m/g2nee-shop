@@ -57,31 +57,11 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
     }
 
     @Override
-    public PageResponse<CategoryInfoDto> getAllCategories(int page) {
-        //모든 카테고리를 페이징처리하여 반환
-        Page<Category> categories = categoryRepository.findAll(
-                PageRequest.of(page - 1, 10, Sort.by("categoryName"))
-        );
+    public List<CategoryInfoDto> getAllCategories() {
 
-        List<CategoryInfoDto> categoryInfoDtoList = categories
-                .stream().map(this::convertToCategoryInfoDto)
+        return categoryRepository.findAll().stream()
+                .map(this::convertToCategoryInfoDto)
                 .collect(Collectors.toList());
-
-        int startPage = (int) Math.max(1, categories.getNumber() - Math.floor((double) maxPageButtons / 2));
-        int endPage = Math.min(startPage + maxPageButtons - 1, categories.getTotalPages());
-
-        if (endPage - startPage + 1 < maxPageButtons) {
-            startPage = Math.max(1, endPage - maxPageButtons + 1);
-        }
-
-        return PageResponse.<CategoryInfoDto>builder()
-                .data(categoryInfoDtoList)
-                .currentPage(page)
-                .totalPage(categories.getTotalPages())
-                .startPage(startPage)
-                .endPage(endPage)
-                .totalElements(categories.getTotalElements())
-                .build();
     }
 
     @Override

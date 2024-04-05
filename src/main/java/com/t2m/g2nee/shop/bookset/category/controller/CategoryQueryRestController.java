@@ -54,15 +54,14 @@ public class CategoryQueryRestController {
     }
 
     /**
-     * 모든 카테고리를 페이징 처리하여 반환하는 컨트롤러
-     * @param page
+     * 모든 카테고리를 반환하는 컨트롤러
      * @return
      */
     @GetMapping("/all")
-    public ResponseEntity<PageResponse<CategoryInfoDto>> getAllCategories(@RequestParam int page) {
+    public ResponseEntity<List<CategoryInfoDto>> getAllCategories() {
 
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
-                .body(service.getAllCategories(page));
+                .body(service.getAllCategories());
     }
 
     /**
