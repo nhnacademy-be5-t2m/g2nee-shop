@@ -1,16 +1,11 @@
 package com.t2m.g2nee.shop.bookset.book.controller;
 
 import com.t2m.g2nee.shop.bookset.book.dto.BookDto;
-import com.t2m.g2nee.shop.bookset.book.repository.BookCustomRepository;
-import com.t2m.g2nee.shop.bookset.book.repository.BookCustomRepositoryImpl;
-import com.t2m.g2nee.shop.bookset.book.repository.BookRepository;
 import com.t2m.g2nee.shop.bookset.book.service.BookMgmtService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,14 +16,21 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+
+/**
+ * 책 관리 controller 클래스
+ *
+ * @author : 신동민
+ * @since : 1.0
+ */
 @RestController
 @Validated
 @RequestMapping("/shop/books")
 @RequiredArgsConstructor
-public class BookController {
+public class BookMgmtController {
 
     private final BookMgmtService bookMgmtService;
-    private final BookRepository bookRepository;
+
 
     /**
      * 책을 등록하는 컨트롤러 입니다.
@@ -83,13 +85,5 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping("/new")
-    public ResponseEntity<List<BookDto.ListResponse>> getNewBooks(){
-
-        List<BookDto.ListResponse> responses = bookRepository.getNewBookList();
-
-
-        return ResponseEntity.status(HttpStatus.OK).body(responses);
-    }
 }
 
