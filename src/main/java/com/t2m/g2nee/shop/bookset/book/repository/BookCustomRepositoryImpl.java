@@ -6,19 +6,24 @@ import com.t2m.g2nee.shop.bookset.book.dto.BookDto;
 import com.t2m.g2nee.shop.bookset.book.mapper.BookMapper;
 import com.t2m.g2nee.shop.bookset.bookcontributor.domain.BookContributor;
 import com.t2m.g2nee.shop.bookset.bookcontributor.domain.QBookContributor;
+import com.t2m.g2nee.shop.bookset.bookcontributor.dto.BookContributorDto;
+import com.t2m.g2nee.shop.bookset.bookcontributor.mapper.BookContributorMapper;
 import com.t2m.g2nee.shop.bookset.publisher.domain.QPublisher;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 
+
 public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implements BookCustomRepository {
 
-    private final BookMapper mapper;
+    private final BookMapper bookMapper;
+    private final BookContributorMapper bookContributorMapper;
 
-    public BookCustomRepositoryImpl(BookMapper mapper) {
+    public BookCustomRepositoryImpl(BookMapper bookMapper, BookContributorMapper bookContributorMapper) {
         super(Book.class);
-        this.mapper = mapper;
+        this.bookMapper = bookMapper;
+        this.bookContributorMapper = bookContributorMapper;
     }
 
     /**
@@ -49,7 +54,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                             .where(bookContributor.book.bookId.eq(b.getBookId()))
                             .fetch();
 
-            BookDto.ListResponse response = mapper.entityToListDto(b,bookContributorList);
+            BookDto.ListResponse response = bookMapper.entityToListDto(b,bookContributorList);
             responses.add(response);
         }
         return responses;
