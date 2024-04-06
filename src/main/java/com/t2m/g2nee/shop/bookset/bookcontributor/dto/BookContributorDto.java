@@ -28,4 +28,16 @@ public class BookContributorDto {
         private Book book;
         private Role role;
     }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class Response {
+
+        private String contributorName;
+        private String contributorEngName;
+        private String roleName;
+    }
 }

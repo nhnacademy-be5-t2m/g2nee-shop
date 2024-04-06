@@ -10,4 +10,5 @@ public interface BookContributorRepository extends JpaRepository<BookContributor
     @Modifying
     @Query("DELETE FROM BookContributor bc WHERE bc.book.bookId = :bookId")
     void deleteByBookId(Long bookId);
+
 }
