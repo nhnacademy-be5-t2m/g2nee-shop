@@ -37,6 +37,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+
+/**
+ * 책 관리에 대한 Service 입니다.
+ *
+ * @author : 신동민
+ * @since : 1.0
+ */
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -70,7 +77,7 @@ public class BookMgmtService {
         // 요청을 Book 엔티티로 변경합니다.
         Book book = mapper.dtoToEntity(request);
         // 출판사 정보를 얻어 Book 엔티티에 매핑 후 저장합니다.
-        Publisher publisher = publisherRepository.findByPublisherName(request.getPublisherName())
+        Publisher publisher = publisherRepository.findById(request.getPublisherId())
                 .orElseThrow(() -> new NotFoundException("출판사 정보가 없습니다."));
         book.setPublisher(publisher);
         book.setBookStatus(Book.BookStatus.ONSALE);
@@ -85,13 +92,13 @@ public class BookMgmtService {
             uploadImage(details[i], book, tokenId, objectName, ImageType.DETAIL);
         }
         // 도서카테고리 연관 관계를 설정합니다.
-        saveBookCategory(request.getCategoryNameList(), book);
+        saveBookCategory(request.getCategoryIdList(), book);
 
         // 도서태그 연관관계를 설정해줍니다.
-        saveBookTag(book, request.getTagNameList());
+        saveBookTag(book, request.getTagIdList());
 
         // 도서기여자 연관관계를 설정해줍니다.
-        saveBookContributor(book, request.getContributorNameList(), request.getRoleNameList());
+        saveBookContributor(book, request.getContributorIdList(), request.getRoleIdList());
 
         return mapper.entityToDto(saveBook);
 
@@ -165,21 +172,21 @@ public class BookMgmtService {
             Optional.of(request.getQuantity()).ifPresent(book::setQuantity);
 
             // 출판사, 기여자, 역할, 태그 연관관계에 변경사항이 있다면 다시 관계를 만들어 줍니다.
-            Optional.ofNullable(request.getPublisherName())
-                    .map(publisherRepository::findByPublisherName)
+            Optional.ofNullable(request.getPublisherId())
+                    .map(publisherRepository::findById)
                     .orElseThrow(() -> new NotFoundException("출판사 정보가 없습니다."))
                     .ifPresent(book::setPublisher);
-            Optional.ofNullable(request.getContributorNameList())
-                    .ifPresent(contributorNameList -> {
+            Optional.ofNullable(request.getContributorIdList())
+                    .ifPresent(contributorIdList -> {
                         bookContributorRepository.deleteByBookId(bookId);
-                        saveBookContributor(book, contributorNameList, request.getRoleNameList());
+                        saveBookContributor(book, contributorIdList, request.getRoleIdList());
                     });
-            Optional.ofNullable(request.getCategoryNameList())
-                    .ifPresent(categoryNameList -> {
+            Optional.ofNullable(request.getCategoryIdList())
+                    .ifPresent(contributorIdList -> {
                         bookCategoryRepository.deleteByBookId(bookId);
-                        saveBookCategory(categoryNameList, book);
+                        saveBookCategory(contributorIdList, book);
                     });
-            Optional.ofNullable(request.getTagNameList())
+            Optional.ofNullable(request.getTagIdList())
                     .ifPresent(tagNameList -> {
                         bookTagRepository.deleteByBookId(bookId);
                         saveBookTag(book, tagNameList);
@@ -241,12 +248,12 @@ public class BookMgmtService {
     /**
      * 책 등록 시 카테고리 연관관계를 설정하는 메서드 입니다.
      *
-     * @param categoryNameList 카테고리 이름 목록
+     * @param categoryIdList 카테고리 이름 목록
      * @param book             책 객체
      */
-    public void saveBookCategory(List<String> categoryNameList, Book book) {
-        for (String categoryName : categoryNameList) {
-            Category category = categoryRepository.findByCategoryName(categoryName)
+    public void saveBookCategory(List<Long> categoryIdList, Book book) {
+        for (Long categoryId : categoryIdList) {
+            Category category = categoryRepository.findById(categoryId)
                     .orElseThrow(() -> new NotFoundException("카테고리가 존재하지 않습니다."));
 
             BookCategory bookCategory = BookCategory.builder()
@@ -261,15 +268,15 @@ public class BookMgmtService {
      * 책 등록 시 태그에 대한 설정을 하는 메서드 입니다.
      *
      * @param book        책 객체
-     * @param tagNameList 태그 이름 목록
+     * @param tagIdList 태그 이름 목록
      */
-    public void saveBookTag(Book book, List<String> tagNameList) {
+    public void saveBookTag(Book book, List<Long> tagIdList) {
 
         // 태그가 없으면 설정하지 않습니다.
-        if (!tagNameList.isEmpty()) {
-            for (String tagName : tagNameList) {
+        if (!tagIdList.isEmpty()) {
+            for (Long tagId : tagIdList) {
                 Tag findTag =
-                        tagRepository.findByTagName(tagName).orElseThrow(() -> new NotFoundException("태그 정보가 없습니다."));
+                        tagRepository.findById(tagId).orElseThrow(() -> new NotFoundException("태그 정보가 없습니다."));
                 BookTag bookTag = BookTag.builder()
                         .book(book)
                         .tag(findTag)
@@ -283,25 +290,25 @@ public class BookMgmtService {
      * 책 등록 시 기여자와 역할에 대한 설정을 하는 메서드 입니다.
      *
      * @param book                책 객체
-     * @param contributorNameList 기여자 이름 목록
-     * @param roleNameList        역할 이름 목록
+     * @param contributorIdList 기여자 아이디 리스트
+     * @param roleIdList        역할 아이디 리스트
      */
-    public void saveBookContributor(Book book, List<String> contributorNameList, List<String> roleNameList) {
+    public void saveBookContributor(Book book, List<Long> contributorIdList, List<Long> roleIdList) {
 
-        if (contributorNameList.size() != roleNameList.size()) {
+        if (contributorIdList.size() != roleIdList.size()) {
             throw new BadRequestException("기여자 이름 목록과 역할 이름 목록이 일치하지 않습니다.");
         }
 
-        for (int i = 0; i < contributorNameList.size(); i++) {
+        for (int i = 0; i < contributorIdList.size(); i++) {
 
-            String contributorName = contributorNameList.get(i);
-            String roleName = roleNameList.get(i);
+            Long contributorId = contributorIdList.get(i);
+            Long roleId = roleIdList.get(i);
 
-            Contributor contributor = contributorRepository.findByContributorName(contributorName)
+            Contributor contributor = contributorRepository.findById(contributorId)
                     .orElseThrow(() -> new NotFoundException("기여자 정보가 없습니다."));
 
             Role role =
-                    roleRepository.findByRoleName(roleName).orElseThrow(() -> new NotFoundException("역할 정보가 없습니다."));
+                    roleRepository.findById(roleId).orElseThrow(() -> new NotFoundException("역할 정보가 없습니다."));
 
             BookContributor bookContributor = BookContributor.builder()
                     .book(book)

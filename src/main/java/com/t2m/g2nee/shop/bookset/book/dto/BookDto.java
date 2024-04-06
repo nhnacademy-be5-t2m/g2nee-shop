@@ -16,6 +16,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * 책 dto 클래스
+ *
+ * @author : 신동민
+ * @since : 1.0
+ */
 public class BookDto {
 
     private BookDto() {
@@ -49,11 +55,11 @@ public class BookDto {
         @Pattern(regexp = "\\d+", message = "수량은 숫자로 입력해주세요")
         private int quantity;
         private BookStatus bookStatus;
-        private String publisherName;
-        private List<String> contributorNameList;
-        private List<String> roleNameList;
-        private List<String> categoryNameList;
-        private List<String> tagNameList;
+        private Long publisherId;
+        private List<Long> contributorIdList;
+        private List<Long> roleIdList;
+        private List<Long> categoryIdList;
+        private List<Long> tagIdList;
 
     }
 

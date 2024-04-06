@@ -21,6 +21,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
+
+/**
+ * 태그 관리에 대한 controller 입니다.
+ *
+ * @author : 신동민
+ * @since : 1.0
+ */
 @RestController
 @Validated
 @RequestMapping("/shop/tags")
