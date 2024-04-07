@@ -46,9 +46,10 @@ public class BookGetController {
      */
     @GetMapping
     public ResponseEntity<PageResponse<BookDto.ListResponse>> getBooksByCategory(@RequestParam Long categoryId,
+                                                                         @RequestParam String sort,
                                                                          @RequestParam int page){
 
-        PageResponse<BookDto.ListResponse> responses = bookGetService.getBooksByCategory(page, categoryId);
+        PageResponse<BookDto.ListResponse> responses = bookGetService.getBooksByCategory(page, categoryId,sort);
 
         return ResponseEntity.status(HttpStatus.OK).body(responses);
 

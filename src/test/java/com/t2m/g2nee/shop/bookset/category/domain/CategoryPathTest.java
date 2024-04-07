@@ -23,7 +23,6 @@ class CategoryPathTest {
 
     @Autowired
     CategoryRepository categoryRepository;
-
     @Test
     void test() {
         Category aCategory = new Category("조상카테고리", "aCategory");

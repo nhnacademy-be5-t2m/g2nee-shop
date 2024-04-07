@@ -3,6 +3,7 @@ package com.t2m.g2nee.shop.bookset.book.dto;
 import static com.t2m.g2nee.shop.bookset.book.domain.Book.BookStatus;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.querydsl.core.annotations.QueryProjection;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.t2m.g2nee.shop.bookset.bookcontributor.dto.BookContributorDto;
 import java.time.LocalDate;
@@ -72,6 +73,7 @@ public class BookDto {
     public static class Response {
 
         private Long bookId;
+        private String detailImageUrl;
         private int quantity;
         private String title;
         private String engTitle;
@@ -100,15 +102,15 @@ public class BookDto {
     public static class ListResponse {
 
         private Long bookId;
+        private String thumbnailImageUrl;
         private String title;
         private String engTitle;
-        private List<BookContributorDto.Response> contributorRoleList;
         private LocalDate publishedDate;
         private int price;
         private int salePrice;
         private String publisherName;
         private String publisherEngName;
-
+        private List<BookContributorDto.Response> contributorRoleList;
     }
     @Getter
     @Setter

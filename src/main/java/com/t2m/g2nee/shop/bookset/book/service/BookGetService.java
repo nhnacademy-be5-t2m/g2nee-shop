@@ -45,10 +45,10 @@ public class BookGetService {
      * @return PageResponse<BookDto.ListResponse>
      */
 
-    public PageResponse<BookDto.ListResponse> getBooksByCategory(int page, Long categoryId){
+    public PageResponse<BookDto.ListResponse> getBooksByCategory(int page, Long categoryId, String sort){
 
         int size = 8;
-        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("viewCount"));
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(sort));
 
         Page<BookDto.ListResponse> bookPage = bookRepository.getBookListByCategory(categoryId,pageable);
 

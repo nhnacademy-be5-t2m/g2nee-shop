@@ -1,4 +1,4 @@
-package com.t2m.g2nee.shop.nhncloudTest;
+package com.t2m.g2nee.shop.nhncloudStorageTest;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
