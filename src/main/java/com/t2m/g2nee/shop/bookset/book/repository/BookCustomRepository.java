@@ -12,5 +12,5 @@ public interface BookCustomRepository {
 
      Page<BookDto.ListResponse> getBookListByCategory(Long categoryId, Pageable pageable);
 
-     List<BookFile> getBookFile();
+
 }

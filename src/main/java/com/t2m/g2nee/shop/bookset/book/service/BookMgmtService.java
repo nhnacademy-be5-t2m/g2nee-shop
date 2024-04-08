@@ -129,7 +129,7 @@ public class BookMgmtService {
                 // 섬네일 이미지 파일을 변경했을 때 실행합니다.
                 if (thumbnail != null) {
 
-                    String objectName = "thumb_" + request.getEngTitle();
+                    String objectName = "thumb/" + request.getEngTitle();
                     // 기존 이미지를 삭제합니다'
                     BookFile bookFile = bookFileRepository.findByBookIdAndImageType(bookId, ImageType.THUMBNAIL);
                     String imageUrl = bookFile.getUrl();
@@ -152,7 +152,7 @@ public class BookMgmtService {
                     // storage에 새 이미지를 업로드합니다
 
                     for (int i = 0; i < details.length; i++) {
-                        String objectName = "detail_" + request.getEngTitle() + (i + 1);
+                        String objectName = "detail/" + request.getEngTitle() + (i + 1);
                         uploadImage(details[i], book, tokenId, objectName, ImageType.DETAIL);
 
                     }

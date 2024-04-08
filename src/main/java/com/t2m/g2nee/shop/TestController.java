@@ -37,11 +37,4 @@ public class TestController {
         return new ResponseEntity<>(result, header, HttpStatus.OK);
     }
 
-    @GetMapping("/file")
-    public ResponseEntity fileTest(){
-
-        List<BookFile> bookFile = bookRepository.getBookFile();
-
-        return ResponseEntity.status(HttpStatus.OK).body(bookFile);
-    }
 }

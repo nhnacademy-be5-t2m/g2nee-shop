@@ -133,15 +133,20 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
 
         return new PageImpl<>(responses, pageable, count);
     }
-    public List<BookFile> getBookFile(){
 
+    public BookDto.Response getBookDetail(Long bookId){
 
+        QBook book = QBook.book;
+        QPublisher publisher = QPublisher.publisher;
+        QBookContributor bookContributor = QBookContributor.bookContributor;
+        QCategoryPath categoryPath = QCategoryPath.categoryPath;
+        QBookCategory bookCategory = QBookCategory.bookCategory;
         QBookFile bookFile = QBookFile.bookFile;
 
-        return from(bookFile)
-                .where(bookFile.imageType.eq(BookFile.ImageType.THUMBNAIL))
-                .fetch();
+return null;
+
     }
+
 
     /**
      * 도서에 기여자와 역할 정보를 설정하고 반환하는 메서드입니다.

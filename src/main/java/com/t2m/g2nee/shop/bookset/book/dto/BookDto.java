@@ -73,7 +73,7 @@ public class BookDto {
     public static class Response {
 
         private Long bookId;
-        private String detailImageUrl;
+        private String[] detailImageUrl;
         private int quantity;
         private String title;
         private String engTitle;
