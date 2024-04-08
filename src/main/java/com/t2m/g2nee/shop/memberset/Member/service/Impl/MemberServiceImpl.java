@@ -1,10 +1,13 @@
 package com.t2m.g2nee.shop.memberset.Member.service.Impl;
 
 import com.t2m.g2nee.shop.exception.AlreadyExistException;
+import com.t2m.g2nee.shop.exception.BadRequestException;
+import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.memberset.Auth.domain.Auth;
 import com.t2m.g2nee.shop.memberset.Auth.repository.AuthRepository;
 import com.t2m.g2nee.shop.memberset.AuthMember.domain.AuthMember;
 import com.t2m.g2nee.shop.memberset.AuthMember.repository.AuthMemberRepository;
+import com.t2m.g2nee.shop.memberset.Customer.domain.Customer;
 import com.t2m.g2nee.shop.memberset.Customer.repository.CustomerRepository;
 import com.t2m.g2nee.shop.memberset.Grade.domain.Grade;
 import com.t2m.g2nee.shop.memberset.Grade.repository.GradeRepository;
@@ -67,7 +70,7 @@ public class MemberServiceImpl implements MemberService {
                 .isOAuth(signUpDto.getIsOAuth())
                 .gender(Member.Gender.valueOf(signUpDto.getGender()))
                 .build();
-        Member member = customerRepository.save(memberInfo);
+        Member member = (Member) customerRepository.save(memberInfo);
         authMemberRepository.save(new AuthMember(authRepository.findByAuthName(Auth.AuthName.ROLE_MEMBER), member));
 
         return new MemberResponse(member.getUsername(), member.getName(), member.getNickname(),
@@ -90,4 +93,21 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.existsByUsername(username);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws NotFoundException   으로 회원아이디도 없는 경우 예외를 던집니다.
+     * @throws BadRequestException 으로 비밀번호가 틀린 경우 예외를 던집니다.
+     */
+    @Override
+    public boolean login(String username, String password) {
+        if (!existsUsername(username)) {
+            throw new NotFoundException(username + "은 존재하지 않는 username 입니다.");
+        }
+        Customer member = memberRepository.findByUsername(username);
+        if (!password.equals(member.getPassword())) {
+            throw new BadRequestException(username + "의 비밀번호가 틀렸습니다.");
+        }
+        return true;
+    }
 }
