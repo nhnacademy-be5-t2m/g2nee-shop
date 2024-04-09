@@ -1,8 +1,11 @@
 package com.t2m.g2nee.shop.memberset.Member.controller;
 
+import com.t2m.g2nee.shop.memberset.Member.dto.request.MemberLoginRequestDto;
 import com.t2m.g2nee.shop.memberset.Member.dto.request.SignUpMemberRequestDto;
+import com.t2m.g2nee.shop.memberset.Member.dto.request.UsernameRequestDto;
 import com.t2m.g2nee.shop.memberset.Member.dto.response.MemberResponse;
-import com.t2m.g2nee.shop.memberset.Member.service.Impl.MemberServiceImpl;
+import com.t2m.g2nee.shop.memberset.Member.dto.response.MemberResponseToAuth;
+import com.t2m.g2nee.shop.memberset.Member.service.MemberService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,12 +28,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequestMapping("/shop/member")
 public class MemberController {
-    private final MemberServiceImpl memberService;
+    private final MemberService memberService;
 
     /**
      * 회원가입을 처리하는 메소드
      *
-     * @param signUpDto 회원가입시 기입하는 회원정보가 입력.
+     * @param signUpDto 회원가입시 기입하는 회원정보가 입력
      * @return 회원정보 저장 후 기본 회원정보 response 반환
      */
     @PostMapping("/signup")
@@ -43,4 +46,32 @@ public class MemberController {
 
     }
 
+    /**
+     * 로그인을 처리하는 메소드
+     *
+     * @param loginDto 로그인시 기입하는 로그인정보가 입력
+     * @return 로그인이 가능한지 여부를 boolean 으로 반환
+     */
+    @PostMapping("/login")
+    public ResponseEntity<Boolean> memberLogin(@Valid @RequestBody MemberLoginRequestDto loginDto) {
+        boolean loginResponse = memberService.login(loginDto.getUsername(), loginDto.getPassword());
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(loginResponse);
+    }
+
+    /**
+     * username 으로 회원의 정보를 받아오는 메소드
+     *
+     * @param request 로그인시 기입하는 로그인정보가 입력
+     * @return 로그인이 가능한지 여부를 boolean 으로 반환
+     */
+    @PostMapping("/getInfo")
+    public ResponseEntity<MemberResponseToAuth> getMemberInfo(@Valid @RequestBody UsernameRequestDto request) {
+        MemberResponseToAuth response = memberService.getMemberInfo(request.getUsername());
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
+    }
 }

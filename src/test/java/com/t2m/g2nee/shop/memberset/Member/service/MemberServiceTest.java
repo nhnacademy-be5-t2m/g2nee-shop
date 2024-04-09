@@ -125,4 +125,5 @@ class MemberServiceTest {
         assertThatThrownBy(() -> memberService.signUp(memberRequestDto))
                 .isInstanceOf(AlreadyExistException.class);
     }
+
 }

@@ -111,12 +111,13 @@ public class BookDto {
         private String publisherEngName;
         private List<BookContributorDto.Response> contributorRoleList;
     }
+
     @Getter
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class statusResponse{
+    public static class statusResponse {
         private BookStatus status;
     }
 }
