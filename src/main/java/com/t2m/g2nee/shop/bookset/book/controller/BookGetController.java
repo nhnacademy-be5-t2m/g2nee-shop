@@ -7,6 +7,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,9 +30,11 @@ public class BookGetController {
     private final BookGetService bookGetService;
 
     @GetMapping("/{bookId}")
-    public ResponseEntity<BookDto.Response> getBookById(@PathVariable("bookId") String bookId){
+    public ResponseEntity<BookDto.Response> getBookById(@PathVariable("bookId") Long bookId) {
 
-return null;
+        BookDto.Response response = bookGetService.getBookDetail(bookId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     /**
@@ -53,12 +56,33 @@ return null;
      */
     @GetMapping
     public ResponseEntity<PageResponse<BookDto.ListResponse>> getBooksByCategory(@RequestParam Long categoryId,
-                                                                         @RequestParam String sort,
+                                                                                 @RequestParam(required = false)
+                                                                                 String sort,
                                                                          @RequestParam int page){
+
+        if (!StringUtils.hasText(sort)) {
+            sort = "viewCount";
+        }
 
         PageResponse<BookDto.ListResponse> responses = bookGetService.getBooksByCategory(page, categoryId,sort);
 
         return ResponseEntity.status(HttpStatus.OK).body(responses);
 
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<PageResponse<BookDto.ListResponse>> getBookByElasticsearchAndCategory(
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) String sort,
+            @RequestParam String keyword,
+            @RequestParam int page) {
+
+        if (!StringUtils.hasText(sort)) {
+            sort = "viewCount";
+        }
+        PageResponse<BookDto.ListResponse> responses =
+                bookGetService.getBookByCategoryAndElasticsearch(page, categoryId, keyword, sort);
+
+        return ResponseEntity.status(HttpStatus.OK).body(responses);
     }
 }

@@ -3,12 +3,11 @@ package com.t2m.g2nee.shop.bookset.book.service;
 
 import com.t2m.g2nee.shop.bookset.book.dto.BookDto;
 import com.t2m.g2nee.shop.bookset.book.repository.BookRepository;
-import com.t2m.g2nee.shop.bookset.tag.domain.Tag;
-import com.t2m.g2nee.shop.bookset.tag.dto.TagDto;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -52,6 +51,53 @@ public class BookGetService {
 
         Page<BookDto.ListResponse> bookPage = bookRepository.getBookListByCategory(categoryId,pageable);
 
+        return getPageResponse(page, bookPage);
+    }
+
+    /**
+     * 책 상세 정보를 조회하는 메서드입니다.
+     * @param bookId
+     * @return
+     */
+    public BookDto.Response getBookDetail(Long bookId) {
+
+        return bookRepository.getBookDetail(bookId);
+    }
+
+    /**
+     * Elasticsearch를 이용해서 책 목록을 조회하는 메서드입니다.
+     * @param page 페이지 번호
+     * @param categoryId 카테고리 아이디
+     * @param keyword 키워드
+     * @param sort 정렬 기준 default viewCount
+     * @return PageResponse<BookDto.ListResponse>
+     */
+    public PageResponse<BookDto.ListResponse> getBookByCategoryAndElasticsearch(int page, Long categoryId,
+                                                                                String keyword, String sort) {
+
+
+        int size = 8;
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(sort));
+
+        List<BookDto.ListResponse> responseList =
+                bookRepository.getBooksByElasticSearchAndCategory(page, categoryId, keyword);
+
+        Page<BookDto.ListResponse> bookPage = new PageImpl<>(responseList, pageable, responseList.size());
+
+        return getPageResponse(page, bookPage);
+
+    }
+
+    /**
+     * Paging하여 응답객체를 생성하는 메서드 입니다.
+     * @param page 페이지 번호
+     * @param bookPage 페이징할 페이지 객체
+     * @return PageResponse<BookDto.ListResponse>
+     */
+    private PageResponse<BookDto.ListResponse> getPageResponse(int page,
+                                                               Page<BookDto.ListResponse> bookPage) {
+
+        // 최대 버튼 개수 8개
         int maxPageButtons = 8;
         int startPage = (int) Math.max(1, bookPage.getNumber() - Math.floor((double) maxPageButtons / 2));
         int endPage = Math.min(startPage + maxPageButtons - 1, bookPage.getTotalPages());

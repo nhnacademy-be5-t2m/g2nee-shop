@@ -3,12 +3,11 @@ package com.t2m.g2nee.shop.bookset.book.dto;
 import static com.t2m.g2nee.shop.bookset.book.domain.Book.BookStatus;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.querydsl.core.annotations.QueryProjection;
-import com.querydsl.core.types.dsl.NumberPath;
 import com.t2m.g2nee.shop.bookset.bookcontributor.dto.BookContributorDto;
+import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryInfoDto;
+import com.t2m.g2nee.shop.bookset.tag.dto.TagDto;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -73,7 +72,7 @@ public class BookDto {
     public static class Response {
 
         private Long bookId;
-        private String[] detailImageUrl;
+        private List<String> detailImageUrl;
         private int quantity;
         private String title;
         private String engTitle;
@@ -86,9 +85,9 @@ public class BookDto {
         private int viewCount;
         private BookStatus bookStatus;
         private int pages;
-        private Map<String, String> contributorRole;
-        private List<String> categoryNameList;
-        private List<String> tagNameList;
+        private List<BookContributorDto.Response> contributorRoleList;
+        private List<List<CategoryInfoDto>> categoryList;
+        private List<TagDto.Response> tagList;
         private String publisherName;
         private String publisherEngName;
     }
