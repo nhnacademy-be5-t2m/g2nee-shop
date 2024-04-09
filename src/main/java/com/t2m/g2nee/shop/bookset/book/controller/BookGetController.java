@@ -70,6 +70,14 @@ public class BookGetController {
 
     }
 
+    /**
+     * Elasticsearch를 이용해서 책을 조회하는 컨트롤러 입니다.
+     * @param categoryId 카테고리 아이디
+     * @param sort 정렬 기준
+     * @param keyword 키워드
+     * @param page 페이지 번호
+     * @return
+     */
     @GetMapping("/search")
     public ResponseEntity<PageResponse<BookDto.ListResponse>> getBookByElasticsearchAndCategory(
             @RequestParam(required = false) Long categoryId,

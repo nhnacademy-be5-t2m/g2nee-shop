@@ -224,12 +224,16 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
 
         MatchQueryBuilder titleQuery = QueryBuilders.matchQuery("title", keyword).boost(50);
-        MatchQueryBuilder bookIndexQuery = QueryBuilders.matchQuery("bookIndex", keyword).boost(50);
-        MatchQueryBuilder descriptionQuery = QueryBuilders.matchQuery("description", keyword).boost(50);
+        MatchQueryBuilder bookIndexQuery = QueryBuilders.matchQuery("bookIndex", keyword).boost(20);
+        MatchQueryBuilder descriptionQuery = QueryBuilders.matchQuery("description", keyword).boost(30);
+        MatchQueryBuilder contributorQuery = QueryBuilders.matchQuery("categoryName",keyword).boost(40);
+        MatchQueryBuilder publisherQuery = QueryBuilders.matchQuery("publisherName",keyword).boost(40);
 
         boolQuery.should(titleQuery);
         boolQuery.should(bookIndexQuery);
         boolQuery.should(descriptionQuery);
+        boolQuery.should(contributorQuery);
+        boolQuery.should(publisherQuery);
 
         NativeSearchQueryBuilder searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(boolQuery);
@@ -414,8 +418,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
     }
 
     /**
-     * 카테고리 ID가 요청으로 왔을 때 팔티링을 위한 메서드
-     *
+     * 카테고리 ID가 요청으로 왔을 때 필터링을 위한 메서드
      * @param bookCategory bookCategory 객체
      * @param categoryId   카테고리 아이디
      * @return BooleanExpression
