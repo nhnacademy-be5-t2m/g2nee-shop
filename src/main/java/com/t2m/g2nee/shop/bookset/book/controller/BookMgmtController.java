@@ -16,13 +16,21 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+
+/**
+ * 책 관리 controller 클래스
+ *
+ * @author : 신동민
+ * @since : 1.0
+ */
 @RestController
 @Validated
 @RequestMapping("/shop/books")
 @RequiredArgsConstructor
-public class BookController {
+public class BookMgmtController {
 
     private final BookMgmtService bookMgmtService;
+
 
     /**
      * 책을 등록하는 컨트롤러 입니다.
@@ -76,5 +84,6 @@ public class BookController {
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
 }
 

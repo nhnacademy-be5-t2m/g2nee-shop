@@ -3,9 +3,11 @@ package com.t2m.g2nee.shop.bookset.book.dto;
 import static com.t2m.g2nee.shop.bookset.book.domain.Book.BookStatus;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.t2m.g2nee.shop.bookset.bookcontributor.dto.BookContributorDto;
+import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryInfoDto;
+import com.t2m.g2nee.shop.bookset.tag.dto.TagDto;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -14,6 +16,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * 책 dto 클래스
+ *
+ * @author : 신동민
+ * @since : 1.0
+ */
 public class BookDto {
 
     private BookDto() {
@@ -47,11 +55,11 @@ public class BookDto {
         @Pattern(regexp = "\\d+", message = "수량은 숫자로 입력해주세요")
         private int quantity;
         private BookStatus bookStatus;
-        private String publisherName;
-        private List<String> contributorNameList;
-        private List<String> roleNameList;
-        private List<String> categoryNameList;
-        private List<String> tagNameList;
+        private Long publisherId;
+        private List<Long> contributorIdList;
+        private List<Long> roleIdList;
+        private List<Long> categoryIdList;
+        private List<Long> tagIdList;
 
     }
 
@@ -64,6 +72,7 @@ public class BookDto {
     public static class Response {
 
         private Long bookId;
+        private List<String> detailImageUrl;
         private int quantity;
         private String title;
         private String engTitle;
@@ -76,9 +85,9 @@ public class BookDto {
         private int viewCount;
         private BookStatus bookStatus;
         private int pages;
-        private Map<String, String> contributorRole;
-        private List<String> categoryNameList;
-        private List<String> tagNameList;
+        private List<BookContributorDto.Response> contributorRoleList;
+        private List<List<CategoryInfoDto>> categoryList;
+        private List<TagDto.Response> tagList;
         private String publisherName;
         private String publisherEngName;
     }
@@ -92,15 +101,15 @@ public class BookDto {
     public static class ListResponse {
 
         private Long bookId;
+        private String thumbnailImageUrl;
         private String title;
         private String engTitle;
-        private Map<String, String> contributorRole;
         private LocalDate publishedDate;
         private int price;
         private int salePrice;
         private String publisherName;
         private String publisherEngName;
-
+        private List<BookContributorDto.Response> contributorRoleList;
     }
 
     @Getter
