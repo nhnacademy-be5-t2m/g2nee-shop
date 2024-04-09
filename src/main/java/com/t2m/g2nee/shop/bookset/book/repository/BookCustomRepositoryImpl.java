@@ -226,7 +226,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
         MatchQueryBuilder titleQuery = QueryBuilders.matchQuery("title", keyword).boost(50);
         MatchQueryBuilder bookIndexQuery = QueryBuilders.matchQuery("bookIndex", keyword).boost(20);
         MatchQueryBuilder descriptionQuery = QueryBuilders.matchQuery("description", keyword).boost(30);
-        MatchQueryBuilder contributorQuery = QueryBuilders.matchQuery("categoryName",keyword).boost(40);
+        MatchQueryBuilder contributorQuery = QueryBuilders.matchQuery("contributorName",keyword).boost(40);
         MatchQueryBuilder publisherQuery = QueryBuilders.matchQuery("publisherName",keyword).boost(40);
 
         boolQuery.should(titleQuery);
@@ -282,7 +282,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                                     , book.price
                                     , book.salePrice
                                     , publisher.publisherName
-                                    , publisher.publisherName))
+                                    , publisher.publisherEngName))
                             .fetchOne();
 
             if (response != null) {
