@@ -16,7 +16,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Table(name = "Books")
@@ -47,7 +46,6 @@ public class Book {
     @ManyToOne
     @JoinColumn(name = "publisherId")
     private Publisher publisher;
-
 
 
     @Getter

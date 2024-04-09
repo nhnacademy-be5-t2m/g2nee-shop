@@ -29,7 +29,7 @@ public class BookController {
      *
      * @param request   책 등록에 필요한 정보가 담긴 객체
      * @param thumbnail 섬네일 이미지 파일
-     * @param details    상세 이미지 파일
+     * @param details   상세 이미지 파일
      * @return
      */
     @PostMapping
@@ -47,7 +47,7 @@ public class BookController {
      *
      * @param request   책 등록에 필요한 정보가 담긴 객체
      * @param thumbnail 섬네일 이미지 파일
-     * @param details    상세 이미지 파일
+     * @param details   상세 이미지 파일
      * @return
      */
     @PutMapping("/{bookId}")

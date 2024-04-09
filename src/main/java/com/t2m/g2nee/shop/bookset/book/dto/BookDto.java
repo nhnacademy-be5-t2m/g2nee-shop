@@ -102,12 +102,13 @@ public class BookDto {
         private String publisherEngName;
 
     }
+
     @Getter
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class statusResponse{
+    public static class statusResponse {
         private BookStatus status;
     }
 }

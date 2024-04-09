@@ -2,6 +2,7 @@ package com.t2m.g2nee.shop.memberset.Member.service;
 
 import com.t2m.g2nee.shop.memberset.Member.dto.request.SignUpMemberRequestDto;
 import com.t2m.g2nee.shop.memberset.Member.dto.response.MemberResponse;
+import com.t2m.g2nee.shop.memberset.Member.dto.response.MemberResponseToAuth;
 
 public interface MemberService {
 
@@ -30,10 +31,27 @@ public interface MemberService {
     boolean existsUsername(String username);
 
     /**
-     * login이 가능한 회원인지 확인하는 메소드
+     * login 이 가능한 회원인지 확인하는 메소드
      *
      * @param username,password 로그인가능 여부를 확인하는 아이디와 비밀번호
      * @return 로그인가능 여부를 boolean 으로 반환
      */
     boolean login(String username, String password);
+
+    /**
+     * customerId로 회원인지 비회원인지 확인하는 메소드
+     *
+     * @param customerId
+     * @return 회원인지의 여부를 boolean 으로 반환
+     */
+    boolean isMember(Long customerId);
+
+    /**
+     * username 으로 member 의 정보를 가져오는 메소드
+     *
+     * @param username
+     * @return member 의 정보를 반환
+     */
+    MemberResponseToAuth getMemberInfo(String username);
+
 }
