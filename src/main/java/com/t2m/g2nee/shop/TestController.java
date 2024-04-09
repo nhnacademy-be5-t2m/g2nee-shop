@@ -1,6 +1,5 @@
 package com.t2m.g2nee.shop;
 
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,7 +29,7 @@ public class TestController {
     }
 
     @GetMapping("/image")
-    public String imageTest(){
+    public String imageTest() {
 
         return "imageTest.html";
     }
