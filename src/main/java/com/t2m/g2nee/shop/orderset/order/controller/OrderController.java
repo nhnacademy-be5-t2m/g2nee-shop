@@ -54,7 +54,7 @@ public class OrderController {
      * @param pageable paging
      * @return 200, 전체 주문 반환
      */
-    @GetMapping("/token/orders")
+    @GetMapping("/admin/orders")
     public ResponseEntity<PageResponse<GetOrderListForAdminResponseDto>> getAllOrders(
             Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -70,6 +70,7 @@ public class OrderController {
      * @param orderState 주문 상태
      * @return 주문 list
      */
+    @GetMapping("/admin/{orderState}")
     public ResponseEntity<PageResponse<GetOrderListForAdminResponseDto>> getAllOrdersByState(
             Pageable pageable, @PathVariable Order.OrderState orderState) {
         return ResponseEntity.status(HttpStatus.OK)
