@@ -59,33 +59,6 @@ public class Order {
         WAITING, DELIVERING, DELIVERED, RETURNING, RETURNED
     }
 
-    @Builder
-    public Order(Long orderId, String orderNumber,
-                 Timestamp orderDate, Timestamp deliveryWishDate,
-                 BigDecimal deliveryFee, OrderState orderState,
-                 BigDecimal netAmount, BigDecimal orderAmount,
-                 String receiverName, String receiverPhoneNumber,
-                 String receiveAddress, String zipcode,
-                 String detail, String message,
-                 Customer customer, Coupon coupon) {
-        this.orderId = orderId;
-        this.orderNumber = orderNumber;
-        this.orderDate = orderDate;
-        this.deliveryWishDate = deliveryWishDate;
-        this.deliveryFee = deliveryFee;
-        this.orderState = orderState;
-        this.netAmount = netAmount;
-        this.orderAmount = orderAmount;
-        this.receiverName = receiverName;
-        this.receiverPhoneNumber = receiverPhoneNumber;
-        this.receiveAddress = receiveAddress;
-        this.zipcode = zipcode;
-        this.detail = detail;
-        this.message = message;
-        this.customer = customer;
-        this.coupon = coupon;
-    }
-
     public void changeState(OrderState orderState) {
         this.orderState = orderState;
     }
