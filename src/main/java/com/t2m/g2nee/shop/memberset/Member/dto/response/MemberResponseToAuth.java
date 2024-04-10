@@ -13,8 +13,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class MemberResponseToAuth {
-    private String userName;
-    private String name;
-    private String nickName;
+    private long memberId;
+    private String username;
+    private String password;
     private List<String> authorities;
 }

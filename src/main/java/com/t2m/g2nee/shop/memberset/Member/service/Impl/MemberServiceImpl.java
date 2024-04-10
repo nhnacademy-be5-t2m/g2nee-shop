@@ -146,7 +146,8 @@ public class MemberServiceImpl implements MemberService {
         for (AuthMember authMember : authMembers) {
             authorities.add(authRepository.findById(authMember.getAuth().getAuthId()).get().getAuthName().getName());
         }
-        return new MemberResponseToAuth(member.getUsername(), member.getName(), member.getNickname(), authorities);
+        return new MemberResponseToAuth(member.getCustomerId(), member.getUsername(), member.getPassword(),
+                authorities);
     }
 
 }
