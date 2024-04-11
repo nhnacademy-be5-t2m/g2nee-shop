@@ -33,6 +33,7 @@ public class OrderImplService implements OrderService {
     @Override
     @Transactional
     public Long createOrder(OrderCreateRequestDto orderCreateRequestDto) {
+        //
         Customer customer = null;
         //if (Objects.nonNull(orderCreateRequestDto.getCustomerId())) {
         //    customer = customerRepository.getById()
@@ -72,9 +73,13 @@ public class OrderImplService implements OrderService {
     @Override
     @Transactional
     public void changeOrderState(Long orderId, Order.OrderState orderState) {
-        Order order = orderRepository.findById(orderId);
-        if (order == null) {
-            throw new NotFoundException("주문이 존재하지 않습니다.");
-        }
+        //order 존재 여부 확인?
+        Order order = orderRepository.findById(orderId).orElseThrow(()
+                -> new NotFoundException("주문이 존재하지 않습니다."));
+
+        order.setOrderState(orderState);
+        orderRepository.save(order);
     }
+
+
 }

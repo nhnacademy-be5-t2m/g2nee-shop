@@ -1,5 +1,6 @@
 package com.t2m.g2nee.shop.orderset.order.repository;
 
+import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListResponseDto;
@@ -24,6 +25,16 @@ public interface OrderCustomRepository {
      * @return 전체 주문 반환
      */
     Page<GetOrderListForAdminResponseDto> getAllOrderList(Pageable pageable);
+
+    /**
+     * 주문 상태별 주문목록 반환
+     *
+     * @param pageable   paging
+     * @param orderState 주문상태
+     * @return 상태별 주문목록
+     */
+    Page<GetOrderListForAdminResponseDto> getOrderListByState(
+            Pageable pageable, Order.OrderState orderState);
 
     /**
      * 회원의 전체 주문 반환.
