@@ -4,8 +4,6 @@ package com.t2m.g2nee.shop.bookset.category.dto.response;
 import com.t2m.g2nee.shop.bookset.category.domain.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 /**
  * 카테고리 정보를 반환하는 dto
  *
@@ -14,7 +12,6 @@ import lombok.NoArgsConstructor;
  */
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
 public class CategoryInfoDto {
 
     //카테고리 정보
@@ -30,4 +27,5 @@ public class CategoryInfoDto {
         this.categoryEngName = category.getCategoryEngName();
         this.isActivated = category.isActivated();
     }
+
 }
