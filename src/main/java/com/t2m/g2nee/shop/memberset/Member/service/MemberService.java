@@ -30,13 +30,6 @@ public interface MemberService {
      */
     boolean existsUsername(String username);
 
-    /**
-     * login 이 가능한 회원인지 확인하는 메소드
-     *
-     * @param username,password 로그인가능 여부를 확인하는 아이디와 비밀번호
-     * @return 로그인가능 여부를 boolean 으로 반환
-     */
-    boolean login(String username, String password);
 
     /**
      * customerId로 회원인지 비회원인지 확인하는 메소드

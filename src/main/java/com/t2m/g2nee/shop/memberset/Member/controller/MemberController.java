@@ -1,6 +1,5 @@
 package com.t2m.g2nee.shop.memberset.Member.controller;
 
-import com.t2m.g2nee.shop.memberset.Member.dto.request.MemberLoginRequestDto;
 import com.t2m.g2nee.shop.memberset.Member.dto.request.SignUpMemberRequestDto;
 import com.t2m.g2nee.shop.memberset.Member.dto.request.UsernameRequestDto;
 import com.t2m.g2nee.shop.memberset.Member.dto.response.MemberResponse;
@@ -44,20 +43,6 @@ public class MemberController {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(memberResponse);
 
-    }
-
-    /**
-     * 로그인을 처리하는 메소드
-     *
-     * @param loginDto 로그인시 기입하는 로그인정보가 입력
-     * @return 로그인이 가능한지 여부를 boolean 으로 반환
-     */
-    @PostMapping("/login")
-    public ResponseEntity<Boolean> memberLogin(@Valid @RequestBody MemberLoginRequestDto loginDto) {
-        boolean loginResponse = memberService.login(loginDto.getUsername(), loginDto.getPassword());
-        return ResponseEntity.status(HttpStatus.OK)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(loginResponse);
     }
 
     /**
