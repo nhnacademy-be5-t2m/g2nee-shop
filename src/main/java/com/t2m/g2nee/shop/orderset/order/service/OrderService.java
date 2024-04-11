@@ -55,7 +55,7 @@ public interface OrderService {
      * @param orderId 주문 id.
      * @return 주문 정보 반환
      */
-    GetOrderInfoResponseDto getOrderInfoById(Long orderId);
+    GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long customerId);
 
     /**
      * 비회원 주문 정보 조회(주문 번호로 조회)

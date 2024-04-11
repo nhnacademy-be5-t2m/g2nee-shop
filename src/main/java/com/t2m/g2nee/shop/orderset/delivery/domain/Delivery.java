@@ -39,6 +39,4 @@ public class Delivery {
     @ManyToOne
     @JoinColumn(name = "customerId")
     private Customer customer;
-
-
 }

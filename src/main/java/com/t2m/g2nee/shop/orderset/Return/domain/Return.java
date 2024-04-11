@@ -1,6 +1,6 @@
 package com.t2m.g2nee.shop.orderset.Return.domain;
 
-import com.t2m.g2nee.shop.orderset.OrderDetail.domain.OrderDetail;
+import com.t2m.g2nee.shop.orderset.orderdetail.domain.OrderDetail;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;

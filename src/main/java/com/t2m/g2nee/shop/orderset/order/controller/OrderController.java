@@ -102,8 +102,8 @@ public class OrderController {
     //@MemberAndAuth
     @GetMapping("/token/orders/{orderId}/members/{customerId}")
     public ResponseEntity<GetOrderInfoResponseDto> getOrderInfoByOrderId(
-            @PathVariable Long orderId) {
-        GetOrderInfoResponseDto orderInfoResponseDto = orderService.getOrderInfoById(orderId);
+            @PathVariable Long orderId, @PathVariable Long customerId) {
+        GetOrderInfoResponseDto orderInfoResponseDto = orderService.getOrderInfoById(orderId, customerId);
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(orderInfoResponseDto);

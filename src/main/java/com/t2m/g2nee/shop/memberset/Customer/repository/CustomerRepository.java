@@ -8,4 +8,6 @@ public interface CustomerRepository<T extends Customer> extends JpaRepository<T,
 
 
     Member save(Member member);
+
+
 }
