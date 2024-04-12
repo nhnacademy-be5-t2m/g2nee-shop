@@ -63,8 +63,7 @@ public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport impl
         return from(category)
                 .leftJoin(categoryPath)
                 .on(category.categoryId.eq(categoryPath.descendant.categoryId).and(categoryPath.depth.gt(0)))
-                .where(categoryPath.descendant.categoryId.isNull()
-                        .and(category.isActivated.isTrue()))
+                .where(categoryPath.descendant.categoryId.isNull())
                 .select(category)
                 .fetch();
     }
