@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryHierarchyDto;
 import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryInfoDto;
 import com.t2m.g2nee.shop.bookset.category.service.CategoryQueryService;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
@@ -50,7 +51,14 @@ class CategoryQueryRestControllerTest {
 
     @Test
     void testGetRootCategories() throws Exception {
-        List<CategoryInfoDto> rootCategory = List.of(category1, category2);
+        CategoryHierarchyDto c1 = new CategoryHierarchyDto(category1);
+        CategoryHierarchyDto c2 =  new CategoryHierarchyDto(category2);
+        CategoryHierarchyDto c3 =  new CategoryHierarchyDto(category3);
+        CategoryHierarchyDto c4 =  new CategoryHierarchyDto(category4);
+
+        List<CategoryHierarchyDto> rootCategory = List.of(c1, c2);
+        c1.setChildren(List.of(c3));
+        c3.setChildren(List.of(c4));
 
         when(service.getRootCategories()).thenReturn(rootCategory);
 
@@ -61,34 +69,18 @@ class CategoryQueryRestControllerTest {
                 .andExpect(jsonPath("$.[0].categoryId", equalTo(1)))
                 .andExpect(jsonPath("$.[0].categoryName", equalTo("카테고리1")))
                 .andExpect(jsonPath("$.[0].categoryEngName", equalTo("test1")))
-                .andExpect(jsonPath("$.[1].categoryId", equalTo(2)))
-                .andExpect(jsonPath("$.[1].categoryName", equalTo("카테고리2")))
-                .andExpect(jsonPath("$.[1].categoryEngName", equalTo("test2")));
+                .andExpect(jsonPath("$.[0].children.[0].categoryId", equalTo(3)))
+                .andExpect(jsonPath("$.[0].children.[0].children.[0].categoryId", equalTo(4)));
     }
 
-    @Test
-    void testGetSubCategories() throws Exception {
-
-        List<CategoryInfoDto> subCategory = List.of(category3, category4);
-
-        when(service.getSubCategories(anyLong())).thenReturn(subCategory);
-
-        mockMvc.perform(get("/shop/categories/{categoryId}/sub", 1L))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$.[0].categoryId", equalTo(3)))
-                .andExpect(jsonPath("$.[0].categoryName", equalTo("카테고리3")))
-                .andExpect(jsonPath("$.[0].categoryEngName", equalTo("test3")))
-                .andExpect(jsonPath("$.[1].categoryId", equalTo(4)))
-                .andExpect(jsonPath("$.[1].categoryName", equalTo("카테고리4")))
-                .andExpect(jsonPath("$.[1].categoryEngName", equalTo("test4")));
-    }
 
     @Test
     void testGetCategory() throws Exception {
+        CategoryHierarchyDto c1 = new CategoryHierarchyDto(category1);
+        CategoryHierarchyDto c3 =  new CategoryHierarchyDto(category3);
+        c1.setChildren(List.of(c3));
 
-        when(service.getCategory(anyLong())).thenReturn(category1);
+        when(service.getCategory(anyLong())).thenReturn(c1);
 
         mockMvc.perform(get("/shop/categories/{categoryId}", 1L))
                 .andExpect(status().isOk())
@@ -102,23 +94,16 @@ class CategoryQueryRestControllerTest {
     void testGetAllCategories() throws Exception {
         List<CategoryInfoDto> categories = List.of(category1, category2, category3, category4);
 
-        PageResponse<CategoryInfoDto> categoryPage =
-                PageResponse.<CategoryInfoDto>builder()
-                        .data(categories)
-                        .currentPage(1)
-                        .totalPage(1)
-                        .build();
+        when(service.getAllCategories()).thenReturn(categories);
 
-        when(service.getAllCategories(anyInt())).thenReturn(categoryPage);
-
-        mockMvc.perform(get("/shop/categories/all").param("page", "1"))
+        mockMvc.perform(get("/shop/categories/all"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.data", hasSize(4)))
-                .andExpect(jsonPath("$.data[0].categoryId", equalTo(1)))
-                .andExpect(jsonPath("$.data[1].categoryId", equalTo(2)))
-                .andExpect(jsonPath("$.data[2].categoryId", equalTo(3)))
-                .andExpect(jsonPath("$.data[3].categoryId", equalTo(4)));
+                .andExpect(jsonPath("$", hasSize(4)))
+                .andExpect(jsonPath("$.[0].categoryId", equalTo(1)))
+                .andExpect(jsonPath("$.[1].categoryId", equalTo(2)))
+                .andExpect(jsonPath("$.[2].categoryId", equalTo(3)))
+                .andExpect(jsonPath("$.[3].categoryId", equalTo(4)));
     }
 
     @Test

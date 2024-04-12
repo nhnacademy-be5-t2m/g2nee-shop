@@ -32,7 +32,14 @@ public class Auth {
     public enum AuthName {
         ROLE_ADMIN("관리자"), ROLE_MEMBER("회원");
 
+        private final String name;
+
         AuthName(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
         }
     }
 }

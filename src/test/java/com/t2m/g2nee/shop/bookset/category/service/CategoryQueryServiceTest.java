@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
+import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryHierarchyDto;
 import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryInfoDto;
 import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
@@ -20,7 +21,7 @@ class CategoryQueryServiceTest {
 
     @Test
     void testGetSubCategories() {
-        List<CategoryInfoDto> subCategories = categoryQueryService.getSubCategories(1L);
+        List<CategoryHierarchyDto> subCategories = categoryQueryService.getSubCategories(1L);
 
         assertThat(subCategories).isNotNull().hasSize(3);
     }
@@ -32,9 +33,10 @@ class CategoryQueryServiceTest {
 
     @Test
     void testGetCategory() {
-        CategoryInfoDto category = categoryQueryService.getCategory(1L);
+        CategoryHierarchyDto category = categoryQueryService.getCategory(1L);
 
         assertEquals(Long.valueOf(1L), category.getCategoryId());
+        assertEquals(2L, category.getChildren().get(0).getCategoryId().longValue());
     }
 
     @Test
@@ -44,20 +46,21 @@ class CategoryQueryServiceTest {
 
     @Test
     void testGetRootCategories() {
-        List<CategoryInfoDto> rootCategories = categoryQueryService.getRootCategories();
+        List<CategoryHierarchyDto> rootCategories = categoryQueryService.getRootCategories();
 
-        assertThat(rootCategories)
-                .isNotNull()
-                .hasSize(2);
+        assertThat(rootCategories).isNotNull();
+        assertEquals(11L, rootCategories.get(1).getCategoryId().longValue());
+        assertEquals(2L, rootCategories.get(0).getChildren().get(0).getCategoryId().longValue());
+        assertEquals(3L,
+                rootCategories.get(0).getChildren().get(0).getChildren().get(0).getCategoryId().longValue());
     }
 
     @Test
     void testGetAllCategories() {
 
-        PageResponse<CategoryInfoDto> allCategories = categoryQueryService.getAllCategories(1);
+        List<CategoryInfoDto> allCategories = categoryQueryService.getAllCategories();
 
-        assertThat(allCategories).isNotNull();
-        assertThat(allCategories.getData()).hasSize(10);
+        assertThat(allCategories).isNotNull().hasSizeGreaterThan(10);
 
     }
 
