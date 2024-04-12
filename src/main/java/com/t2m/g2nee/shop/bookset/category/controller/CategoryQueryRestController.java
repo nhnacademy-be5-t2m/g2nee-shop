@@ -1,5 +1,6 @@
 package com.t2m.g2nee.shop.bookset.category.controller;
 
+import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryHierarchyDto;
 import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryInfoDto;
 import com.t2m.g2nee.shop.bookset.category.service.CategoryQueryService;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
@@ -29,42 +30,28 @@ public class CategoryQueryRestController {
     }
 
     /**
-     * 최상위 카테고리를 반환하는 컨트롤러
+     * 카테고리를 계층화하여 반환하는 컨트롤러
      *
      * @return
      */
     @GetMapping
-    public ResponseEntity<List<CategoryInfoDto>> getRootCategories() {
+    public ResponseEntity<List<CategoryHierarchyDto>> getRootCategories() {
 
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
                 .body(service.getRootCategories());
     }
 
-    /**
-     * 특정 카테고리의 서브 카테고리를 반환하는 컨트롤러
-     *
-     * @param categoryId
-     * @return
-     */
-    @GetMapping("/{categoryId}/sub")
-    public ResponseEntity<List<CategoryInfoDto>> getSubCategories(
-            @PathVariable("categoryId") Long categoryId) {
-
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
-                .body(service.getSubCategories(categoryId));
-    }
 
     /**
-     * 모든 카테고리를 페이징 처리하여 반환하는 컨트롤러
+     * 모든 카테고리를 반환하는 컨트롤러
      *
-     * @param page
      * @return
      */
     @GetMapping("/all")
-    public ResponseEntity<PageResponse<CategoryInfoDto>> getAllCategories(@RequestParam int page) {
+    public ResponseEntity<List<CategoryInfoDto>> getAllCategories() {
 
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
-                .body(service.getAllCategories(page));
+                .body(service.getAllCategories());
     }
 
     /**
@@ -74,7 +61,7 @@ public class CategoryQueryRestController {
      * @return
      */
     @GetMapping("/{categoryId}")
-    public ResponseEntity<CategoryInfoDto> getCategory(@PathVariable("categoryId") Long categoryId) {
+    public ResponseEntity<CategoryHierarchyDto> getCategory(@PathVariable("categoryId") Long categoryId) {
 
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
                 .body(service.getCategory(categoryId));

@@ -48,7 +48,17 @@ public class Member extends Customer {
 
     public enum MemberStatus {
 
-        ACTIVE, QUIT, INACTIVE
+        ACTIVE("활동"), QUIT("탈퇴"), INACTIVE("휴면");
+
+        private final String name;
+
+        MemberStatus(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
 
 

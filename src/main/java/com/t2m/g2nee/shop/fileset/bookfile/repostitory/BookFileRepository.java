@@ -1,7 +1,8 @@
 package com.t2m.g2nee.shop.fileset.bookfile.repostitory;
 
+import static com.t2m.g2nee.shop.fileset.bookfile.domain.BookFile.ImageType;
+
 import com.t2m.g2nee.shop.fileset.bookfile.domain.BookFile;
-import static com.t2m.g2nee.shop.fileset.bookfile.domain.BookFile.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

@@ -1,12 +1,12 @@
 package com.t2m.g2nee.shop.bookset.category.repository;
 
 import com.t2m.g2nee.shop.bookset.category.domain.Category;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+
 
 /**
  * 카테고리 레포지토리
@@ -28,10 +28,9 @@ public interface CategoryRepository extends JpaRepository<Category, Long>, Categ
     /**
      * 모든 카테고리를 찾아 페이징 처리하는 메소드
      *
-     * @param pageable
      * @return
      */
-    Page<Category> findAll(Pageable pageable);
+    List<Category> findAll();
 
     /**
      * 카테고리를 name으로 찾아 결과를 페이징 처리하는 메소드

@@ -86,8 +86,8 @@ public class ObjectService {
     /**
      * nhncloud api를 호출하여 storage에 이미지를 저장하는 메서드
      *
-     * @param tokenId    인증토큰 Id값
-     * @param url 삭제할 파일 url
+     * @param tokenId 인증토큰 Id값
+     * @param url     삭제할 파일 url
      */
     public void deleteObject(String url, String tokenId) {
 
