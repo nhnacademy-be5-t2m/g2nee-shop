@@ -1,10 +1,13 @@
 package com.t2m.g2nee.shop.bookset.book.service;
 
 
+import com.t2m.g2nee.shop.bookset.book.domain.Book;
 import com.t2m.g2nee.shop.bookset.book.dto.BookDto;
+import com.t2m.g2nee.shop.bookset.book.mapper.BookMapper;
 import com.t2m.g2nee.shop.bookset.book.repository.BookRepository;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -29,7 +32,7 @@ public class BookGetService {
     private final BookRepository bookRepository;
 
     /**
-     * 가장 최신 출판된 10개의 책을 조회하는 메서드 입니다.
+     * 가장 최신 출판된 8개의 책을 조회하는 메서드 입니다.
      * @return List<BookDto.ListResponse>
      */
     public List<BookDto.ListResponse> getNewBooks(){
@@ -37,6 +40,18 @@ public class BookGetService {
         return bookRepository.getNewBookList();
     }
 
+    /**
+     * 모든 도서 목록을 조회하는 메서드 입니다.
+     * @return List<BookDto.ListResponse>
+     */
+    public PageResponse<BookDto.ListResponse> getAllBook(int page) {
+
+        int size = 8;
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("title"));
+
+        Page<BookDto.ListResponse> bookPage = bookRepository.getAllBook(pageable);;
+        return getPageResponse(page,bookPage);
+    }
     /**
      * 카테고리와 하위 카테고리의 책을 모두 조회하는 메서드 입니다.
      * @param page 페이지 번호
@@ -56,8 +71,8 @@ public class BookGetService {
 
     /**
      * 책 상세 정보를 조회하는 메서드입니다.
-     * @param bookId
-     * @return
+     * @param bookId 책 아이디
+     * @return BookDto.Response
      */
     public BookDto.Response getBookDetail(Long bookId) {
 

@@ -63,6 +63,17 @@ public class ContributorService {
         return mapper.entityToDto(findContributor);
 
     }
+    /**
+     * 모든 기여자를 조회하는 메서드
+     *
+     *
+     * @return List<ContributorDto.Response>
+     */
+    @Transactional(readOnly = true)
+    public List<ContributorDto.Response> getAllContributor(){
+
+        return mapper.entitiesToDtos(contributorRepository.findAll());
+    }
 
     /**
      * 기여자 페이지를 구성하는 메서드

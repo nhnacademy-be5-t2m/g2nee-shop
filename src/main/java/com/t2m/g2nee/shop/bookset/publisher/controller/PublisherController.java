@@ -4,6 +4,7 @@ import com.t2m.g2nee.shop.bookset.publisher.domain.Publisher;
 import com.t2m.g2nee.shop.bookset.publisher.dto.PublisherDto;
 import com.t2m.g2nee.shop.bookset.publisher.service.PublisherService;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -81,6 +82,19 @@ public class PublisherController {
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+    /**
+     * 모든 출판사를 조회하는 메서드 입니다
+     * @return ResponseEntity<List<PublisherDto.Response>>
+     */
+    @GetMapping("/list")
+    public ResponseEntity<List<PublisherDto.Response>> getPublishers() {
+
+        List<PublisherDto.Response> response = publisherService.getAllPublisher();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
 
     /**
      * 출판사를 삭제하는 컨트롤러 입니다.

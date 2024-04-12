@@ -17,16 +17,11 @@ public class BooksIndex {
 
     @Id
     private Long bookId;
-    private int quantity;
     private String title;
-    private String engTitle;
     private String bookIndex;
     private String description;
-    private LocalDateTime publishedDate;
-    private int price;
-    private int salePrice;
-    private String isbn;
-    private int viewCount;
-    private Book.BookStatus bookStatus;
-    private int pages;
+    private String contributorName;
+    private String publisherName;
+
+
 }

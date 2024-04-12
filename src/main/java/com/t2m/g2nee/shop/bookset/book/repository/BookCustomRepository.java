@@ -9,6 +9,8 @@ public interface BookCustomRepository {
 
      List<BookDto.ListResponse> getNewBookList();
 
+     Page<BookDto.ListResponse> getAllBook(Pageable pageable);
+
      Page<BookDto.ListResponse> getBookListByCategory(Long categoryId, Pageable pageable);
 
      BookDto.Response getBookDetail(Long bookId);

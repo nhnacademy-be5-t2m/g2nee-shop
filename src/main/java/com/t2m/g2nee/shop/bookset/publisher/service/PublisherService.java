@@ -72,6 +72,15 @@ public class PublisherService {
     }
 
     /**
+     * 모든 출판사를 조회하는 메서드
+     * @return List<PublisherDto.Response>
+     */
+    public List<PublisherDto.Response> getAllPublisher() {
+
+        return mapper.entitiesToDtos(publisherRepository.findAll());
+    }
+
+    /**
      * 출판사 페이지를 구성하는 메서드
      *
      * @param page 현재 페이지
