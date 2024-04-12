@@ -1,6 +1,7 @@
 package com.t2m.g2nee.shop.memberset.Member.service;
 
 import com.t2m.g2nee.shop.memberset.Member.dto.request.SignUpMemberRequestDto;
+import com.t2m.g2nee.shop.memberset.Member.dto.response.MemberDetailInfoResponseDto;
 import com.t2m.g2nee.shop.memberset.Member.dto.response.MemberResponse;
 import com.t2m.g2nee.shop.memberset.Member.dto.response.MemberResponseToAuth;
 
@@ -46,5 +47,14 @@ public interface MemberService {
      * @return member 의 정보를 반환
      */
     MemberResponseToAuth getMemberInfo(String username);
+
+    /**
+     * customerId로 회원의 세부정보를 가져오는 메소드
+     *
+     * @param customerId
+     * @return 회원의 세부정보를 반환
+     */
+    MemberDetailInfoResponseDto getMemberDetailInfo(Long customerId);
+
 
 }

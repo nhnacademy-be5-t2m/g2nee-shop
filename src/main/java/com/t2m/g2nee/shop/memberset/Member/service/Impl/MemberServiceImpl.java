@@ -11,6 +11,7 @@ import com.t2m.g2nee.shop.memberset.Grade.domain.Grade;
 import com.t2m.g2nee.shop.memberset.Grade.repository.GradeRepository;
 import com.t2m.g2nee.shop.memberset.Member.domain.Member;
 import com.t2m.g2nee.shop.memberset.Member.dto.request.SignUpMemberRequestDto;
+import com.t2m.g2nee.shop.memberset.Member.dto.response.MemberDetailInfoResponseDto;
 import com.t2m.g2nee.shop.memberset.Member.dto.response.MemberResponse;
 import com.t2m.g2nee.shop.memberset.Member.dto.response.MemberResponseToAuth;
 import com.t2m.g2nee.shop.memberset.Member.repository.MemberRepository;
@@ -131,4 +132,36 @@ public class MemberServiceImpl implements MemberService {
                 authorities);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws NotFoundException 으로 username 에 해당하는 정보가 없는 경우 예외를 던집니다.
+     */
+    @Override
+    public MemberDetailInfoResponseDto getMemberDetailInfo(Long customerId) {
+        if (!memberRepository.existsById(customerId)) {
+            throw new NotFoundException(customerId + "의 정보가 존재하지 않습니다.");
+        }
+        Member member = memberRepository.findById(customerId).get();
+        ArrayList<String> authorities = new ArrayList<>();
+        List<AuthMember> authMembers = authMemberRepository.getAuthMembersByMember_CustomerId(member.getCustomerId());
+
+        for (AuthMember authMember : authMembers) {
+            authorities.add(
+                    String.valueOf(authRepository.findById(authMember.getAuth().getAuthId()).get().getAuthName()));
+        }
+
+        MemberDetailInfoResponseDto memberDetail = new MemberDetailInfoResponseDto(
+                member.getCustomerId(),
+                member.getName(),
+                member.getUsername(),
+                member.getNickname(),
+                member.getGender().name(),
+                member.getBirthday(),
+                member.getPhoneNumber(),
+                member.getEmail(),
+                authorities
+        );
+        return memberDetail;
+    }
 }
