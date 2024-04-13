@@ -42,6 +42,15 @@ class CategoryQueryServiceTest {
     }
 
     @Test
+    void testGetCategory2() {
+        CategoryUpdateDto category = categoryQueryService.getCategory(1L);
+
+        assertEquals(Long.valueOf(1L), category.getCategoryId());
+        assertEquals(2L, category.getChildren().get(0).getCategoryId().longValue());
+        assertEquals(Long.valueOf(0L), category.getAncestorCategoryId());
+    }
+
+    @Test
     void testGetCategoryFail() {
         assertThrows(NotFoundException.class, () -> categoryQueryService.getCategory(1000L));
     }
