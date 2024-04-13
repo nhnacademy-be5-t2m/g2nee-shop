@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThrows;
 
 import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryHierarchyDto;
 import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryInfoDto;
+import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryUpdateDto;
 import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import java.util.List;
@@ -33,10 +34,11 @@ class CategoryQueryServiceTest {
 
     @Test
     void testGetCategory() {
-        CategoryHierarchyDto category = categoryQueryService.getCategory(1L);
+        CategoryUpdateDto category = categoryQueryService.getCategory(2L);
 
-        assertEquals(Long.valueOf(1L), category.getCategoryId());
-        assertEquals(2L, category.getChildren().get(0).getCategoryId().longValue());
+        assertEquals(Long.valueOf(2L), category.getCategoryId());
+        assertEquals(3L, category.getChildren().get(0).getCategoryId().longValue());
+        assertEquals(Long.valueOf(1L), category.getAncestorCategoryId());
     }
 
     @Test

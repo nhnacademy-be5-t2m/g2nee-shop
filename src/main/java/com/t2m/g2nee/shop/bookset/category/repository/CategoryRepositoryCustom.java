@@ -1,6 +1,7 @@
 package com.t2m.g2nee.shop.bookset.category.repository;
 
 import com.t2m.g2nee.shop.bookset.category.domain.Category;
+import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryUpdateDto;
 import java.util.List;
 
 /**
@@ -57,4 +58,6 @@ public interface CategoryRepositoryCustom {
      * @param categoryId
      */
     void activeCategoryByCategoryId(Long categoryId);
+
+    CategoryUpdateDto getFindByCategoryId(Long categoryId);
 }

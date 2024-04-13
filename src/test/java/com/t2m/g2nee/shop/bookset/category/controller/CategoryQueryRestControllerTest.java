@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryHierarchyDto;
 import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryInfoDto;
+import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryUpdateDto;
 import com.t2m.g2nee.shop.bookset.category.service.CategoryQueryService;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import java.util.List;
@@ -51,10 +52,14 @@ class CategoryQueryRestControllerTest {
 
     @Test
     void testGetRootCategories() throws Exception {
-        CategoryHierarchyDto c1 = new CategoryHierarchyDto(category1);
-        CategoryHierarchyDto c2 =  new CategoryHierarchyDto(category2);
-        CategoryHierarchyDto c3 =  new CategoryHierarchyDto(category3);
-        CategoryHierarchyDto c4 =  new CategoryHierarchyDto(category4);
+        CategoryHierarchyDto c1 = new CategoryHierarchyDto(category1.getCategoryId(), category1.getCategoryName(),
+                category1.getCategoryEngName(), category1.getIsActivated());
+        CategoryHierarchyDto c2 = new CategoryHierarchyDto(category2.getCategoryId(), category2.getCategoryName(),
+                category2.getCategoryEngName(), category2.getIsActivated());
+        CategoryHierarchyDto c3 = new CategoryHierarchyDto(category3.getCategoryId(), category3.getCategoryName(),
+                category3.getCategoryEngName(), category3.getIsActivated());
+        CategoryHierarchyDto c4 = new CategoryHierarchyDto(category4.getCategoryId(), category4.getCategoryName(),
+                category4.getCategoryEngName(), category4.getIsActivated());
 
         List<CategoryHierarchyDto> rootCategory = List.of(c1, c2);
         c1.setChildren(List.of(c3));
@@ -76,8 +81,10 @@ class CategoryQueryRestControllerTest {
 
     @Test
     void testGetCategory() throws Exception {
-        CategoryHierarchyDto c1 = new CategoryHierarchyDto(category1);
-        CategoryHierarchyDto c3 =  new CategoryHierarchyDto(category3);
+        CategoryUpdateDto c1 = new CategoryUpdateDto(category1.getCategoryId(), category1.getCategoryName(),
+                category1.getCategoryEngName(), category1.getIsActivated(), 0L);
+        CategoryUpdateDto c3 = new CategoryUpdateDto(category3.getCategoryId(), category3.getCategoryName(),
+                category3.getCategoryEngName(), category3.getIsActivated(), 1L);
         c1.setChildren(List.of(c3));
 
         when(service.getCategory(anyLong())).thenReturn(c1);

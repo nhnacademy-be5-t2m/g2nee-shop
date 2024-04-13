@@ -5,9 +5,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.t2m.g2nee.shop.bookset.category.domain.Category;
+import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryUpdateDto;
 import com.t2m.g2nee.shop.bookset.categoryPath.domain.CategoryPath;
 import com.t2m.g2nee.shop.bookset.categoryPath.repository.CategoryPathRepository;
 import com.t2m.g2nee.shop.config.ElasticsearchConfig;
@@ -46,8 +48,8 @@ class CategoryRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        category1 = categoryRepository.save(new Category("테스트카테고리1", "testCategory1"));//부모
-        category2 = categoryRepository.save(new Category("테스트카테고리2", "testCategory2"));//자식
+        category1 = categoryRepository.save(new Category("테스트카테고리1", "testCategory1", true));//부모
+        category2 = categoryRepository.save(new Category("테스트카테고리2", "testCategory2", true));//자식
 
         categoryPath1 = categoryPathRepository.save(new CategoryPath(category1, category1, 0L));
         categoryPath2 = categoryPathRepository.save(new CategoryPath(category2, category2, 0L));
@@ -149,17 +151,28 @@ class CategoryRepositoryTest {
 
         Category updatedCategory = categoryRepository.findById(category1.getCategoryId()).orElse(null);
 
-        assertThat(updatedCategory.isActivated()).isFalse();
+        assertThat(updatedCategory.getIsActivated()).isFalse();
     }
 
     @Test
     void testActiveCategoryByCategoryId() {
-        category1.setActivated(false);
+        category1.setIsActivated(false);
 
         categoryRepository.activeCategoryByCategoryId(category1.getCategoryId());
 
         Category updatedCategory = categoryRepository.findById(category1.getCategoryId()).orElse(null);
 
-        assertThat(updatedCategory.isActivated()).isTrue();
+        assertThat(updatedCategory.getIsActivated()).isTrue();
+    }
+
+    @Test
+    void testGetFindByCategoryId() {
+        CategoryUpdateDto category = categoryRepository.getFindByCategoryId(category2.getCategoryId());
+
+        assertEquals(category2.getCategoryId(), category.getCategoryId());
+        assertEquals(category2.getCategoryName(), category.getCategoryName());
+        assertEquals(category2.getCategoryEngName(), category.getCategoryEngName());
+        assertNull(category.getChildren());
+        assertEquals(category1.getCategoryId(), category.getAncestorCategoryId());
     }
 }

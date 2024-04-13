@@ -3,6 +3,7 @@ package com.t2m.g2nee.shop.bookset.category.service;
 
 import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryHierarchyDto;
 import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryInfoDto;
+import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryUpdateDto;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public interface CategoryQueryService {
      * @param categoryId
      * @return
      */
-    CategoryHierarchyDto getCategory(Long categoryId);
+    CategoryUpdateDto getCategory(Long categoryId);
 
     /**
      * 최상위 카테고리만 반환

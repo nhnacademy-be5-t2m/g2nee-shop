@@ -2,6 +2,7 @@ package com.t2m.g2nee.shop.bookset.category.controller;
 
 import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryHierarchyDto;
 import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryInfoDto;
+import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryUpdateDto;
 import com.t2m.g2nee.shop.bookset.category.service.CategoryQueryService;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import java.util.List;
@@ -61,7 +62,7 @@ public class CategoryQueryRestController {
      * @return
      */
     @GetMapping("/{categoryId}")
-    public ResponseEntity<CategoryHierarchyDto> getCategory(@PathVariable("categoryId") Long categoryId) {
+    public ResponseEntity<CategoryUpdateDto> getCategory(@PathVariable("categoryId") Long categoryId) {
 
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
                 .body(service.getCategory(categoryId));

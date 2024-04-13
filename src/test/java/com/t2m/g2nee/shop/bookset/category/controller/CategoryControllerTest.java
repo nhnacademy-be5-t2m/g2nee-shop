@@ -13,7 +13,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.t2m.g2nee.shop.bookset.category.dto.request.CategorySaveDto;
-import com.t2m.g2nee.shop.bookset.category.dto.request.CategoryUpdateDto;
 import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryInfoDto;
 import com.t2m.g2nee.shop.bookset.category.service.CategoryService;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,7 +42,7 @@ class CategoryControllerTest {
 
     @Test
     void testCreateCategory() throws Exception {
-        CategorySaveDto request = new CategorySaveDto("테스트", "test", 0L);
+        CategorySaveDto request = new CategorySaveDto("테스트", "test", true, 0L);
         CategoryInfoDto category = new CategoryInfoDto(1L, "테스트", "test", true);
 
         when(service.saveCategory(any(CategorySaveDto.class))).thenReturn(category);
@@ -59,18 +58,18 @@ class CategoryControllerTest {
 
     @Test
     void testUpdateCategory() throws Exception {
-        CategorySaveDto request = new CategorySaveDto("수정", "modify", 0L);
-        CategoryInfoDto updatedCategory = new CategoryInfoDto(1L, "수정", "modify", true);
-
-        when(service.updateCategory(any(CategoryUpdateDto.class))).thenReturn(updatedCategory);
+        CategorySaveDto request = new CategorySaveDto("테스트", "test", true, 0L);
+        CategoryInfoDto category = new CategoryInfoDto(1L, "테스트", "test", true);
+        when(service.updateCategory(anyLong(), any(CategorySaveDto.class))).thenReturn(category);
 
         mockMvc.perform(put("/shop/categories/{categoryId}", 1L)
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.categoryId", equalTo(1)))
-                .andExpect(jsonPath("$.categoryName", equalTo(updatedCategory.getCategoryName())))
-                .andExpect(jsonPath("$.categoryEngName", equalTo(updatedCategory.getCategoryEngName())));
+                .andExpect(jsonPath("$.categoryName", equalTo(request.getCategoryName())))
+                .andExpect(jsonPath("$.categoryEngName", equalTo(request.getCategoryEngName())))
+                .andExpect(jsonPath("$.isActivated", equalTo(request.getIsActivated())));
 
     }
 

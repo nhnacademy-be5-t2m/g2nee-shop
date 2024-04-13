@@ -29,7 +29,7 @@ class CategoryPathTest {
     CategoryRepository categoryRepository;
     @Test
     void test() {
-        Category aCategory = new Category("조상카테고리", "aCategory");
+        Category aCategory = new Category("조상카테고리", "aCategory", true);
         Category dCategory = new Category();
         dCategory.setCategoryName("후손카테고리");
         dCategory.setCategoryEngName("dCategory");

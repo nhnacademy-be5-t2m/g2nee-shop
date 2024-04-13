@@ -5,17 +5,19 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
+
 public class CategoryHierarchyDto extends CategoryInfoDto{
 
+    @Getter
     @Setter
     private List<CategoryHierarchyDto> children;
 
-    public CategoryHierarchyDto(CategoryInfoDto categoryInfoDto) {
-        super(categoryInfoDto.getCategoryId(), categoryInfoDto.getCategoryName(), categoryInfoDto.getCategoryEngName(), categoryInfoDto.getIsActivated());
-    }
 
     public CategoryHierarchyDto(Category category) {
         super(category);
+    }
+
+    public CategoryHierarchyDto(Long categoryId, String categoryName, String categoryEngName, Boolean isActivated) {
+        super(categoryId, categoryName, categoryEngName, isActivated);
     }
 }
