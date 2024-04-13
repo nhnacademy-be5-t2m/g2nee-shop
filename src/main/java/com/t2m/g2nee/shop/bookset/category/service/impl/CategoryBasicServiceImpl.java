@@ -56,7 +56,7 @@ public class CategoryBasicServiceImpl implements CategoryBasicService {
             categoryRepository.softDeleteByCategoryId(categoryId);
             //카테고리의 활성화 상태를 반환
             return categoryRepository.findById(categoryId).orElseThrow(() -> new NotFoundException("카테고리가 존재하지 않습니다."))
-                    .isActivated();
+                    .getIsActivated();
         } else {
             //존재 하지 않으면 예외 발생
             throw new NotFoundException("삭제할 카테고리가 존재하지 않습니다.");

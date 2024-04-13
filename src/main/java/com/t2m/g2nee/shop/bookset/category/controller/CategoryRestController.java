@@ -1,7 +1,6 @@
 package com.t2m.g2nee.shop.bookset.category.controller;
 
 import com.t2m.g2nee.shop.bookset.category.dto.request.CategorySaveDto;
-import com.t2m.g2nee.shop.bookset.category.dto.request.CategoryUpdateDto;
 import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryInfoDto;
 import com.t2m.g2nee.shop.bookset.category.service.CategoryService;
 import javax.validation.Valid;
@@ -57,12 +56,8 @@ public class CategoryRestController {
     public ResponseEntity<CategoryInfoDto> updateCategory(@PathVariable("categoryId") Long categoryId,
                                                           @RequestBody @Valid CategorySaveDto request) {
 
-        CategoryUpdateDto updateDto = new CategoryUpdateDto(
-                categoryId, request.getCategoryName(), request.getCategoryEngName(), request.getAncestorCategoryId()
-        );
-
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
-                .body(service.updateCategory(updateDto));
+                .body(service.updateCategory(categoryId, request));
     }
 
     /**

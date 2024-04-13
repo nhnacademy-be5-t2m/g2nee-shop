@@ -30,6 +30,9 @@ public class CategorySaveDto {
     @Pattern(regexp = "^[A-Za-z0-9]+$", message = "카테고리 영문 이름을 입력해주세요.")
     private String categoryEngName;
 
+    @NotNull(message = "카테고리 활성 정보가 없음!")
+    private Boolean isActivated;
+
     //틍록할 카테고리의 바로 상위 카테고리Id
     @NotNull(message = "상위 카테고리가 없음!")
     private Long ancestorCategoryId;

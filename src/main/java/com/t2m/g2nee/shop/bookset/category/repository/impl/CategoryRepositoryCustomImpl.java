@@ -1,7 +1,9 @@
 package com.t2m.g2nee.shop.bookset.category.repository.impl;
 
+import com.querydsl.core.types.Projections;
 import com.t2m.g2nee.shop.bookset.category.domain.Category;
 import com.t2m.g2nee.shop.bookset.category.domain.QCategory;
+import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryUpdateDto;
 import com.t2m.g2nee.shop.bookset.category.repository.CategoryRepositoryCustom;
 import com.t2m.g2nee.shop.bookset.categoryPath.domain.QCategoryPath;
 import java.util.List;
@@ -147,6 +149,30 @@ public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport impl
 
         entityManager.clear();
         entityManager.flush();
+    }
+
+    @Override
+    public CategoryUpdateDto getFindByCategoryId(Long categoryId) {
+        QCategory category = QCategory.category;
+        QCategoryPath categoryPath = QCategoryPath.categoryPath;
+
+        /**
+         * SELECT c.*, p.ancestorId
+         * FROM Categories c
+         *     JOIN CategoryPaths p ON c.categoryId = p.descendantId
+         * WHERE c.categoryId = ?
+         *     AND p.depth = 1;
+         */
+
+
+        return from(category)
+                .join(categoryPath).on(category.categoryId.eq(categoryPath.descendant.categoryId))
+                .where(category.categoryId.eq(categoryId)
+                        .and(categoryPath.depth.eq(1L)))
+                .select(Projections.constructor(CategoryUpdateDto.class,
+                        category.categoryId, category.categoryName, category.categoryEngName, category.isActivated,
+                        categoryPath.ancestor.categoryId))
+                .fetchOne();
     }
 
 }

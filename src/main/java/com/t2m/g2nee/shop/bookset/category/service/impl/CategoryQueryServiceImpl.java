@@ -3,6 +3,7 @@ package com.t2m.g2nee.shop.bookset.category.service.impl;
 import com.t2m.g2nee.shop.bookset.category.domain.Category;
 import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryHierarchyDto;
 import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryInfoDto;
+import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryUpdateDto;
 import com.t2m.g2nee.shop.bookset.category.repository.CategoryRepository;
 import com.t2m.g2nee.shop.bookset.category.service.CategoryQueryService;
 import com.t2m.g2nee.shop.exception.NotFoundException;
@@ -42,11 +43,9 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
     }
 
     @Override
-    public CategoryHierarchyDto getCategory(Long categoryId) {
+    public CategoryUpdateDto getCategory(Long categoryId) {
         //카테고리 단일 객체 반환, 존재 하지 않으면 예외 발생
-
-        CategoryHierarchyDto category = convertToCategoryHierarchyDto(
-                categoryRepository.findById(categoryId).orElseThrow(() -> new NotFoundException("카테고리가 존재하지 않습니다.")));
+        CategoryUpdateDto category = categoryRepository.getFindByCategoryId(categoryId);
 
         List<CategoryHierarchyDto> subCategories = getSubCategories(categoryId);
         category.setChildren(subCategories);
