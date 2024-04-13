@@ -156,21 +156,20 @@ public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport impl
         QCategoryPath categoryPath = QCategoryPath.categoryPath;
 
         /**
-         * SELECT c.*, p.ancestorId
+         * SELECT c.*, COALESCE(p.ancestorId, 0)
          * FROM Categories c
-         *     JOIN CategoryPaths p ON c.categoryId = p.descendantId
-         * WHERE c.categoryId = ?
-         *     AND p.depth = 1;
+         * 	LEFT JOIN CategoryPaths p ON c.categoryId = p.descendantId AND p.depth = 1
+         * WHERE c.categoryId = ?;
          */
 
 
         return from(category)
-                .join(categoryPath).on(category.categoryId.eq(categoryPath.descendant.categoryId))
-                .where(category.categoryId.eq(categoryId)
+                .leftJoin(categoryPath).on(category.categoryId.eq(categoryPath.descendant.categoryId)
                         .and(categoryPath.depth.eq(1L)))
+                .where(category.categoryId.eq(categoryId))
                 .select(Projections.constructor(CategoryUpdateDto.class,
                         category.categoryId, category.categoryName, category.categoryEngName, category.isActivated,
-                        categoryPath.ancestor.categoryId))
+                        categoryPath.ancestor.categoryId.coalesce(0L)))
                 .fetchOne();
     }
 
