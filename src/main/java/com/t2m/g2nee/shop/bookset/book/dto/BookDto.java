@@ -120,4 +120,12 @@ public class BookDto {
     public static class statusResponse{
         private BookStatus status;
     }
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class quantityResponse{
+        private int quantity;
+    }
 }

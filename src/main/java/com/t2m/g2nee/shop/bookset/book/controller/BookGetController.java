@@ -71,11 +71,6 @@ public class BookGetController {
     public ResponseEntity<PageResponse<BookDto.ListResponse>> getBooksByCategory(@PathVariable("categoryId") Long categoryId,
                                                                                  @RequestParam(required = false) String sort,
                                                                                  @RequestParam int page){
-
-        if (!StringUtils.hasText(sort)) {
-            sort = "viewCount";
-        }
-
         PageResponse<BookDto.ListResponse> responses = bookGetService.getBooksByCategory(page, categoryId,sort);
 
         return ResponseEntity.status(HttpStatus.OK).body(responses);
@@ -88,7 +83,7 @@ public class BookGetController {
      * @param sort 정렬 기준
      * @param keyword 키워드
      * @param page 페이지 번호
-     * @return
+     * @return ResponseEntity<PageResponse<BookDto.ListResponse>>
      */
     @GetMapping("/search")
     public ResponseEntity<PageResponse<BookDto.ListResponse>> getBookByElasticsearchAndCategory(
@@ -97,9 +92,8 @@ public class BookGetController {
             @RequestParam String keyword,
             @RequestParam int page) {
 
-        if (!StringUtils.hasText(sort)) {
-            sort = "viewCount";
-        }
+        if(!StringUtils.hasText(sort)) sort = "viewCount";
+
         PageResponse<BookDto.ListResponse> responses =
                 bookGetService.getBookByCategoryAndElasticsearch(page, categoryId, keyword, sort);
 

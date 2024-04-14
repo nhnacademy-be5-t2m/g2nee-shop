@@ -46,6 +46,7 @@ public class BookContributorDto {
         private Long contributorId;
         private String contributorName;
         private String contributorEngName;
+        private Long roleId;
         private String roleName;
     }
 }
