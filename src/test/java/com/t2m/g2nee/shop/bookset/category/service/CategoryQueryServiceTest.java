@@ -29,7 +29,7 @@ class CategoryQueryServiceTest {
 
     @Test
     void testGetSubCategoriesFail() {
-        assertThrows(NotFoundException.class, () -> categoryQueryService.getSubCategories(1000L));
+        assertThrows(NotFoundException.class, () -> categoryQueryService.getSubCategories(1000000000L));
     }
 
     @Test
@@ -52,7 +52,7 @@ class CategoryQueryServiceTest {
 
     @Test
     void testGetCategoryFail() {
-        assertThrows(NotFoundException.class, () -> categoryQueryService.getCategory(1000L));
+        assertThrows(NotFoundException.class, () -> categoryQueryService.getCategory(1000000000L));
     }
 
     @Test
