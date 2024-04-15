@@ -56,5 +56,11 @@ public interface MemberService {
      */
     MemberDetailInfoResponseDto getMemberDetailInfo(Long customerId);
 
-
+    /**
+     * accessToken 으로 회원의 세부정보를 가져오는 메소드
+     *
+     * @param accessToken
+     * @return 회원의 세부정보를 반환
+     */
+    MemberDetailInfoResponseDto getMemberDetailInfoToAccessToken(String accessToken);
 }

@@ -17,10 +17,12 @@ import com.t2m.g2nee.shop.memberset.Member.dto.response.MemberResponseToAuth;
 import com.t2m.g2nee.shop.memberset.Member.repository.MemberRepository;
 import com.t2m.g2nee.shop.memberset.Member.service.MemberService;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
@@ -163,5 +165,25 @@ public class MemberServiceImpl implements MemberService {
                 authorities
         );
         return memberDetail;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws NotFoundException 으로 username 에 해당하는 정보가 없는 경우 예외를 던집니다.
+     */
+    @Override
+    public MemberDetailInfoResponseDto getMemberDetailInfoToAccessToken(String accessToken) {
+        Base64.Decoder decoder = Base64.getUrlDecoder();
+        String[] access_chunks = accessToken.split("\\.");
+        String access_payload = new String(decoder.decode(access_chunks[1]));
+        JSONObject aObject = new JSONObject(access_payload);
+        String username = aObject.getString("username");
+
+        if (!memberRepository.existsByUsername(username)) {
+            throw new NotFoundException(username + "의 정보가 존재하지 않습니다.");
+        }
+        Member member = (Member) memberRepository.findByUsername(username);
+        return getMemberDetailInfo(member.getCustomerId());
     }
 }

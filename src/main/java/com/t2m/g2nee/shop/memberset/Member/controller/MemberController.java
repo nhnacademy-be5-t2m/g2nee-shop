@@ -77,4 +77,19 @@ public class MemberController {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(response);
     }
+
+    /**
+     * accessToken으로 회원의 세부정보를 받아오는 메소드
+     *
+     * @param accessToken 검색할 회원의 id
+     * @return MemberDetailInfoResponseDto 반환
+     */
+    @GetMapping("/getDetailInfo")
+    public ResponseEntity<MemberDetailInfoResponseDto> getMemberDetailInfo(
+            @Valid @RequestBody String accessToken) {
+        MemberDetailInfoResponseDto response = memberService.getMemberDetailInfoToAccessToken(accessToken);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
+    }
 }
