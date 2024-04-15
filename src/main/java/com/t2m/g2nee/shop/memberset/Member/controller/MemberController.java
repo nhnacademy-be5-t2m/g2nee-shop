@@ -84,7 +84,7 @@ public class MemberController {
      * @param accessToken 검색할 회원의 id
      * @return MemberDetailInfoResponseDto 반환
      */
-    @GetMapping("/getDetailInfo")
+    @PostMapping("/getDetailInfo")
     public ResponseEntity<MemberDetailInfoResponseDto> getMemberDetailInfo(
             @Valid @RequestBody String accessToken) {
         MemberDetailInfoResponseDto response = memberService.getMemberDetailInfoToAccessToken(accessToken);
