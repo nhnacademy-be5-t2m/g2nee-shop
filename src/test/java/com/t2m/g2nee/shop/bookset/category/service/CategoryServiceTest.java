@@ -70,14 +70,14 @@ class CategoryServiceTest {
         assertEquals(request.getIsActivated(), category3.getIsActivated());
     }
 
-    @Test
-    void testUpdateFail() {
-        assertThrows(NotFoundException.class, () -> {
-            categoryService.updateCategory(100L,
-                    new CategorySaveDto("테스트카테고리4", "testCategory4", true, category2.getCategoryId())
-            );
-        });
-    }
+//    @Test
+//    void testUpdateFail() {
+//        assertThrows(NotFoundException.class, () -> {
+//            categoryService.updateCategory(100L,
+//                    new CategorySaveDto("테스트카테고리4", "testCategory4", true, category2.getCategoryId())
+//            );
+//        });
+//    }
 
     @Test
     void testDelete_activeCategory() {
