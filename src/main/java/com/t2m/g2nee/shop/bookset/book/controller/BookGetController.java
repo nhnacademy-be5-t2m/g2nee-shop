@@ -50,15 +50,27 @@ public class BookGetController {
     }
 
     /**
+     * 관리자 도서 목록에서 사용할 모든 책을 조회하는 컨트롤러 입니다.
+     * @param page 페이지 번호
+     * @return ResponseEntity<PageResponse<BookDto.ListResponse>>
+     */
+    @GetMapping("/list")
+    public ResponseEntity<PageResponse<BookDto.ListResponse>> getBooks(@RequestParam int page){
+
+        PageResponse<BookDto.ListResponse> responses = bookGetService.getAllBook(page);
+        return ResponseEntity.status(HttpStatus.OK).body(responses);
+    }
+
+
+    /**
      * 카테고리와 하위 카테고리에 해당하는 책을 조회하는 컨트롤러 입니다.
      * @param categoryId 카테고리 아이디
      * @return List<BookDto.ListResponse>
      */
-    @GetMapping
-    public ResponseEntity<PageResponse<BookDto.ListResponse>> getBooksByCategory(@RequestParam Long categoryId,
-                                                                                 @RequestParam(required = false)
-                                                                                 String sort,
-                                                                         @RequestParam int page){
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<PageResponse<BookDto.ListResponse>> getBooksByCategory(@PathVariable("categoryId") Long categoryId,
+                                                                                 @RequestParam(required = false) String sort,
+                                                                                 @RequestParam int page){
 
         if (!StringUtils.hasText(sort)) {
             sort = "viewCount";

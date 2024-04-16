@@ -4,6 +4,7 @@ import com.t2m.g2nee.shop.bookset.role.domain.Role;
 import com.t2m.g2nee.shop.bookset.role.dto.RoleDto;
 import com.t2m.g2nee.shop.bookset.role.service.RoleService;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -67,13 +68,26 @@ public class RoleController {
     }
 
     /**
+     * 모든 역할을 조회하는 컨트롤러 입니다
+     *
+     * @return 역할 정보들과 페이지 정보
+     */
+    @GetMapping("/list")
+    public ResponseEntity<List<RoleDto.Response>> getAllRole() {
+
+        List<RoleDto.Response> response = roleService.getAllRole();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    /**
      * 역할 리스트를 보여주는 컨트롤러 입니다
      *
      * @param page 페이지 값
      * @return 역할 정보들과 페이지 정보
      */
     @GetMapping
-    public ResponseEntity<PageResponse<RoleDto.Response>> getTags(@RequestParam int page) {
+    public ResponseEntity<PageResponse<RoleDto.Response>> getRoles(@RequestParam int page) {
 
         PageResponse<RoleDto.Response> response = roleService.getRoleList(page);
 
@@ -87,7 +101,7 @@ public class RoleController {
      * @return X
      */
     @DeleteMapping("/{roleId}")
-    public ResponseEntity deleteTag(@PathVariable("roleId") Long roleId) {
+    public ResponseEntity deleteRole(@PathVariable("roleId") Long roleId) {
 
         roleService.deleteRole(roleId);
 

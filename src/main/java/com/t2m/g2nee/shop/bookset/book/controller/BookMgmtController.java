@@ -2,10 +2,12 @@ package com.t2m.g2nee.shop.bookset.book.controller;
 
 import com.t2m.g2nee.shop.bookset.book.dto.BookDto;
 import com.t2m.g2nee.shop.bookset.book.service.BookMgmtService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,7 +45,7 @@ public class BookMgmtController {
     @PostMapping
     public ResponseEntity<BookDto.Response> postBook(@RequestPart BookDto.Request request,
                                                      @RequestPart MultipartFile thumbnail,
-                                                     @RequestPart MultipartFile[] details
+                                                     @RequestPart List<MultipartFile> details
     ) {
         BookDto.Response response = bookMgmtService.registerBook(request, thumbnail, details);
 
@@ -58,7 +60,7 @@ public class BookMgmtController {
      * @param details   상세 이미지 파일
      * @return
      */
-    @PutMapping("/{bookId}")
+    @PatchMapping("/{bookId}")
     public ResponseEntity<BookDto.Response> updateBook(@PathVariable("bookId") Long bookId,
                                                        @RequestPart BookDto.Request request,
                                                        @RequestPart(required = false) MultipartFile thumbnail,
@@ -76,7 +78,7 @@ public class BookMgmtController {
      * @param request 변경할 상태가 담긴 객체
      * @return
      */
-    @PatchMapping("/{bookId}")
+    @PatchMapping("/status/{bookId}")
     public ResponseEntity<BookDto.statusResponse> modifyBookStatus(@PathVariable("bookId") Long bookId,
                                                                    @RequestBody BookDto.Request request) {
 

@@ -71,7 +71,7 @@ public class BookMgmtService {
      * @param details   도서 세부 이미지 파일
      * @return 등록한 책 정보 응답 객체
      */
-    public BookDto.Response registerBook(BookDto.Request request, MultipartFile thumbnail, MultipartFile[] details) {
+    public BookDto.Response registerBook(BookDto.Request request, MultipartFile thumbnail, List<MultipartFile> details) {
 
 
         // 요청을 Book 엔티티로 변경합니다.
@@ -86,10 +86,10 @@ public class BookMgmtService {
         // storage 사용을 위한 토큰을 발급합니다.
         String tokenId = authService.requestToken();
         // storage에 이미지를 업로드합니다
-        uploadImage(thumbnail, book, tokenId, "thumb_" + request.getEngTitle(), ImageType.THUMBNAIL);
-        for (int i = 0; i < details.length; i++) {
-            String objectName = "detail_" + request.getEngTitle() + (i + 1);
-            uploadImage(details[i], book, tokenId, objectName, ImageType.DETAIL);
+        uploadImage(thumbnail, book, tokenId, "thumb/" + request.getEngTitle(), ImageType.THUMBNAIL);
+        for (int i = 0; i < details.size(); i++) {
+            String objectName = "detail/" + request.getEngTitle() + (i + 1);
+            uploadImage(details.get(i), book, tokenId, objectName, ImageType.DETAIL);
         }
         // 도서카테고리 연관 관계를 설정합니다.
         saveBookCategory(request.getCategoryIdList(), book);
@@ -173,25 +173,34 @@ public class BookMgmtService {
 
             // 출판사, 기여자, 역할, 태그 연관관계에 변경사항이 있다면 다시 관계를 만들어 줍니다.
             Optional.ofNullable(request.getPublisherId())
-                    .map(publisherRepository::findById)
-                    .orElseThrow(() -> new NotFoundException("출판사 정보가 없습니다."))
-                    .ifPresent(book::setPublisher);
-            Optional.ofNullable(request.getContributorIdList())
-                    .ifPresent(contributorIdList -> {
-                        bookContributorRepository.deleteByBookId(bookId);
-                        saveBookContributor(book, contributorIdList, request.getRoleIdList());
+                    .ifPresent(publisherId -> {
+                        Publisher publisher = publisherRepository.findById(publisherId)
+                                .orElseThrow(() -> new NotFoundException("출판사 정보가 없습니다."));
+                        book.setPublisher(publisher);
                     });
-            Optional.ofNullable(request.getCategoryIdList())
-                    .ifPresent(contributorIdList -> {
-                        bookCategoryRepository.deleteByBookId(bookId);
-                        saveBookCategory(contributorIdList, book);
-                    });
-            Optional.ofNullable(request.getTagIdList())
-                    .ifPresent(tagNameList -> {
-                        bookTagRepository.deleteByBookId(bookId);
-                        saveBookTag(book, tagNameList);
-                    });
+            if(!request.getContributorIdList().isEmpty()) {
+                Optional.of(request.getContributorIdList())
+                        .ifPresent(contributorIdList -> {
+                            bookContributorRepository.deleteByBookId(bookId);
+                            saveBookContributor(book, contributorIdList, request.getRoleIdList());
+                        });
+            }
 
+            if(!request.getCategoryIdList().isEmpty()) {
+                Optional.of(request.getCategoryIdList())
+                        .ifPresent(contributorIdList -> {
+                            bookCategoryRepository.deleteByBookId(bookId);
+                            saveBookCategory(contributorIdList, book);
+                        });
+            }
+
+            if(!request.getTagIdList().isEmpty()) {
+                Optional.of(request.getTagIdList())
+                        .ifPresent(tagNameList -> {
+                            bookTagRepository.deleteByBookId(bookId);
+                            saveBookTag(book, tagNameList);
+                        });
+            }
             return mapper.entityToDto(book);
 
         } else {
@@ -205,7 +214,7 @@ public class BookMgmtService {
      *
      * @param bookId  상태를 바꿀 책 아이디
      * @param request 상태를 정보를 가진 객체
-     * @return
+     * @return BookDto.statusResponse
      */
 
     public BookDto.statusResponse modifyStatus(Long bookId, BookDto.Request request) {
