@@ -71,6 +71,8 @@ public class BookGetController {
     public ResponseEntity<PageResponse<BookDto.ListResponse>> getBooksByCategory(@PathVariable("categoryId") Long categoryId,
                                                                                  @RequestParam(required = false) String sort,
                                                                                  @RequestParam int page){
+        if(!StringUtils.hasText(sort)) sort = "viewCount";
+
         PageResponse<BookDto.ListResponse> responses = bookGetService.getBooksByCategory(page, categoryId,sort);
 
         return ResponseEntity.status(HttpStatus.OK).body(responses);

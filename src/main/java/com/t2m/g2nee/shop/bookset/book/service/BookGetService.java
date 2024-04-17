@@ -29,7 +29,7 @@ public class BookGetService {
     private final BookRepository bookRepository;
 
     /**
-     * 가장 최신 출판된 8개의 책을 조회하는 메서드 입니다.
+     * 가장 최신 출판된 6개의 책을 조회하는 메서드 입니다.
      *
      * @return List<BookDto.ListResponse>
      */
@@ -57,16 +57,17 @@ public class BookGetService {
      *
      * @param page       페이지 번호
      * @param categoryId 카테고리 아이디
-     * @param sort 정렬 기준
+     * @param sort       정렬 기준
      * @return PageResponse<BookDto.ListResponse>
      */
 
     public PageResponse<BookDto.ListResponse> getBooksByCategory(int page, Long categoryId, String sort) {
 
         // 조건에 맞게 정렬하여 페이지 생성
-        Pageable pageable = sorting(sort, page);
+        int size = 8;
+        Pageable pageable = PageRequest.of(page-1, size);
 
-        Page<BookDto.ListResponse> bookPage = bookRepository.getBookListByCategory(categoryId, pageable);
+        Page<BookDto.ListResponse> bookPage = bookRepository.getBookListByCategory(categoryId, pageable, sort);
 
         return getPageResponse(page, bookPage);
     }
@@ -96,7 +97,7 @@ public class BookGetService {
                                                                                 String keyword, String sort) {
         // 조건에 맞게 정렬하여 페이지 생성
         int size = 8;
-        Pageable pageable;
+        Pageable pageable = PageRequest.of(page-1, size);
         Page<BookDto.ListResponse> bookPage;
 
         switch (sort) {
@@ -110,12 +111,16 @@ public class BookGetService {
                 // 정렬한 pageResponse 반환
                 break;
             default:
-                pageable = sorting(sort, page);
 
                 // categoryId가 null 일 경우 repository에서 키워드만 받도록 처리
                 List<BookDto.ListResponse> responseList =
-                        bookRepository.getBooksByElasticSearchAndCategory(page, categoryId, keyword);
-                bookPage = new PageImpl<>(responseList, pageable, responseList.size());
+                        bookRepository.getBooksByElasticSearchAndCategory(categoryId, keyword, sort);
+
+                int start = (int) pageable.getOffset();
+                int end = Math.min((start + pageable.getPageSize()), responseList.size());
+
+                List<BookDto.ListResponse> sortedList = responseList.subList(start, end);
+                bookPage = new PageImpl<>(sortedList, pageable, responseList.size());
                 return getPageResponse(page, bookPage);
         }
 
@@ -151,28 +156,4 @@ public class BookGetService {
                 .totalElements(bookPage.getTotalElements())
                 .build();
     }
-
-    // 필드로 정렬하는 경우
-    private Pageable sorting(String sort, int page) {
-
-        int size = 8;
-        Pageable pageable;
-
-
-        switch (sort) {
-            case "publishedDate":
-                pageable = PageRequest.of(page - 1, size, Sort.by("publishedDate"));
-                break;
-            case "salePriceDesc":
-                pageable = PageRequest.of(page - 1, size, Sort.by("price").descending());
-                break;
-            case "salePriceAsc":
-                pageable = PageRequest.of(page - 1, size, Sort.by("price"));
-                break;
-            default:
-                pageable = PageRequest.of(page - 1, size, Sort.by("viewCount"));
-        }
-        return pageable;
-    }
-
 }

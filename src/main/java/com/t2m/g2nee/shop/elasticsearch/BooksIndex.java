@@ -1,5 +1,6 @@
 package com.t2m.g2nee.shop.elasticsearch;
 
+import java.time.LocalDate;
 import javax.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +28,12 @@ public class BooksIndex {
     private String contributorName;
     @Field(type= FieldType.Text)
     private String publisherName;
+    @Field(type = FieldType.Long)
+    private Long salePrice;
+    @Field(type = FieldType.Long)
+    private Long viewCount;
+    @Field(type = FieldType.Date)
+    private LocalDate publishedDate;
 
 
 }

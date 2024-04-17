@@ -72,7 +72,7 @@ public class ContributorService {
     @Transactional(readOnly = true)
     public List<ContributorDto.Response> getAllContributor(){
 
-        return mapper.entitiesToDtos(contributorRepository.findAll());
+        return mapper.entitiesToDtos(contributorRepository.findAllActivated());
     }
 
     /**
@@ -86,7 +86,7 @@ public class ContributorService {
 
         int size = 10;
         Page<Contributor> contributorPage =
-                contributorRepository.findAll(PageRequest.of(page - 1, size, Sort.by("contributorName")));
+                contributorRepository.findAllActivated(PageRequest.of(page - 1, size, Sort.by("contributorName")));
 
         List<ContributorDto.Response> responses = mapper.entitiesToDtos(contributorPage.getContent());
 

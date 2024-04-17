@@ -12,9 +12,9 @@ public interface BookCustomRepository {
 
      Page<BookDto.ListResponse> getAllBook(Pageable pageable);
 
-     Page<BookDto.ListResponse> getBookListByCategory(Long categoryId, Pageable pageable);
+     Page<BookDto.ListResponse> getBookListByCategory(Long categoryId, Pageable pageable,String sort);
 
      BookDto.Response getBookDetail(Long bookId);
 
-     List<BookDto.ListResponse> getBooksByElasticSearchAndCategory(int page, Long categoryId, String keyword);
+     List<BookDto.ListResponse> getBooksByElasticSearchAndCategory(Long categoryId, String keyword,String sort);
 }

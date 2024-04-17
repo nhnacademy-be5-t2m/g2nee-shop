@@ -1,16 +1,14 @@
 package com.t2m.g2nee.shop.bookset.book.repository;
 
-import com.querydsl.core.Tuple;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.t2m.g2nee.shop.bookset.book.domain.Book;
 import com.t2m.g2nee.shop.bookset.book.domain.QBook;
 import com.t2m.g2nee.shop.bookset.book.dto.BookDto;
 import com.t2m.g2nee.shop.bookset.bookcategory.domain.QBookCategory;
-import com.t2m.g2nee.shop.bookset.bookcontributor.domain.BookContributor;
 import com.t2m.g2nee.shop.bookset.bookcontributor.domain.QBookContributor;
 import com.t2m.g2nee.shop.bookset.bookcontributor.dto.BookContributorDto;
-import com.t2m.g2nee.shop.bookset.bookcontributor.mapper.BookContributorMapper;
 import com.t2m.g2nee.shop.bookset.booktag.domain.QBookTag;
 import com.t2m.g2nee.shop.bookset.category.domain.QCategory;
 import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryInfoDto;
@@ -41,13 +39,10 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 
 public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implements BookCustomRepository {
 
-    private final BookContributorMapper bookContributorMapper;
     private final ElasticsearchOperations operations;
 
-    public BookCustomRepositoryImpl(BookContributorMapper bookContributorMapper,
-                                    ElasticsearchOperations operations) {
+    public BookCustomRepositoryImpl(ElasticsearchOperations operations) {
         super(Book.class);
-        this.bookContributorMapper = bookContributorMapper;
         this.operations = operations;
     }
 
@@ -127,7 +122,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
      * @return List<BookDto.Response>
      */
     @Override
-    public Page<BookDto.ListResponse> getBookListByCategory(Long categoryId, Pageable pageable) {
+    public Page<BookDto.ListResponse> getBookListByCategory(Long categoryId, Pageable pageable, String sort) {
 
         QBook book = QBook.book;
         QPublisher publisher = QPublisher.publisher;
@@ -149,6 +144,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                 .boxed()
                 .collect(Collectors.toList());
 
+        OrderSpecifier<?> orderSpecifier = sorting(book, sort);
 
         List<BookDto.ListResponse> responseList =
                 from(book)
@@ -163,8 +159,10 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                                         , book.title
                                         , book.engTitle
                                         , book.publishedDate
+                                , book.viewCount
                                 , book.price, book.salePrice, book.bookStatus, publisher.publisherName,
                                 publisher.publisherEngName))
+                        .orderBy(orderSpecifier)
                         .offset(pageable.getOffset())
                         .limit(pageable.getPageSize())
                         .fetch();
@@ -204,10 +202,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
         QBookTag bookTag = QBookTag.bookTag;
 
         // 조회수 증가
-        update(book)
-                .set(book.viewCount, book.viewCount.add(1))
-                .where(book.bookId.eq(bookId))
-                .execute();
+        addViewCount(book, bookId);
 
         BookDto.Response response =
                 from(book)
@@ -239,12 +234,11 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
     /**
      * Elasticsearch를 이용해서 키워드를 통해 가중치를 부여하여 검색하고 필요에 따라 카테고리를 필터링하여 검색하는 메서드 입니다.
      *
-     * @param page       페이지 번호
      * @param categoryId 카테고리 아이디
      * @param keyword    검색할 키워드
      * @return List<BookDto.ListResponse>
      */
-    public List<BookDto.ListResponse> getBooksByElasticSearchAndCategory(int page, Long categoryId, String keyword) {
+    public List<BookDto.ListResponse> getBooksByElasticSearchAndCategory(Long categoryId, String keyword, String sort) {
 
         /*
          Elasticsearch search 쿼리
@@ -266,8 +260,6 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
 
         NativeSearchQueryBuilder searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(boolQuery);
-
-
         /*
             search 결과로 가져온 인덱스 객체들을 포함하는 hitList
          */
@@ -305,10 +297,12 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                                     , bookFile.url.as("thumbnailImageUrl")
                                     , book.title
                                     , book.engTitle
+                                    , book.viewCount
                                     , book.publishedDate
                                     , book.price, book.salePrice, book.bookStatus
                                     , publisher.publisherName
                                     , publisher.publisherEngName))
+                            .orderBy(sorting(book,sort))
                             .fetch();
 
         return toListResponseList(responseList, bookContributor);
@@ -488,5 +482,33 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
 
             return bookCategory.category.categoryId.in(categoryIdList);
         }
+    }
+
+    private synchronized void addViewCount(QBook book, Long bookId) {
+        update(book)
+                .set(book.viewCount, book.viewCount.add(1))
+                .where(book.bookId.eq(bookId))
+                .execute();
+    }
+
+
+    private OrderSpecifier<?> sorting(QBook book, String sort) {
+
+        OrderSpecifier<?> orderSpecifier;
+
+        switch (sort) {
+            case "publishedDate":
+                orderSpecifier = book.publishedDate.desc();
+                break;
+            case "salePriceDesc":
+                orderSpecifier = book.salePrice.desc();
+                break;
+            case "salePriceAsc":
+                orderSpecifier = book.salePrice.asc();
+                break;
+            default:
+                orderSpecifier = book.viewCount.desc();
+        }
+        return orderSpecifier;
     }
 }
