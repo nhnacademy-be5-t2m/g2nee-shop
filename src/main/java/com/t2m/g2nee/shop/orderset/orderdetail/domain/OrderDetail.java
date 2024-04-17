@@ -1,8 +1,8 @@
-package com.t2m.g2nee.shop.orderset.orderdetail.domain;
+package com.t2m.g2nee.shop.orderset.orderDetail.domain;
 
 import com.t2m.g2nee.shop.bookset.book.domain.Book;
 import com.t2m.g2nee.shop.memberset.Customer.domain.Customer;
-import com.t2m.g2nee.shop.orderset.PackageType.domain.PackageType;
+import com.t2m.g2nee.shop.orderset.packageType.domain.PackageType;
 import java.math.BigDecimal;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
