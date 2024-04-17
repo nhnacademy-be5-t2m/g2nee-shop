@@ -39,7 +39,7 @@ public class PointPolicy {
     }
 
     public enum PolicyType {
-        AMOUNT("퍼센트적립"), PERCENT("금액적립");
+        AMOUNT("금액적립"), PERCENT("퍼센트적립");
 
         private final String name;
 

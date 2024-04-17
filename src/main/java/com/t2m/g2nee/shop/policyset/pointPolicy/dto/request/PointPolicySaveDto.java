@@ -1,5 +1,6 @@
 package com.t2m.g2nee.shop.policyset.pointPolicy.dto.request;
 
+import com.t2m.g2nee.shop.policyset.pointPolicy.dto.annotation.PolicyType;
 import java.math.BigDecimal;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -27,6 +28,6 @@ public class PointPolicySaveDto {
     @NotBlank(message = "정책 종류는 비울 수 없습니다.")
     private String policyType;
 
-    @Pattern(regexp = "\\d+(\\.\\d+)?", message = "숫자로 입력해주세요")
+    @PolicyType
     private BigDecimal amount;
 }
