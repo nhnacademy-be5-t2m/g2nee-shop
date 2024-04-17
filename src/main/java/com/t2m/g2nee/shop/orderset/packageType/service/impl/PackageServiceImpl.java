@@ -56,7 +56,7 @@ public class PackageServiceImpl implements PackageService {
     @Transactional(readOnly = true)
     public PageResponse<PackageInfoDto> getAllPackages(int page) {
         Page<PackageType> packageTypes = packageRepository.findAll(
-                PageRequest.of(page - 1, 10, Sort.by("name"))
+                PageRequest.of(page - 1, 10, Sort.by("price"))
         );
 
         List<PackageInfoDto> packageInfoDtoList = packageTypes
