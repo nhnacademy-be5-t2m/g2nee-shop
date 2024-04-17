@@ -2,6 +2,7 @@ package com.t2m.g2nee.shop.orderset.order.dto.response;
 
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import java.sql.Timestamp;
+import java.util.List;
 import lombok.Getter;
 
 /**
@@ -16,6 +17,7 @@ public class GetOrderInfoResponseDto {
     private String orderNumber;
     private Order.OrderState orderState;
     private Timestamp orderDate;
+    private List<Long> orderDetailId;
 
 
 }
