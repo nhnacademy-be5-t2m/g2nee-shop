@@ -40,7 +40,7 @@ public class OrderImplService implements OrderService {
 
 
             customer = (Customer) customerRepository.getById();
-            Order order = orderRepository.save()
+            Order order = orderRepository.save();
         }
         return null;
     }
