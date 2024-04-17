@@ -115,18 +115,10 @@ class CategoryRepositoryTest {
 
     @Test
     void testDeleteByAncestorCategoryId() {
-        categoryPathRepository.deleteByAncestor_CategoryId(category1.getCategoryId());
+        categoryPathRepository.deleteCategoryPathByAncestorIdAndDescendantId(category1.getCategoryId());
         assertFalse(categoryPathRepository.existsById(categoryPath1.getCategoryPathId()));
         assertTrue(categoryPathRepository.existsById(categoryPath2.getCategoryPathId()));
         assertFalse(categoryPathRepository.existsById(categoryPath3.getCategoryPathId()));
-    }
-
-    @Test
-    void testDeleteByDescendantCategoryId() {
-        categoryPathRepository.deleteByDescendant_CategoryId(category1.getCategoryId());
-        assertFalse(categoryPathRepository.existsById(categoryPath1.getCategoryPathId()));
-        assertTrue(categoryPathRepository.existsById(categoryPath2.getCategoryPathId()));
-        assertTrue(categoryPathRepository.existsById(categoryPath3.getCategoryPathId()));
     }
 
     @Test
