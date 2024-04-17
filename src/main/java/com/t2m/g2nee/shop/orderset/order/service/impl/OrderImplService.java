@@ -37,10 +37,10 @@ public class OrderImplService implements OrderService {
         //
         Customer customer = null;
         if (Objects.nonNull(orderCreateRequestDto.getCustomerId())) {
+
+
             customer = (Customer) customerRepository.getById();
-            Order order = orderRepository.save(Order.builder()
-                    .customer(customer)
-                    .)
+            Order order = orderRepository.save()
         }
         return null;
     }
@@ -63,14 +63,18 @@ public class OrderImplService implements OrderService {
         return null;
     }
 
+    //주문 조회
     @Override
     public GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long customerId) {
-        //GetOrderInfoResponseDto orderInfoResponseDto = orderRepository.ge
+        GetOrderInfoResponseDto orderInfoResponseDto = orderRepository.findById(orderId).orElseThrow(()
+                -> new NotFoundException("주문이 존재하지 않습니다."));
         return null;
     }
 
+    //주문 번호로 조회
     @Override
     public GetOrderInfoResponseDto getOrderInfoByOrderNumber(String orderNumber) {
+        GetOrderInfoResponseDto orderInfoResponseDto = orderRepository.findBy()
         return null;
     }
 

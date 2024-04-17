@@ -12,7 +12,7 @@ import lombok.Getter;
  */
 @Getter
 public class GetOrderInfoResponseDto {
-
+    private Long orderId;
     private String orderNumber;
     private Order.OrderState orderState;
     private Timestamp orderDate;
