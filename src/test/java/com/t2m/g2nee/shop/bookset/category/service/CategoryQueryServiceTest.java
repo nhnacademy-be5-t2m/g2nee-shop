@@ -4,7 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
+import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryHierarchyDto;
 import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryInfoDto;
+import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryUpdateDto;
 import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import java.util.List;
@@ -20,44 +22,55 @@ class CategoryQueryServiceTest {
 
     @Test
     void testGetSubCategories() {
-        List<CategoryInfoDto> subCategories = categoryQueryService.getSubCategories(1L);
+        List<CategoryHierarchyDto> subCategories = categoryQueryService.getSubCategories(1L);
 
         assertThat(subCategories).isNotNull().hasSize(3);
     }
 
     @Test
     void testGetSubCategoriesFail() {
-        assertThrows(NotFoundException.class, () -> categoryQueryService.getSubCategories(1000L));
+        assertThrows(NotFoundException.class, () -> categoryQueryService.getSubCategories(1000000000L));
     }
 
     @Test
     void testGetCategory() {
-        CategoryInfoDto category = categoryQueryService.getCategory(1L);
+        CategoryUpdateDto category = categoryQueryService.getCategory(2L);
+
+        assertEquals(Long.valueOf(2L), category.getCategoryId());
+        assertEquals(3L, category.getChildren().get(0).getCategoryId().longValue());
+        assertEquals(Long.valueOf(1L), category.getAncestorCategoryId());
+    }
+
+    @Test
+    void testGetCategory2() {
+        CategoryUpdateDto category = categoryQueryService.getCategory(1L);
 
         assertEquals(Long.valueOf(1L), category.getCategoryId());
+        assertEquals(2L, category.getChildren().get(0).getCategoryId().longValue());
+        assertEquals(Long.valueOf(0L), category.getAncestorCategoryId());
     }
 
     @Test
     void testGetCategoryFail() {
-        assertThrows(NotFoundException.class, () -> categoryQueryService.getCategory(1000L));
+        assertThrows(NotFoundException.class, () -> categoryQueryService.getCategory(1000000000L));
     }
 
     @Test
     void testGetRootCategories() {
-        List<CategoryInfoDto> rootCategories = categoryQueryService.getRootCategories();
+        List<CategoryHierarchyDto> rootCategories = categoryQueryService.getRootCategories();
 
-        assertThat(rootCategories)
-                .isNotNull()
-                .hasSize(2);
+        assertThat(rootCategories).isNotNull();
+        assertEquals(2L, rootCategories.get(0).getChildren().get(0).getCategoryId().longValue());
+        assertEquals(3L,
+                rootCategories.get(0).getChildren().get(0).getChildren().get(0).getCategoryId().longValue());
     }
 
     @Test
     void testGetAllCategories() {
 
-        PageResponse<CategoryInfoDto> allCategories = categoryQueryService.getAllCategories(1);
+        List<CategoryInfoDto> allCategories = categoryQueryService.getAllCategories();
 
-        assertThat(allCategories).isNotNull();
-        assertThat(allCategories.getData()).hasSize(10);
+        assertThat(allCategories).isNotNull().hasSizeGreaterThan(9);
 
     }
 

@@ -113,12 +113,13 @@ public class BookDto {
         private BookStatus bookStatus;
         private List<BookContributorDto.Response> contributorRoleList;
     }
+
     @Getter
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class statusResponse{
+    public static class statusResponse {
         private BookStatus status;
     }
     @Getter

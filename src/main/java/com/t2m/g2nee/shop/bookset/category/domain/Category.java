@@ -34,18 +34,11 @@ public class Category {
     private String categoryName;
     private String categoryEngName;
 
-    private boolean isActivated;
+    private Boolean isActivated;
 
-    public Category(String categoryName, String categoryEngName) {
+    public Category(String categoryName, String categoryEngName, boolean isActivated) {
         this.categoryName = categoryName;
         this.categoryEngName = categoryEngName;
-        isActivated = true;
-    }
-
-    public Category(Long categoryId, String categoryName, String categoryEngName) {
-        this.categoryId = categoryId;
-        this.categoryName = categoryName;
-        this.categoryEngName = categoryEngName;
-        isActivated = true;
+        this.isActivated = isActivated;
     }
 }

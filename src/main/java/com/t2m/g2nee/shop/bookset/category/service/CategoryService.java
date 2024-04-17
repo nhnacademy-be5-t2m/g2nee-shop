@@ -2,7 +2,6 @@ package com.t2m.g2nee.shop.bookset.category.service;
 
 
 import com.t2m.g2nee.shop.bookset.category.dto.request.CategorySaveDto;
-import com.t2m.g2nee.shop.bookset.category.dto.request.CategoryUpdateDto;
 import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryInfoDto;
 
 /**
@@ -24,10 +23,9 @@ public interface CategoryService {
     /**
      * 카테고리 및 카테고리 경로 수정
      *
-     * @param updateCategoryDto
      * @return
      */
-    CategoryInfoDto updateCategory(CategoryUpdateDto updateCategoryDto);
+    CategoryInfoDto updateCategory(Long categoryId, CategorySaveDto categorySaveDto);
 
     /**
      * 카테고리 soft delete, 카테고리 경로는 delete

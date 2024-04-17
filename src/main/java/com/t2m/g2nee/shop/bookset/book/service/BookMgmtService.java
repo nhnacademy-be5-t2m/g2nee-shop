@@ -110,7 +110,7 @@ public class BookMgmtService {
      * @param bookId    도서 아이디
      * @param request   도서 수정할 정보가 담긴 객체
      * @param thumbnail 바꿀 섬네일 이미지 파일
-     * @param details    바꿀 세부 이미지 파일
+     * @param details   바꿀 세부 이미지 파일
      * @return 수정된 도서 응답 객체
      */
     public BookDto.Response updateBook(Long bookId, BookDto.Request request, MultipartFile thumbnail,
@@ -211,7 +211,8 @@ public class BookMgmtService {
 
     /**
      * 책 상태를 바꾸는 메서드 입니다
-     * @param bookId 상태를 바꿀 책 아이디
+     *
+     * @param bookId  상태를 바꿀 책 아이디
      * @param request 상태를 정보를 가진 객체
      * @return BookDto.statusResponse
      */

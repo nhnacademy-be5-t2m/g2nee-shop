@@ -1,6 +1,7 @@
 package com.t2m.g2nee.shop.memberset.Member.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -9,8 +10,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.t2m.g2nee.shop.memberset.Member.dto.request.SignUpMemberRequestDto;
+import com.t2m.g2nee.shop.memberset.Member.dto.request.UsernameRequestDto;
 import com.t2m.g2nee.shop.memberset.Member.dto.response.MemberResponse;
+import com.t2m.g2nee.shop.memberset.Member.dto.response.MemberResponseToAuth;
 import com.t2m.g2nee.shop.memberset.Member.service.Impl.MemberServiceImpl;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,7 +36,9 @@ class MemberControllerTest {
 
     SignUpMemberRequestDto signUpMemberRequestDto;
     MemberResponse memberResponse;
-    String signUpPath = "/shop/member/signup";
+    MemberResponseToAuth memberResponseToAuth;
+    UsernameRequestDto usernameRequestDto;
+    String path = "/shop/member";
 
     @BeforeEach
     void setUp() {
@@ -54,13 +60,22 @@ class MemberControllerTest {
                 "홍길동",
                 "일반"
         );
+        memberResponseToAuth = new MemberResponseToAuth(
+                1,
+                "gildong",
+                "asdf1234!",
+                List.of("ROLE_MEMBER")
+        );
+        usernameRequestDto = new UsernameRequestDto(
+                "gildong"
+        );
     }
 
     @Test
     @DisplayName("정상적인 회원가입 성공 Test")
     void memberSignUpComplete() throws Exception {
         when(memberService.signUp(any())).thenReturn(memberResponse);
-        mvc.perform(post(signUpPath)
+        mvc.perform(post(path + "/signup")
                         .content(objectMapper.writeValueAsString(signUpMemberRequestDto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
@@ -71,4 +86,21 @@ class MemberControllerTest {
                 .andExpect(jsonPath("$.grade").value("일반"));
 
     }
+
+    @Test
+    @DisplayName("username으로 회원의 정보를 정상적으로 받아오는 Test")
+    void getMemberInfoComplete() throws Exception {
+        when(memberService.getMemberInfo(anyString())).thenReturn(memberResponseToAuth);
+
+        mvc.perform(post(path + "/getInfo")
+                        .content(objectMapper.writeValueAsString(usernameRequestDto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.username").value("gildong"))
+                .andExpect(jsonPath("$.password").value("asdf1234!"))
+                .andExpect(jsonPath("$.memberId").value(1))
+                .andExpect(jsonPath("$.authorities").value("ROLE_MEMBER"));
+    }
+
 }

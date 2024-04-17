@@ -2,7 +2,6 @@ package com.t2m.g2nee.shop.bookset.category.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.t2m.g2nee.shop.bookset.book.mapper.BookMapper;
 import com.t2m.g2nee.shop.bookset.category.repository.CategoryRepository;
 import com.t2m.g2nee.shop.config.ElasticsearchConfig;
 import com.t2m.g2nee.shop.config.MapperConfig;
@@ -26,7 +25,7 @@ class CategoryTest {
 
     @Test
     void test() {
-        Category category = new Category("테스트카테고리", "testCategory");
+        Category category = new Category("테스트카테고리", "testCategory", true);
 
         categoryRepository.saveAndFlush(category);
 
@@ -36,7 +35,7 @@ class CategoryTest {
         assertThat(testCategory.getCategoryId()).isEqualTo(category.getCategoryId());
         assertThat(testCategory.getCategoryName()).isEqualTo(category.getCategoryName());
         assertThat(testCategory.getCategoryEngName()).isEqualTo(category.getCategoryEngName());
-        assertThat(testCategory.isActivated()).isTrue();
+        assertThat(testCategory.getIsActivated()).isTrue();
     }
 
 }

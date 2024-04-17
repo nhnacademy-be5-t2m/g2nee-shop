@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/shop")
 public class TestController {
 
-
     HttpHeaders header = new HttpHeaders();
 
     public TestController() {
@@ -29,4 +28,9 @@ public class TestController {
         return new ResponseEntity<>(result, header, HttpStatus.OK);
     }
 
+    @GetMapping("/image")
+    public String imageTest() {
+
+        return "imageTest.html";
+    }
 }

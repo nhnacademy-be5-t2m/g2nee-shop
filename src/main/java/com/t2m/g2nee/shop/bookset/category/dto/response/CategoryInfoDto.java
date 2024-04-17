@@ -30,6 +30,7 @@ public class CategoryInfoDto {
         this.categoryId = category.getCategoryId();
         this.categoryName = category.getCategoryName();
         this.categoryEngName = category.getCategoryEngName();
-        this.isActivated = category.isActivated();
+        this.isActivated = category.getIsActivated();
     }
+
 }
