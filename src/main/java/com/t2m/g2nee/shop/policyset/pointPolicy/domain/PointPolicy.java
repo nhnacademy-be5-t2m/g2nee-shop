@@ -1,6 +1,7 @@
-package com.t2m.g2nee.shop.policyset.PointPolicy.domain;
+package com.t2m.g2nee.shop.policyset.pointPolicy.domain;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -30,6 +31,8 @@ public class PointPolicy {
     @Enumerated(EnumType.STRING)
     private PolicyType policyType;
     private BigDecimal amount;
+    private Boolean isActivated;
+    private LocalDateTime changedDate;
 
     public enum PolicyType {
         AMOUNT, PERCENT
