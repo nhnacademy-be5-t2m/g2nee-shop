@@ -31,9 +31,21 @@ public class RoleService {
      */
     public RoleDto.Response registerRole(Role role) {
 
-        Role saveRole = roleRepository.save(role);
+        // 역할 이름이 존재하는지 확인 후 있으면 상태를 변경하고 없으면 저장합니다.
+        Optional<Role> optionalRole = roleRepository.findByRoleName(role.getRoleName());
 
-        return mapper.entityToDto(saveRole);
+        if (optionalRole.isPresent()) {
+
+            Role findRole = optionalRole.get();
+            findRole.setActivated(true);
+
+            return mapper.entityToDto(findRole);
+        } else {
+
+            Role saveRole = roleRepository.save(role);
+
+            return mapper.entityToDto(saveRole);
+        }
     }
 
     /**
@@ -60,6 +72,7 @@ public class RoleService {
      * @param page 현재 페이지
      * @return 페이징에 필요한 정보가 담긴 PageResponse 객체
      */
+    @Transactional(readOnly = true)
     public PageResponse<RoleDto.Response> getRoleList(int page) {
 
         int size = 10;
@@ -68,14 +81,22 @@ public class RoleService {
 
         List<RoleDto.Response> responses = mapper.entitiesToDtos(rolePage.getContent());
 
-//        int blockLimit = 3;
-//        int startPage = (((int) Math.ceil(((double) pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1;
-//        int endPage = Math.min((startPage + blockLimit - 1), publisherPage.getTotalPages());
+        int maxPageButtons = 5;
+        int startPage = (int) Math.max(1, rolePage.getNumber() - Math.floor((double) maxPageButtons / 2));
+        int endPage = Math.min(startPage + maxPageButtons - 1, rolePage.getTotalPages());
+
+        if (endPage - startPage + 1 < maxPageButtons) {
+            startPage = Math.max(1, endPage - maxPageButtons + 1);
+        }
+
 
         return PageResponse.<RoleDto.Response>builder()
                 .data(responses)
                 .currentPage(page)
+                .startPage(startPage)
+                .endPage(endPage)
                 .totalPage(rolePage.getTotalPages())
+                .totalElements(rolePage.getTotalElements())
                 .build();
     }
 
@@ -107,4 +128,5 @@ public class RoleService {
             throw new NotFoundException("역할 정보가 없습니다.");
         }
     }
+
 }

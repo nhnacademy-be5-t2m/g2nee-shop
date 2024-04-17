@@ -7,15 +7,15 @@ import java.util.List;
 import org.mapstruct.Mapper;
 
 /**
- * domain과 response를 변환하는 mapper 클래스
+ * domain과 response를 변환하는 mapper 인터페이스
  *
  * @author : 신동민
  * @since : 1.0
  */
-@Mapper(componentModel = "spring")
+@Mapper
 public interface TagMapper {
 
-    TagDto.Response entityToDto(Tag Tag);
+    TagDto.Response entityToDto(Tag tag);
 
     List<TagDto.Response> entitiesToDtos(List<Tag> tagList);
 }

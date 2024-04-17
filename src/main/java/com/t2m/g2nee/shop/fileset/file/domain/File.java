@@ -20,7 +20,6 @@ public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fileId;
-
+    private String type;
     private String url;
-    private String extensionName;
 }

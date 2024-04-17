@@ -27,4 +27,10 @@ public class TestController {
         String result = "hello g2nee shop : " + port;
         return new ResponseEntity<>(result, header, HttpStatus.OK);
     }
+
+    @GetMapping("/image")
+    public String imageTest() {
+
+        return "imageTest.html";
+    }
 }

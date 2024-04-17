@@ -12,6 +12,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * 카테고리 엔티티
+ *
+ * @author : 김수빈
+ * @since : 1.0
+ */
 @Entity
 @Table(name = "Categories")
 @Getter
@@ -28,8 +34,11 @@ public class Category {
     private String categoryName;
     private String categoryEngName;
 
-    public Category(String categoryName, String categoryEngName) {
+    private Boolean isActivated;
+
+    public Category(String categoryName, String categoryEngName, boolean isActivated) {
         this.categoryName = categoryName;
         this.categoryEngName = categoryEngName;
+        this.isActivated = isActivated;
     }
 }

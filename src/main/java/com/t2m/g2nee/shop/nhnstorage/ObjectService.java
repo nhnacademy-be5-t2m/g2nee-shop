@@ -64,7 +64,7 @@ public class ObjectService {
      * @param objectName  파일 이름
      * @param inputStream
      */
-    public void uploadObject(String tokenId, String objectPath, String objectName, final InputStream inputStream) {
+    public String uploadObject(String tokenId, String objectPath, String objectName, final InputStream inputStream) {
         String url = this.getUrl(nhnCloudStorageProperties, objectPath, objectName);
 
         // InputStream을 요청 본문에 추가할 수 있도록 RequestCallback 오버라이드
@@ -79,16 +79,17 @@ public class ObjectService {
 
         // API 호출
         restTemplate.execute(url, HttpMethod.PUT, requestCallback, responseExtractor);
+
+        return url;
     }
 
     /**
      * nhncloud api를 호출하여 storage에 이미지를 저장하는 메서드
      *
-     * @param tokenId    인증토큰 Id값
-     * @param objectName 삭제할 파일 이름
+     * @param tokenId 인증토큰 Id값
+     * @param url     삭제할 파일 url
      */
-    public void deleteObject(String objectName, String tokenId) {
-        String url = this.getUrl(nhnCloudStorageProperties, objectName);
+    public void deleteObject(String url, String tokenId) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Auth-Token", tokenId);

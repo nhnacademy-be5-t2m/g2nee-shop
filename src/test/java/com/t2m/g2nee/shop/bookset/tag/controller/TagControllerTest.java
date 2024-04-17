@@ -21,17 +21,13 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(TagController.class)
 class TagControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -45,11 +41,13 @@ class TagControllerTest {
     @MockBean
     private TagMapper mapper;
 
+    private final String url = "/shop/tags/";
+
     @Test
     @DisplayName("유효성 검사 실패 후 응답값 테스트")
     void testKorValidation() throws Exception {
 
-        TagDto.Request request =  TagDto.Request.builder()
+        TagDto.Request request = TagDto.Request.builder()
                 .tagName(" ")
                 .build();
 
@@ -58,7 +56,7 @@ class TagControllerTest {
         when(tagService.registerTag(any(Tag.class))).thenReturn(
                 TagDto.Response.class.newInstance());
 
-        ResultActions resultActions = mockMvc.perform(post("/shop/tag")
+        ResultActions resultActions = mockMvc.perform(post(url)
                 .content(requestJson)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON));
@@ -80,7 +78,7 @@ class TagControllerTest {
         when(tagService.registerTag(any(Tag.class))).thenReturn(response);
 
         //when
-        ResultActions resultActions = mockMvc.perform(post("/shop/tag")
+        ResultActions resultActions = mockMvc.perform(post(url)
                 .content(requestJson)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON));
@@ -95,7 +93,8 @@ class TagControllerTest {
     void testUpdateTag() throws Exception {
 
         //given
-        TagDto.Request request = getModifyRequest();;
+        TagDto.Request request = getModifyRequest();
+        ;
         TagDto.Response modifyresponse = getModifiedResponse();
         Tag tag = getTag();
 
@@ -104,7 +103,7 @@ class TagControllerTest {
         when(tagService.updateTag(any(Tag.class))).thenReturn(modifyresponse);
 
         //when  //then
-        ResultActions resultActions = mockMvc.perform(patch("/shop/tag/{tagId}", tag.getTagId())
+        ResultActions resultActions = mockMvc.perform(patch(url + tag.getTagId())
                 .content(requestJson)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON));
@@ -135,7 +134,7 @@ class TagControllerTest {
         when(mapper.entitiesToDtos(tagList)).thenReturn(responses);
 
         //when
-        ResultActions resultActions = mockMvc.perform(get("/shop/tag")
+        ResultActions resultActions = mockMvc.perform(get(url)
                 .param("page", String.valueOf(page))
                 .param("size", String.valueOf(size))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -148,7 +147,7 @@ class TagControllerTest {
 
         for (int i = 0; i < responses.size(); i++) {
             resultActions.andExpect(
-                            jsonPath("$.data[" + i + "].tagName").value(responses.get(i).getTagName()));
+                    jsonPath("$.data[" + i + "].tagName").value(responses.get(i).getTagName()));
         }
 
     }
@@ -165,10 +164,11 @@ class TagControllerTest {
         doNothing().when(tagService).deleteTag(tag.getTagId());
 
         //when
-        mockMvc.perform(delete("/shop/tag/{tagId}", tag.getTagId()))
+        mockMvc.perform(delete(url + tag.getTagId()))
                 .andExpect(status().isNoContent());
 
     }
+
     private List<Tag> getList() {
 
         List<Tag> tagList = new ArrayList<>();

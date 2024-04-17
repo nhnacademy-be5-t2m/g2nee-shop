@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Validated
-@RequestMapping("/shop/publisher")
+@RequestMapping("/shop/publishers")
 @RequiredArgsConstructor
 public class PublisherController {
 
@@ -84,6 +84,7 @@ public class PublisherController {
 
     /**
      * 출판사를 삭제하는 컨트롤러 입니다.
+     *
      * @param publisherId
      * @return X
      */

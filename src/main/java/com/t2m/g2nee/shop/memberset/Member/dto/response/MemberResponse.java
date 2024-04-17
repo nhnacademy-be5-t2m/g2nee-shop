@@ -17,4 +17,5 @@ public class MemberResponse {
     private String name;
     private String nickName;
     private String grade;
+
 }

@@ -1,10 +1,9 @@
 package com.t2m.g2nee.shop.bookset.tag.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import com.t2m.g2nee.shop.bookset.tag.domain.Tag;
@@ -40,7 +39,7 @@ class TagServiceTest {
 
     @Test
     @DisplayName("태그 등록 테스트")
-    void registerTag() {
+    void registerTagTest() {
 
         //given
         TagDto.Request request = getRequest();
@@ -55,12 +54,31 @@ class TagServiceTest {
 
         // then
         assertEquals(response.getTagName(), request.getTagName());
+    }
 
+    @Test
+    @DisplayName("태그 재활성화 테스트")
+    void activateTagTest() {
+
+        //given
+        TagDto.Request request = getRequest();
+        Tag tag = Tag.builder()
+                .tagName("태그1")
+                .isActivated(false)
+                .build();
+
+        when(tagRepository.findByTagName(request.getTagName())).thenReturn(Optional.ofNullable(tag));
+
+        //when
+        tagService.registerTag(tag);
+
+        //then
+        assertTrue(tag.isActivated());
     }
 
     @Test
     @DisplayName("태그 수정 테스트")
-    void updateTag() {
+    void updateTagTest() {
 
         //given
         TagDto.Request request = getModifyRequest();
@@ -80,7 +98,7 @@ class TagServiceTest {
 
     @Test
     @DisplayName("태그 리스트 조회 테스트")
-    void getTagList() {
+    void getTagListTest() {
 
         //given
         List<Tag> tagList = getList();
@@ -91,7 +109,7 @@ class TagServiceTest {
                 .totalPage(2)
                 .build();
 
-        Pageable pageable = PageRequest.of(0, 10,Sort.by("tagName"));
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("tagName"));
 
         Page<Tag> tagPage = new PageImpl<>(tagList, pageable, tagList.size());
 
@@ -100,7 +118,7 @@ class TagServiceTest {
         when(mapper.entitiesToDtos(tagList)).thenReturn(responseList);
 
         //when
-       tagService.getTagList(1);
+        tagService.getTagList(1);
 
         //then
         assertEquals(10, responses.getData().size());
@@ -114,23 +132,22 @@ class TagServiceTest {
 
     @Test
     @DisplayName("출판사 삭제 테스트")
-    void deleteTag() {
+    void deleteTagTest() {
 
         //given
         Tag tag = getTag();
 
         when(tagRepository.findById(tag.getTagId())).thenReturn(Optional.of(tag));
-        doNothing().when(tagRepository).deleteById(tag.getTagId());
-
-        //when //then
+        //when
         tagService.deleteTag(tag.getTagId());
-
-        verify(tagRepository, times(1)).deleteById(tag.getTagId());
+        //then
+        assertFalse(tag.isActivated());
 
     }
+
     @Test
     @DisplayName("태그가 없을 때 예외 테스트")
-    void testExistTag(){
+    void testExistTagTest() {
         Tag tag = getTag();
 
         when(tagRepository.findById(tag.getTagId())).thenReturn(Optional.empty());

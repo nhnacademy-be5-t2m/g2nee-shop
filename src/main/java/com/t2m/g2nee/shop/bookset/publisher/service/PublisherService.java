@@ -37,9 +37,19 @@ public class PublisherService {
      */
     public PublisherDto.Response registerPublisher(Publisher publisher) {
 
-        Publisher savePublisher = publisherRepository.save(publisher);
+        Optional<Publisher> optionalPublisher = publisherRepository.findByPublisherName(publisher.getPublisherName());
+        if (optionalPublisher.isPresent()) {
 
-        return mapper.entityToDto(savePublisher);
+            Publisher findPublisher = optionalPublisher.get();
+            findPublisher.setActivated(true);
+
+            return mapper.entityToDto(findPublisher);
+        } else {
+
+            Publisher savePublisher = publisherRepository.save(publisher);
+
+            return mapper.entityToDto(savePublisher);
+        }
     }
 
     /**
@@ -67,6 +77,7 @@ public class PublisherService {
      * @param page 현재 페이지
      * @return 페이징에 필요한 정보가 담긴 PageResponse 객체
      */
+    @Transactional(readOnly = true)
     public PageResponse<PublisherDto.Response> getPublisherList(int page) {
 
         int size = 10;
@@ -75,14 +86,22 @@ public class PublisherService {
 
         List<PublisherDto.Response> responses = mapper.entitiesToDtos(publisherPage.getContent());
 
-//        int blockLimit = 3;
-//        int startPage = (((int) Math.ceil(((double) pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1;
-//        int endPage = Math.min((startPage + blockLimit - 1), publisherPage.getTotalPages());
+
+        int maxPageButtons = 5;
+        int startPage = (int) Math.max(1, publisherPage.getNumber() - Math.floor((double) maxPageButtons / 2));
+        int endPage = Math.min(startPage + maxPageButtons - 1, publisherPage.getTotalPages());
+
+        if (endPage - startPage + 1 < maxPageButtons) {
+            startPage = Math.max(1, endPage - maxPageButtons + 1);
+        }
 
         return PageResponse.<PublisherDto.Response>builder()
                 .data(responses)
                 .currentPage(page)
+                .startPage(startPage)
+                .endPage(endPage)
                 .totalPage(publisherPage.getTotalPages())
+                .totalElements(publisherPage.getTotalElements())
                 .build();
     }
 
