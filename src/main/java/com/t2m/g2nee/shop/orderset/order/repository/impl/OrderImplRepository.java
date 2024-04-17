@@ -32,7 +32,7 @@ public class OrderImplRepository extends QuerydslRepositorySupport
     public Page<GetOrderListForAdminResponseDto> getAllOrderList(Pageable pageable) {
         JPQLQuery<GetOrderListForAdminResponseDto> queryAdmin = from(order)
                 .select(Projections.constructor(GetOrderListForAdminResponseDto.class, order.orderId.as("orderId"),
-                        order.orderDate))
+                        order.orderDate));
 
         return null;
     }
@@ -42,7 +42,6 @@ public class OrderImplRepository extends QuerydslRepositorySupport
         return null;
     }
 
-    a
 
     @Override
 

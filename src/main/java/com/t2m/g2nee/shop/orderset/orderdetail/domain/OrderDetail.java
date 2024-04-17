@@ -1,6 +1,7 @@
 package com.t2m.g2nee.shop.orderset.orderdetail.domain;
 
 import com.t2m.g2nee.shop.bookset.book.domain.Book;
+import com.t2m.g2nee.shop.fileset.file.domain.File;
 import com.t2m.g2nee.shop.memberset.Customer.domain.Customer;
 import com.t2m.g2nee.shop.orderset.PackageType.domain.PackageType;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
@@ -51,5 +52,9 @@ public class OrderDetail {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "orderId")
     private Order order;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fileId")
+    private File file;
 
 }

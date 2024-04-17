@@ -1,5 +1,6 @@
 package com.t2m.g2nee.shop.orderset.orderdetail.dto.response;
 
+import com.t2m.g2nee.shop.fileset.file.domain.File;
 import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,4 +22,5 @@ public class GetOrderDetailResponseDto {
     private BigDecimal price;
     private Long packageTypeId;
     private Boolean isCancelled;
+    private File fileId;
 }

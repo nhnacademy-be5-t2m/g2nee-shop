@@ -1,6 +1,7 @@
 package com.t2m.g2nee.shop.orderset.orderdetail.service;
 
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
+import com.t2m.g2nee.shop.orderset.orderdetail.dto.request.OrderDetailChangeRequestDto;
 import com.t2m.g2nee.shop.orderset.orderdetail.dto.request.OrderDetailCreateRequestDto;
 import com.t2m.g2nee.shop.orderset.orderdetail.dto.response.GetOrderDetailResponseDto;
 
@@ -27,4 +28,11 @@ public interface OrderDetailService {
      * @return 주문 상세 반환
      */
     GetOrderDetailResponseDto getOrderDetailById(Long orderDetailId);
+
+    /**
+     * 도서 주문 상세 정보 변경
+     *
+     * @param changeRequestDto
+     */
+    OrderDetailChangeRequestDto changeOrderDetail(OrderDetailChangeRequestDto changeRequestDto);
 }

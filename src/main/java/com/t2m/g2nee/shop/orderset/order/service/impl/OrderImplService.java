@@ -13,6 +13,7 @@ import com.t2m.g2nee.shop.orderset.order.repository.OrderRepository;
 import com.t2m.g2nee.shop.orderset.order.service.OrderService;
 import com.t2m.g2nee.shop.orderset.orderdetail.repository.OrderDetailRepository;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -35,9 +36,12 @@ public class OrderImplService implements OrderService {
     public Long createOrder(OrderCreateRequestDto orderCreateRequestDto) {
         //
         Customer customer = null;
-        //if (Objects.nonNull(orderCreateRequestDto.getCustomerId())) {
-        //    customer = customerRepository.getById()
-        //}
+        if (Objects.nonNull(orderCreateRequestDto.getCustomerId())) {
+            customer = (Customer) customerRepository.getById();
+            Order order = orderRepository.save(Order.builder()
+                    .customer(customer)
+                    .)
+        }
         return null;
     }
 
