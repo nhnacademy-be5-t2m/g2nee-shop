@@ -1,9 +1,7 @@
-package com.t2m.g2nee.shop.policyset.PointPolicy.domain;
+package com.t2m.g2nee.shop.policyset.deliveryPolicy.domain;
 
-import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,23 +13,21 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "PointPolicies")
+@Table(name = "DeliveryPolicies")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PointPolicy {
+public class DeliveryPolicy {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long pointPolicyId;
-    private String policyName;
-    @Enumerated(EnumType.STRING)
-    private PolicyType policyType;
-    private BigDecimal amount;
+    private Long deliveryPolicyId;
 
-    public enum PolicyType {
-        AMOUNT, PERCENT
-    }
+    private int deliveryFee;
+    private int freeDeliveryStandard;
+    private Boolean isActivated;
+    private LocalDateTime changedDate;
+
 }
