@@ -9,7 +9,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PointPolicyRepository extends JpaRepository<PointPolicy, Long>, PointPolicyRepositoryCustom {
 
+    boolean existsByPolicyNameAndIsActivated(String policyName, boolean isActivated);
+
     Page<PointPolicy> findAll(Pageable pageable);
 
-    Optional<DeliveryPolicy> findFirstByIsActivatedOrderByChangedDateDesc(boolean isActivated);
+    Optional<DeliveryPolicy> findFirstByIsActivatedOrderByIsActivatedDesc(boolean isActivated);
 }

@@ -6,9 +6,13 @@ import com.t2m.g2nee.shop.policyset.pointPolicy.dto.response.PointPolicyInfoDto;
 
 public interface PointPolicyService {
 
-    PointPolicyInfoDto saveDeliveryPolicy(PointPolicySaveDto request);
+    PointPolicyInfoDto savePointPolicy(PointPolicySaveDto request);
 
-    PointPolicyInfoDto getDeliveryPolicy();
+    PointPolicyInfoDto updatePointPolicy(Long pointPolicyId, PointPolicySaveDto request);
 
-    PageResponse<PointPolicyInfoDto> getAllDeliveryPolicy(int page);
+    boolean softDeletePointPolicy(Long pointPolicyId);
+
+    PointPolicyInfoDto getPointPolicy(Long pointPolicyId);
+
+    PageResponse<PointPolicyInfoDto> getAllPointPolicy(int page);
 }

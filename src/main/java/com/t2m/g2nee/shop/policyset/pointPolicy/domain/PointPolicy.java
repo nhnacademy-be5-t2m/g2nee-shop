@@ -10,16 +10,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "PointPolicies")
 @Getter
-@Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class PointPolicy {
@@ -34,7 +30,25 @@ public class PointPolicy {
     private Boolean isActivated;
     private LocalDateTime changedDate;
 
+    public PointPolicy(String policyName, String policyType, BigDecimal amount) {
+        this.policyName = policyName;
+        this.policyType = PolicyType.valueOf(policyType);
+        this.amount = amount;
+        this.isActivated = true;
+        this.changedDate = LocalDateTime.now();
+    }
+
     public enum PolicyType {
-        AMOUNT, PERCENT
+        AMOUNT("퍼센트적립"), PERCENT("금액적립");
+
+        private final String name;
+
+        PolicyType(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
 }

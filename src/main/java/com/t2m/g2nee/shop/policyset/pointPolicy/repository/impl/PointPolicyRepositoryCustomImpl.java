@@ -17,7 +17,7 @@ public class PointPolicyRepositoryCustomImpl extends QuerydslRepositorySupport i
     }
 
     @Override
-    public void softDelete() {
+    public void softDelete(Long pointPolicyId) {
         QPointPolicy pointPolicy = QPointPolicy.pointPolicy;
 
         /**
@@ -26,6 +26,7 @@ public class PointPolicyRepositoryCustomImpl extends QuerydslRepositorySupport i
 
         update(pointPolicy)
                 .set(pointPolicy.isActivated, false)
+                .where(pointPolicy.pointPolicyId.eq(pointPolicyId))
                 .execute();
 
         entityManager.clear();
