@@ -34,9 +34,9 @@ public class BookDto {
     @Builder
     public static class Request {
 
-        @Pattern(regexp = "^[가-힣0-9]+$", message = "출판사 한글 이름을 입력해주세요.")
+        @Pattern(regexp = "^[가-힣0-9a-zA-Z]+$", message = "책 이름을 입력해주세요.")
         private String title;
-        @Pattern(regexp = "^[A-Za-z0-9]+$", message = "출판사 영문 이름을 입력해주세요")
+        @Pattern(regexp = "^[A-Za-z0-9]+$", message = "책 영문 이름을 입력해주세요")
         private String engTitle;
         @NotNull(message = "목차를 입력해주세요")
         private String bookIndex;
@@ -109,6 +109,7 @@ public class BookDto {
         private int salePrice;
         private String publisherName;
         private String publisherEngName;
+        private BookStatus bookStatus;
         private List<BookContributorDto.Response> contributorRoleList;
     }
 

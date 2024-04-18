@@ -5,6 +5,7 @@ import com.t2m.g2nee.shop.bookset.tag.domain.Tag;
 import com.t2m.g2nee.shop.bookset.tag.dto.TagDto;
 import com.t2m.g2nee.shop.bookset.tag.service.TagService;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -73,6 +74,17 @@ public class TagController {
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+    /**
+     * 모든 태그를 조회하는 컨트롤러 입니다.
+     */
+    @GetMapping("/list")
+    public ResponseEntity<List<TagDto.Response>> getTags() {
+
+        List<TagDto.Response> response = tagService.getAllTag();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
 
     /**
      * 태그 리스트를 보여주는 컨트롤러 입니다

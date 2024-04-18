@@ -1,5 +1,6 @@
 package com.t2m.g2nee.shop.bookset.book.repository;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.t2m.g2nee.shop.bookset.book.domain.Book;
@@ -14,7 +15,9 @@ import com.t2m.g2nee.shop.bookset.booktag.domain.QBookTag;
 import com.t2m.g2nee.shop.bookset.category.domain.QCategory;
 import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryInfoDto;
 import com.t2m.g2nee.shop.bookset.categoryPath.domain.QCategoryPath;
+import com.t2m.g2nee.shop.bookset.contributor.domain.QContributor;
 import com.t2m.g2nee.shop.bookset.publisher.domain.QPublisher;
+import com.t2m.g2nee.shop.bookset.role.domain.QRole;
 import com.t2m.g2nee.shop.bookset.tag.domain.QTag;
 import com.t2m.g2nee.shop.bookset.tag.dto.TagDto;
 import com.t2m.g2nee.shop.elasticsearch.BooksIndex;
@@ -73,13 +76,10 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                                 , book.title
                                 , book.engTitle
                                 , book.publishedDate
-                                , book.price
-                                , book.salePrice
+                                , book.price, book.salePrice, book.bookStatus
                                 , publisher.publisherName
                                 , publisher.publisherName
-                        ))
-                        .orderBy(book.publishedDate.desc())
-                        .limit(8)
+                        )).orderBy(book.publishedDate.desc()).limit(6)
                         .fetch();
 
 
@@ -87,8 +87,42 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
     }
 
     /**
-     * 카테고리와 하위 카테고리에 해당하는 책들을 조회하는 메서드입니다.
+     * 모든 책들을 조회하는 메서드 입니다.
      *
+     * @param pageable 페이징 설정
+     * @return Page<BookDto.ListResponse>
+     */
+    @Override
+    public Page<BookDto.ListResponse> getAllBook(Pageable pageable) {
+        QBook book = QBook.book;
+        QPublisher publisher = QPublisher.publisher;
+        QBookCategory bookCategory = QBookCategory.bookCategory;
+        QBookFile bookFile = QBookFile.bookFile;
+        QBookContributor bookContributor = QBookContributor.bookContributor;
+
+
+        List<BookDto.ListResponse> responseList =
+                from(book).innerJoin(publisher).on(book.publisher.publisherId.eq(publisher.publisherId))
+                        .innerJoin(bookCategory).on(book.bookId.eq(bookCategory.book.bookId)).innerJoin(bookFile)
+                        .on(book.bookId.eq(bookFile.book.bookId)
+                                .and(bookFile.imageType.eq(BookFile.ImageType.THUMBNAIL)))
+                        .select(Projections.fields(BookDto.ListResponse.class, book.bookId,
+                                bookFile.url.as("thumbnailImageUrl"), book.title, book.engTitle, book.publishedDate,
+                                book.price, book.salePrice, book.bookStatus, publisher.publisherName,
+                                publisher.publisherEngName)).offset(pageable.getOffset()).limit(pageable.getPageSize())
+                        .fetch();
+
+        Long count = from(book).select(book.count()).fetchOne();
+
+
+        List<BookDto.ListResponse> responses = toListResponseList(responseList, bookContributor);
+
+        return new PageImpl<>(responses, pageable, count);
+
+    }
+    /**
+     * 카테고리와 하위 카테고리에 해당하는 책들을 조회하는 메서드입니다.
+     * @param pageable 페이징 설정
      * @param categoryId 카테고리 아이디
      * @return List<BookDto.Response>
      */
@@ -129,10 +163,8 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                                         , book.title
                                         , book.engTitle
                                         , book.publishedDate
-                                        , book.price
-                                        , book.salePrice
-                                        , publisher.publisherName
-                                        , publisher.publisherName))
+                                , book.price, book.salePrice, book.bookStatus, publisher.publisherName,
+                                publisher.publisherEngName))
                         .offset(pageable.getOffset())
                         .limit(pageable.getPageSize())
                         .fetch();
@@ -165,9 +197,12 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
         QCategoryPath categoryPath = QCategoryPath.categoryPath;
         QCategory category = QCategory.category;
         QBookCategory bookCategory = QBookCategory.bookCategory;
+        QContributor contributor = QContributor.contributor;
+        QRole role = QRole.role;
         QBookFile bookFile = QBookFile.bookFile;
         QTag tag = QTag.tag;
         QBookTag bookTag = QBookTag.bookTag;
+
 
         BookDto.Response response =
                 from(book)
@@ -178,8 +213,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                                 , book.quantity
                                 , book.title
                                 , book.engTitle
-                                , book.bookIndex
-                                , book.description
+                                , book.bookIndex, book.description, publisher.publisherName, publisher.publisherEngName
                                 , book.publishedDate
                                 , book.price
                                 , book.salePrice
@@ -190,7 +224,10 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                         .fetchOne();
 
 
-        return toResponse(response, bookContributor, bookFile, bookCategory, tag, bookTag, category, categoryPath);
+        return toResponse(bookId, response, book, contributor, role, bookContributor, bookFile, bookCategory, tag,
+                bookTag, category, categoryPath);
+
+
 
     }
 
@@ -206,20 +243,6 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
 
         /*
          Elasticsearch search 쿼리
-           {
-          "query": {
-            "bool": {
-              "should": [
-                {
-                  "match": {
-                    "title": {
-                      "query": keyword,
-                      "boost": 50
-                    }
-                  }
-                },
-                ...
-                }
          */
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
 
@@ -279,8 +302,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                                     , book.title
                                     , book.engTitle
                                     , book.publishedDate
-                                    , book.price
-                                    , book.salePrice
+                                    , book.price, book.salePrice, book.bookStatus
                                     , publisher.publisherName
                                     , publisher.publisherEngName))
                             .fetchOne();
@@ -326,8 +348,11 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
 
     /**
      * 도서 응답에 필요한 객체를 설정하고 반환하는 메서드입니다.
-     *
+     * @param bookId 책 아이디
      * @param bookResponse    책 responseDto
+     * @param book 책 객체
+     * @param contributor 기여자 객체
+     * @param role 역할 객체
      * @param bookContributor 책, 기여자, 역할 관계 객체
      * @param bookFile        이미지 관계 객체
      * @param bookCategory    카테고리 관계 객체
@@ -336,7 +361,8 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
      * @param categoryPath    카테고리들의 관계 객체
      * @return dto response
      */
-    private BookDto.Response toResponse(BookDto.Response bookResponse,
+    private BookDto.Response toResponse(Long bookId, BookDto.Response bookResponse, QBook book,
+                                        QContributor contributor, QRole role,
                                         QBookContributor bookContributor,
                                         QBookFile bookFile,
                                         QBookCategory bookCategory,
@@ -345,40 +371,50 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                                         QCategory category,
                                         QCategoryPath categoryPath) {
 
-        // 기여자 역할 정보
-        List<BookContributor> bookContributorList =
-                from(bookContributor)
-                        .where(bookContributor.book.bookId.eq(bookResponse.getBookId()))
-                        .fetch();
-        List<BookContributorDto.Response> bookContributorResponseList =
-                bookContributorMapper.entitiesToDtos(bookContributorList);
 
-        // 상세이미지 정보
-        List<BookFile> bookFileList =
-                from(bookFile)
-                        .where(bookFile.book.bookId.eq(bookResponse.getBookId()))
+        /*
+            세부 이미지를 얻습니다.
+         */
+        List<BookFile> bookFileList = from(bookFile).where(
+                        bookFile.book.bookId.eq(bookId).and(bookFile.imageType.eq(BookFile.ImageType.DETAIL)))
                         .fetch();
+
         List<String> imageUrlList =
                 bookFileList.stream()
                         .map(File::getUrl)
                         .collect(Collectors.toList());
 
-       /*
+    /*
+        기여자 역할 정보를 얻습니다.
+     */
+        List<Tuple> contributorRole =
+                from(bookContributor)
+                        .join(bookContributor.contributor, contributor)
+                        .join(bookContributor.role, role)
+                        .where(bookContributor.book.bookId.eq(bookId))
+                        .select(contributor.contributorId, contributor.contributorName, contributor.contributorEngName,
+                                role.roleName).fetch();
+
+        List<BookContributorDto.Response> bookContributorList = contributorRole.stream()
+                .map(bc -> BookContributorDto.Response.builder().contributorId(bc.get(0, Long.class))
+                        .contributorName(bc.get(1, String.class)).contributorEngName(bc.get(2, String.class))
+                        .roleName(bc.get(3, String.class)).build()).collect(Collectors.toList());
+
+         /*
         책에 연관된 카테고리 ID를 가져옵니다
         책의 카테고리는 최하위 카테고리를 가집니다.
         */
         List<Long> categoryIdList =
                 from(bookCategory)
-                        .innerJoin(category)
-                        .on(bookCategory.category.categoryId.eq(category.categoryId))
-                        .where(bookCategory.book.bookId.eq(bookResponse.getBookId()))
+                        .join(bookCategory.category, category)
+                        .where(bookCategory.book.bookId.eq(bookId))
                         .select(bookCategory.category.categoryId)
                         .fetch();
 
         List<List<CategoryInfoDto>> categoriesList = new ArrayList<>();
 
          /* 연관된 카테고리 ID에 해당하는 이름을 넣어줍니다.
-         이과 / 수학 / 미분 에서 최하위 카테고리인 미분 ID를 가지고 있을 것이니 미분의 모든 상위 카테고리 이름을 가져옵니다.
+         이과 / 수학 / 미분 에서 최하위 카테고리인 미분 ID를 가지고 있을 것이니 미분의 모든 상위 카테고리 이름을 순서대로 가져옵니다.
          만약 카테고리가 2개라면 [이과, 수학, 미분] , [문과, 국어, 작문] 두 개의 리스트를 리스트에 넣어줍니다.
           */
         for (Long categoryId : categoryIdList) {
@@ -396,25 +432,27 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
         }
 
         /*
-          태그 정보
+            태그 객체를 얻습니다.
          */
-        List<TagDto.Response> tagList =
-                from(tag)
-                        .innerJoin(bookTag).on(bookTag.tag.tagId.eq(tag.tagId))
-                        .where(bookTag.book.bookId.eq(bookResponse.getBookId()))
-                        .select(Projections.fields(TagDto.Response.class
-                                , tag.tagId
-                                , tag.tagName
-                        ))
+        List<Tuple> tagList = from(bookTag)
+                .join(bookTag.tag, tag)
+                .where(bookTag.book.bookId.eq(bookId))
+                .select(tag.tagId, tag.tagName)
                         .fetch();
 
+        List<TagDto.Response> bookTagList = tagList.stream()
+                .map(bt -> TagDto.Response.builder().tagId(bt.get(0, Long.class)).tagName(bt.get(1, String.class))
+                        .build()).collect(Collectors.toList());
 
-        bookResponse.setContributorRoleList(bookContributorResponseList);
-        bookResponse.setDetailImageUrl(imageUrlList);
+        // 반환할 객체에 모두 설정해줍니다.
+        bookResponse.setContributorRoleList(bookContributorList);
         bookResponse.setCategoryList(categoriesList);
-        bookResponse.setTagList(tagList);
+        bookResponse.setTagList(bookTagList);
+        bookResponse.setDetailImageUrl(imageUrlList);
 
         return bookResponse;
+
+
     }
 
     /**

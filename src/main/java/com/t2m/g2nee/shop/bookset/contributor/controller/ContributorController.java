@@ -5,6 +5,7 @@ import com.t2m.g2nee.shop.bookset.contributor.domain.Contributor;
 import com.t2m.g2nee.shop.bookset.contributor.dto.ContributorDto;
 import com.t2m.g2nee.shop.bookset.contributor.service.ContributorService;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -72,12 +73,24 @@ public class ContributorController {
 
     /**
      * 기여자 리스트를 보여주는 컨트롤러 입니다
+     * @return 기여자 정보들과 페이지 정보
+     */
+    @GetMapping("/list")
+    public ResponseEntity<List<ContributorDto.Response>> getAllContributor() {
+
+        List<ContributorDto.Response> response = contributorService.getAllContributor();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    /**
+     * 기여자 리스트를 보여주는 컨트롤러 입니다
      *
      * @param page 페이지 값
      * @return 기여자 정보들과 페이지 정보
      */
     @GetMapping
-    public ResponseEntity<PageResponse<ContributorDto.Response>> getPublishers(@RequestParam int page) {
+    public ResponseEntity<PageResponse<ContributorDto.Response>> getContributors(@RequestParam int page) {
 
         PageResponse<ContributorDto.Response> response = contributorService.getContributorList(page);
 
@@ -92,7 +105,7 @@ public class ContributorController {
      */
 
     @DeleteMapping("/{contributorId}")
-    public ResponseEntity deletePublisher(@PathVariable("contributorId") Long contributorId) {
+    public ResponseEntity deleteContributor(@PathVariable("contributorId") Long contributorId) {
 
         contributorService.deleteContributor(contributorId);
 
