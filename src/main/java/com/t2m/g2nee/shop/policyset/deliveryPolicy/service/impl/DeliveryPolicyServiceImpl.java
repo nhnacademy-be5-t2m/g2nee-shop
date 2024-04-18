@@ -17,7 +17,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * DeliveryPolicyService의 구현체입니다.
+ *
+ * @author : 김수빈
+ * @since : 1.0
+ */
 @Service
+@Transactional
 public class DeliveryPolicyServiceImpl implements DeliveryPolicyService {
 
     private static int maxPageButtons = 5;
@@ -27,11 +34,12 @@ public class DeliveryPolicyServiceImpl implements DeliveryPolicyService {
         this.deliveryPolicyRepository = deliveryPolicyRepository;
     }
 
+
     @Override
     public DeliveryPolicyInfoDto saveDeliveryPolicy(DeliveryPolicySaveDto request) {
         if (deliveryPolicyRepository.count() == 0) {//처음으로 저장하는 경우
             return convertToDeliveryPolicyInfoDto(deliveryPolicyRepository.save(convertToDeliveryPolicy(request)));
-        } else {//변경해야할 경우
+        } else {//변경해야할 경우: 어짜피 배송비 정책은 1개
             //이전 정책과 변경사항 비교
             DeliveryPolicy oldPolicy = deliveryPolicyRepository.findFirstByIsActivatedOrderByChangedDateDesc(true)
                     .orElseThrow(() -> new NotFoundException("이전 정책이 없습니다."));
@@ -58,6 +66,7 @@ public class DeliveryPolicyServiceImpl implements DeliveryPolicyService {
     @Override
     @Transactional(readOnly = true)
     public PageResponse<DeliveryPolicyInfoDto> getAllDeliveryPolicy(int page) {
+        //활성화된 배송비 정책이 먼저 보이고, 나머지는 변경 날짜 순서로 정렬
         Page<DeliveryPolicy> deliveryPolicies = deliveryPolicyRepository.findAll(
                 PageRequest.of(page - 1, 10, Sort.by("isActivated").descending()
                         .and(Sort.by("changedDate")))
@@ -85,6 +94,11 @@ public class DeliveryPolicyServiceImpl implements DeliveryPolicyService {
                 .build();
     }
 
+    /**
+     * DeliveryPolicy객체를 DeliveryPolicyInfoDto로 변경
+     * @param deliveryPolicy
+     * @return
+     */
     private DeliveryPolicyInfoDto convertToDeliveryPolicyInfoDto(DeliveryPolicy deliveryPolicy) {
         return new DeliveryPolicyInfoDto(deliveryPolicy.getDeliveryPolicyId(),
                 deliveryPolicy.getDeliveryFee().intValue(),
@@ -92,6 +106,11 @@ public class DeliveryPolicyServiceImpl implements DeliveryPolicyService {
                 deliveryPolicy.getChangedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
     }
 
+    /**
+     * DeliveryPolicySaveDto객체를 DeliveryPolicy로 변경
+     * @param deliveryPolicySaveDto
+     * @return
+     */
     private DeliveryPolicy convertToDeliveryPolicy(DeliveryPolicySaveDto deliveryPolicySaveDto) {
         return new DeliveryPolicy(BigDecimal.valueOf(deliveryPolicySaveDto.getDeliveryFee()),
                 BigDecimal.valueOf(deliveryPolicySaveDto.getFreeDeliveryStandard()));

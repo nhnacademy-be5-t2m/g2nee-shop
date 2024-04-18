@@ -6,6 +6,12 @@ import com.t2m.g2nee.shop.policyset.deliveryPolicy.repository.DeliveryPolicyRepo
 import javax.persistence.EntityManager;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
+/**
+ * DeliveryPolicyRepositoryCustom의 구현체입니다.
+ *
+ * @author : 김수빈
+ * @since : 1.0
+ */
 public class DeliveryPolicyRepositoryCustomImpl extends QuerydslRepositorySupport implements
         DeliveryPolicyRepositoryCustom {
 

@@ -6,6 +6,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import javax.validation.Constraint;
 
+/**
+ * 포인트 정책 저장 시, 포인트 타입에 맞는 적립 수치를 입력했는지 검증하는 커스텀 어노테이션입니다.
+ *
+ * @author : 김수빈
+ * @since : 1.0
+ */
 @Constraint(validatedBy = PolicyTypeValidator.class)
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
