@@ -46,7 +46,7 @@ class DeliveryControllerTest {
 
     @Test
     @DisplayName("배송비 정책 저장")
-    void testCreatePackage() throws Exception {
+    void testCreateDeliveryPolicy() throws Exception {
         DeliveryPolicySaveDto request = new DeliveryPolicySaveDto(2500, 10000);
         DeliveryPolicyInfoDto deliveryPolicy = new DeliveryPolicyInfoDto(1L, 2500, 10000, true,
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
@@ -66,7 +66,7 @@ class DeliveryControllerTest {
 
     @Test
     @DisplayName("현재 시행중인 배송비 정책 테스트")
-    void testGetPackage() throws Exception {
+    void testGetDeliveryPolicy() throws Exception {
         DeliveryPolicyInfoDto deliveryPolicy = new DeliveryPolicyInfoDto(1L, 2500, 10000, true,
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
 

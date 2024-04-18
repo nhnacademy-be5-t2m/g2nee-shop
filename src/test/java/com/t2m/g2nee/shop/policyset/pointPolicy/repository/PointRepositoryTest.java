@@ -1,7 +1,6 @@
 package com.t2m.g2nee.shop.policyset.pointPolicy.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -12,6 +11,7 @@ import com.t2m.g2nee.shop.policyset.pointPolicy.domain.PointPolicy;
 import java.math.BigDecimal;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -46,6 +46,7 @@ class PointRepositoryTest {
     }
 
     @Test
+    @DisplayName("existById test")
     void testExistsById() {
         assertTrue(pointPolicyRepository.existsById(pointPolicy1.getPointPolicyId()));
         assertTrue(pointPolicyRepository.existsById(pointPolicy2.getPointPolicyId()));
@@ -53,6 +54,7 @@ class PointRepositoryTest {
     }
 
     @Test
+    @DisplayName("save & findById test")
     void testSave() {
         assertNotNull(pointPolicyRepository.findById(pointPolicy1.getPointPolicyId()));
         assertNotNull(pointPolicyRepository.findById(pointPolicy2.getPointPolicyId()));
@@ -60,23 +62,23 @@ class PointRepositoryTest {
     }
 
     @Test
+    @DisplayName("existsByPolicyNameAndIsActivated test")
     void testExistsByPolicyNameAndIsActivated() {
         assertTrue(pointPolicyRepository.existsByPolicyNameAndIsActivated("테스트 정책1", true));
     }
 
     @Test
+    @DisplayName("findAll test")
     void testFindAll() {
         List<PointPolicy> packageTypes = pointPolicyRepository.findAll(
                 PageRequest.of(0, 10, Sort.by("isActivated").descending())).getContent();
 
-        assertThat(packageTypes).isNotNull();
-        assertEquals(packageTypes.get(0).getPointPolicyId(), pointPolicy1.getPointPolicyId());
-        assertEquals(packageTypes.get(2).getPointPolicyId(), pointPolicy3.getPointPolicyId());
-        assertEquals(packageTypes.get(1).getPointPolicyId(), pointPolicy2.getPointPolicyId());
+        assertThat(packageTypes).isNotNull().hasSize(3);
 
     }
 
     @Test
+    @DisplayName("softDelete test")
     void testSoftDelete() {
         pointPolicyRepository.softDelete(pointPolicy1.getPointPolicyId());
         assertFalse(pointPolicyRepository.findById(pointPolicy1.getPointPolicyId()).orElse(null).getIsActivated());

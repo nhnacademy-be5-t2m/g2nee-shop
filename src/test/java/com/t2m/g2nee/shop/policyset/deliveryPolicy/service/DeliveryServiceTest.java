@@ -8,6 +8,7 @@ import com.t2m.g2nee.shop.policyset.deliveryPolicy.dto.request.DeliveryPolicySav
 import com.t2m.g2nee.shop.policyset.deliveryPolicy.dto.response.DeliveryPolicyInfoDto;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,6 +36,7 @@ class DeliveryServiceTest {
     }
 
     @Test
+    @DisplayName("배송비 정책 저장 테스트")
     void testSave() {
         assertNotNull(deliveryPolicy1.getDeliveryPolicyId());
         assertNotNull(deliveryPolicy2.getDeliveryPolicyId());
@@ -42,6 +44,7 @@ class DeliveryServiceTest {
     }
 
     @Test
+    @DisplayName("현재 배송비 정책 얻기 테스트")
     void testGetDeliveryPolicy() {
         DeliveryPolicyInfoDto testDeliveryPolicy = deliveryPolicyService.getDeliveryPolicy();
 
@@ -53,6 +56,7 @@ class DeliveryServiceTest {
     }
 
     @Test
+    @DisplayName("모든 배송비 정책 얻기 테스트")
     void tesGetAllDeliveryPolicy() {
         List<DeliveryPolicyInfoDto> page = deliveryPolicyService.getAllDeliveryPolicy(1).getData();
 

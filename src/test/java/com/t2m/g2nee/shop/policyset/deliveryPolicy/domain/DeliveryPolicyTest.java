@@ -6,6 +6,7 @@ import com.t2m.g2nee.shop.config.ElasticsearchConfig;
 import com.t2m.g2nee.shop.config.MapperConfig;
 import com.t2m.g2nee.shop.policyset.deliveryPolicy.repository.DeliveryPolicyRepository;
 import java.math.BigDecimal;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -25,6 +26,7 @@ public class DeliveryPolicyTest {
     DeliveryPolicyRepository deliveryPolicyRepository;
 
     @Test
+    @DisplayName("DelveryPolicy Entity test")
     void test() {
         DeliveryPolicy deliveryPolicy = new DeliveryPolicy(BigDecimal.valueOf(3000), BigDecimal.valueOf(30000));
 

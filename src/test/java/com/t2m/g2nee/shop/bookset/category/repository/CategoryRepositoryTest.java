@@ -16,6 +16,7 @@ import com.t2m.g2nee.shop.config.ElasticsearchConfig;
 import com.t2m.g2nee.shop.config.MapperConfig;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -57,6 +58,7 @@ class CategoryRepositoryTest {
     }
 
     @Test
+    @DisplayName("existById test")
     void testExistsById() {
         assertTrue(categoryRepository.existsById(category1.getCategoryId()));
 
@@ -64,6 +66,7 @@ class CategoryRepositoryTest {
     }
 
     @Test
+    @DisplayName("save test")
     void testSave() {
         assertNotNull(categoryRepository.findById(category1.getCategoryId()));
 
@@ -71,11 +74,13 @@ class CategoryRepositoryTest {
     }
 
     @Test
+    @DisplayName("existsByCategoryName test")
     void testExistsByCategoryName() {
         assertTrue(categoryRepository.existsByCategoryName("테스트카테고리1"));
     }
 
     @Test
+    @DisplayName("findAll test")
     void testFindAll() {
         List<Category> categoryPage = categoryRepository.findAll();
 
@@ -83,6 +88,7 @@ class CategoryRepositoryTest {
     }
 
     @Test
+    @DisplayName("getSubCategoriesByCategoryId test")
     void testGetSubCategoriesByCategoryId() {
         List<Category> categoryPage =
                 categoryRepository.getSubCategoriesByCategoryId(category1.getCategoryId());
@@ -93,6 +99,7 @@ class CategoryRepositoryTest {
     }
 
     @Test
+    @DisplayName("getRootCategories test")
     void testGetRootCategories() {
 
         List<Category> category = categoryRepository.getRootCategories();
@@ -102,18 +109,21 @@ class CategoryRepositoryTest {
     }
 
     @Test
+    @DisplayName("getFindAncestorIdsByCategoryId")
     void testGetFindAncestorIdsByCategoryId() {
         List<Category> list = categoryRepository.getFindAncestorIdsByCategoryId(category2.getCategoryId());
         assertEquals(2, list.size());
     }
 
     @Test
+    @DisplayName("existsByAncestorAndDescendant test")
     void testExistsByAncestorAndDescendant() {
         assertTrue(categoryPathRepository.existsByAncestorAndDescendant(categoryPath1.getAncestor(),
                 categoryPath1.getDescendant()));
     }
 
     @Test
+    @DisplayName("deleteCategoryPathByAncestorIdAndDescendantId test")
     void testDeleteByAncestorCategoryId() {
         categoryPathRepository.deleteCategoryPathByAncestorIdAndDescendantId(category1.getCategoryId());
         assertFalse(categoryPathRepository.existsById(categoryPath1.getCategoryPathId()));
@@ -122,6 +132,8 @@ class CategoryRepositoryTest {
     }
 
     @Test
+    @DisplayName("findByCategoryNameContaining test")
+
     void testfindByCategoryNameContaining() {
         Pageable pageable = Pageable.ofSize(10).withPage(0);
 
@@ -132,12 +144,14 @@ class CategoryRepositoryTest {
     }
 
     @Test
+    @DisplayName("getExistsByCategoryIdAndisActivated test")
     void testGetExistsByCategoryIdAndisActivated() {
         assertTrue(categoryRepository.getExistsByCategoryIdAndisActivated(category1.getCategoryId(), true));
         assertFalse(categoryRepository.getExistsByCategoryIdAndisActivated(category1.getCategoryId(), false));
     }
 
     @Test
+    @DisplayName("softDeleteByCategoryId test")
     void testSoftDeleteByCategoryId() {
         categoryRepository.softDeleteByCategoryId(category1.getCategoryId());
 
@@ -147,8 +161,9 @@ class CategoryRepositoryTest {
     }
 
     @Test
+    @DisplayName("activeCategoryByCategoryId test")
     void testActiveCategoryByCategoryId() {
-        category1.setIsActivated(false);
+        category1 = categoryRepository.save(new Category("테스트카테고리1", "testCategory1", false));
 
         categoryRepository.activeCategoryByCategoryId(category1.getCategoryId());
 
@@ -158,6 +173,7 @@ class CategoryRepositoryTest {
     }
 
     @Test
+    @DisplayName("getFindByCategoryId test")
     void testGetFindByCategoryId() {
         CategoryUpdateDto category = categoryRepository.getFindByCategoryId(category2.getCategoryId());
 

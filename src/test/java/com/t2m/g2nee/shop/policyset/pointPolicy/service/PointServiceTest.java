@@ -14,6 +14,7 @@ import com.t2m.g2nee.shop.policyset.pointPolicy.dto.response.PointPolicyInfoDto;
 import java.math.BigDecimal;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,6 +44,7 @@ class PointServiceTest {
     }
 
     @Test
+    @DisplayName("포인트 정책 저장 테스트")
     void testSave() {
         assertNotNull(pointPolicy1.getPointPolicyId());
         assertNotNull(pointPolicy2.getPointPolicyId());
@@ -50,6 +52,7 @@ class PointServiceTest {
     }
 
     @Test
+    @DisplayName("포인트 정책 저장 실패 테스트")
     void testSaveFail() {
         assertThrows(AlreadyExistException.class, () -> {
             pointPolicyService.savePointPolicy(
@@ -59,6 +62,7 @@ class PointServiceTest {
     }
 
     @Test
+    @DisplayName("포인트 정책 수정 테스트")
     void testUpdate() {
         PointPolicySaveDto request = new PointPolicySaveDto("테스트 정책1", "AMOUNT", BigDecimal.valueOf(2000));
         pointPolicy1 = pointPolicyService.updatePointPolicy(pointPolicy1.getPointPolicyId(), request);
@@ -69,6 +73,7 @@ class PointServiceTest {
     }
 
     @Test
+    @DisplayName("포인트 정책 수정 실패 테스트")
     void testUpdateFail() {
         assertThrows(NotFoundException.class, () -> {
             pointPolicyService.updatePointPolicy(1000000000L,
@@ -77,7 +82,8 @@ class PointServiceTest {
     }
 
     @Test
-    void testGetPackage() {
+    @DisplayName("특정 포인트 정책 얻기 테스트")
+    void testGetPointPolicy() {
         PointPolicyInfoDto testPointPolicy = pointPolicyService.getPointPolicy(pointPolicy1.getPointPolicyId());
 
         assertEquals(testPointPolicy.getPointPolicyId(), pointPolicy1.getPointPolicyId());
@@ -89,25 +95,29 @@ class PointServiceTest {
     }
 
     @Test
-    void testGetPackageFail() {
+    @DisplayName("특정 포인트 정책 얻기 실패 테스트")
+    void testGetPointPolicyFail() {
         assertThrows(NotFoundException.class, () -> pointPolicyService.getPointPolicy(1000000000L));
     }
 
     @Test
-    void tesGetAllPackages() {
+    @DisplayName("모든 포인트 정책 얻기 테스트")
+    void tesGetAllPointPolicy() {
         List<PointPolicyInfoDto> page = pointPolicyService.getAllPointPolicy(1).getData();
 
         assertThat(page).isNotNull().hasSizeGreaterThan(3);
     }
 
     @Test
-    void testSoftDeletePackage() {
+    @DisplayName("포인트 정책 삭제 테스트")
+    void testSoftDeletePointPolicy() {
         pointPolicyService.softDeletePointPolicy(pointPolicy1.getPointPolicyId());
         assertFalse(pointPolicyService.getPointPolicy(pointPolicy1.getPointPolicyId()).getIsActivated());
     }
 
     @Test
-    void testSoftDeletePackageFail() {
+    @DisplayName("포인트 정책 삭제 실패 테스트")
+    void testSoftDeletePointPolicyFail() {
         assertThrows(NotFoundException.class, () -> pointPolicyService.softDeletePointPolicy(1000000000L));
 
     }

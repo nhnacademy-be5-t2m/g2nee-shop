@@ -50,7 +50,7 @@ class PointControllerTest {
 
     @Test
     @DisplayName("포인트 정책 저장")
-    void testCreatePackage() throws Exception {
+    void testCreatePointPolicy() throws Exception {
         PointPolicySaveDto request = new PointPolicySaveDto("테스트 정책1", "PERCENT", BigDecimal.valueOf(0.25));
         PointPolicyInfoDto pointPolicy =
                 new PointPolicyInfoDto(1L, "테스트 정책1", "PERCENT", BigDecimal.valueOf(0.25).toString(), true,
@@ -72,7 +72,7 @@ class PointControllerTest {
 
     @Test
     @DisplayName("포인트 정책 수정 테스트")
-    void testUpdatePackage() throws Exception {
+    void testUpdatePointPolicy() throws Exception {
         PointPolicySaveDto request = new PointPolicySaveDto("테스트 정책1", "PERCENT", BigDecimal.valueOf(0.25));
         PointPolicyInfoDto pointPolicy =
                 new PointPolicyInfoDto(1L, "테스트 정책1", "PERCENT", BigDecimal.valueOf(0.25).toString(), true,
@@ -95,7 +95,7 @@ class PointControllerTest {
 
     @Test
     @DisplayName("포인트 정책 삭제 테스트")
-    void testDeletePackage() throws Exception {
+    void testDeletePointPolicy() throws Exception {
         when(service.softDeletePointPolicy(anyLong())).thenReturn(false);
 
         mockMvc.perform(patch("/shop/pointPolicy/{pointPolicyId}", 1L))
@@ -105,8 +105,8 @@ class PointControllerTest {
     }
 
     @Test
-    @DisplayName("포인트 정책 1개 얻기 테스트")
-    void testGetPackage() throws Exception {
+    @DisplayName("특정 포인트 정책 얻기 테스트")
+    void testGetPointPolicy() throws Exception {
         PointPolicyInfoDto pointPolicy =
                 new PointPolicyInfoDto(1L, "테스트 정책1", "PERCENT", BigDecimal.valueOf(0.25).toString(), true,
                         LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
@@ -125,7 +125,7 @@ class PointControllerTest {
 
     @Test
     @DisplayName("포인트 정책 목록 얻기 테스트")
-    void testGetAllPackages() throws Exception {
+    void testGetAllPointPolicy() throws Exception {
         PointPolicyInfoDto pointPolicy1 =
                 new PointPolicyInfoDto(1L, "테스트 정책1", "PERCENT", BigDecimal.valueOf(0.25).toString(), true,
                         LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));

@@ -6,6 +6,7 @@ import com.t2m.g2nee.shop.config.ElasticsearchConfig;
 import com.t2m.g2nee.shop.config.MapperConfig;
 import com.t2m.g2nee.shop.policyset.pointPolicy.repository.PointPolicyRepository;
 import java.math.BigDecimal;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -24,6 +25,7 @@ class PointPolicyTest {
     PointPolicyRepository pointPolicyRepository;
 
     @Test
+    @DisplayName("PontPolicy Entity test")
     void test() {
         PointPolicy pointPolicy = new PointPolicy("테스트 정책", "PERCENT", BigDecimal.valueOf(0.25));
 

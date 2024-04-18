@@ -11,6 +11,7 @@ import com.t2m.g2nee.shop.policyset.deliveryPolicy.domain.DeliveryPolicy;
 import java.math.BigDecimal;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -47,11 +48,13 @@ class DeliveryRepositoryTest {
     }
 
     @Test
+    @DisplayName("count test")
     void testCount() {
         assertEquals(3, deliveryPolicyRepository.count());
     }
 
     @Test
+    @DisplayName("save & findById test")
     void testSave() {
         assertNotNull(deliveryPolicyRepository.findById(deliveryPolicy1.getDeliveryPolicyId()));
         assertNotNull(deliveryPolicyRepository.findById(deliveryPolicy2.getDeliveryPolicyId()));
@@ -59,6 +62,7 @@ class DeliveryRepositoryTest {
     }
 
     @Test
+    @DisplayName("findFirstByIsActivatedOrderByChangedDateDesc test")
     void testFindFirstByIsActivatedOrderByChangedDateDesc() {
         DeliveryPolicy recentPolicy =
                 deliveryPolicyRepository.findFirstByIsActivatedOrderByChangedDateDesc(true).orElse(null);
@@ -70,6 +74,7 @@ class DeliveryRepositoryTest {
     }
 
     @Test
+    @DisplayName("findAll test")
     void testFindAll() {
         List<DeliveryPolicy> deliveryPolicies = deliveryPolicyRepository.findAll(
                 PageRequest.of(0, 10, Sort.by("isActivated").descending()
@@ -84,6 +89,7 @@ class DeliveryRepositoryTest {
     }
 
     @Test
+    @DisplayName("softDelete test")
     void testSoftDelete() {
         deliveryPolicyRepository.softDelete();
         assertFalse(
