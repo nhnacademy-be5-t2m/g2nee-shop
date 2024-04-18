@@ -7,12 +7,14 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 
 @Constraint(validatedBy = PolicyTypeValidator.class)
-@Target({ElementType.FIELD})
+@Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PolicyType {
-    String message() default "잘못된 숫자 형식입니다. 타입에 맞는 값을 입력해 주세요";
+
+    String message() default "잘못된 숫자 형식입니다. 올바른 값을 입력해 주세요";
 
     Class[] groups() default {};
 
     Class[] payload() default {};
+
 }

@@ -56,7 +56,8 @@ public class PackageServiceImpl implements PackageService {
     @Transactional(readOnly = true)
     public PageResponse<PackageInfoDto> getAllPackages(int page) {
         Page<PackageType> packageTypes = packageRepository.findAll(
-                PageRequest.of(page - 1, 10, Sort.by("price"))
+                PageRequest.of(page - 1, 10, Sort.by("isActivated").descending()
+                        .and(Sort.by("price")))
         );
 
         List<PackageInfoDto> packageInfoDtoList = packageTypes
@@ -94,7 +95,7 @@ public class PackageServiceImpl implements PackageService {
 
     @Override
     public boolean activatedPackage(Long packageId) {
-        if (packageRepository.getExistsByPackageIdAndIsActivated(packageId, true)) {
+        if (packageRepository.getExistsByPackageIdAndIsActivated(packageId, false)) {
             packageRepository.activateByPackageId(packageId);
             return packageRepository.findById(packageId).orElseThrow(() -> new NotFoundException("포장지를 찾을 수 없습니다"))
                     .getIsActivated();

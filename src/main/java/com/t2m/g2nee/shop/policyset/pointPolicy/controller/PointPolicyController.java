@@ -37,7 +37,7 @@ public class PointPolicyController {
     @PutMapping("/{pointPolicyId}")
     public ResponseEntity<PointPolicyInfoDto> updatePointPolicy(@PathVariable("pointPolicyId") Long pointPolicyId,
                                                                 @RequestBody @Valid PointPolicySaveDto request) {
-        return ResponseEntity.status(HttpStatus.CREATED).contentType(MediaType.APPLICATION_JSON)
+        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
                 .body(pointPolicyService.updatePointPolicy(pointPolicyId, request));
     }
 

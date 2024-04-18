@@ -8,6 +8,7 @@ import com.t2m.g2nee.shop.policyset.pointPolicy.dto.request.PointPolicySaveDto;
 import com.t2m.g2nee.shop.policyset.pointPolicy.dto.response.PointPolicyInfoDto;
 import com.t2m.g2nee.shop.policyset.pointPolicy.repository.PointPolicyRepository;
 import com.t2m.g2nee.shop.policyset.pointPolicy.service.PointPolicyService;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
@@ -69,7 +70,7 @@ public class PointPolicyServiceImpl implements PointPolicyService {
     @Transactional(readOnly = true)
     public PageResponse<PointPolicyInfoDto> getAllPointPolicy(int page) {
         Page<PointPolicy> deliveryPolicies = pointPolicyRepository.findAll(
-                PageRequest.of(page - 1, 10, Sort.by("isActivated"))
+                PageRequest.of(page - 1, 10, Sort.by("isActivated").descending())
         );
 
         List<PointPolicyInfoDto> deliveryPolicyInfoDtoList = deliveryPolicies
@@ -96,8 +97,8 @@ public class PointPolicyServiceImpl implements PointPolicyService {
 
     private PointPolicyInfoDto convertToPointPolicyInfoDto(PointPolicy pointPolicy) {
         return new PointPolicyInfoDto(pointPolicy.getPointPolicyId(), pointPolicy.getPolicyName(),
-                pointPolicy.getPolicyType().toString(), pointPolicy.getAmount(), pointPolicy.getIsActivated(),
-                pointPolicy.getChangedDate());
+                pointPolicy.getPolicyType().getName(), pointPolicy.getAmount().toString(), pointPolicy.getIsActivated(),
+                pointPolicy.getChangedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
     }
 
     private PointPolicy convertToPointPolicy(PointPolicySaveDto pointPolicySaveDto) {

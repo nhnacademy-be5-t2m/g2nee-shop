@@ -2,6 +2,8 @@ package com.t2m.g2nee.shop.policyset.pointPolicy.dto.annotation;
 
 import com.t2m.g2nee.shop.policyset.pointPolicy.domain.PointPolicy;
 import com.t2m.g2nee.shop.policyset.pointPolicy.dto.request.PointPolicySaveDto;
+import java.math.BigDecimal;
+import java.util.Objects;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
@@ -10,11 +12,16 @@ public class PolicyTypeValidator implements ConstraintValidator<PolicyType, Poin
     @Override
     public boolean isValid(PointPolicySaveDto pointPolicySaveDto,
                            ConstraintValidatorContext constraintValidatorContext) {
-        if (pointPolicySaveDto.getPolicyType().equals(PointPolicy.PolicyType.PERCENT.toString())) {
-            return pointPolicySaveDto.getAmount().toString().matches("^(0.)\\d*[^0]$\n");
+        BigDecimal amount = pointPolicySaveDto.getAmount();
+        String type = pointPolicySaveDto.getPolicyType();
 
-        } else if (pointPolicySaveDto.getPolicyType().equals(PointPolicy.PolicyType.AMOUNT.toString())) {
-            return pointPolicySaveDto.getAmount().toString().matches("^[^0]\\d*\n");
+        if (Objects.nonNull(amount) && Objects.nonNull(type)) {
+            if (type.equals(PointPolicy.PolicyType.PERCENT.toString())) {
+                return amount.compareTo(BigDecimal.ZERO) > 0 && amount.compareTo(BigDecimal.ONE) <= 0;
+
+            } else if (type.equals(PointPolicy.PolicyType.AMOUNT.toString())) {
+                return amount.stripTrailingZeros().scale() <= 0;
+            }
         }
 
         return false;
