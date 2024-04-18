@@ -89,7 +89,7 @@ class DeliveryControllerTest {
         DeliveryPolicyInfoDto deliveryPolicy2 = new DeliveryPolicyInfoDto(2L, 3000, 50000, true,
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
 
-        List<DeliveryPolicyInfoDto> deliveryPolicies = List.of(deliveryPolicy1, deliveryPolicy2);
+        List<DeliveryPolicyInfoDto> deliveryPolicies = List.of(deliveryPolicy2, deliveryPolicy1);
 
         PageResponse<DeliveryPolicyInfoDto> deliveryPolicyPage =
                 PageResponse.<DeliveryPolicyInfoDto>builder()
