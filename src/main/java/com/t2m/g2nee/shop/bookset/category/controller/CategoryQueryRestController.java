@@ -40,18 +40,6 @@ public class CategoryQueryRestController {
                 .body(service.getRootCategories());
     }
 
-
-    /**
-     * 계층구조 없이 모든 카테고리를 반환하는 컨트롤러 입니다.
-     * @return ResponseEntity<List < CategoryInfoDto>>
-     */
-    @GetMapping("/all")
-    public ResponseEntity<List<CategoryInfoDto>> getAllCategories() {
-
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
-                .body(service.getAllCategories());
-    }
-
     /**
      * 하나의 카테고리를 반환하는 컨트롤러 입니다.
      * @param categoryId 카테고리 id

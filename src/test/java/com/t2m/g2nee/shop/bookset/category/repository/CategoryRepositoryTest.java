@@ -80,14 +80,6 @@ class CategoryRepositoryTest {
     }
 
     @Test
-    @DisplayName("findAll test")
-    void testFindAll() {
-        List<Category> categoryPage = categoryRepository.findAll();
-
-        assertThat(categoryPage).isNotNull().contains(category1, category2);
-    }
-
-    @Test
     @DisplayName("getSubCategoriesByCategoryId test")
     void testGetSubCategoriesByCategoryId() {
         List<Category> categoryPage =

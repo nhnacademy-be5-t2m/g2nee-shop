@@ -1,7 +1,6 @@
 package com.t2m.g2nee.shop.bookset.category.repository;
 
 import com.t2m.g2nee.shop.bookset.category.domain.Category;
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,12 +19,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long>, Categ
      * @return boolean
      */
     boolean existsByCategoryName(String name);
-
-    /**
-     * 모든 카테고리를 찾아 반환하는 메소드입니다.
-     * @return List<Category>
-     */
-    List<Category> findAll();
 
     /**
      * 카테고리를 name으로 찾아 결과를 페이징 처리하여 반환하는 메소드입니다.

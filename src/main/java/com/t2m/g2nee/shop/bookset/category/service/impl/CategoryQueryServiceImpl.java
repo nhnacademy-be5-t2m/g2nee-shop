@@ -92,13 +92,6 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
     }
 
     @Override
-    public List<CategoryInfoDto> getAllCategories() {
-        return categoryRepository.findAll().stream().map(this::convertToCategoryInfoDto)
-                .collect(Collectors.toList());
-    }
-
-
-    @Override
     public PageResponse<CategoryInfoDto> getCategoriesByName(String name, int page) {
         //이름으로 검색한 카테고리를 페이징처리하여 반환
         Page<Category> categories = categoryRepository.findByCategoryNameContaining(name,

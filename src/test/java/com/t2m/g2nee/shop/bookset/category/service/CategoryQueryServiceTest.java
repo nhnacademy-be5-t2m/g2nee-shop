@@ -74,16 +74,6 @@ class CategoryQueryServiceTest {
     }
 
     @Test
-    @DisplayName("모든 카테고리 얻기 테스트")
-    void testGetAllCategories() {
-
-        List<CategoryInfoDto> allCategories = categoryQueryService.getAllCategories();
-
-        assertThat(allCategories).isNotNull().hasSizeGreaterThan(10);
-
-    }
-
-    @Test
     @DisplayName("카테고리 이름으로 얻기 테스트")
     void testGetCategoriesByName() {
         PageResponse<CategoryInfoDto> allCategories = categoryQueryService.getCategoriesByName("경제", 1);

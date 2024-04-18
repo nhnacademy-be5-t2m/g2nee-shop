@@ -101,31 +101,6 @@ class CategoryQueryRestControllerTest {
     }
 
     @Test
-    @DisplayName("모든 카테고리 얻기 테스트")
-    void testGetAllCategories() throws Exception {
-        List<CategoryInfoDto> categories = List.of(category1, category2, category3, category4);
-
-        when(service.getAllCategories()).thenReturn(categories);
-
-        mockMvc.perform(get("/shop/categories/all"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(4)))
-                .andExpect(jsonPath("$.[0].categoryId", equalTo(1)))
-                .andExpect(jsonPath("$.[0].categoryName", equalTo("카테고리1")))
-                .andExpect(jsonPath("$.[0].categoryEngName", equalTo("test1")))
-                .andExpect(jsonPath("$.[1].categoryId", equalTo(2)))
-                .andExpect(jsonPath("$.[1].categoryName", equalTo("카테고리2")))
-                .andExpect(jsonPath("$.[1].categoryEngName", equalTo("test2")))
-                .andExpect(jsonPath("$.[2].categoryId", equalTo(3)))
-                .andExpect(jsonPath("$.[2].categoryName", equalTo("카테고리3")))
-                .andExpect(jsonPath("$.[2].categoryEngName", equalTo("test3")))
-                .andExpect(jsonPath("$.[3].categoryId", equalTo(4)))
-                .andExpect(jsonPath("$.[3].categoryName", equalTo("카테고리4")))
-                .andExpect(jsonPath("$.[3].categoryEngName", equalTo("test4")));
-    }
-
-    @Test
     @DisplayName("카테고리 이름으로 얻기 테스트")
     void testGetCategories() throws Exception {
         List<CategoryInfoDto> categories = List.of(category1, category2, category3, category4);

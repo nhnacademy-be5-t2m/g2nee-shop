@@ -35,12 +35,6 @@ public interface CategoryQueryService {
     List<CategoryHierarchyDto> getRootCategories();
 
     /**
-     * 계층없이 전체 카테고리를 반환합니다.
-     * @return List<CategoryInfoDto>
-     */
-    List<CategoryInfoDto> getAllCategories();
-
-    /**
      * 카테고리를 이름으로 검색하여 페이징 처리합니다.
      * @param name 검색할 카테고리 이름
      * @param page 현재 페이지
