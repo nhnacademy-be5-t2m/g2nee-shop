@@ -3,7 +3,10 @@ package com.t2m.g2nee.shop.bookset.category.dto.response;
 
 import com.t2m.g2nee.shop.bookset.category.domain.Category;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 /**
  * 카테고리 기본 정보를 반환하는 객체
  * @author : 김수빈
@@ -11,6 +14,8 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class CategoryInfoDto {
 
     /**
