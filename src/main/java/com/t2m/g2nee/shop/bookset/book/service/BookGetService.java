@@ -101,9 +101,6 @@ public class BookGetService {
         Page<BookDto.ListResponse> bookPage;
 
         switch (sort) {
-            case "salesVolume":
-                // 정렬한 pageResponse 반환
-                break;
             case "score":
                 // 정렬한 pageResponse 반환
                 break;
@@ -125,6 +122,16 @@ public class BookGetService {
         }
 
         return null;
+    }
+
+    /**
+     * 추천책 15권을 조회하는 메서드
+     * @param categoryIdList 카테고리 아이디 리스트
+     * @return List<BookDto.ListResponse>
+     */
+    public List<BookDto.ListResponse> getRecommendBooks(List<Long> categoryIdList, Long bookId){
+
+        return bookRepository.getRecommendBooks(categoryIdList,bookId);
     }
 
     /**

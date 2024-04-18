@@ -17,4 +17,5 @@ public interface BookCustomRepository {
      BookDto.Response getBookDetail(Long bookId);
 
      List<BookDto.ListResponse> getBooksByElasticSearchAndCategory(Long categoryId, String keyword,String sort);
+     List<BookDto.ListResponse> getRecommendBooks(List<Long> categoryIdList, Long bookId);
 }

@@ -309,6 +309,36 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
 
     }
 
+    /**
+     * 같은 카테고리를 지닌 추천 책들을 15권 조회하는 메서드
+     *
+     * @param categoryIdList categoryIdList 카테고리 아이디들
+     * @return List<BookDto.ListResponse>
+     */
+    @Override
+    public List<BookDto.ListResponse> getRecommendBooks(List<Long> categoryIdList, Long bookId) {
+        QBook book = QBook.book;
+        QBookCategory bookCategory = QBookCategory.bookCategory;
+        QBookFile bookFile = QBookFile.bookFile;
+
+        return from(book)
+                .innerJoin(bookCategory).on(book.bookId.eq(bookCategory.book.bookId))
+                .innerJoin(bookFile).on(book.bookId.eq(bookFile.book.bookId))
+                .where(bookFile.imageType.eq(BookFile.ImageType.THUMBNAIL)
+                        .and(bookCategory.book.bookId.ne(bookId))
+                        .and(bookCategory.category.categoryId.in(categoryIdList)))
+                .select(Projections.fields(BookDto.ListResponse.class
+                        , book.bookId
+                        , bookFile.url.as("thumbnailImageUrl")
+                        , book.title
+                        , book.engTitle
+                        , book.bookStatus
+                        , book.viewCount))
+                .orderBy(book.viewCount.desc())
+                .limit(15)
+                .fetch();
+    }
+
 
     /**
      * 도서에 기여자와 역할 정보를 설정하고 반환하는 메서드입니다.
