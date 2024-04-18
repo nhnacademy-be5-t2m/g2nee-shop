@@ -8,6 +8,7 @@ import com.t2m.g2nee.shop.policyset.deliveryPolicy.dto.response.DeliveryPolicyIn
 import com.t2m.g2nee.shop.policyset.deliveryPolicy.repository.DeliveryPolicyRepository;
 import com.t2m.g2nee.shop.policyset.deliveryPolicy.service.DeliveryPolicyService;
 import java.math.BigDecimal;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
@@ -31,10 +32,18 @@ public class DeliveryPolicyServiceImpl implements DeliveryPolicyService {
         if (deliveryPolicyRepository.count() == 0) {//처음으로 저장하는 경우
             return convertToDeliveryPolicyInfoDto(deliveryPolicyRepository.save(convertToDeliveryPolicy(request)));
         } else {//변경해야할 경우
-            //이전의 정책을 비활성화로 변경
-            deliveryPolicyRepository.softDelete();
-            //새로운 정책 저장
-            return convertToDeliveryPolicyInfoDto(deliveryPolicyRepository.save(convertToDeliveryPolicy(request)));
+            //이전 정책과 변경사항 비교
+            DeliveryPolicy oldPolicy = deliveryPolicyRepository.findFirstByIsActivatedOrderByChangedDateDesc(true)
+                    .orElseThrow(() -> new NotFoundException("이전 정책이 없습니다."));
+            if ((oldPolicy.getDeliveryFee() != BigDecimal.valueOf(request.getDeliveryFee())) ||
+                    (oldPolicy.getFreeDeliveryStandard() != BigDecimal.valueOf(request.getFreeDeliveryStandard()))) {
+                //이전의 정책을 비활성화로 변경
+                deliveryPolicyRepository.softDelete();
+                //새로운 정책 저장
+                return convertToDeliveryPolicyInfoDto(deliveryPolicyRepository.save(convertToDeliveryPolicy(request)));
+            }
+            //변경사항이 없을 경우, 이전 정책을 그대로 리턴
+            return convertToDeliveryPolicyInfoDto(oldPolicy);
         }
     }
 
@@ -50,7 +59,8 @@ public class DeliveryPolicyServiceImpl implements DeliveryPolicyService {
     @Transactional(readOnly = true)
     public PageResponse<DeliveryPolicyInfoDto> getAllDeliveryPolicy(int page) {
         Page<DeliveryPolicy> deliveryPolicies = deliveryPolicyRepository.findAll(
-                PageRequest.of(page - 1, 10, Sort.by("changedDate"))
+                PageRequest.of(page - 1, 10, Sort.by("isActivated").descending()
+                        .and(Sort.by("changedDate")))
         );
 
         List<DeliveryPolicyInfoDto> deliveryPolicyInfoDtoList = deliveryPolicies
@@ -79,7 +89,7 @@ public class DeliveryPolicyServiceImpl implements DeliveryPolicyService {
         return new DeliveryPolicyInfoDto(deliveryPolicy.getDeliveryPolicyId(),
                 deliveryPolicy.getDeliveryFee().intValue(),
                 deliveryPolicy.getFreeDeliveryStandard().intValue(), deliveryPolicy.getIsActivated(),
-                deliveryPolicy.getChangedDate());
+                deliveryPolicy.getChangedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
     }
 
     private DeliveryPolicy convertToDeliveryPolicy(DeliveryPolicySaveDto deliveryPolicySaveDto) {
