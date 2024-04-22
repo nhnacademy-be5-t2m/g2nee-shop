@@ -56,12 +56,10 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
 
         QBook book = QBook.book;
         QPublisher publisher = QPublisher.publisher;
-        QBookContributor bookContributor = QBookContributor.bookContributor;
         QBookFile bookFile = QBookFile.bookFile;
 
 
-        List<BookDto.ListResponse> responseList =
-                from(book)
+        return from(book)
                         .innerJoin(publisher).on(book.publisher.publisherId.eq(publisher.publisherId))
                         .innerJoin(bookFile).on(book.bookId.eq(bookFile.book.bookId))
                         .where(bookFile.imageType.eq(BookFile.ImageType.THUMBNAIL))
@@ -76,9 +74,6 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                                 , publisher.publisherName
                         )).orderBy(book.publishedDate.desc()).limit(6)
                         .fetch();
-
-
-        return toListResponseList(responseList, bookContributor);
     }
 
     /**
