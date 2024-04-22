@@ -119,7 +119,7 @@ class ContributorServiceTest {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("contributorName"));
         Page<Contributor> contributorPage = new PageImpl<>(contributorList, pageable, contributorList.size());
 
-        when(contributorRepository.findAll(PageRequest.of(0, 10, Sort.by("contributorName"))))
+        when(contributorRepository.findAllActivated(PageRequest.of(0, 10, Sort.by("contributorName"))))
                 .thenReturn(contributorPage);
         when(mapper.entitiesToDtos(contributorList)).thenReturn(responseList);
 
@@ -176,6 +176,7 @@ class ContributorServiceTest {
                     .contributorId((long) i)
                     .contributorName("기여자" + i)
                     .contributorEngName("contributor" + i)
+                    .isActivated(true)
                     .build();
 
             contributorList.add(contributor);
@@ -221,6 +222,7 @@ class ContributorServiceTest {
                 .contributorId(1L)
                 .contributorName("기여자1")
                 .contributorEngName("contributor1")
+                .isActivated(true)
                 .build();
     }
 
@@ -230,6 +232,7 @@ class ContributorServiceTest {
                 .contributorId(1L)
                 .contributorName("기여자2")
                 .contributorEngName("contributor2")
+                .isActivated(true)
                 .build();
     }
 
