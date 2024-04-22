@@ -40,6 +40,7 @@ public class PublisherController {
         Publisher publisher = Publisher.builder()
                 .publisherName(request.getPublisherName())
                 .publisherEngName(request.getPublisherEngName())
+                .isActivated(true)
                 .build();
 
         PublisherDto.Response response = publisherService.registerPublisher(publisher);
@@ -70,7 +71,7 @@ public class PublisherController {
     }
 
     /**
-     * 출판사 리스트를 보여주는 컨트롤러 입니다
+     * 출판사 페이지를 보여주는 컨트롤러 입니다
      *
      * @param page 페이지 값
      * @return 출판사 정보들과 페이지 정보
@@ -84,7 +85,7 @@ public class PublisherController {
     }
 
     /**
-     * 모든 출판사를 조회하는 메서드 입니다
+     * 출판사 리스트를 보여주는 컨트롤러 입니다
      * @return ResponseEntity<List<PublisherDto.Response>>
      */
     @GetMapping("/list")
@@ -99,7 +100,7 @@ public class PublisherController {
     /**
      * 출판사를 삭제하는 컨트롤러 입니다.
      *
-     * @param publisherId
+     * @param publisherId 출판사 아이디
      * @return X
      */
 

@@ -10,7 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -71,10 +73,7 @@ public class BookGetController {
     public ResponseEntity<PageResponse<BookDto.ListResponse>> getBooksByCategory(@PathVariable("categoryId") Long categoryId,
                                                                                  @RequestParam(required = false) String sort,
                                                                                  @RequestParam int page){
-
-        if (!StringUtils.hasText(sort)) {
-            sort = "viewCount";
-        }
+        if(!StringUtils.hasText(sort)) sort = "viewCount";
 
         PageResponse<BookDto.ListResponse> responses = bookGetService.getBooksByCategory(page, categoryId,sort);
 
@@ -88,7 +87,7 @@ public class BookGetController {
      * @param sort 정렬 기준
      * @param keyword 키워드
      * @param page 페이지 번호
-     * @return
+     * @return ResponseEntity<PageResponse<BookDto.ListResponse>>
      */
     @GetMapping("/search")
     public ResponseEntity<PageResponse<BookDto.ListResponse>> getBookByElasticsearchAndCategory(
@@ -97,12 +96,23 @@ public class BookGetController {
             @RequestParam String keyword,
             @RequestParam int page) {
 
-        if (!StringUtils.hasText(sort)) {
-            sort = "viewCount";
-        }
+        if(!StringUtils.hasText(sort)) sort = "viewCount";
+
         PageResponse<BookDto.ListResponse> responses =
                 bookGetService.getBookByCategoryAndElasticsearch(page, categoryId, keyword, sort);
 
         return ResponseEntity.status(HttpStatus.OK).body(responses);
     }
+
+    @GetMapping("/{bookId}/recommend")
+    public ResponseEntity<List<BookDto.ListResponse>> getRecommendBooks(
+            @PathVariable("bookId") Long bookId,
+            @RequestParam List<Long> categoryIdList) {
+
+        List<BookDto.ListResponse> responses = bookGetService.getRecommendBooks(categoryIdList, bookId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(responses);
+    }
+
+
 }

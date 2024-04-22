@@ -71,7 +71,7 @@ public class RoleService {
     @Transactional(readOnly = true)
     public List<RoleDto.Response> getAllRole(){
 
-        return mapper.entitiesToDtos(roleRepository.findAll());
+        return mapper.entitiesToDtos(roleRepository.findAllActivated());
     }
 
     /**
@@ -85,7 +85,7 @@ public class RoleService {
 
         int size = 10;
         Page<Role> rolePage =
-                roleRepository.findAll(PageRequest.of(page - 1, size, Sort.by("roleName")));
+                roleRepository.findAllActivated(PageRequest.of(page - 1, size, Sort.by("roleName")));
 
         List<RoleDto.Response> responses = mapper.entitiesToDtos(rolePage.getContent());
 

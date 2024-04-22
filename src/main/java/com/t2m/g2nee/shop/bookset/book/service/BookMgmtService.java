@@ -297,6 +297,28 @@ public class BookMgmtService {
     }
 
     /**
+     * 책 수량을 추가하는 메서드 입니다
+     *
+     * @param bookId   책 아이디
+     * @param quantity 추가할 수량
+     * @return BookDto.quantityResponse
+     */
+    public synchronized int modifyQuantity(Long bookId, int quantity) {
+
+        Optional<Book> optionalBook = bookRepository.findById(bookId);
+
+        if (optionalBook.isPresent()) {
+
+            Book book = optionalBook.get();
+            book.setQuantity(book.getQuantity() + quantity);
+
+            return book.getQuantity();
+        } else {
+            throw new NotFoundException("책 정보가 없습니다");
+        }
+    }
+
+    /**
      * 책 등록 시 기여자와 역할에 대한 설정을 하는 메서드 입니다.
      *
      * @param book                책 객체
@@ -346,4 +368,5 @@ public class BookMgmtService {
 
         objectService.deleteObject(url, tokenId);
     }
+
 }

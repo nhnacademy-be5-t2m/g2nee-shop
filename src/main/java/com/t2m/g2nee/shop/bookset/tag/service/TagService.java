@@ -77,7 +77,7 @@ public class TagService {
     @Transactional(readOnly = true)
     public List<TagDto.Response> getAllTag(){
 
-        return mapper.entitiesToDtos(tagRepository.findAll());
+        return mapper.entitiesToDtos(tagRepository.findAllActivated());
     }
 
     /**
@@ -91,7 +91,7 @@ public class TagService {
 
         int size = 10;
         Page<Tag> tagPage =
-                tagRepository.findAll(PageRequest.of(page - 1, size, Sort.by("tagName")));
+                tagRepository.findAllActivated(PageRequest.of(page - 1, size, Sort.by("tagName")));
 
         List<TagDto.Response> responses = mapper.entitiesToDtos(tagPage.getContent());
 
