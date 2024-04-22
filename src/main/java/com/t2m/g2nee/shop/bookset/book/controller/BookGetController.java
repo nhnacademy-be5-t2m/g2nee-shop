@@ -104,6 +104,11 @@ public class BookGetController {
         return ResponseEntity.status(HttpStatus.OK).body(responses);
     }
 
+    /**
+     * 카테고리에 맞는 책을 조회하는 컨트롤러
+     * @param bookId 책 아이디
+     * @param categoryIdList 카테고리 아이디 리스트
+     */
     @GetMapping("/{bookId}/recommend")
     public ResponseEntity<List<BookDto.ListResponse>> getRecommendBooks(
             @PathVariable("bookId") Long bookId,

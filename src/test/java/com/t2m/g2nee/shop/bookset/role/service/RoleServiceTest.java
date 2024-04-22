@@ -118,7 +118,7 @@ class RoleServiceTest {
 
         Page<Role> rolePage = new PageImpl<>(roleList, pageable, roleList.size());
 
-        when(roleRepository.findAll(PageRequest.of(0, 10, Sort.by("roleName"))))
+        when(roleRepository.findAllActivated(PageRequest.of(0, 10, Sort.by("roleName"))))
                 .thenReturn(rolePage);
         when(mapper.entitiesToDtos(roleList)).thenReturn(responseList);
 
@@ -170,6 +170,7 @@ class RoleServiceTest {
             Role role = Role.builder()
                     .roleId((long) i)
                     .roleName("역할" + i)
+                    .isActivated(true)
                     .build();
 
             roleList.add(role);
@@ -212,6 +213,7 @@ class RoleServiceTest {
         return Role.builder()
                 .roleId(1L)
                 .roleName("역할1")
+                .isActivated(true)
                 .build();
     }
 
@@ -220,6 +222,7 @@ class RoleServiceTest {
         return Role.builder()
                 .roleId(1L)
                 .roleName("역할2")
+                .isActivated(true)
                 .build();
     }
 

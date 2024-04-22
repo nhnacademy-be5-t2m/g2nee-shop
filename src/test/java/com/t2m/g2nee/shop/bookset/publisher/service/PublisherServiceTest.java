@@ -118,7 +118,7 @@ class PublisherServiceTest {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("publisherName"));
         Page<Publisher> publisherPage = new PageImpl<>(publisherList, pageable, publisherList.size());
 
-        when(publisherRepository.findAll(PageRequest.of(0, 10, Sort.by("publisherName"))))
+        when(publisherRepository.findAllActivated(PageRequest.of(0, 10, Sort.by("publisherName"))))
                 .thenReturn(publisherPage);
         when(mapper.entitiesToDtos(publisherList)).thenReturn(responseList);
 
@@ -173,6 +173,7 @@ class PublisherServiceTest {
                     .publisherId((long) i)
                     .publisherName("출판사" + i)
                     .publisherEngName("publisher" + i)
+                    .isActivated(true)
                     .build();
 
             publisherList.add(publisher);
@@ -218,6 +219,7 @@ class PublisherServiceTest {
                 .publisherId(1L)
                 .publisherName("출판사1")
                 .publisherEngName("publisher1")
+                .isActivated(true)
                 .build();
     }
 
@@ -227,6 +229,7 @@ class PublisherServiceTest {
                 .publisherId(1L)
                 .publisherName("출판사2")
                 .publisherEngName("publisher2")
+                .isActivated(true)
                 .build();
     }
 
