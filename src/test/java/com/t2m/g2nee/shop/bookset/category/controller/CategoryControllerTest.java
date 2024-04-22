@@ -16,6 +16,7 @@ import com.t2m.g2nee.shop.bookset.category.dto.request.CategorySaveDto;
 import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryInfoDto;
 import com.t2m.g2nee.shop.bookset.category.service.CategoryService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -41,6 +42,7 @@ class CategoryControllerTest {
     }
 
     @Test
+    @DisplayName("카테고리 생성 테스트")
     void testCreateCategory() throws Exception {
         CategorySaveDto request = new CategorySaveDto("테스트", "test", true, 0L);
         CategoryInfoDto category = new CategoryInfoDto(1L, "테스트", "test", true);
@@ -57,6 +59,7 @@ class CategoryControllerTest {
     }
 
     @Test
+    @DisplayName("카테고리 수정 테스트")
     void testUpdateCategory() throws Exception {
         CategorySaveDto request = new CategorySaveDto("테스트", "test", true, 0L);
         CategoryInfoDto category = new CategoryInfoDto(1L, "테스트", "test", true);
@@ -74,6 +77,7 @@ class CategoryControllerTest {
     }
 
     @Test
+    @DisplayName("카테고리 삭제 테스트")
     void testDeleteCategory() throws Exception {
         when(service.deleteCategory(anyLong())).thenReturn(false);
 
@@ -84,6 +88,7 @@ class CategoryControllerTest {
     }
 
     @Test
+    @DisplayName("카테고리 활성화 테스트")
     void testActiveCategory() throws Exception {
         when(service.activeCategory(anyLong())).thenReturn(true);
 

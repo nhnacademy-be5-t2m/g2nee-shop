@@ -16,6 +16,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * CategoryQueryService의 구현체 입니다.
+ *
+ * @author : 김수빈
+ * @since : 1.0
+ */
 @Service
 @Transactional(readOnly = true)
 public class CategoryQueryServiceImpl implements CategoryQueryService {
@@ -44,9 +50,10 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
 
     @Override
     public CategoryUpdateDto getCategory(Long categoryId) {
-        //카테고리 단일 객체 반환, 존재 하지 않으면 예외 발생
+        //카테고리와 카테고리의 상위 id를 가져옴
         CategoryUpdateDto category = categoryRepository.getFindByCategoryId(categoryId);
 
+        //서브 카테고리 목록 설정
         List<CategoryHierarchyDto> subCategories = getSubCategories(categoryId);
         category.setChildren(subCategories);
         setHierarchy(subCategories);
@@ -71,20 +78,17 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
         return rootCategories;
     }
 
+    /**
+     * 카테고리 계층 설정
+     * @param categories 계층 설정할 카테고리
+     */
     public void setHierarchy(List<CategoryHierarchyDto> categories) {
         for (CategoryHierarchyDto category : categories) {
+            //자식 카테고리 목록을 받아 설정
             List<CategoryHierarchyDto> subCategories = getSubCategories(category.getCategoryId());
             category.setChildren(subCategories);
             setHierarchy(subCategories);
         }
-    }
-
-    @Override
-    public List<CategoryInfoDto> getAllCategories() {
-        //모든 카테고리를 반환
-
-        return categoryRepository.findAll().stream().map(this::convertToCategoryInfoDto)
-                .collect(Collectors.toList());
     }
 
     @Override

@@ -5,9 +5,17 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 카테고리 정보를 계층적으로 반환하는 객체입니다.
+ *
+ * @author : 김수빈
+ * @since : 1.0
+ */
+public class CategoryHierarchyDto extends CategoryInfoDto {
 
-public class CategoryHierarchyDto extends CategoryInfoDto{
-
+    /**
+     * 자식 카테고리 목록
+     */
     @Getter
     @Setter
     private List<CategoryHierarchyDto> children;

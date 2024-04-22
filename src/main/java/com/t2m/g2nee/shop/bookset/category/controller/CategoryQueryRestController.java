@@ -15,8 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * select 하는 쿼리를 처리하는 controller
- *
+ * 카테고리 조회를 위한 컨트롤러 입니다.
  * @author : 김수빈
  * @since : 1.0
  */
@@ -31,9 +30,8 @@ public class CategoryQueryRestController {
     }
 
     /**
-     * 카테고리를 계층화하여 반환하는 컨트롤러
-     *
-     * @return
+     * 카테고리를 계층화하여 반환하는 컨트롤러입니다.
+     * @return ResponseEntity<List < CategoryHierarchyDto>>
      */
     @GetMapping
     public ResponseEntity<List<CategoryHierarchyDto>> getRootCategories() {
@@ -42,24 +40,10 @@ public class CategoryQueryRestController {
                 .body(service.getRootCategories());
     }
 
-
     /**
-     * 모든 카테고리를 반환하는 컨트롤러
-     *
-     * @return
-     */
-    @GetMapping("/all")
-    public ResponseEntity<List<CategoryInfoDto>> getAllCategories() {
-
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
-                .body(service.getAllCategories());
-    }
-
-    /**
-     * 하나의 카테고리를 반환하는 컨트롤러
-     *
-     * @param categoryId
-     * @return
+     * 하나의 카테고리를 반환하는 컨트롤러 입니다.
+     * @param categoryId 카테고리 id
+     * @return ResponseEntity<CategoryUpdateDto>
      */
     @GetMapping("/{categoryId}")
     public ResponseEntity<CategoryUpdateDto> getCategory(@PathVariable("categoryId") Long categoryId) {
@@ -69,11 +53,10 @@ public class CategoryQueryRestController {
     }
 
     /**
-     * 카테고리 이름으로 검색하여 페이징처리 하여 반환하는 컨트롤러
-     *
-     * @param name
-     * @param page
-     * @return
+     * 카테고리 이름으로 검색하고, 그 결과들을 페이징처리 하여 반환하는 컨트롤러입니다.
+     * @param name 검색할 이름
+     * @param page 현재 페이지
+     * @return ResponseEntity<PageResponse < CategoryInfoDto>>
      */
     @GetMapping("/search")
     public ResponseEntity<PageResponse<CategoryInfoDto>> getCategories(
