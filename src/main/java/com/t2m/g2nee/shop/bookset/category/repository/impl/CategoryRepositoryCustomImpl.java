@@ -11,8 +11,7 @@ import javax.persistence.EntityManager;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
- * QueryDSL을 사용하여 복잡한 쿼리를 작성하기 위한 구현체
- *
+ * QueryDSL을 사용하여 카테고리에 대한 복잡한 쿼리를 작성하기 위한 구현체입니다.
  * @author : 김수빈
  * @since : 1.0
  */

@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @since : 1.0
  */
 @Service
+@Transactional
 public class CategoryPathBasicServiceImpl implements CategoryPathBasicService {
 
     private final CategoryPathRepository categoryPathRepository;
@@ -38,10 +39,8 @@ public class CategoryPathBasicServiceImpl implements CategoryPathBasicService {
     }
 
     @Override
-    @Transactional
     public void deleteCategoryPathBasic(Long categoryId) {
         //관련된 조상 및 후손 경로 삭제
-        categoryPathRepository.deleteByDescendant_CategoryId(categoryId);
-        categoryPathRepository.deleteByAncestor_CategoryId(categoryId);
+        categoryPathRepository.deleteCategoryPathByAncestorIdAndDescendantId(categoryId);
     }
 }
