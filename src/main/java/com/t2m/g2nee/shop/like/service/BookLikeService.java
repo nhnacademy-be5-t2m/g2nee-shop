@@ -8,6 +8,7 @@ import com.t2m.g2nee.shop.like.dto.BookLikeDto;
 import com.t2m.g2nee.shop.like.repository.BookLikeRepository;
 import com.t2m.g2nee.shop.memberset.Member.domain.Member;
 import com.t2m.g2nee.shop.memberset.Member.repository.MemberRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +33,7 @@ public class BookLikeService {
      * @param request 책과 회원 정보가 아이디가 담긴 객체
      * @return BookLikeDto
      */
-    public BookLikeDto addBookLike(BookLikeDto request) {
+    public BookLikeDto setBookLike(BookLikeDto request) {
 
         Member member = memberRepository.findById(request.getMemberId())
                 .orElseThrow(() -> new NotFoundException("존재하지 않은 회원입니다."));
@@ -40,21 +41,29 @@ public class BookLikeService {
         Book book = bookRepository.findById(request.getBookId())
                 .orElseThrow(() -> new NotFoundException("책 정보가 없습니다."));
 
-        BookLike bookLike = BookLike.builder()
-                .book(book)
-                .member(member)
-                .build();
+       Optional<BookLike> optionalBookLike = bookLikeRepository.findBookLike(request.getMemberId(), request.getBookId());
 
-        BookLike saveBookLike = bookLikeRepository.save(bookLike);
+       // 동일한 좋아요가 없으면 생성
+        if(optionalBookLike.isEmpty()) {
 
-        return BookLikeDto.builder()
-                .bookId(saveBookLike.getBook().getBookId())
-                .memberId(saveBookLike.getMember().getCustomerId())
-                .build();
-    }
+            BookLike bookLike = BookLike.builder()
+                    .book(book)
+                    .member(member)
+                    .build();
 
-    public void deleteBookLike(Long likeId) {
+            BookLike saveBookLike = bookLikeRepository.save(bookLike);
 
-        bookLikeRepository.deleteById(likeId);
+            return BookLikeDto.builder()
+                    .bookId(saveBookLike.getBook().getBookId())
+                    .memberId(saveBookLike.getMember().getCustomerId())
+                    .build();
+        } else {
+
+            // 있으면 삭제
+            BookLike bookLike = optionalBookLike.get();
+            bookLikeRepository.deleteById(bookLike.getBookLikeId());
+
+            return null;
+        }
     }
 }

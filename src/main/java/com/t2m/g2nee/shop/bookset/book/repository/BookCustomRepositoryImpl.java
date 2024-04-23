@@ -233,7 +233,6 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                                 , book.viewCount
                                 , book.bookStatus
                                 , book.pages
-                                , bookLike.bookLikeId
                                 , isLiked.as("isLiked")
                                 , score.as("scoreAverage")
                         ))
