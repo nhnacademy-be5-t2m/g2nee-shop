@@ -48,10 +48,10 @@ public class OrderController {
      */
     @GetMapping("/admin/orders")
     public ResponseEntity<PageResponse<GetOrderListForAdminResponseDto>> getAllOrders(
-            Pageable pageable) {
+            Pageable pageable, int page) {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(orderService.getALlOrderList(pageable));
+                .body(orderService.getALlOrderList(pageable, page));
 
     }
 

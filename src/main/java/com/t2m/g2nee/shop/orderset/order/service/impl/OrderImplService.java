@@ -12,7 +12,9 @@ import com.t2m.g2nee.shop.policyset.pointPolicy.repository.PointPolicyRepository
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,11 +49,14 @@ public class OrderImplService implements OrderService {
 //    }
 
     @Override
-    public PageResponse<GetOrderListForAdminResponseDto> getALlOrderList(Pageable pageable) {
-        GetOrderListForAdminResponseDto orderListForAdminResponseDto = new GetOrderListForAdminResponseDto()
+    public PageResponse<GetOrderListForAdminResponseDto> getALlOrderList(Pageable pageable, int page) {
+        GetOrderListForAdminResponseDto orderListForAdminResponseDto = new GetOrderListForAdminResponseDto();
+        int size = 5;
+        pageable = PageRequest.of(page - 1, size, Sort.by("createdAt"));
         Page<GetOrderListForAdminResponseDto> returnAdminList =
                 orderRepository.getAllOrderList(pageable);
-        return new PageResponse<>(returnAdminList);
+        PageResponse<GetOrderListForAdminResponseDto> pageResponse = new PageResponse<>();
+        return pageResponse.getPageResponse(page, 4, returnAdminList);
     }
 //
 //    @Override

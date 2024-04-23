@@ -23,9 +23,10 @@ public interface OrderService {
      * 전체 주문 조회(admin용)
      *
      * @param pageable paging
+     * @param page     current page
      * @return 전체 주문 반환
      */
-    PageResponse<GetOrderListForAdminResponseDto> getALlOrderList(Pageable pageable);
+    PageResponse<GetOrderListForAdminResponseDto> getALlOrderList(Pageable pageable, int page);
 
 //    /**
 //     * 전체 주문 상태에 따라 반환(admin용)
