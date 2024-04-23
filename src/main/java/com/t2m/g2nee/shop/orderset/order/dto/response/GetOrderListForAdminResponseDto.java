@@ -25,5 +25,4 @@ public class GetOrderListForAdminResponseDto {
     private Timestamp orderDate;
     private OrderState orderState;
     private BigDecimal orderAmount;
-    private Boolean isCancelled;
 }

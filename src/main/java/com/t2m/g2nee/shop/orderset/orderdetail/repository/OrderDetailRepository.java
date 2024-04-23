@@ -1,6 +1,6 @@
 package com.t2m.g2nee.shop.orderset.orderdetail.repository;
 
-import com.t2m.g2nee.shop.orderset.orderdetail.domain.OrderDetail;
+import com.t2m.g2nee.shop.orderset.orderDetail.domain.OrderDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
