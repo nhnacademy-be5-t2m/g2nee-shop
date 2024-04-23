@@ -43,7 +43,7 @@ class RoleControllerTest {
     @MockBean
     private RoleMapper mapper;
 
-    private final String url = "/shop/roles/";
+    private final String url = "/api/v1/shop/roles/";
 
     @Test
     @DisplayName("유효성 검사 실패 후 응답값 테스트")

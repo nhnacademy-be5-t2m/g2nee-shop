@@ -58,7 +58,7 @@ class PointControllerTest {
 
         when(service.savePointPolicy(any(PointPolicySaveDto.class))).thenReturn(pointPolicy);
 
-        mockMvc.perform(post("/shop/pointPolicy")
+        mockMvc.perform(post("/api/v1/shop/pointPolicies")
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
@@ -80,7 +80,7 @@ class PointControllerTest {
 
         when(service.updatePointPolicy(anyLong(), any(PointPolicySaveDto.class))).thenReturn(pointPolicy);
 
-        mockMvc.perform(put("/shop/pointPolicy/{pointPolicyId}", 1L)
+        mockMvc.perform(put("/api/v1/shop/pointPolicies/{pointPolicyId}", 1L)
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -98,7 +98,7 @@ class PointControllerTest {
     void testDeletePointPolicy() throws Exception {
         when(service.softDeletePointPolicy(anyLong())).thenReturn(false);
 
-        mockMvc.perform(patch("/shop/pointPolicy/{pointPolicyId}", 1L))
+        mockMvc.perform(patch("/api/v1/shop/pointPolicies/{pointPolicyId}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", equalTo(false)));
 
@@ -113,7 +113,7 @@ class PointControllerTest {
 
         when(service.getPointPolicy(anyLong())).thenReturn(pointPolicy);
 
-        mockMvc.perform(get("/shop/pointPolicy/{pointPolicyId}", 1L))
+        mockMvc.perform(get("/api/v1/shop/pointPolicies/{pointPolicyId}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.pointPolicyId", equalTo(1)))
                 .andExpect(jsonPath("$.policyName", equalTo(pointPolicy.getPolicyName())))
@@ -147,7 +147,7 @@ class PointControllerTest {
 
         when(service.getAllPointPolicy(anyInt())).thenReturn(pointPolicyPage);
 
-        mockMvc.perform(get("/shop/pointPolicy?page=1", 1L))
+        mockMvc.perform(get("/api/v1/shop/pointPolicies?page=1", 1L))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.data", hasSize(3)))

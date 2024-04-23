@@ -20,6 +20,8 @@ public interface PackageRepository extends JpaRepository<PackageType, Long>, Pac
      */
     boolean existsByName(String name);
 
+    boolean existsByNameAndPackageIdNot(String name, Long packageId);
+
     /**
      * 모든 포장지 정보를 페이징 처리하여 반환합니다.
      * @param pageable 페이지 객체

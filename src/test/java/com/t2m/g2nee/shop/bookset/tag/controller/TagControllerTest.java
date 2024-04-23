@@ -41,7 +41,7 @@ class TagControllerTest {
     @MockBean
     private TagMapper mapper;
 
-    private final String url = "/shop/tags/";
+    private final String url = "/api/v1/shop/tags/";
 
     @Test
     @DisplayName("유효성 검사 실패 후 응답값 테스트")

@@ -49,14 +49,18 @@ public class PointPolicyServiceImpl implements PointPolicyService {
     @Override
     public PointPolicyInfoDto updatePointPolicy(Long pointPolicyId, PointPolicySaveDto request) {
         //정책이 존재하는지 확인
-        if (pointPolicyRepository.existsById(pointPolicyId)) {
+        if (!pointPolicyRepository.existsById(pointPolicyId)) {
+            //없을 경우 예외
+            throw new NotFoundException("존재하지 않는 정책입니다.");
+        } else if (pointPolicyRepository.existsByPolicyNameAndPointPolicyIdNotAndIsActivated(request.getPolicyName(),
+                pointPolicyId, true)) {
+            //활성화된 정책중 같은 이름이 있는 경우
+            throw new AlreadyExistException("이미 존재하는 정책입니다.");
+        } else {
             //이전 정책을 비활성화: 기록으로 남기기 위해 새롭게 만드는 방법 선택
             pointPolicyRepository.softDelete(pointPolicyId);
             //새롭게 정책 저장
             return convertToPointPolicyInfoDto(pointPolicyRepository.save(convertToPointPolicy(request)));
-        } else {
-            //없을 경우 예외
-            throw new NotFoundException("존재하지 않는 정책입니다.");
         }
     }
 

@@ -49,7 +49,7 @@ class CategoryControllerTest {
 
         when(service.saveCategory(any(CategorySaveDto.class))).thenReturn(category);
 
-        mockMvc.perform(post("/shop/categories")
+        mockMvc.perform(post("/api/v1/shop/categories")
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
@@ -65,7 +65,8 @@ class CategoryControllerTest {
         CategoryInfoDto category = new CategoryInfoDto(1L, "테스트", "test", true);
         when(service.updateCategory(anyLong(), any(CategorySaveDto.class))).thenReturn(category);
 
-        mockMvc.perform(put("/shop/categories/{categoryId}", 1L)
+
+        mockMvc.perform(put("/api/v1/shop/categories/{categoryId}", 1L)
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -81,7 +82,7 @@ class CategoryControllerTest {
     void testDeleteCategory() throws Exception {
         when(service.deleteCategory(anyLong())).thenReturn(false);
 
-        mockMvc.perform(delete("/shop/categories/{categoryId}", 1L))
+        mockMvc.perform(delete("/api/v1/shop/categories/{categoryId}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", equalTo(false)));
 
@@ -92,7 +93,7 @@ class CategoryControllerTest {
     void testActiveCategory() throws Exception {
         when(service.activeCategory(anyLong())).thenReturn(true);
 
-        mockMvc.perform(patch("/shop/categories/{categoryId}", 1L))
+        mockMvc.perform(patch("/api/v1/shop/categories/{categoryId}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", equalTo(true)));
     }
