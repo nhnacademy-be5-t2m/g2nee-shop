@@ -15,7 +15,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
+/**
+ * 리뷰 controller 클래스
+ *
+ * @author : 신동민
+ * @since : 1.0
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/shop/reviews")
@@ -23,6 +28,12 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
+    /**
+     * 리뷰 등록 컨트롤러
+     * @param image 이미지
+     * @param request 리뷰 정보 객체
+     * @return ResponseEntity<ReviewDto.Response>
+     */
     @PostMapping
     public ResponseEntity<ReviewDto.Response> postReview(@RequestPart MultipartFile image,
                                                          @RequestPart ReviewDto.Request request) {
@@ -32,6 +43,13 @@ public class ReviewController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    /**
+     * 리뷰 수정 컨트롤러
+     * @param reviewId 리뷰 아이디
+     * @param request 리뷰 정보 객체
+     * @param image 이미지
+     * @return ResponseEntity<ReviewDto.Response>
+     */
     @PatchMapping("/{reviewId}")
     public ResponseEntity<ReviewDto.Response> updateReview(@PathVariable("reviewId") Long reviewId,
                                                            @RequestPart ReviewDto.Request request,
@@ -43,6 +61,12 @@ public class ReviewController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    /**
+     * 책에 대한 리뷰 조회 컨트롤러
+     * @param bookId 책 아이디
+     * @param page 페이지 번호
+     * @return ResponseEntity<PageResponse<ReviewDto.Response>>
+     */
     @GetMapping("/book/{bookId}")
     public ResponseEntity<PageResponse<ReviewDto.Response>> getReviews(@PathVariable("bookId") Long bookId,
                                                          @RequestParam(defaultValue = "1") int page) {
