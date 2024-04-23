@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @Validated
-@RequestMapping("/shop/books")
+@RequestMapping("/api/v1/shop/books")
 @RequiredArgsConstructor
 public class BookGetController {
 

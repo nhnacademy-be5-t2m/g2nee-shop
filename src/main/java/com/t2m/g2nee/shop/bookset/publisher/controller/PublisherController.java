@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Validated
-@RequestMapping("/shop/publishers")
+@RequestMapping("/api/v1/shop/publishers")
 @RequiredArgsConstructor
 public class PublisherController {
 

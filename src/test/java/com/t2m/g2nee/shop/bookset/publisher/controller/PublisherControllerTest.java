@@ -42,7 +42,7 @@ class PublisherControllerTest {
     @MockBean
     private PublisherMapper mapper;
 
-    private final String url = "/shop/publishers/";
+    private final String url = "/api/v1/shop/publishers/";
 
     @Test
     @DisplayName("한글 유효성 검사 실패 후 응답값 테스트")

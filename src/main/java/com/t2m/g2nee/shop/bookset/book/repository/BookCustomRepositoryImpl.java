@@ -24,11 +24,8 @@ import com.t2m.g2nee.shop.elasticsearch.BooksIndex;
 import com.t2m.g2nee.shop.fileset.bookfile.domain.BookFile;
 import com.t2m.g2nee.shop.fileset.bookfile.domain.QBookFile;
 import com.t2m.g2nee.shop.fileset.file.domain.QFile;
-import com.t2m.g2nee.shop.fileset.reviewfile.domain.QReviewFile;
 import com.t2m.g2nee.shop.like.domain.QBookLike;
-import com.t2m.g2nee.shop.memberset.Member.domain.QMember;
 import com.t2m.g2nee.shop.review.domain.QReview;
-import com.t2m.g2nee.shop.review.dto.ReviewDto;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -236,28 +233,12 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                                 , book.viewCount
                                 , book.bookStatus
                                 , book.pages
+                                , bookLike.bookLikeId
                                 , isLiked.as("isLiked")
-                                , score.as("scoreAverage")))
+                                , score.as("scoreAverage")
+                        ))
                         .groupBy(book,bookLike,publisher,review)
                         .fetchOne();
-
-        // 그냥 api로 받을까?
-//        List<ReviewDto.Response> reviewList =
-//                from(review)
-//                        .innerJoin(member).on(review.member.customerId.eq(member.customerId))
-//                        .innerJoin(reviewFile).on(reviewFile.review.reviewId.eq(review.reviewId))
-//                        .where(review.book.bookId.eq(bookId))
-//                        .select(Projections.fields(ReviewDto.Response.class
-//                                , review.reviewId
-//                                , review.content
-//                                , reviewFile.url.as("imageUrl")
-//                                , member.nickname
-//                                , review.createdAt
-//                                , review.modifiedAt))
-//                        .fetch();
-//
-//        // 책 리뷰 정보
-//        bookResponse.setReviewList(reviewList);
         // 조회수 증가
         addViewCount(book, bookId);
 
@@ -357,6 +338,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                                 , book.bookStatus
                                 , publisher.publisherName
                                 , publisher.publisherEngName
+                                , bookLike.bookLikeId
                                 , isLiked.as("isLiked")
                                 , review.count().as("reviewCount")
                                 , score.as("scoreAverage")))

@@ -23,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/shop/reviews")
+@RequestMapping("/api/v1/shop/reviews")
 public class ReviewController {
 
     private final ReviewService reviewService;

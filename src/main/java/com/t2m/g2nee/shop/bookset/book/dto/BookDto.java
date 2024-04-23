@@ -91,9 +91,9 @@ public class BookDto {
         private List<TagDto.Response> tagList;
         private String publisherName;
         private String publisherEngName;
+        private Long bookLikeId;
         private boolean isLiked;
         private Double scoreAverage;
-        private List<ReviewDto.Response> reviewList;
     }
 
     @Getter
@@ -116,6 +116,7 @@ public class BookDto {
         private String publisherEngName;
         private BookStatus bookStatus;
         private List<BookContributorDto.Response> contributorRoleList;
+        private Long bookLikeId;
         private boolean isLiked;
         private Long reviewCount;
         private Double scoreAverage;
