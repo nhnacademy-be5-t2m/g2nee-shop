@@ -38,12 +38,17 @@ public class CategoryBasicServiceImpl implements CategoryBasicService {
     @Override
     public Category updateCategoryBasic(Category category) {
         //카테고리가 존재하는지 확인
-        if (categoryRepository.existsById(category.getCategoryId())) {
-            //수정된 내용을 저장
-            return categoryRepository.save(category);
-        } else {
+        if (!categoryRepository.existsById(category.getCategoryId())) {
             //카테고리가 존재하지 않으면 예외 발생
             throw new NotFoundException("업데이트 할 카테고리를 찾을 수 없습니다.");
+        } else if (categoryRepository.existsByCategoryNameAndCategoryIdNot(category.getCategoryName(),
+                category.getCategoryId())) {
+            //동일한 이름의 카테고리로 수정할 수 없게 함
+            throw new AlreadyExistException("이미 존재하는 카테고리 명 입니다.");
+        } else {
+            //수정된 내용을 저장
+            return categoryRepository.save(category);
+
         }
     }
 

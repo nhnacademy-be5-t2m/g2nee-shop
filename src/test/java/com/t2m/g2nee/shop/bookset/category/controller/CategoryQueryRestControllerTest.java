@@ -69,7 +69,7 @@ class CategoryQueryRestControllerTest {
 
         when(service.getRootCategories()).thenReturn(rootCategory);
 
-        mockMvc.perform(get("/shop/categories"))
+        mockMvc.perform(get("/api/v1/shop/categories"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -92,7 +92,7 @@ class CategoryQueryRestControllerTest {
 
         when(service.getCategory(anyLong())).thenReturn(c1);
 
-        mockMvc.perform(get("/shop/categories/{categoryId}", 1L))
+        mockMvc.perform(get("/api/v1/shop/categories/{categoryId}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.categoryId", equalTo(1)))
@@ -114,7 +114,7 @@ class CategoryQueryRestControllerTest {
 
         when(service.getCategoriesByName(anyString(), anyInt())).thenReturn(categoryPage);
 
-        mockMvc.perform(get("/shop/categories/search")
+        mockMvc.perform(get("/api/v1/shop/categories/search")
                         .param("name", "카테고리")
                         .param("page", "1"))
                 .andExpect(status().isOk())

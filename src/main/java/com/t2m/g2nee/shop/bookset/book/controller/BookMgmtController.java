@@ -26,7 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @RestController
 @Validated
-@RequestMapping("/shop/books")
+@RequestMapping("/api/v1/shop/books")
 @RequiredArgsConstructor
 public class BookMgmtController {
 

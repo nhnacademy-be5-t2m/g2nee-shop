@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Validated
-@RequestMapping("/shop/contributors")
+@RequestMapping("/api/v1/shop/contributors")
 @RequiredArgsConstructor
 public class ContributorController {
 

@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ConfigurationPropertiesScan
-@EnableDiscoveryClient
+//@EnableDiscoveryClient
 public class G2neeApplication {
 
     public static void main(String[] args) {

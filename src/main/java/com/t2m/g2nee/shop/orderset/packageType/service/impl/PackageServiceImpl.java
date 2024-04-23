@@ -48,14 +48,15 @@ public class PackageServiceImpl implements PackageService {
     @Override
     public PackageInfoDto updatePackage(Long packageId, PackageSaveDto request) {
         //포장지가 있는지 확인
-        if (packageRepository.existsById(packageId)) {
-            //있으면 수정
-            return convertToPackageInfoDto(packageRepository.save(new PackageType(
-                    packageId, request.getName(), BigDecimal.valueOf(request.getPrice()), request.getIsActivated()
-            )));
-        } else {
+        if (!packageRepository.existsById(packageId)) {
             //없으면 예외
             throw new NotFoundException("수정할 포장지를 찾을 수 없습니다.");
+        } else if (packageRepository.existsByNameAndPackageIdNot(request.getName(), packageId)) {
+            throw new AlreadyExistException("이미 존재하는 포장지 이름 입니다.");
+        } else {
+            //있으면 수정
+            return convertToPackageInfoDto(packageRepository.save(new PackageType(
+                    packageId, request.getName(), BigDecimal.valueOf(request.getPrice()), request.getIsActivated())));
         }
     }
 
