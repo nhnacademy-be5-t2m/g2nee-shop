@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -99,6 +100,7 @@ public class MemberController {
      * @param username 중복여부를 체크할 username
      * @return 중복여부를 true, false 로 반환
      */
+    @CrossOrigin("http://localhost:8080")
     @PostMapping("/existsUsername")
     public ResponseEntity<Boolean> existsUsername(@RequestBody String username) {
         Boolean result = memberService.existsUsername(username);
@@ -113,9 +115,10 @@ public class MemberController {
      * @param nickname 중복여부를 체크할 nickname
      * @return 중복여부를 true, false 로 반환
      */
+    @CrossOrigin("http://localhost:8080")
     @PostMapping("/existsNickname")
     public ResponseEntity<Boolean> existsNickname(@RequestBody String nickname) {
-        Boolean result = memberService.existsUsername(nickname);
+        Boolean result = memberService.existsNickname(nickname);
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(result);
