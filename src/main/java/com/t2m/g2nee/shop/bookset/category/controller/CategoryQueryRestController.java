@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since : 1.0
  */
 @RestController
-@RequestMapping("/shop/categories")
+@RequestMapping("/api/v1/shop/categories")
 public class CategoryQueryRestController {
 
     private final CategoryQueryService service;
@@ -53,19 +53,6 @@ public class CategoryQueryRestController {
 
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
                 .body(service.getCategory(categoryId).getChildren());
-    }
-
-
-    /**
-     * 모든 카테고리를 반환하는 컨트롤러
-     *
-     * @return
-     */
-    @GetMapping("/all")
-    public ResponseEntity<List<CategoryInfoDto>> getAllCategories() {
-
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
-                .body(service.getAllCategories());
     }
 
     /**
