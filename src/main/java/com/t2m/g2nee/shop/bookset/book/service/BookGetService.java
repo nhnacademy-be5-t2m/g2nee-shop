@@ -56,18 +56,21 @@ public class BookGetService {
      * 카테고리와 하위 카테고리의 책을 모두 조회하고 sort에 따라 정렬하는 메서드 입니다.
      *
      * @param page       페이지 번호
+     * @param memberId  회원 아이디
      * @param categoryId 카테고리 아이디
      * @param sort       정렬 기준
      * @return PageResponse<BookDto.ListResponse>
      */
 
-    public PageResponse<BookDto.ListResponse> getBooksByCategory(int page, Long categoryId, String sort) {
+    public PageResponse<BookDto.ListResponse> getBooksByCategory(int page, Long memberId, Long categoryId,
+                                                                 String sort) {
 
         // 조건에 맞게 정렬하여 페이지 생성
         int size = 8;
         Pageable pageable = PageRequest.of(page-1, size);
 
-        Page<BookDto.ListResponse> bookPage = bookRepository.getBookListByCategory(categoryId, pageable, sort);
+        Page<BookDto.ListResponse> bookPage =
+                bookRepository.getBookListByCategory(categoryId, memberId, pageable, sort);
 
         return getPageResponse(page, bookPage);
     }
@@ -75,13 +78,13 @@ public class BookGetService {
 
     /**
      * 책 상세 정보를 조회하는 메서드입니다.
-     *
+     * @param memberId 회원 아이디
      * @param bookId 책 아이디
      * @return BookDto.Response
      */
     @Transactional
-    public BookDto.Response getBookDetail(Long bookId) {
-        return bookRepository.getBookDetail(bookId);
+    public BookDto.Response getBookDetail(Long memberId,Long bookId) {
+        return bookRepository.getBookDetail(memberId,bookId);
     }
 
     /**
@@ -93,35 +96,19 @@ public class BookGetService {
      * @param sort       정렬 기준 default viewCount
      * @return PageResponse<BookDto.ListResponse>
      */
-    public PageResponse<BookDto.ListResponse> getBookByCategoryAndElasticsearch(int page, Long categoryId,
+    public PageResponse<BookDto.ListResponse> getBookByCategoryAndElasticsearch(int page, Long memberId,
+                                                                                Long categoryId,
                                                                                 String keyword, String sort) {
         // 조건에 맞게 정렬하여 페이지 생성
         int size = 8;
         Pageable pageable = PageRequest.of(page-1, size);
-        Page<BookDto.ListResponse> bookPage;
 
-        switch (sort) {
-            case "score":
-                // 정렬한 pageResponse 반환
-                break;
-            case "review":
-                // 정렬한 pageResponse 반환
-                break;
-            default:
+        // categoryId가 null 일 경우 repository에서 키워드만 받도록 처리
+        Page<BookDto.ListResponse> bookPage =
+                bookRepository.getBooksByElasticSearchAndCategory(memberId, categoryId, keyword, pageable, sort);
 
-                // categoryId가 null 일 경우 repository에서 키워드만 받도록 처리
-                List<BookDto.ListResponse> responseList =
-                        bookRepository.getBooksByElasticSearchAndCategory(categoryId, keyword, sort);
+        return getPageResponse(page, bookPage);
 
-                int start = (int) pageable.getOffset();
-                int end = Math.min((start + pageable.getPageSize()), responseList.size());
-
-                List<BookDto.ListResponse> sortedList = responseList.subList(start, end);
-                bookPage = new PageImpl<>(sortedList, pageable, responseList.size());
-                return getPageResponse(page, bookPage);
-        }
-
-        return null;
     }
 
     /**

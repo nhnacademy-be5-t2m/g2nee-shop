@@ -10,9 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,16 +23,17 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @Validated
-@RequestMapping("/shop/books")
+@RequestMapping("/api/v1/shop/books")
 @RequiredArgsConstructor
 public class BookGetController {
 
     private final BookGetService bookGetService;
 
     @GetMapping("/{bookId}")
-    public ResponseEntity<BookDto.Response> getBookById(@PathVariable("bookId") Long bookId) {
+    public ResponseEntity<BookDto.Response> getBookById(@PathVariable("bookId") Long bookId,
+                                                        @RequestParam("memberId") Long memberId) {
 
-        BookDto.Response response = bookGetService.getBookDetail(bookId);
+        BookDto.Response response = bookGetService.getBookDetail(memberId, bookId);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
@@ -66,16 +65,21 @@ public class BookGetController {
 
     /**
      * 카테고리와 하위 카테고리에 해당하는 책을 조회하는 컨트롤러 입니다.
+     * @param memberId 회원 아이디
+     * @param page 페이지 번호
      * @param categoryId 카테고리 아이디
      * @return List<BookDto.ListResponse>
      */
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<PageResponse<BookDto.ListResponse>> getBooksByCategory(@PathVariable("categoryId") Long categoryId,
+                                                                                 @RequestParam(required = false)
+                                                                                 Long memberId,
                                                                                  @RequestParam(required = false) String sort,
                                                                                  @RequestParam int page){
         if(!StringUtils.hasText(sort)) sort = "viewCount";
 
-        PageResponse<BookDto.ListResponse> responses = bookGetService.getBooksByCategory(page, categoryId,sort);
+        PageResponse<BookDto.ListResponse> responses =
+                bookGetService.getBooksByCategory(page, memberId, categoryId, sort);
 
         return ResponseEntity.status(HttpStatus.OK).body(responses);
 
@@ -91,6 +95,7 @@ public class BookGetController {
      */
     @GetMapping("/search")
     public ResponseEntity<PageResponse<BookDto.ListResponse>> getBookByElasticsearchAndCategory(
+            @RequestParam(required = false) Long memberId,
             @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) String sort,
             @RequestParam String keyword,
@@ -99,7 +104,7 @@ public class BookGetController {
         if(!StringUtils.hasText(sort)) sort = "viewCount";
 
         PageResponse<BookDto.ListResponse> responses =
-                bookGetService.getBookByCategoryAndElasticsearch(page, categoryId, keyword, sort);
+                bookGetService.getBookByCategoryAndElasticsearch(page, memberId, categoryId, keyword, sort);
 
         return ResponseEntity.status(HttpStatus.OK).body(responses);
     }

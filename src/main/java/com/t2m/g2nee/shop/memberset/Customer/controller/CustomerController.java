@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/shop/customer")
+@RequestMapping("/api/v1/shop/customer")
 public class CustomerController {
 
     private final CustomerService customerService;

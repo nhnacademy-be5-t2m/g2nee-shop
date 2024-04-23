@@ -52,9 +52,9 @@ public class ObjectService {
                 "/" + objectName;
     }
 
-    private String getUrl(NhnCloudStorageProperties properties, @NotNull String objectName) {
-        return properties.getStorageUrl() + properties.getAuth() + properties.getContainerName() + "/" + objectName;
-    }
+//    private String getUrl(NhnCloudStorageProperties properties, @NotNull String objectName) {
+//        return properties.getStorageUrl() + properties.getAuth() + properties.getContainerName() + "/" + objectName;
+//    }
 
     /**
      * nhncloud api를 호출하여 storage에 이미지를 저장하는 메서드
