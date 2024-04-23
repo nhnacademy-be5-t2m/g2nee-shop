@@ -38,7 +38,7 @@ class MemberControllerTest {
     MemberResponse memberResponse;
     MemberResponseToAuth memberResponseToAuth;
     UsernameRequestDto usernameRequestDto;
-    String path = "/shop/member";
+    String path = "/api/v1/shop/member";
 
     @BeforeEach
     void setUp() {

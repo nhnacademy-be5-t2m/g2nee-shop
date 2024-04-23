@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Validated
-@RequestMapping("/shop/roles")
+@RequestMapping("/api/v1/shop/roles")
 @RequiredArgsConstructor
 public class RoleController {
 

@@ -65,6 +65,7 @@ class CategoryControllerTest {
         CategoryInfoDto category = new CategoryInfoDto(1L, "테스트", "test", true);
         when(service.updateCategory(anyLong(), any(CategorySaveDto.class))).thenReturn(category);
 
+
         mockMvc.perform(put("/api/v1/shop/categories/{categoryId}", 1L)
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
