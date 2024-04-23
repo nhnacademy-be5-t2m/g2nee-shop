@@ -1,5 +1,6 @@
 package com.t2m.g2nee.shop.memberset.Member.controller;
 
+import com.t2m.g2nee.shop.annotation.AdminAuth;
 import com.t2m.g2nee.shop.memberset.Member.dto.request.SignUpMemberRequestDto;
 import com.t2m.g2nee.shop.memberset.Member.dto.request.UsernameRequestDto;
 import com.t2m.g2nee.shop.memberset.Member.dto.response.MemberDetailInfoResponseDto;
@@ -55,6 +56,7 @@ public class MemberController {
      * @return 로그인이 가능한지 여부를 boolean 으로 반환
      */
     @PostMapping("/getInfo")
+    @AdminAuth
     public ResponseEntity<MemberResponseToAuth> getMemberInfo(@Valid @RequestBody UsernameRequestDto request) {
         MemberResponseToAuth response = memberService.getMemberInfo(request.getUsername());
 
