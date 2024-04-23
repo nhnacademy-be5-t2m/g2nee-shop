@@ -13,6 +13,9 @@ import com.t2m.g2nee.shop.orderset.order.repository.OrderRepository;
 import com.t2m.g2nee.shop.orderset.order.service.OrderService;
 import com.t2m.g2nee.shop.orderset.orderdetail.repository.OrderDetailRepository;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import com.t2m.g2nee.shop.policyset.deliveryPolicy.domain.DeliveryPolicy;
+import com.t2m.g2nee.shop.policyset.deliveryPolicy.service.DeliveryPolicyService;
+import com.t2m.g2nee.shop.policyset.pointPolicy.repository.PointPolicyRepository;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +33,9 @@ public class OrderImplService implements OrderService {
     private final CustomerRepository customerRepository;
     private final MemberRepository memberRepository;
     private final OrderDetailRepository orderDetailRepository;
+    private final DeliveryPolicyService deliveryPolicyService;
+    private final PointPolicyRepository pointPolicyRepository;
+    //private final CouponRepository couponRepository;
 
     @Override
     @Transactional
@@ -37,11 +43,13 @@ public class OrderImplService implements OrderService {
         //
         Customer customer = null;
         if (Objects.nonNull(orderCreateRequestDto.getCustomerId())) {
-
-
-            customer = (Customer) customerRepository.getById();
-            Order order = orderRepository.save();
+            customer = customerRepository.findById(orderCreateRequestDto.getCustomerId())
+                    .orElseThrow(() -> new NotFoundException("회원이 아닙니다."));
         }
+        DeliveryPolicy deliveryPolicy = deliveryPolicyService.getDeliveryPolicy(orderCreateRequestDto.)
+
+        Order order = orderRepository.save();
+
         return null;
     }
 

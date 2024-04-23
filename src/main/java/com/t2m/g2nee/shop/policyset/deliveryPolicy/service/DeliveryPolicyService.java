@@ -6,9 +6,22 @@ import com.t2m.g2nee.shop.policyset.deliveryPolicy.dto.response.DeliveryPolicyIn
 
 public interface DeliveryPolicyService {
 
+    /**
+     * @param request
+     * @return
+     */
     DeliveryPolicyInfoDto saveDeliveryPolicy(DeliveryPolicySaveDto request);
 
+    /**
+     * 최근 배송비 정책 불러옴
+     *
+     * @return
+     */
     DeliveryPolicyInfoDto getDeliveryPolicy();
 
+    /**
+     * @param page
+     * @return
+     */
     PageResponse<DeliveryPolicyInfoDto> getAllDeliveryPolicy(int page);
 }

@@ -1,9 +1,6 @@
 package com.t2m.g2nee.shop.orderset.orderdetail.dto.response;
 
-import com.t2m.g2nee.shop.bookset.book.domain.Book;
 import com.t2m.g2nee.shop.fileset.file.domain.File;
-import com.t2m.g2nee.shop.memberset.Customer.domain.Customer;
-import com.t2m.g2nee.shop.orderset.packageType.domain.PackageType;
 import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,13 +16,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetOrderDetailResponseDto {
-    private Long orderDetailId;
-    private BigDecimal price;
+public class GetOrderDetailListForOrderResponseDto {
+    private Long bookId;
     private Integer quantity;
+    private BigDecimal price;
+    private Long packageTypeId;
     private Boolean isCancelled;
-    private Book bookId;
-    private PackageType packageType;
-    private Customer customer;
     private File fileId;
 }
