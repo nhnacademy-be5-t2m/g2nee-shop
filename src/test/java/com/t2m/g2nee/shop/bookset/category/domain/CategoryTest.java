@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.t2m.g2nee.shop.bookset.category.repository.CategoryRepository;
 import com.t2m.g2nee.shop.config.ElasticsearchConfig;
 import com.t2m.g2nee.shop.config.MapperConfig;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -24,6 +25,7 @@ class CategoryTest {
     CategoryRepository categoryRepository;
 
     @Test
+    @DisplayName("Category Entity test")
     void test() {
         Category category = new Category("테스트카테고리", "testCategory", true);
 

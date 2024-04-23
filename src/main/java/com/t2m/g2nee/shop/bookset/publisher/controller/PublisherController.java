@@ -4,6 +4,7 @@ import com.t2m.g2nee.shop.bookset.publisher.domain.Publisher;
 import com.t2m.g2nee.shop.bookset.publisher.dto.PublisherDto;
 import com.t2m.g2nee.shop.bookset.publisher.service.PublisherService;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -39,6 +40,7 @@ public class PublisherController {
         Publisher publisher = Publisher.builder()
                 .publisherName(request.getPublisherName())
                 .publisherEngName(request.getPublisherEngName())
+                .isActivated(true)
                 .build();
 
         PublisherDto.Response response = publisherService.registerPublisher(publisher);
@@ -69,7 +71,7 @@ public class PublisherController {
     }
 
     /**
-     * 출판사 리스트를 보여주는 컨트롤러 입니다
+     * 출판사 페이지를 보여주는 컨트롤러 입니다
      *
      * @param page 페이지 값
      * @return 출판사 정보들과 페이지 정보
@@ -83,9 +85,22 @@ public class PublisherController {
     }
 
     /**
+     * 출판사 리스트를 보여주는 컨트롤러 입니다
+     * @return ResponseEntity<List<PublisherDto.Response>>
+     */
+    @GetMapping("/list")
+    public ResponseEntity<List<PublisherDto.Response>> getPublishers() {
+
+        List<PublisherDto.Response> response = publisherService.getAllPublisher();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+
+    /**
      * 출판사를 삭제하는 컨트롤러 입니다.
      *
-     * @param publisherId
+     * @param publisherId 출판사 아이디
      * @return X
      */
 

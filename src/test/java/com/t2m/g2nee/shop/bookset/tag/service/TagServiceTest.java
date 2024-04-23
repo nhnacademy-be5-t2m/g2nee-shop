@@ -113,7 +113,7 @@ class TagServiceTest {
 
         Page<Tag> tagPage = new PageImpl<>(tagList, pageable, tagList.size());
 
-        when(tagRepository.findAll(PageRequest.of(0, 10, Sort.by("tagName"))))
+        when(tagRepository.findAllActivated(PageRequest.of(0, 10, Sort.by("tagName"))))
                 .thenReturn(tagPage);
         when(mapper.entitiesToDtos(tagList)).thenReturn(responseList);
 
@@ -163,6 +163,7 @@ class TagServiceTest {
             Tag tag = Tag.builder()
                     .tagId((long) i)
                     .tagName("태그" + i)
+                    .isActivated(true)
                     .build();
 
             tagList.add(tag);
@@ -177,7 +178,6 @@ class TagServiceTest {
             TagDto.Response tag = TagDto.Response.builder()
                     .tagId((long) i)
                     .tagName("태그" + i)
-
                     .build();
 
             tagList.add(tag);
@@ -197,6 +197,7 @@ class TagServiceTest {
 
         return TagDto.Request.builder()
                 .tagName("태그2")
+
                 .build();
     }
 
@@ -205,6 +206,7 @@ class TagServiceTest {
         return Tag.builder()
                 .tagId(1L)
                 .tagName("태그1")
+                .isActivated(true)
                 .build();
     }
 
@@ -213,6 +215,7 @@ class TagServiceTest {
         return Tag.builder()
                 .tagId(1L)
                 .tagName("태그2")
+                .isActivated(true)
                 .build();
     }
 

@@ -6,6 +6,12 @@ import com.t2m.g2nee.shop.policyset.pointPolicy.repository.PointPolicyRepository
 import javax.persistence.EntityManager;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
+/**
+ * PointPolicyRepositoryCustom의 구현체입니다.
+ *
+ * @author : 김수빈
+ * @since : 1.0
+ */
 public class PointPolicyRepositoryCustomImpl extends QuerydslRepositorySupport implements
         PointPolicyRepositoryCustom {
 
@@ -31,5 +37,28 @@ public class PointPolicyRepositoryCustomImpl extends QuerydslRepositorySupport i
 
         entityManager.clear();
         entityManager.flush();
+    }
+
+    @Override
+    public boolean getExistsByPointPolicyIdAndIsActivated(Long pointPolicyId, boolean active) {
+        QPointPolicy pointPolicy = QPointPolicy.pointPolicy;
+
+        /**
+         * SELECT CASE WHEN COUNT(packageId) > 0 THEN true ELSE false END
+         * FROM PointPolicies p
+         * WHERE p.pointPolicyId = ?
+         * AND p.isActivated is false;
+         */
+        if (active) {
+            return from(pointPolicy)
+                    .where(pointPolicy.pointPolicyId.eq(pointPolicyId)
+                            .and(pointPolicy.isActivated.isTrue()))
+                    .select(pointPolicy.pointPolicyId.count().gt(0)).fetchOne();
+        } else {
+            return from(pointPolicy)
+                    .where(pointPolicy.pointPolicyId.eq(pointPolicyId)
+                            .and(pointPolicy.isActivated.isFalse()))
+                    .select(pointPolicy.pointPolicyId.count().gt(0)).fetchOne();
+        }
     }
 }

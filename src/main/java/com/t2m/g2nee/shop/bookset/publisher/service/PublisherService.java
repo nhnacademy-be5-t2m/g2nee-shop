@@ -72,6 +72,16 @@ public class PublisherService {
     }
 
     /**
+     * 모든 출판사를 조회하는 메서드
+     * @return List<PublisherDto.Response>
+     */
+    @Transactional(readOnly = true)
+    public List<PublisherDto.Response> getAllPublisher() {
+
+        return mapper.entitiesToDtos(publisherRepository.findAllActivated());
+    }
+
+    /**
      * 출판사 페이지를 구성하는 메서드
      *
      * @param page 현재 페이지
@@ -82,7 +92,7 @@ public class PublisherService {
 
         int size = 10;
         Page<Publisher> publisherPage =
-                publisherRepository.findAll(PageRequest.of(page - 1, size, Sort.by("publisherName")));
+                publisherRepository.findAllActivated(PageRequest.of(page - 1, size, Sort.by("publisherName")));
 
         List<PublisherDto.Response> responses = mapper.entitiesToDtos(publisherPage.getContent());
 

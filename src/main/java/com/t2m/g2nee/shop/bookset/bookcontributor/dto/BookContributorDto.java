@@ -43,8 +43,10 @@ public class BookContributorDto {
     @Builder
     public static class Response {
 
+        private Long contributorId;
         private String contributorName;
         private String contributorEngName;
+        private Long roleId;
         private String roleName;
     }
 }

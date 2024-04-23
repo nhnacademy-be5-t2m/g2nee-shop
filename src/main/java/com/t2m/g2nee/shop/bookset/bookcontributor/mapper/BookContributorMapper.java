@@ -20,6 +20,7 @@ public interface BookContributorMapper {
         return bookContributorList.stream()
                 .map(bc ->
                         BookContributorDto.Response.builder()
+                                .contributorId(bc.getBookContributorId())
                                 .contributorName(bc.getContributor().getContributorName())
                                 .contributorEngName(bc.getContributor().getContributorEngName())
                                 .roleName(bc.getRole().getRoleName())

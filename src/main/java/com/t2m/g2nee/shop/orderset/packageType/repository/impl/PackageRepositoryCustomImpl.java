@@ -6,6 +6,12 @@ import com.t2m.g2nee.shop.orderset.packageType.repository.PackageRepositoryCusto
 import javax.persistence.EntityManager;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
+/**
+ * PackageRepositoryCustom의 구현체입니다.
+ *
+ * @author : 김수빈
+ * @since : 1.0
+ */
 public class PackageRepositoryCustomImpl extends QuerydslRepositorySupport implements PackageRepositoryCustom {
 
     private final EntityManager entityManager;

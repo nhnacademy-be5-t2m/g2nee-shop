@@ -13,6 +13,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * PointPolicies에 대한 Entity 입니다.
+ *
+ * @author : 김수빈
+ * @since : 1.0
+ */
 @Entity
 @Table(name = "PointPolicies")
 @Getter
@@ -20,14 +26,32 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PointPolicy {
 
+    /**
+     * 포인트 정책 id
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pointPolicyId;
+    /**
+     * 포인트 정책 이름
+     */
     private String policyName;
+    /**
+     * 포인트 정책 타입: 퍼센트 적립, 금액 적립
+     */
     @Enumerated(EnumType.STRING)
     private PolicyType policyType;
+    /**
+     * 적립 금액
+     */
     private BigDecimal amount;
+    /**
+     * 포인트 정책 활성화 유무
+     */
     private Boolean isActivated;
+    /**
+     * 정책 수정 날짜
+     */
     private LocalDateTime changedDate;
 
     public PointPolicy(String policyName, String policyType, BigDecimal amount) {

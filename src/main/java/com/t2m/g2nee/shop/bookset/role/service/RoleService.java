@@ -65,6 +65,14 @@ public class RoleService {
         return mapper.entityToDto(saveRole);
 
     }
+    /**
+     * 모든 역할을 조회하는 메서드 입니다
+     */
+    @Transactional(readOnly = true)
+    public List<RoleDto.Response> getAllRole(){
+
+        return mapper.entitiesToDtos(roleRepository.findAllActivated());
+    }
 
     /**
      * 역할 페이지를 구성하는 메서드
@@ -77,7 +85,7 @@ public class RoleService {
 
         int size = 10;
         Page<Role> rolePage =
-                roleRepository.findAll(PageRequest.of(page - 1, size, Sort.by("roleName")));
+                roleRepository.findAllActivated(PageRequest.of(page - 1, size, Sort.by("roleName")));
 
         List<RoleDto.Response> responses = mapper.entitiesToDtos(rolePage.getContent());
 

@@ -11,6 +11,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * DeliveryPolicies의 Entity 입니다.
+ *
+ * @author : 김수빈
+ * @since : 1.0
+ */
 @Entity
 @Table(name = "DeliveryPolicies")
 @Getter
@@ -18,14 +24,29 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DeliveryPolicy {
 
+    /**
+     * 배송비 정책 id
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long deliveryPolicyId;
 
+    /**
+     * 배송비
+     */
     private BigDecimal deliveryFee;
+    /**
+     * 무료 배송 기준
+     */
     private BigDecimal freeDeliveryStandard;
 
+    /**
+     * 정책 활성화 여부
+     */
     private Boolean isActivated;
+    /**
+     * 정책 변경 날짜
+     */
     private LocalDateTime changedDate;
 
     public DeliveryPolicy(BigDecimal deliveryFee, BigDecimal freeDeliveryStandard) {

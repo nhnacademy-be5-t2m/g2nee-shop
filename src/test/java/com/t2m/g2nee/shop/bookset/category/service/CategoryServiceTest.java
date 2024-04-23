@@ -11,6 +11,7 @@ import com.t2m.g2nee.shop.bookset.category.repository.CategoryRepository;
 import com.t2m.g2nee.shop.exception.AlreadyExistException;
 import com.t2m.g2nee.shop.exception.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -45,12 +46,14 @@ class CategoryServiceTest {
     }
 
     @Test
+    @DisplayName("카테고리 저장 테스트")
     void testSave() {
         assertNotNull(category1.getCategoryId());
         assertNotNull(category2.getCategoryId());
     }
 
     @Test
+    @DisplayName("카테고리 저장 실패 테스트")
     void testSaveFail() {
         assertThrows(AlreadyExistException.class, () -> {
             categoryService.saveCategory(
@@ -60,6 +63,7 @@ class CategoryServiceTest {
     }
 
     @Test
+    @DisplayName("카테고리 수정 테스트")
     void testUpdate() {
         CategorySaveDto request = new CategorySaveDto("테스트카테고리4", "testCategory4", true, category2.getCategoryId());
         category3 = categoryService.updateCategory(category3.getCategoryId(), request);
@@ -71,6 +75,7 @@ class CategoryServiceTest {
     }
 
     @Test
+    @DisplayName("카테고리 수정 실패 테스트")
     void testUpdateFail() {
         assertThrows(NotFoundException.class, () -> {
             categoryService.updateCategory(1000000000L,
@@ -80,6 +85,7 @@ class CategoryServiceTest {
     }
 
     @Test
+    @DisplayName("카테고리 삭제-활성화 테스트")
     void testDelete_activeCategory() {
         categoryService.deleteCategory(category1.getCategoryId());
 
@@ -94,11 +100,13 @@ class CategoryServiceTest {
     }
 
     @Test
+    @DisplayName("카테고리 삭제 실패 테스트")
     void testDeleteFail() {
         assertThrows(NotFoundException.class, () -> categoryService.deleteCategory(1000000000L));
     }
 
     @Test
+    @DisplayName("카테고리 활성화 실패 테스트")
     void testActiveCategoryFail() {
 
         assertThrows(NotFoundException.class, () -> categoryService.activeCategory(1000000000L));

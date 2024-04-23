@@ -4,6 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 포장지 정보를 반환하기 윈한 객체입니다.
+ *
+ * @author : 김수빈
+ * @since : 1.0
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

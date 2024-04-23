@@ -71,9 +71,17 @@ public class TagService {
         return mapper.entityToDto(saveTag);
 
     }
+    /**
+     * 모든 태그를 조회하는 메서드
+     */
+    @Transactional(readOnly = true)
+    public List<TagDto.Response> getAllTag(){
+
+        return mapper.entitiesToDtos(tagRepository.findAllActivated());
+    }
 
     /**
-     * 출판사 페이지를 구성하는 메서드
+     * 태그 페이지를 구성하는 메서드
      *
      * @param page 현재 페이지
      * @return 페이징에 필요한 정보가 담긴 PageResponse 객체
@@ -83,7 +91,7 @@ public class TagService {
 
         int size = 10;
         Page<Tag> tagPage =
-                tagRepository.findAll(PageRequest.of(page - 1, size, Sort.by("tagName")));
+                tagRepository.findAllActivated(PageRequest.of(page - 1, size, Sort.by("tagName")));
 
         List<TagDto.Response> responses = mapper.entitiesToDtos(tagPage.getContent());
 

@@ -7,6 +7,7 @@ import com.t2m.g2nee.shop.bookset.categoryPath.domain.CategoryPath;
 import com.t2m.g2nee.shop.bookset.categoryPath.repository.CategoryPathRepository;
 import com.t2m.g2nee.shop.config.ElasticsearchConfig;
 import com.t2m.g2nee.shop.config.MapperConfig;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -27,12 +28,12 @@ class CategoryPathTest {
 
     @Autowired
     CategoryRepository categoryRepository;
+
     @Test
+    @DisplayName("CategoryPath Entity test")
     void test() {
         Category aCategory = new Category("조상카테고리", "aCategory", true);
-        Category dCategory = new Category();
-        dCategory.setCategoryName("후손카테고리");
-        dCategory.setCategoryEngName("dCategory");
+        Category dCategory = new Category("후손카테고리", "dCategory", true);
 
         categoryRepository.saveAndFlush(aCategory);
         categoryRepository.saveAndFlush(dCategory);
