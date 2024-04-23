@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since : 1.0
  */
 @RestController
-@RequestMapping("/shop/deliveryPolicy")
+@RequestMapping("/api/v1/shop/deliveryPolicies")
 public class DeliveryPolicyController {
 
     private final DeliveryPolicyService deliveryPolicyService;

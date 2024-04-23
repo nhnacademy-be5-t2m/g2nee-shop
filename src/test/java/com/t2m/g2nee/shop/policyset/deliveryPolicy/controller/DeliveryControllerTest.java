@@ -53,7 +53,7 @@ class DeliveryControllerTest {
 
         when(service.saveDeliveryPolicy(any(DeliveryPolicySaveDto.class))).thenReturn(deliveryPolicy);
 
-        mockMvc.perform(post("/shop/deliveryPolicy")
+        mockMvc.perform(post("/api/v1/shop/deliveryPolicies")
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
@@ -72,7 +72,7 @@ class DeliveryControllerTest {
 
         when(service.getDeliveryPolicy()).thenReturn(deliveryPolicy);
 
-        mockMvc.perform(get("/shop/deliveryPolicy/recentPolicy", 1L))
+        mockMvc.perform(get("/api/v1/shop/deliveryPolicies/recentPolicy", 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.deliveryPolicyId", equalTo(1)))
                 .andExpect(jsonPath("$.deliveryFee", equalTo(deliveryPolicy.getDeliveryFee())))
@@ -100,7 +100,7 @@ class DeliveryControllerTest {
 
         when(service.getAllDeliveryPolicy(anyInt())).thenReturn(deliveryPolicyPage);
 
-        mockMvc.perform(get("/shop/deliveryPolicy?page=1", 1L))
+        mockMvc.perform(get("/api/v1/shop/deliveryPolicies?page=1", 1L))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.data", hasSize(2)))

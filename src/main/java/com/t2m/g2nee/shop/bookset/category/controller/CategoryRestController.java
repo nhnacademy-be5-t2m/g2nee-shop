@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since : 1.0
  */
 @RestController
-@RequestMapping("/shop/categories")
+@RequestMapping("/api/v1/shop/categories")
 public class CategoryRestController {
 
     private final CategoryService service;

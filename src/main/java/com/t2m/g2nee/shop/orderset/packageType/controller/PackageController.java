@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since : 1.0
  */
 @RestController
-@RequestMapping("/shop/package")
+@RequestMapping("/api/v1/shop/packages")
 public class PackageController {
 
     private final PackageService packageService;

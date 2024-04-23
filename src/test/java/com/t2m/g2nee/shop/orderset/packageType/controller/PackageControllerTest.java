@@ -53,7 +53,7 @@ class PackageControllerTest {
 
         when(service.savePackage(any(PackageSaveDto.class))).thenReturn(packages);
 
-        mockMvc.perform(post("/shop/package")
+        mockMvc.perform(post("/api/v1/shop/packages")
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
@@ -71,7 +71,7 @@ class PackageControllerTest {
 
         when(service.updatePackage(anyLong(), any(PackageSaveDto.class))).thenReturn(packages);
 
-        mockMvc.perform(put("/shop/package/{packageId}", 1L)
+        mockMvc.perform(put("/api/v1/shop/packages/{packageId}", 1L)
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -87,7 +87,7 @@ class PackageControllerTest {
     void testDeletePackage() throws Exception {
         when(service.softDeletePackage(anyLong())).thenReturn(false);
 
-        mockMvc.perform(patch("/shop/package/delete/{packageId}", 1L))
+        mockMvc.perform(patch("/api/v1/shop/packages/delete/{packageId}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", equalTo(false)));
 
@@ -98,7 +98,7 @@ class PackageControllerTest {
     void testActivePackage() throws Exception {
         when(service.activatedPackage(anyLong())).thenReturn(true);
 
-        mockMvc.perform(patch("/shop/package/activate/{packageId}", 1L))
+        mockMvc.perform(patch("/api/v1/shop/packages/activate/{packageId}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", equalTo(true)));
     }
@@ -111,7 +111,7 @@ class PackageControllerTest {
 
         when(service.getPackage(anyLong())).thenReturn(packages);
 
-        mockMvc.perform(get("/shop/package/{packageId}", 1L))
+        mockMvc.perform(get("/api/v1/shop/packages/{packageId}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.packageId", equalTo(1)))
                 .andExpect(jsonPath("$.name", equalTo(packages.getName())))
@@ -137,7 +137,7 @@ class PackageControllerTest {
 
         when(service.getAllPackages(anyInt())).thenReturn(packagePage);
 
-        mockMvc.perform(get("/shop/package?page=1", 1))
+        mockMvc.perform(get("/api/v1/shop/packages?page=1", 1))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.data", hasSize(3)))

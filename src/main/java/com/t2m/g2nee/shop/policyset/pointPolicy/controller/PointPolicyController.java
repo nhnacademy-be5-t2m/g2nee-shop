@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since : 1.0
  */
 @RestController
-@RequestMapping("/shop/pointPolicy")
+@RequestMapping("/api/v1/shop/pointPolicies")
 public class PointPolicyController {
 
     private final PointPolicyService pointPolicyService;
