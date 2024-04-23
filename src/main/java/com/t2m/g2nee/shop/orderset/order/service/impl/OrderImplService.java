@@ -29,6 +29,7 @@ public class OrderImplService implements OrderService {
     private final PointPolicyRepository pointPolicyRepository;
     //private final CouponRepository couponRepository;
 
+
 //    @Override
 //    @Transactional
 //    public Long createOrder(OrderCreateRequestDto orderCreateRequestDto) {
@@ -47,6 +48,7 @@ public class OrderImplService implements OrderService {
 
     @Override
     public PageResponse<GetOrderListForAdminResponseDto> getALlOrderList(Pageable pageable) {
+        GetOrderListForAdminResponseDto orderListForAdminResponseDto = new GetOrderListForAdminResponseDto()
         Page<GetOrderListForAdminResponseDto> returnAdminList =
                 orderRepository.getAllOrderList(pageable);
         return new PageResponse<>(returnAdminList);

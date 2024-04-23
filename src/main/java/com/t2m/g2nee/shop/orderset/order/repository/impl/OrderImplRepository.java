@@ -2,12 +2,16 @@ package com.t2m.g2nee.shop.orderset.order.repository.impl;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
+import com.t2m.g2nee.shop.memberset.Customer.domain.QCustomer;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
+import com.t2m.g2nee.shop.orderset.order.domain.QOrder;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
 import com.t2m.g2nee.shop.orderset.order.repository.OrderCustomRepository;
+import com.t2m.g2nee.shop.orderset.orderDetail.domain.QOrderDetail;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import org.springframework.data.support.PageableExecutionUtils;
 
 /**
  * repository에서 querydsl 사용하기 위한 클래스
@@ -17,8 +21,9 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  */
 public class OrderImplRepository extends QuerydslRepositorySupport
         implements OrderCustomRepository {
-    Order order = new Order();
-
+    QOrder order = QOrder.order;
+    QCustomer customer = QCustomer.customer;
+    QOrderDetail orderDetail = QOrderDetail.orderDetail;
 
     public OrderImplRepository() {
         super(Order.class);
@@ -29,10 +34,17 @@ public class OrderImplRepository extends QuerydslRepositorySupport
     public Page<GetOrderListForAdminResponseDto> getAllOrderList(Pageable pageable) {
         JPQLQuery<GetOrderListForAdminResponseDto> queryAdmin = from(order)
                 .select(Projections.constructor(GetOrderListForAdminResponseDto.class,
-                        order.getOrderId(orderId),
-                        order.orderDate));
+                        order.orderId.as("orderId"),
+                        customer.customerId.as("customerId"),
+                        orderDetail.orderDetailId.as("orderDetailId"),
+                        order.orderDate.as("orderDate"),
+                        order.orderState.as("orderState"),
+                        order.orderAmount.as("orderAmount")));
 
-        return null;
+        JPQLQuery<Long> count = from(order)
+                .select(order.orderId.count());
+
+        return PageableExecutionUtils.getPage(queryAdmin.fetch(), pageable, count::fetchOne);
     }
 //
 //    @Override
