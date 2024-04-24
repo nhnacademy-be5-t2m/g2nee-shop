@@ -27,9 +27,8 @@ public class BookDto {
 
     private BookDto() {
     }
-
-    @Getter
     @Setter
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
@@ -64,8 +63,8 @@ public class BookDto {
 
     }
 
-    @Getter
     @Setter
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
@@ -121,16 +120,16 @@ public class BookDto {
         private Double scoreAverage;
     }
 
-    @Getter
     @Setter
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
     public static class statusResponse {
         private BookStatus status;
     }
-    @Getter
     @Setter
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
