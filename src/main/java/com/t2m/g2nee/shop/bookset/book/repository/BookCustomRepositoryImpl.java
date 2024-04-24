@@ -4,6 +4,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.t2m.g2nee.shop.bookset.book.domain.Book;
 import com.t2m.g2nee.shop.bookset.book.domain.QBook;
@@ -121,7 +122,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
      * @return List<BookDto.Response>
      */
     @Override
-    public Page<BookDto.ListResponse> getBookListByCategory(Long categoryId, Long memberId, Pageable pageable,
+    public Page<BookDto.ListResponse> getBookListByCategory(Long memberId, Long categoryId, Pageable pageable,
                                                             String sort) {
 
         QBook book = QBook.book;
@@ -133,22 +134,28 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
         QReview review = QReview.review;
         QBookLike bookLike = QBookLike.bookLike;
 
-        /*
-            검색할 카테고리의 모든 하위 카테고리 id를 함께 가져옵니다.
-            ex) 이과 / 수학 / 미분 일때 이과를 검색 시 이과, 수학, 미분 카테고리를 가진 모든 책이 조회됩니다.
-            ex) 수학만 검색 시 수학, 미분이 카테고리를 가진 책이 검색됩니다.
-         */
 
         // 정렬 조건
         OrderSpecifier<?> orderSpecifier = sorting(book, review, sort);
 
         // 요청으로 들어온 회원아이디와 조인한 테이블의 memberId가 같은 튜플은 isLiked를 true로 설정
-        BooleanExpression isLiked =
-                new CaseBuilder().when(bookLike.member.customerId.eq(memberId)).then(true).otherwise(false);
+
+        BooleanExpression isLiked;
+        if (memberId == null) {
+            isLiked = Expressions.asBoolean(false);
+        } else {
+            isLiked = new CaseBuilder().when(bookLike.member.customerId.eq(memberId)).then(true)
+                    .otherwise(false);
+        }
         // 리뷰가 없어서 평점이 null이면 0 아니면 평점으로 설정
         NumberExpression<Double>
                 score = new CaseBuilder().when(review.score.avg().isNull()).then(0D).otherwise(review.score.avg());
 
+          /*
+            검색할 카테고리의 모든 하위 카테고리 id를 함께 가져옵니다.
+            ex) 이과 / 수학 / 미분 일때 이과를 검색 시 이과, 수학, 미분 카테고리를 가진 모든 책이 조회됩니다.
+            ex) 수학만 검색 시 수학, 미분이 카테고리를 가진 책이 검색됩니다.
+         */
         List<BookDto.ListResponse> responseList =
                 from(book)
                         .innerJoin(publisher).on(book.publisher.publisherId.eq(publisher.publisherId))
@@ -208,8 +215,13 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
         QBookLike bookLike = QBookLike.bookLike;
 
         // 요청으로 들어온 회원아이디와 조인한 테이블의 memberId가 같은 튜플은 isLiked를 true로 설정
-        BooleanExpression isLiked =
-                new CaseBuilder().when(bookLike.member.customerId.eq(memberId)).then(true).otherwise(false);
+        BooleanExpression isLiked;
+        if (memberId == null) {
+            isLiked = Expressions.asBoolean(false);
+        } else {
+            isLiked = new CaseBuilder().when(bookLike.member.customerId.eq(memberId)).then(true)
+                    .otherwise(false);
+        }
         // 리뷰가 없어서 평점이 null이면 0 아니면 평점으로 설정
         NumberExpression<Double>
                 score = new CaseBuilder().when(review.score.avg().isNull()).then(0D).otherwise(review.score.avg());
@@ -309,8 +321,13 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
         // 정렬 조건
         OrderSpecifier<?> orderSpecifier = sorting(book, review, sort);
         // 요청으로 들어온 회원아이디와 조인한 테이블의 memberId가 같은 튜플은 isLiked를 true로 설정
-        BooleanExpression isLiked =
-                new CaseBuilder().when(bookLike.member.customerId.eq(memberId)).then(true).otherwise(false);
+        BooleanExpression isLiked;
+        if (memberId == null) {
+            isLiked = Expressions.asBoolean(false);
+        } else {
+            isLiked = new CaseBuilder().when(bookLike.member.customerId.eq(memberId)).then(true)
+                    .otherwise(false);
+        }
         // 리뷰가 없어서 평점이 null이면 0 아니면 평점으로 설정
         NumberExpression<Double>
                 score = new CaseBuilder().when(review.score.avg().isNull()).then(0D).otherwise(review.score.avg());

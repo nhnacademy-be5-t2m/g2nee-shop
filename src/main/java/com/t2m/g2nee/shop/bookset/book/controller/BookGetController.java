@@ -31,7 +31,7 @@ public class BookGetController {
 
     @GetMapping("/{bookId}")
     public ResponseEntity<BookDto.Response> getBookById(@PathVariable("bookId") Long bookId,
-                                                        @RequestParam("memberId") Long memberId) {
+                                                        @RequestParam(required = false) Long memberId) {
 
         BookDto.Response response = bookGetService.getBookDetail(memberId, bookId);
 

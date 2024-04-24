@@ -34,7 +34,8 @@ public class CategoryQueryRestController {
      * 카테고리를 계층화하여 반환하는 컨트롤러입니다.
      * @return ResponseEntity<List < CategoryHierarchyDto>>
      */
-    @CrossOrigin(origins = "http://localhost:8080")
+    //TODO : 나중에 지우기
+    @CrossOrigin(origins = "http://133.186.208.183:8100")
     @GetMapping
     public ResponseEntity<List<CategoryHierarchyDto>> getRootCategories() {
 
@@ -47,7 +48,7 @@ public class CategoryQueryRestController {
      * @param categoryId 카테고리 아이디
      */
     //TODO : 나중에 지우기
-    @CrossOrigin(origins = "http://localhost:8080")
+    @CrossOrigin(origins = "http://133.186.208.183:8100")
     @GetMapping("/{categoryId}/children")
     public ResponseEntity<List<CategoryHierarchyDto>> getChildCategories(@PathVariable("categoryId") Long categoryId){
 
