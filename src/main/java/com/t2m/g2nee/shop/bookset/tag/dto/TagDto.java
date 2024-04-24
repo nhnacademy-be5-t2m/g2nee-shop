@@ -13,8 +13,8 @@ public class TagDto {
     private TagDto() {
     }
 
-    @Getter
     @Setter
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
@@ -24,9 +24,8 @@ public class TagDto {
         private String tagName;
 
     }
-
-    @Getter
     @Setter
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder

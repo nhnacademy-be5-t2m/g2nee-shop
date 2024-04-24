@@ -13,8 +13,8 @@ public class PublisherDto {
     private PublisherDto() {
     }
 
-    @Getter
     @Setter
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
@@ -26,8 +26,8 @@ public class PublisherDto {
         private String publisherEngName;
     }
 
-    @Getter
     @Setter
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder

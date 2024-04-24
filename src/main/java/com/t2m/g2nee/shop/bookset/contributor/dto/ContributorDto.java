@@ -13,8 +13,8 @@ public class ContributorDto {
     private ContributorDto() {
     }
 
-    @Getter
     @Setter
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
@@ -26,9 +26,8 @@ public class ContributorDto {
         private String contributorEngName;
 
     }
-
-    @Getter
     @Setter
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
