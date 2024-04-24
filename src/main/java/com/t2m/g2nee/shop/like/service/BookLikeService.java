@@ -56,6 +56,7 @@ public class BookLikeService {
             return BookLikeDto.builder()
                     .bookId(saveBookLike.getBook().getBookId())
                     .memberId(saveBookLike.getMember().getCustomerId())
+                    .isLiked(true)
                     .build();
         } else {
 
@@ -63,7 +64,9 @@ public class BookLikeService {
             BookLike bookLike = optionalBookLike.get();
             bookLikeRepository.deleteById(bookLike.getBookLikeId());
 
-            return null;
+            return BookLikeDto.builder()
+                    .isLiked(false)
+                    .build();
         }
     }
 }
