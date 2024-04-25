@@ -98,7 +98,7 @@ public class ReviewService {
             // storage 사용을 위한 토큰을 발급합니다.
             String tokenId = authService.requestToken();
 
-            // 기존 이미지를 삭제합니다'
+            // 기존 이미지를 삭제합니다
             ReviewFile reviewFile = reviewFileRepository.findByReviewId(review.getReviewId());
             String imageUrl = reviewFile.getUrl();
             deleteImage(imageUrl, tokenId);
@@ -122,8 +122,18 @@ public class ReviewService {
                     .build();
         }
 
+
     /**
-     * 책에 대한 리뷰를 5개를 조회하는 메서드
+     * 리뷰 중복 작성을 막기 위해 해당하는 리뷰를 찾는 메서드
+     * @param memberId 회원 아이디
+     * @param bookId 책 아이디
+     * @return ReviewDto.Response
+     */
+    public ReviewDto.Response getReview(Long memberId, Long bookId){
+        return reviewRepository.getReview(memberId, bookId);
+    }
+    /**
+     * 책에 대한 리뷰를 5개씩 페이징 조회하는 메서드
      * @param bookId 책 아이디
      * @param page 페이지 번호
      * @return PageResponse<ReviewDto.Response>

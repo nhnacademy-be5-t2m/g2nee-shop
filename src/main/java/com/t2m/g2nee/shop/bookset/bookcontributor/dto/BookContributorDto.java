@@ -24,8 +24,8 @@ public class BookContributorDto {
     private BookContributorDto() {
     }
 
-    @Getter
     @Setter
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
@@ -35,9 +35,8 @@ public class BookContributorDto {
         private Book book;
         private Role role;
     }
-
-    @Getter
     @Setter
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder

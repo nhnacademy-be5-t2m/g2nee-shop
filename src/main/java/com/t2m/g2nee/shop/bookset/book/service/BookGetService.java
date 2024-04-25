@@ -7,7 +7,6 @@ import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -70,7 +69,7 @@ public class BookGetService {
         Pageable pageable = PageRequest.of(page-1, size);
 
         Page<BookDto.ListResponse> bookPage =
-                bookRepository.getBookListByCategory(categoryId, memberId, pageable, sort);
+                bookRepository.getBookListByCategory(memberId, categoryId, pageable, sort);
 
         return getPageResponse(page, bookPage);
     }

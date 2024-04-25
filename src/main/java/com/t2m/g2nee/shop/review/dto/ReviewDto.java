@@ -18,8 +18,8 @@ import org.json.JSONPropertyIgnore;
 public class ReviewDto {
 
     private ReviewDto(){}
-    @Getter
     @Setter
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
@@ -31,7 +31,6 @@ public class ReviewDto {
         private Long bookId;
         private Long memberId;
     }
-    @Getter
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor

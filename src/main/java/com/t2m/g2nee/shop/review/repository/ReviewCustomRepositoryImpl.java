@@ -81,4 +81,17 @@ public class ReviewCustomRepositoryImpl extends QuerydslRepositorySupport implem
 
         return new PageImpl<>(reviewList, pageable, count);
     }
+
+    @Override
+    public ReviewDto.Response getReview(Long memberId, Long bookId) {
+
+        QReview review = QReview.review;
+
+        return from(review)
+                .where(review.member.customerId.eq(memberId)
+                        .and(review.book.bookId.eq(bookId)))
+                .select(Projections.fields(ReviewDto.Response.class
+                ,review.reviewId))
+                .fetchOne();
+    }
 }
