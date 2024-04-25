@@ -54,7 +54,7 @@ public class OrderImplService implements OrderService {
         int size = 5;
         pageable = PageRequest.of(page - 1, size, Sort.by("createdAt"));
         Page<GetOrderListForAdminResponseDto> returnAdminList =
-                orderRepository.getAllOrderList(pageable);
+                orderRepository.getAllOrderList(pageable, page);
         PageResponse<GetOrderListForAdminResponseDto> pageResponse = new PageResponse<>();
         return pageResponse.getPageResponse(page, 4, returnAdminList);
     }

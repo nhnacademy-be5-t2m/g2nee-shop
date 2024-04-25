@@ -20,7 +20,7 @@ public interface OrderCustomRepository {
      * @param pageable paging
      * @return 전체 주문 반환
      */
-    Page<GetOrderListForAdminResponseDto> getAllOrderList(Pageable pageable);
+    Page<GetOrderListForAdminResponseDto> getAllOrderList(Pageable pageable, int page);
 //
 //    /**
 //     * 주문 상태별 주문목록 반환

@@ -1,9 +1,6 @@
 package com.t2m.g2nee.shop.orderset.orderdetail.service.impl;
 
-import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.memberset.Customer.repository.CustomerRepository;
-import com.t2m.g2nee.shop.orderset.orderdetail.dto.request.OrderDetailChangeRequestDto;
-import com.t2m.g2nee.shop.orderset.orderdetail.dto.response.GetOrderDetailResponseDto;
 import com.t2m.g2nee.shop.orderset.orderdetail.repository.OrderDetailRepository;
 import com.t2m.g2nee.shop.orderset.orderdetail.service.OrderDetailService;
 import lombok.RequiredArgsConstructor;
@@ -26,17 +23,17 @@ public class OrderDetailImplService implements OrderDetailService {
 //    public Long createOrderDetail(OrderDetailCreateRequestDto createRequestDto, Order order) {
 //        return null;
 //    }
+//
+//    @Override
+//    public GetOrderDetailResponseDto getOrderDetailById(Long orderDetailId) {
+//        GetOrderDetailResponseDto orderDetailResponseDto = orderDetailRepository.getOrderDetailById(orderDetailId)
+//                .orElseThrow(() -> new NotFoundException("존재하지 않습니다."));
+//        return orderDetailResponseDto;
+//    }
 
-    @Override
-    public GetOrderDetailResponseDto getOrderDetailById(Long orderDetailId) {
-        GetOrderDetailResponseDto orderDetailResponseDto = orderDetailRepository.getOrderDetailById(orderDetailId)
-                .orElseThrow(() -> new NotFoundException("존재하지 않습니다."));
-        return orderDetailResponseDto;
-    }
-
-    @Override
-    @Transactional
-    public OrderDetailChangeRequestDto changeOrderDetail(OrderDetailChangeRequestDto changeRequestDto) {
-        return null;
-    }
+//    @Override
+//    @Transactional
+//    public OrderDetailChangeRequestDto changeOrderDetail(OrderDetailChangeRequestDto changeRequestDto) {
+//        return null;
+//    }
 }
