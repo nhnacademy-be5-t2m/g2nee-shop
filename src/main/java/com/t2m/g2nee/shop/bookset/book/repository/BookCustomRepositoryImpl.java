@@ -234,7 +234,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                                 , isLiked.as("isLiked")
                                 , score.as("scoreAverage")
                         ))
-                        .groupBy(book, bookLike, publisher, review, bookFile, bookFile.url)
+                        .groupBy(book, bookLike, publisher, review)
                         .fetchOne();
         // 조회수 증가
         addViewCount(book, bookId);
