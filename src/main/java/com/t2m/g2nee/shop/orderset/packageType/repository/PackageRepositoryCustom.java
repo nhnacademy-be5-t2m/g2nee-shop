@@ -17,14 +17,16 @@ public interface PackageRepositoryCustom {
 
     /**
      * 포장지를 활성화합니다.
+     *
      * @param packageId 포장지 id
      */
     void activateByPackageId(Long packageId);
 
     /**
      * 포장지가 존재하면서 활성/비활성인지 확인합니다.
+     *
      * @param packageId 포장지 id
-     * @param active true일 경우 활성인지 확인, false인 경우 비활성인지 확인
+     * @param active    true일 경우 활성인지 확인, false인 경우 비활성인지 확인
      * @return boolean
      */
     boolean getExistsByPackageIdAndIsActivated(Long packageId, boolean active);

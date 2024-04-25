@@ -35,6 +35,7 @@ public class BookContributorDto {
         private Book book;
         private Role role;
     }
+
     @Setter
     @Getter
     @NoArgsConstructor

@@ -15,6 +15,7 @@ public interface PackageRepository extends JpaRepository<PackageType, Long>, Pac
 
     /**
      * 같은 이름을 가진 포장지가 있는지 확인합니다.
+     *
      * @param name 포장지 이름
      * @return boolean
      */
@@ -24,6 +25,7 @@ public interface PackageRepository extends JpaRepository<PackageType, Long>, Pac
 
     /**
      * 모든 포장지 정보를 페이징 처리하여 반환합니다.
+     *
      * @param pageable 페이지 객체
      * @return Page<PackageType>
      */

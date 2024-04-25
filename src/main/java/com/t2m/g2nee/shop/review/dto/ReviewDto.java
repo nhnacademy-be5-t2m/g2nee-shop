@@ -17,13 +17,15 @@ import org.json.JSONPropertyIgnore;
  */
 public class ReviewDto {
 
-    private ReviewDto(){}
+    private ReviewDto() {
+    }
+
     @Setter
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class Request{
+    public static class Request {
 
         private Long reviewId;
         private String content;
@@ -31,12 +33,13 @@ public class ReviewDto {
         private Long bookId;
         private Long memberId;
     }
+
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class Response{
+    public static class Response {
 
         private Long reviewId;
         private String content;

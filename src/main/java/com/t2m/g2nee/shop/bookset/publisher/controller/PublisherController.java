@@ -86,7 +86,8 @@ public class PublisherController {
 
     /**
      * 출판사 리스트를 보여주는 컨트롤러 입니다
-     * @return ResponseEntity<List<PublisherDto.Response>>
+     *
+     * @return ResponseEntity<List < PublisherDto.Response>>
      */
     @GetMapping("/list")
     public ResponseEntity<List<PublisherDto.Response>> getPublishers() {

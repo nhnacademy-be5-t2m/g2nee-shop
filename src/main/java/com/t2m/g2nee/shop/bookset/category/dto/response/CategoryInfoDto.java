@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * 카테고리 기본 정보를 반환하는 객체
+ *
  * @author : 김수빈
  * @since : 1.0
  */

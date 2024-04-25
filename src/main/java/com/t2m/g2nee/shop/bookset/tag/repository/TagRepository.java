@@ -21,5 +21,4 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
     List<Tag> findAllActivated();
 
 
-
 }

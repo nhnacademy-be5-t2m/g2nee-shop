@@ -73,6 +73,7 @@ public class ContributorController {
 
     /**
      * 기여자 리스트를 보여주는 컨트롤러 입니다
+     *
      * @return 기여자 정보들과 페이지 정보
      */
     @GetMapping("/list")

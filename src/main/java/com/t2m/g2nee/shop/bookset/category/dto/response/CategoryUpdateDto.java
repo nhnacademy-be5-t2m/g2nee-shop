@@ -5,6 +5,7 @@ import lombok.Getter;
 
 /**
  * 카테고리의 상위 카테고리를 포함한 정보를 반환하는 객체입니다
+ *
  * @author : 김수빈
  * @since : 1.0
  */

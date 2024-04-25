@@ -83,7 +83,8 @@ public class ReviewService {
 
     /**
      * 리뷰 수정 메서드
-     * @param image 이미지
+     *
+     * @param image   이미지
      * @param request 리뷰 정보 객체
      * @return ReviewDto.Response
      */
@@ -107,48 +108,51 @@ public class ReviewService {
             // storage에 새 이미지를 업로드합니다
             uploadImage(image, review, tokenId, review.getBook().getEngTitle(), review.getMember().getCustomerId());
         }
-            Optional.of(request.getScore()).ifPresent(review::setScore);
-            Optional.ofNullable(request.getContent()).ifPresent(review::setContent);
+        Optional.of(request.getScore()).ifPresent(review::setScore);
+        Optional.ofNullable(request.getContent()).ifPresent(review::setContent);
 
-            Review modifiedReview = reviewRepository.save(review);
+        Review modifiedReview = reviewRepository.save(review);
 
-            return ReviewDto.Response.builder()
-                    .reviewId(modifiedReview.getReviewId())
-                    .score(modifiedReview.getScore())
-                    .content(modifiedReview.getContent())
-                    .nickname(modifiedReview.getMember().getNickname())
-                    .createdAt(modifiedReview.getCreatedAt())
-                    .modifiedAt(modifiedReview.getModifiedAt())
-                    .build();
-        }
+        return ReviewDto.Response.builder()
+                .reviewId(modifiedReview.getReviewId())
+                .score(modifiedReview.getScore())
+                .content(modifiedReview.getContent())
+                .nickname(modifiedReview.getMember().getNickname())
+                .createdAt(modifiedReview.getCreatedAt())
+                .modifiedAt(modifiedReview.getModifiedAt())
+                .build();
+    }
 
 
     /**
      * 리뷰 중복 작성을 막기 위해 해당하는 리뷰를 찾는 메서드
+     *
      * @param memberId 회원 아이디
-     * @param bookId 책 아이디
+     * @param bookId   책 아이디
      * @return ReviewDto.Response
      */
-    public ReviewDto.Response getReview(Long memberId, Long bookId){
+    public ReviewDto.Response getReview(Long memberId, Long bookId) {
         return reviewRepository.getReview(memberId, bookId);
     }
+
     /**
      * 책에 대한 리뷰를 5개씩 페이징 조회하는 메서드
+     *
      * @param bookId 책 아이디
-     * @param page 페이지 번호
+     * @param page   페이지 번호
      * @return PageResponse<ReviewDto.Response>
      */
     @Transactional(readOnly = true)
-    public PageResponse<ReviewDto.Response> getReviews(Long bookId, int page){
+    public PageResponse<ReviewDto.Response> getReviews(Long bookId, int page) {
 
         int size = 5;
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdAt"));
 
-        Page<ReviewDto.Response> reviewPage = reviewRepository.getReviews(bookId,pageable);
+        Page<ReviewDto.Response> reviewPage = reviewRepository.getReviews(bookId, pageable);
 
         PageResponse<ReviewDto.Response> pageResponse = new PageResponse<>();
 
-        return pageResponse.getPageResponse(page,4,reviewPage);
+        return pageResponse.getPageResponse(page, 4, reviewPage);
 
     }
 
@@ -177,7 +181,6 @@ public class ReviewService {
     }
 
 
-
     /**
      * 리뷰연관 관계를 설정하는 메서드
      *
@@ -198,7 +201,8 @@ public class ReviewService {
 
     /**
      * 이미지 삭제 메서드
-     * @param url 이미지 url
+     *
+     * @param url     이미지 url
      * @param tokenId storage tokenId
      */
     private void deleteImage(String url, String tokenId) {

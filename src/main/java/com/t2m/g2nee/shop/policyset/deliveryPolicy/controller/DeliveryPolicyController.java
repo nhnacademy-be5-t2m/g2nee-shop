@@ -33,6 +33,7 @@ public class DeliveryPolicyController {
 
     /**
      * 배송비 정책을 저장합니다.
+     *
      * @param request 배송비 정책 저장 객체
      * @return ResponseEntity<DeliveryPolicyInfoDto>
      */
@@ -45,6 +46,7 @@ public class DeliveryPolicyController {
 
     /**
      * 현재 설정된 배송비 정책을 보여줍니다.
+     *
      * @return ResponseEntity<DeliveryPolicyInfoDto>
      */
     @GetMapping("/recentPolicy")
@@ -55,6 +57,7 @@ public class DeliveryPolicyController {
 
     /**
      * 배송비 정책 기록을 페이징 처리하여 보여줍니다.
+     *
      * @param page 현재 페이지
      * @return ResponseEntity<PageResponse < DeliveryPolicyInfoDto>>
      */

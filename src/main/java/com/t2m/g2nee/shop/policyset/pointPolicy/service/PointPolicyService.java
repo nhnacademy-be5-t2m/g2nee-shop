@@ -19,14 +19,16 @@ public interface PointPolicyService {
 
     /**
      * 포인트 정책을 수정합니다.
+     *
      * @param pointPolicyId 포인트 정책 id
-     * @param request 저장할 객체
+     * @param request       저장할 객체
      * @return PointPolicyInfoDto
      */
     PointPolicyInfoDto updatePointPolicy(Long pointPolicyId, PointPolicySaveDto request);
 
     /**
      * 포인트 정책을 삭제 합니다.
+     *
      * @param pointPolicyId 포인트 정책 id
      * @return boolean
      */
@@ -34,6 +36,7 @@ public interface PointPolicyService {
 
     /**
      * 특정 포인트 정책을 가져옵니다.
+     *
      * @param pointPolicyId 포인트 정책 id
      * @return PointPolicyInfoDto
      */
@@ -41,6 +44,7 @@ public interface PointPolicyService {
 
     /**
      * 모든 포인트 정책을 페이징 처리하여 반환합니다.
+     *
      * @param page 현재 페이지
      * @return PageResponse<PointPolicyInfoDto>
      */

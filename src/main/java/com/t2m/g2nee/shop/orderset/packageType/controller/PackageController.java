@@ -36,6 +36,7 @@ public class PackageController {
 
     /**
      * 포장지를 저장하는 컨트롤러입니다.
+     *
      * @param request 포장지 저장 객체
      * @return ResponseEntity<PackageInfoDto>
      */
@@ -47,8 +48,9 @@ public class PackageController {
 
     /**
      * 포장지를 수정하는 컨트롤러입니다.
+     *
      * @param packageId 수정할 포장지 id
-     * @param request 포장지 수정 객체
+     * @param request   포장지 수정 객체
      * @return ResponseEntity<PackageInfoDto>
      */
     @PutMapping("/{packageId}")
@@ -60,6 +62,7 @@ public class PackageController {
 
     /**
      * 특정 포장지 하나를 얻는 컨트롤러 입니다.
+     *
      * @param packageId 포장지 id
      * @return ResponseEntity<PackageInfoDto>
      */
@@ -71,6 +74,7 @@ public class PackageController {
 
     /**
      * 모든 포장지를 페이징하여 반환하는 컨트롤러 입니다.
+     *
      * @param page 현재 페이지
      * @return ResponseEntity<PageResponse < PackageInfoDto>>
      */
@@ -82,6 +86,7 @@ public class PackageController {
 
     /**
      * 포장지를 soft delete하는 컨트롤러 입니다.
+     *
      * @param packageId 포장지 id
      * @return ResponseEntity<Boolean> 성공 시 false 반환
      */

@@ -14,7 +14,7 @@ import org.mapstruct.Mapper;
 @Mapper
 public interface PublisherMapper {
 
-     PublisherDto.Response entityToDto(Publisher publisher);
+    PublisherDto.Response entityToDto(Publisher publisher);
 
-     List<PublisherDto.Response> entitiesToDtos(List<Publisher> publisherList);
+    List<PublisherDto.Response> entitiesToDtos(List<Publisher> publisherList);
 }

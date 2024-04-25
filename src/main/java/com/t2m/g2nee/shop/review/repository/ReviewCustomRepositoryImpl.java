@@ -51,7 +51,8 @@ public class ReviewCustomRepositoryImpl extends QuerydslRepositorySupport implem
 
     /**
      * 책의 리뷰 정보를 조회하는 메서드
-     * @param bookId 책아이디
+     *
+     * @param bookId   책아이디
      * @param pageable 페이징 객체
      * @return Page<ReviewDto.Response>
      */
@@ -67,12 +68,12 @@ public class ReviewCustomRepositoryImpl extends QuerydslRepositorySupport implem
                 .innerJoin(reviewFile).on(review.reviewId.eq(reviewFile.review.reviewId))
                 .where(review.book.bookId.eq(bookId))
                 .select(Projections.fields(ReviewDto.Response.class
-                ,review.reviewId
-                ,review.content
-                ,review.score
-                ,reviewFile.url.as("imageUrl")
-                ,review.createdAt
-                ,review.modifiedAt))
+                        , review.reviewId
+                        , review.content
+                        , review.score
+                        , reviewFile.url.as("imageUrl")
+                        , review.createdAt
+                        , review.modifiedAt))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -91,7 +92,7 @@ public class ReviewCustomRepositoryImpl extends QuerydslRepositorySupport implem
                 .where(review.member.customerId.eq(memberId)
                         .and(review.book.bookId.eq(bookId)))
                 .select(Projections.fields(ReviewDto.Response.class
-                ,review.reviewId))
+                        , review.reviewId))
                 .fetchOne();
     }
 }

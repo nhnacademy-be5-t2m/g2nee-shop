@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * CategoryPaths의 entity입니다.
+ *
  * @author : 김수빈
  * @since : 1.0
  */
