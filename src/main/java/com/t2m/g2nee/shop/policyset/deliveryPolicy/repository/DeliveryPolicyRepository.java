@@ -16,6 +16,7 @@ public interface DeliveryPolicyRepository extends JpaRepository<DeliveryPolicy, 
 
     /**
      * 모든 배송비 정책을 페이징 처리하여 반환합니다.
+     *
      * @param pageable 페이징 객체
      * @return Page<DeliveryPolicy>
      */
@@ -23,6 +24,7 @@ public interface DeliveryPolicyRepository extends JpaRepository<DeliveryPolicy, 
 
     /**
      * 현제 활성중인 배송비 정책을 가져옵니다.
+     *
      * @param isActivated 정책 활성화 여부
      * @return Optional<DeliveryPolicy>
      */

@@ -71,7 +71,8 @@ public class BookMgmtService {
      * @param details   도서 세부 이미지 파일
      * @return 등록한 책 정보 응답 객체
      */
-    public BookDto.Response registerBook(BookDto.Request request, MultipartFile thumbnail, List<MultipartFile> details) {
+    public BookDto.Response registerBook(BookDto.Request request, MultipartFile thumbnail,
+                                         List<MultipartFile> details) {
 
 
         // 요청을 Book 엔티티로 변경합니다.
@@ -178,7 +179,7 @@ public class BookMgmtService {
                                 .orElseThrow(() -> new NotFoundException("출판사 정보가 없습니다."));
                         book.setPublisher(publisher);
                     });
-            if(!request.getContributorIdList().isEmpty()) {
+            if (!request.getContributorIdList().isEmpty()) {
                 Optional.of(request.getContributorIdList())
                         .ifPresent(contributorIdList -> {
                             bookContributorRepository.deleteByBookId(bookId);
@@ -186,7 +187,7 @@ public class BookMgmtService {
                         });
             }
 
-            if(!request.getCategoryIdList().isEmpty()) {
+            if (!request.getCategoryIdList().isEmpty()) {
                 Optional.of(request.getCategoryIdList())
                         .ifPresent(contributorIdList -> {
                             bookCategoryRepository.deleteByBookId(bookId);
@@ -194,7 +195,7 @@ public class BookMgmtService {
                         });
             }
 
-            if(!request.getTagIdList().isEmpty()) {
+            if (!request.getTagIdList().isEmpty()) {
                 Optional.of(request.getTagIdList())
                         .ifPresent(tagNameList -> {
                             bookTagRepository.deleteByBookId(bookId);
@@ -259,7 +260,7 @@ public class BookMgmtService {
      * 책 등록 시 카테고리 연관관계를 설정하는 메서드 입니다.
      *
      * @param categoryIdList 카테고리 이름 목록
-     * @param book             책 객체
+     * @param book           책 객체
      */
     public void saveBookCategory(List<Long> categoryIdList, Book book) {
         for (Long categoryId : categoryIdList) {
@@ -277,7 +278,7 @@ public class BookMgmtService {
     /**
      * 책 등록 시 태그에 대한 설정을 하는 메서드 입니다.
      *
-     * @param book        책 객체
+     * @param book      책 객체
      * @param tagIdList 태그 이름 목록
      */
     public void saveBookTag(Book book, List<Long> tagIdList) {
@@ -321,7 +322,7 @@ public class BookMgmtService {
     /**
      * 책 등록 시 기여자와 역할에 대한 설정을 하는 메서드 입니다.
      *
-     * @param book                책 객체
+     * @param book              책 객체
      * @param contributorIdList 기여자 아이디 리스트
      * @param roleIdList        역할 아이디 리스트
      */

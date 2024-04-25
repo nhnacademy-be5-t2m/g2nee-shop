@@ -71,11 +71,12 @@ public class TagService {
         return mapper.entityToDto(saveTag);
 
     }
+
     /**
      * 모든 태그를 조회하는 메서드
      */
     @Transactional(readOnly = true)
-    public List<TagDto.Response> getAllTag(){
+    public List<TagDto.Response> getAllTag() {
 
         return mapper.entitiesToDtos(tagRepository.findAllActivated());
     }

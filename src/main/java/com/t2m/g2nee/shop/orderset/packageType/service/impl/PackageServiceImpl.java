@@ -126,6 +126,7 @@ public class PackageServiceImpl implements PackageService {
 
     /**
      * PackageType 객체를 PackageInfoDto로 변환
+     *
      * @param packageType
      * @return PackageInfoDto
      */
@@ -136,6 +137,7 @@ public class PackageServiceImpl implements PackageService {
 
     /**
      * PackageSaveDto객체를 PackageType으로 변환
+     *
      * @param packageSaveDto
      * @return PackageType
      */

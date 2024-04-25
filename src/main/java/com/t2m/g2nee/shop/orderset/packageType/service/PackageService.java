@@ -14,6 +14,7 @@ public interface PackageService {
 
     /**
      * 포장지를 저장합니다.
+     *
      * @param request 포장지 저장 객체
      * @return PackageInfoDto
      */
@@ -21,14 +22,16 @@ public interface PackageService {
 
     /**
      * 포장지를 수정합니다.
+     *
      * @param packageId 포장지 id
-     * @param request 포장지 수정 객체
+     * @param request   포장지 수정 객체
      * @return PackageInfoDto
      */
     PackageInfoDto updatePackage(Long packageId, PackageSaveDto request);
 
     /**
      * 하나의 포장지를 얻어옵니다.
+     *
      * @param packageId 포장지 id
      * @return PackageInfoDto
      */
@@ -36,6 +39,7 @@ public interface PackageService {
 
     /**
      * 모든 포장지를 페이징처리하여 반환합니다.
+     *
      * @param page 현재 페이지
      * @return PageResponse<PackageInfoDto>
      */
@@ -43,6 +47,7 @@ public interface PackageService {
 
     /**
      * 포장지를 soft delete합니다.
+     *
      * @param packageId 포장지 id
      * @return boolean
      */
@@ -50,6 +55,7 @@ public interface PackageService {
 
     /**
      * 비활성화인 포장지를 활성화합니다.
+     *
      * @param packageId 포장지 id
      * @return boolean
      */

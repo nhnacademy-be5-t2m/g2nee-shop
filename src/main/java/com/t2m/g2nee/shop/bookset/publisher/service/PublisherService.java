@@ -73,6 +73,7 @@ public class PublisherService {
 
     /**
      * 모든 출판사를 조회하는 메서드
+     *
      * @return List<PublisherDto.Response>
      */
     @Transactional(readOnly = true)

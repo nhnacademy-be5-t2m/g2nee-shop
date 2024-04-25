@@ -7,14 +7,16 @@ import org.springframework.data.domain.Pageable;;
 
 public interface BookCustomRepository {
 
-     List<BookDto.ListResponse> getNewBookList();
+    List<BookDto.ListResponse> getNewBookList();
 
-     Page<BookDto.ListResponse> getAllBook(Pageable pageable);
+    Page<BookDto.ListResponse> getAllBook(Pageable pageable);
 
-     Page<BookDto.ListResponse> getBookListByCategory(Long memberId, Long categoryId, Pageable pageable,String sort);
+    Page<BookDto.ListResponse> getBookListByCategory(Long memberId, Long categoryId, Pageable pageable, String sort);
 
-     BookDto.Response getBookDetail(Long memberId,Long bookId);
+    BookDto.Response getBookDetail(Long memberId, Long bookId);
 
-     Page<BookDto.ListResponse> getBooksByElasticSearchAndCategory(Long memberId,Long categoryId, String keyword,Pageable pageable,String sort);
-     List<BookDto.ListResponse> getRecommendBooks(List<Long> categoryIdList, Long bookId);
+    Page<BookDto.ListResponse> getBooksByElasticSearchAndCategory(Long memberId, Long categoryId, String keyword,
+                                                                  Pageable pageable, String sort);
+
+    List<BookDto.ListResponse> getRecommendBooks(List<Long> categoryIdList, Long bookId);
 }

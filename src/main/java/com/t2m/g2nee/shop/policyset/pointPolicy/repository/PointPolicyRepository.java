@@ -15,7 +15,8 @@ public interface PointPolicyRepository extends JpaRepository<PointPolicy, Long>,
 
     /**
      * 포인트 정책의 이름이 같으면서 활성화 되어 있는지 확인하는 메소드입니다.
-     * @param policyName 포인트 정책 이름
+     *
+     * @param policyName  포인트 정책 이름
      * @param isActivated 활성화 여부
      * @return boolean
      */
@@ -32,6 +33,7 @@ public interface PointPolicyRepository extends JpaRepository<PointPolicy, Long>,
 
     /**
      * 모든 포인트 정책을 페이징처리하여 반환합니다.
+     *
      * @param pageable 페이징 객체
      * @return Page<PointPolicy>
      */

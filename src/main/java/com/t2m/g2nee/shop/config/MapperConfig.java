@@ -50,8 +50,9 @@ public class MapperConfig {
 
         return new RoleMapperImpl();
     }
+
     @Bean
-    public PublisherMapper publisherMapper(){
+    public PublisherMapper publisherMapper() {
         return new PublisherMapperImpl();
     }
 

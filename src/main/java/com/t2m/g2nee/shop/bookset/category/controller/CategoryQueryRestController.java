@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 카테고리 조회를 위한 컨트롤러 입니다.
+ *
  * @author : 김수빈
  * @since : 1.0
  */
@@ -32,6 +33,7 @@ public class CategoryQueryRestController {
 
     /**
      * 카테고리를 계층화하여 반환하는 컨트롤러입니다.
+     *
      * @return ResponseEntity<List < CategoryHierarchyDto>>
      */
     //TODO : 나중에 지우기
@@ -45,12 +47,13 @@ public class CategoryQueryRestController {
 
     /**
      * 카테고리의 자식 카테고리를 가져오는 컨트롤러
+     *
      * @param categoryId 카테고리 아이디
      */
     //TODO : 나중에 지우기
     @CrossOrigin(origins = "http://133.186.208.183:8100")
     @GetMapping("/{categoryId}/children")
-    public ResponseEntity<List<CategoryHierarchyDto>> getChildCategories(@PathVariable("categoryId") Long categoryId){
+    public ResponseEntity<List<CategoryHierarchyDto>> getChildCategories(@PathVariable("categoryId") Long categoryId) {
 
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
                 .body(service.getCategory(categoryId).getChildren());
@@ -58,6 +61,7 @@ public class CategoryQueryRestController {
 
     /**
      * 하나의 카테고리를 반환하는 컨트롤러 입니다.
+     *
      * @param categoryId 카테고리 id
      * @return ResponseEntity<CategoryUpdateDto>
      */
@@ -70,6 +74,7 @@ public class CategoryQueryRestController {
 
     /**
      * 카테고리 이름으로 검색하고, 그 결과들을 페이징처리 하여 반환하는 컨트롤러입니다.
+     *
      * @param name 검색할 이름
      * @param page 현재 페이지
      * @return ResponseEntity<PageResponse < CategoryInfoDto>>

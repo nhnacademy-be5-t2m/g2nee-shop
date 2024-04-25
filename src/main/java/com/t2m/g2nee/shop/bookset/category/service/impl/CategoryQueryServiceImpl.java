@@ -69,7 +69,7 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
                 .map(this::convertToCategoryHierarchyDto)
                 .collect(Collectors.toList());
 
-        for(CategoryHierarchyDto rootCategory:rootCategories){
+        for (CategoryHierarchyDto rootCategory : rootCategories) {
             List<CategoryHierarchyDto> subCategories = getSubCategories(rootCategory.getCategoryId());
             rootCategory.setChildren(subCategories);
             //하위 카테고리도 자식 설정
@@ -80,6 +80,7 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
 
     /**
      * 카테고리 계층 설정
+     *
      * @param categories 계층 설정할 카테고리
      */
     public void setHierarchy(List<CategoryHierarchyDto> categories) {

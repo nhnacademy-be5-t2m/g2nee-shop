@@ -36,6 +36,7 @@ public class PointPolicyController {
 
     /**
      * 포인트 정책을 저장합니다.
+     *
      * @param request 포인트 정책 저장 객체
      * @return ResponseEntity<PointPolicyInfoDto>
      */
@@ -47,8 +48,9 @@ public class PointPolicyController {
 
     /**
      * 포인트 정책을 수정합니다.
+     *
      * @param pointPolicyId 수정할 포인트 정책 id
-     * @param request 포인트 정책 수정 객체
+     * @param request       포인트 정책 수정 객체
      * @return ResponseEntity<PointPolicyInfoDto>
      */
     @PutMapping("/{pointPolicyId}")
@@ -60,6 +62,7 @@ public class PointPolicyController {
 
     /**
      * 포인트 정책을 삭제 합니다.
+     *
      * @param pointPolicyId 포인트 정책 id
      * @return ResponseEntity<Boolean> 성공시 false를 반환합니다.
      */
@@ -71,6 +74,7 @@ public class PointPolicyController {
 
     /**
      * 한 포인트 정책을 반환합니다.
+     *
      * @param pointPolicyId 포인트 정책 id
      * @return ResponseEntity<PointPolicyInfoDto>
      */
@@ -82,6 +86,7 @@ public class PointPolicyController {
 
     /**
      * 모든 포인트 정책을 페이징 하여 반환합니다.
+     *
      * @param page 현재 페이지
      * @return ResponseEntity<PageResponse < PointPolicyInfoDto>>
      */
