@@ -8,4 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface BookLikeRepository extends JpaRepository<BookLike,Long> {
     @Query("SELECT bl FROM BookLike bl WHERE bl.book.bookId = :bookId AND bl.member.customerId = :memberId")
     Optional<BookLike> findBookLike(Long memberId, Long bookId);
+
+    @Query("SELECT count(*) FROM BookLike bl WHERE bl.member.customerId = :memberId")
+    Long getMemberLikesNum(Long memberId);
 }

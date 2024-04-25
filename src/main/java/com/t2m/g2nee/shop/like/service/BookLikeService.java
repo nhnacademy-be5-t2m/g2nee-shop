@@ -30,6 +30,7 @@ public class BookLikeService {
 
     /**
      * 책에 좋아요를 설정하는 메서드
+     *
      * @param request 책과 회원 정보가 아이디가 담긴 객체
      * @return BookLikeDto
      */
@@ -41,10 +42,11 @@ public class BookLikeService {
         Book book = bookRepository.findById(request.getBookId())
                 .orElseThrow(() -> new NotFoundException("책 정보가 없습니다."));
 
-       Optional<BookLike> optionalBookLike = bookLikeRepository.findBookLike(request.getMemberId(), request.getBookId());
+        Optional<BookLike> optionalBookLike =
+                bookLikeRepository.findBookLike(request.getMemberId(), request.getBookId());
 
-       // 동일한 좋아요가 없으면 생성
-        if(optionalBookLike.isEmpty()) {
+        // 동일한 좋아요가 없으면 생성
+        if (optionalBookLike.isEmpty()) {
 
             BookLike bookLike = BookLike.builder()
                     .book(book)
@@ -68,5 +70,16 @@ public class BookLikeService {
                     .isLiked(false)
                     .build();
         }
+    }
+
+    /**
+     * 회원 좋아요 개수를 조회하는 메서드
+     * @param memberId 회원 아이디
+     * @return Long
+     */
+
+    public Long getMemberLikesNum(Long memberId) {
+
+       return bookLikeRepository.getMemberLikesNum(memberId);
     }
 }

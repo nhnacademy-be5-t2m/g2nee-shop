@@ -179,7 +179,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                                 , isLiked.as("isLiked")
                                 , review.count().as("reviewCount")
                                 , score.as("scoreAverage")))
-                        .groupBy(book, bookFile, publisher, bookLike)
+                        .groupBy(book, bookFile, publisher, bookLike, bookFile.url)
                         // 정렬 조건에 따라 리스트 반환
                         .orderBy(orderSpecifier)
                         .offset(pageable.getOffset())
@@ -234,7 +234,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                                 , isLiked.as("isLiked")
                                 , score.as("scoreAverage")
                         ))
-                        .groupBy(book,bookLike,publisher,review)
+                        .groupBy(book, bookLike, publisher, review, bookFile, bookFile.url)
                         .fetchOne();
         // 조회수 증가
         addViewCount(book, bookId);
@@ -336,7 +336,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                                 , isLiked.as("isLiked")
                                 , review.count().as("reviewCount")
                                 , score.as("scoreAverage")))
-                        .groupBy(book, bookFile, publisher, bookLike)
+                        .groupBy(book, bookFile, publisher, bookLike, bookFile.url)
                         // 정렬 조건에 따라 리스트 반환
                         .orderBy(orderSpecifier)
                         .offset(pageable.getOffset())
