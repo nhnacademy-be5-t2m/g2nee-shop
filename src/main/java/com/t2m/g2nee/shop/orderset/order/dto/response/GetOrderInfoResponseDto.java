@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
@@ -15,6 +16,7 @@ import lombok.Getter;
  * @since 1.0
  */
 @Getter
+@AllArgsConstructor
 public class GetOrderInfoResponseDto {
     private final Long orderId;
     private final String orderNumber;
@@ -34,6 +36,8 @@ public class GetOrderInfoResponseDto {
     private final Long couponId;
     private List<GetOrderDetailListForOrderResponseDto> orderDetails = new ArrayList<>();
 
+    //todo: 주문 이름 (xxx 외 n 건) 추가
+    private String orderName;
 
     public GetOrderInfoResponseDto(Long orderId, String orderNumber, Timestamp orderDate, Timestamp deliveryWishDate,
                                    BigDecimal deliveryFee, Order.OrderState orderState, BigDecimal netAmount,

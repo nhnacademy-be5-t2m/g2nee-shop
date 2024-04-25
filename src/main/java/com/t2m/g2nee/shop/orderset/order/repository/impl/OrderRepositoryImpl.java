@@ -4,10 +4,12 @@ import com.querydsl.core.types.Projections;
 import com.t2m.g2nee.shop.memberset.Customer.domain.QCustomer;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import com.t2m.g2nee.shop.orderset.order.domain.QOrder;
+import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
 import com.t2m.g2nee.shop.orderset.order.repository.OrderCustomRepository;
 import com.t2m.g2nee.shop.orderset.orderdetail.domain.QOrderDetail;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -32,25 +34,30 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
 
 
     @Override
-    public Page<GetOrderListForAdminResponseDto> getAllOrderList(Pageable pageable, int page) {
+    public Page<GetOrderListForAdminResponseDto> getAllOrderList(Pageable pageable) {
 
         List<GetOrderListForAdminResponseDto> queryAdmin = from(order)
                 .innerJoin(customer).on(order.customer.customerId.eq(customer.customerId))
-                .innerJoin(orderDetail).on(order.orderId.eq(orderDetail.order.orderId))
                 .select(Projections.fields(GetOrderListForAdminResponseDto.class,
                         order.orderId,
                         customer.customerId,
-                        orderDetail.orderDetailId,
                         order.orderDate,
                         order.orderState,
-                        order.orderAmount)).fetch();
+                        order.orderAmount,
+                        order.receiverName,
+                        order.receiverPhoneNumber,
+                        order.receiveAddress,
+                        order.detailAddress,
+                        order.zipcode,
+                        order.message)).fetch();
 
         Long count = from(order)
                 .select(order.orderId.count()).fetchOne();
 
         return new PageImpl<>(queryAdmin, pageable, count);
     }
-//
+
+    //
 //    @Override
 //    public Page<GetOrderListForAdminResponseDto> getOrderListByState(Pageable pageable, Order.OrderState orderState) {
 //        return null;
@@ -63,13 +70,13 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
 //        return null;
 //    }
 //
-//    @Override
-//    public Optional<GetOrderInfoResponseDto> getOrderInfoById(Long orderId) {
-//        return Optional.empty();
-//    }
-//
-//    @Override
-//    public Optional<GetOrderInfoResponseDto> getOrderInfoByOrderNumber(String orderNumber) {
-//        return Optional.empty();
-//    }
+    @Override
+    public Optional<GetOrderInfoResponseDto> getOrderInfoById(Long orderId) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<GetOrderInfoResponseDto> getOrderInfoByOrderNumber(String orderNumber) {
+        return Optional.empty();
+    }
 }

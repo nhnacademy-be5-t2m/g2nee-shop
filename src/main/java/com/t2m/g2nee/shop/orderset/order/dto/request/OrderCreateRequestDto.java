@@ -26,5 +26,6 @@ public class OrderCreateRequestDto {
     private Map<Long, Integer> bookAmount;
     @NotNull(message = "쿠폰")
     private Coupon coupon;
+    private String orderName;
 
 }

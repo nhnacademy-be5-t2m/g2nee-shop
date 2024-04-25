@@ -44,7 +44,7 @@ public class Order {
     private String receiverPhoneNumber;
     private String receiveAddress;
     private String zipcode;
-    private String detail;
+    private String detailAddress;
     private String message;
 
     @ManyToOne
@@ -56,8 +56,19 @@ public class Order {
     private Coupon coupon;
 
     public enum OrderState {
-        WAITING, DELIVERING, DELIVERED, RETURNING, RETURNED
+        WAITING("배송대기"), DELIVERING("배송중"), DELIVERED("배송완료"),
+        RETURNING("반품대기"), RETURNED("반품완료");
+        private final String name;
+
+        OrderState(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
+
 
     public void changeState(OrderState orderState) {
         this.orderState = orderState;

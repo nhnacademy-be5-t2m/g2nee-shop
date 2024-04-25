@@ -1,16 +1,17 @@
 package com.t2m.g2nee.shop.orderset.order.controller;
 
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
+import com.t2m.g2nee.shop.orderset.order.repository.OrderRepository;
 import com.t2m.g2nee.shop.orderset.order.service.OrderService;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -22,10 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Validated
-@RequestMapping("/shop/order")
+@RequestMapping("/api/v1/shop/order")
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
+    private final OrderRepository orderRepository;
 
 //    /**
 //     * 주문을 생성
@@ -43,15 +45,16 @@ public class OrderController {
     /**
      * admin이 전체 주문을 조회
      *
-     * @param pageable paging
-     * @return 200, 전체 주문 반환
+     * @param page 현재 페이지
+     * @return 전체 주문 반환
      */
     @GetMapping("/admin/orders")
     public ResponseEntity<PageResponse<GetOrderListForAdminResponseDto>> getAllOrders(
-            Pageable pageable, int page) {
+            @RequestParam int page) {
+        PageResponse<GetOrderListForAdminResponseDto> adminListResponse = orderService.getALlOrderList(page);
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(orderService.getALlOrderList(pageable, page));
+                .body(adminListResponse);
 
     }
 

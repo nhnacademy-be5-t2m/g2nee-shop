@@ -9,6 +9,7 @@ import com.t2m.g2nee.shop.orderset.orderdetail.repository.OrderDetailRepository;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import com.t2m.g2nee.shop.policyset.deliveryPolicy.service.DeliveryPolicyService;
 import com.t2m.g2nee.shop.policyset.pointPolicy.repository.PointPolicyRepository;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -32,7 +33,7 @@ public class OrderImplService implements OrderService {
     //private final CouponRepository couponRepository;
 
 
-//    @Override
+    //    @Override
 //    @Transactional
 //    public Long createOrder(OrderCreateRequestDto orderCreateRequestDto) {
 //        //
@@ -41,6 +42,7 @@ public class OrderImplService implements OrderService {
 //            customer = customerRepository.findById(orderCreateRequestDto.getCustomerId())
 //                    .orElseThrow(() -> new NotFoundException("회원이 아닙니다."));
 //        }
+    String orderNumber = UUID.randomUUID().toString().replace("-", "");
 //        DeliveryPolicy deliveryPolicy = deliveryPolicyService.getDeliveryPolicy(orderCreateRequestDto.)
 //
 //        Order order = orderRepository.save(new Order());
@@ -49,12 +51,12 @@ public class OrderImplService implements OrderService {
 //    }
 
     @Override
-    public PageResponse<GetOrderListForAdminResponseDto> getALlOrderList(Pageable pageable, int page) {
+    public PageResponse<GetOrderListForAdminResponseDto> getALlOrderList(int page) {
         GetOrderListForAdminResponseDto orderListForAdminResponseDto = new GetOrderListForAdminResponseDto();
         int size = 5;
-        pageable = PageRequest.of(page - 1, size, Sort.by("createdAt"));
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdAt"));
         Page<GetOrderListForAdminResponseDto> returnAdminList =
-                orderRepository.getAllOrderList(pageable, page);
+                orderRepository.getAllOrderList(Pageable.ofSize(page));
         PageResponse<GetOrderListForAdminResponseDto> pageResponse = new PageResponse<>();
         return pageResponse.getPageResponse(page, 4, returnAdminList);
     }

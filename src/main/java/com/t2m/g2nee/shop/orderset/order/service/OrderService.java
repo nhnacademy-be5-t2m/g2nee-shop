@@ -2,7 +2,6 @@ package com.t2m.g2nee.shop.orderset.order.service;
 
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
-import org.springframework.data.domain.Pageable;
 
 /**
  * 주문 서비스
@@ -22,11 +21,10 @@ public interface OrderService {
     /**
      * 전체 주문 조회(admin용)
      *
-     * @param pageable paging
-     * @param page     current page
+     * @param page current page
      * @return 전체 주문 반환
      */
-    PageResponse<GetOrderListForAdminResponseDto> getALlOrderList(Pageable pageable, int page);
+    PageResponse<GetOrderListForAdminResponseDto> getALlOrderList(int page);
 
 //    /**
 //     * 전체 주문 상태에 따라 반환(admin용)
