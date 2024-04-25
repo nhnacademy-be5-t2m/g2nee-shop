@@ -17,7 +17,6 @@ import lombok.Setter;
 @Entity
 @Table(name = "Address")
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,7 +30,7 @@ public class Address {
     private String zipcode;
     private String address;
     private String detail;
-    private boolean isDefault;
+    private Boolean isDefault;
 
     @ManyToOne
     @JoinColumn(name = "memberId")

@@ -1,4 +1,4 @@
-package com.t2m.g2nee.shop.memberset.Member.dto.response;
+package com.t2m.g2nee.shop.memberset.Address.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,11 +7,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MemberAddressResponseDto {
+public class AddressResponseDto {
+    private Long addressId;
     private String address;
+    private String zipcode;
     private String alias;
     private String detail;
-    private boolean isDefault;
-    private String zipcode;
+    private Boolean isDefault;
 }
 
