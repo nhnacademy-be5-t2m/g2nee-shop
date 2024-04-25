@@ -1,9 +1,7 @@
 package com.t2m.g2nee.shop.orderset.order.repository;
 
-import com.t2m.g2nee.shop.orderset.order.domain.Order;
+import com.t2m.g2nee.shop.orderset.order.domain.Orders;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@EnableJpaRepositories
-public interface OrderRepository extends JpaRepository<Order, Long>, OrderCustomRepository {
+public interface OrderRepository extends JpaRepository<Orders, Long>, OrderCustomRepository {
 }

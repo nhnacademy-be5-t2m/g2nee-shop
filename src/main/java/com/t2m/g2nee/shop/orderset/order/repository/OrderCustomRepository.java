@@ -5,7 +5,6 @@ import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminRespon
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.NoRepositoryBean;
 
 /**
  * query 사용하는 클래스
@@ -13,7 +12,7 @@ import org.springframework.data.repository.NoRepositoryBean;
  * @author 박재희
  * @since 1.0
  */
-@NoRepositoryBean
+
 public interface OrderCustomRepository {
 
     /**

@@ -1,6 +1,6 @@
 package com.t2m.g2nee.shop.orderset.order.dto.response;
 
-import com.t2m.g2nee.shop.orderset.order.domain.Order;
+import com.t2m.g2nee.shop.orderset.order.domain.Orders;
 import java.sql.Timestamp;
 import lombok.Getter;
 
@@ -14,7 +14,7 @@ import lombok.Getter;
 public class GetOrderListResponseDto {
 
     private String orderNumber;
-    private Order.OrderState orderState;
+    private Orders.OrderState orderState;
     private Timestamp orderDate;
 
 

@@ -1,5 +1,8 @@
 package com.t2m.g2nee.shop.orderset.orderdetail.service;
 
+import com.t2m.g2nee.shop.orderset.orderdetail.dto.response.GetOrderDetailResponseDto;
+import java.util.List;
+
 /**
  * 도서별 주문 상세 서비스 인터페이스
  *
@@ -23,6 +26,14 @@ public interface OrderDetailService {
 //     * @return 주문 상세 반환
 //     */
 //    GetOrderDetailResponseDto getOrderDetailById(Long orderDetailId);
+
+    /**
+     * 도서 주문의 상세 내역 조회
+     *
+     * @
+     * @
+     */
+    List<GetOrderDetailResponseDto> getOrderDetailListByOrderId(Long orderId);
 
 //    /**
 //     * 도서 주문 상세 정보 변경

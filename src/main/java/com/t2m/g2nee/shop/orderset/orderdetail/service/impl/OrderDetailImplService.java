@@ -1,8 +1,10 @@
 package com.t2m.g2nee.shop.orderset.orderdetail.service.impl;
 
 import com.t2m.g2nee.shop.memberset.Customer.repository.CustomerRepository;
+import com.t2m.g2nee.shop.orderset.orderdetail.dto.response.GetOrderDetailResponseDto;
 import com.t2m.g2nee.shop.orderset.orderdetail.repository.OrderDetailRepository;
 import com.t2m.g2nee.shop.orderset.orderdetail.service.OrderDetailService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,7 +19,8 @@ public class OrderDetailImplService implements OrderDetailService {
     private final OrderDetailRepository orderDetailRepository;
     private final CustomerRepository customerRepository;
 
-//
+
+    //
 //    @Override
 //    @Transactional
 //    public Long createOrderDetail(OrderDetailCreateRequestDto createRequestDto, Order order) {
@@ -30,6 +33,10 @@ public class OrderDetailImplService implements OrderDetailService {
 //                .orElseThrow(() -> new NotFoundException("존재하지 않습니다."));
 //        return orderDetailResponseDto;
 //    }
+    @Override
+    public List<GetOrderDetailResponseDto> getOrderDetailListByOrderId(Long orderId) {
+        return orderDetailRepository.getOrderDetailListByOrderId(orderId);
+    }
 
 //    @Override
 //    @Transactional

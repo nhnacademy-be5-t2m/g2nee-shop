@@ -1,6 +1,6 @@
 package com.t2m.g2nee.shop.orderset.order.dto.response;
 
-import com.t2m.g2nee.shop.orderset.order.domain.Order;
+import com.t2m.g2nee.shop.orderset.order.domain.Orders;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import lombok.AllArgsConstructor;
@@ -21,7 +21,7 @@ public class GetOrderListForAdminResponseDto {
     private Long orderId;
     private Long customerId;
     private Timestamp orderDate;
-    private Order.OrderState orderState;
+    private Orders.OrderState orderState;
     private BigDecimal orderAmount;
     private String receiverName;
     private String receiverPhoneNumber;

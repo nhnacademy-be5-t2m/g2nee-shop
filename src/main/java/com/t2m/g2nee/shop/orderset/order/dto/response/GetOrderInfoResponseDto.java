@@ -1,6 +1,6 @@
 package com.t2m.g2nee.shop.orderset.order.dto.response;
 
-import com.t2m.g2nee.shop.orderset.order.domain.Order;
+import com.t2m.g2nee.shop.orderset.order.domain.Orders;
 import com.t2m.g2nee.shop.orderset.orderdetail.dto.response.GetOrderDetailListForOrderResponseDto;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -23,7 +23,7 @@ public class GetOrderInfoResponseDto {
     private final Timestamp orderDate;
     private final Timestamp deliveryWishDate;
     private final BigDecimal deliveryFee;
-    private final Order.OrderState orderState;
+    private final Orders.OrderState orderState;
     private final BigDecimal netAmount;
     private final BigDecimal orderAmount;
     private final String receiverName;
@@ -40,7 +40,7 @@ public class GetOrderInfoResponseDto {
     private String orderName;
 
     public GetOrderInfoResponseDto(Long orderId, String orderNumber, Timestamp orderDate, Timestamp deliveryWishDate,
-                                   BigDecimal deliveryFee, Order.OrderState orderState, BigDecimal netAmount,
+                                   BigDecimal deliveryFee, Orders.OrderState orderState, BigDecimal netAmount,
                                    BigDecimal orderAmount, String receiverName, String receiverPhoneNumber,
                                    String receiveAddress, String zipcode, String detail, String message,
                                    Long customerId, Long couponId) {

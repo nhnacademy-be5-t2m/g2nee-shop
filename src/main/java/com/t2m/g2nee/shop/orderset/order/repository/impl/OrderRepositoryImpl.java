@@ -2,8 +2,8 @@ package com.t2m.g2nee.shop.orderset.order.repository.impl;
 
 import com.querydsl.core.types.Projections;
 import com.t2m.g2nee.shop.memberset.Customer.domain.QCustomer;
-import com.t2m.g2nee.shop.orderset.order.domain.Order;
-import com.t2m.g2nee.shop.orderset.order.domain.QOrder;
+import com.t2m.g2nee.shop.orderset.order.domain.Orders;
+import com.t2m.g2nee.shop.orderset.order.domain.QOrders;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
 import com.t2m.g2nee.shop.orderset.order.repository.OrderCustomRepository;
@@ -24,35 +24,35 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 public class OrderRepositoryImpl extends QuerydslRepositorySupport
         implements OrderCustomRepository {
 
-    QOrder order = QOrder.order;
+    QOrders orders = QOrders.orders;
     QCustomer customer = QCustomer.customer;
     QOrderDetail orderDetail = QOrderDetail.orderDetail;
 
     public OrderRepositoryImpl() {
-        super(Order.class);
+        super(Orders.class);
     }
 
 
     @Override
     public Page<GetOrderListForAdminResponseDto> getAllOrderList(Pageable pageable) {
 
-        List<GetOrderListForAdminResponseDto> queryAdmin = from(order)
-                .innerJoin(customer).on(order.customer.customerId.eq(customer.customerId))
+        List<GetOrderListForAdminResponseDto> queryAdmin = from(orders)
+                .innerJoin(customer).on(orders.customer.customerId.eq(customer.customerId))
                 .select(Projections.fields(GetOrderListForAdminResponseDto.class,
-                        order.orderId,
+                        orders.orderId,
                         customer.customerId,
-                        order.orderDate,
-                        order.orderState,
-                        order.orderAmount,
-                        order.receiverName,
-                        order.receiverPhoneNumber,
-                        order.receiveAddress,
-                        order.detailAddress,
-                        order.zipcode,
-                        order.message)).fetch();
+                        orders.orderDate,
+                        orders.orderState,
+                        orders.orderAmount,
+                        orders.receiverName,
+                        orders.receiverPhoneNumber,
+                        orders.receiveAddress,
+                        orders.detailAddress,
+                        orders.zipcode,
+                        orders.message)).fetch();
 
-        Long count = from(order)
-                .select(order.orderId.count()).fetchOne();
+        Long count = from(orders)
+                .select(orders.orderId.count()).fetchOne();
 
         return new PageImpl<>(queryAdmin, pageable, count);
     }

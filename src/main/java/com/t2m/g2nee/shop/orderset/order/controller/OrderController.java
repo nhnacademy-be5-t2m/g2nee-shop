@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Validated
-@RequestMapping("/api/v1/shop/order")
+@RequestMapping("/api/v1/shop/orders")
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
@@ -57,6 +57,7 @@ public class OrderController {
                 .body(adminListResponse);
 
     }
+
 
 //    /**
 //     * admin이 주문 상태별로 조회

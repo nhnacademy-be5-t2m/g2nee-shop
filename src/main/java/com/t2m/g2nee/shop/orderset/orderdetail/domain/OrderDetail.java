@@ -1,9 +1,8 @@
 package com.t2m.g2nee.shop.orderset.orderdetail.domain;
 
 import com.t2m.g2nee.shop.bookset.book.domain.Book;
-import com.t2m.g2nee.shop.fileset.file.domain.File;
 import com.t2m.g2nee.shop.memberset.Customer.domain.Customer;
-import com.t2m.g2nee.shop.orderset.order.domain.Order;
+import com.t2m.g2nee.shop.orderset.order.domain.Orders;
 import com.t2m.g2nee.shop.orderset.packageType.domain.PackageType;
 import java.math.BigDecimal;
 import javax.persistence.Entity;
@@ -38,7 +37,7 @@ public class OrderDetail {
     @NonNull
     @ManyToOne
     @JoinColumn(name = "orderId")
-    private Order order;
+    private Orders orders;
 
     @ManyToOne
     @JoinColumn(name = "bookId")
@@ -47,14 +46,10 @@ public class OrderDetail {
     @ManyToOne
     @JoinColumn(name = "packageTypeId")
     private PackageType packageType;
-
+    //todo: 포장지 가격은 권당 포장이 아니라 orderDetail당 1번씩 계산
     @NonNull
     @ManyToOne
     @JoinColumn(name = "customerId")
     private Customer customer;
-
-    @ManyToOne
-    @JoinColumn(name = "fileId")
-    private File file;
 
 }

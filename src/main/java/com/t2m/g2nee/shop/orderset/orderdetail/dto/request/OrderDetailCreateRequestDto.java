@@ -1,6 +1,5 @@
 package com.t2m.g2nee.shop.orderset.orderdetail.dto.request;
 
-import com.t2m.g2nee.shop.fileset.file.domain.File;
 import java.math.BigDecimal;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
@@ -24,6 +23,5 @@ public class OrderDetailCreateRequestDto {
     @NotNull(message = "도서 포장정보는 필수입니다.")
     private Long packageTypeId;
 
-    private File fileId;
 
 }
