@@ -6,6 +6,7 @@ import com.t2m.g2nee.shop.orderset.order.domain.Orders;
 import com.t2m.g2nee.shop.orderset.order.domain.QOrders;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
+import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListResponseDto;
 import com.t2m.g2nee.shop.orderset.order.repository.OrderCustomRepository;
 import com.t2m.g2nee.shop.orderset.orderdetail.domain.QOrderDetail;
 import java.util.List;
@@ -57,19 +58,19 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
         return new PageImpl<>(queryAdmin, pageable, count);
     }
 
+
     //
 //    @Override
 //    public Page<GetOrderListForAdminResponseDto> getOrderListByState(Pageable pageable, Order.OrderState orderState) {
 //        return null;
 //    }
 //
-//
-//    @Override
-//
-//    public Page<GetOrderListResponseDto> getOrderListForMembers(Pageable pageable, Long customerId) {
-//        return null;
-//    }
-//
+
+    @Override
+    public Page<List<GetOrderListResponseDto>> getOrderListForMembers(Pageable pageable, Long customerId) {
+        return null;
+    }
+    
     @Override
     public Optional<GetOrderInfoResponseDto> getOrderInfoById(Long orderId) {
         return Optional.empty();
