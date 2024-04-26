@@ -20,10 +20,10 @@ public interface OrderDetailCustomRepository {
 //    Optional<GetOrderDetailResponseDto> getOrderDetailById(Long orderDetailId);
 
     /**
-     * 도서 주문 상세 내역 확인
+     * 주문id 기반으로 주문 상세 내역 확인
      *
-     * @
-     * @
+     * @param orderId 주문 id
+     * @return
      */
     List<GetOrderDetailResponseDto> getOrderDetailListByOrderId(Long orderId);
 

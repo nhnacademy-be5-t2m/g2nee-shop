@@ -36,8 +36,8 @@ public class OrderDetailRepositoryImpl extends QuerydslRepositorySupport
                         orderDetail.price,
                         orderDetail.quantity,
                         orderDetail.isCancelled,
-                        book.title,
-                        packageType.name)).fetch();
+                        book.title.as("bookName"),
+                        packageType.name.as("packageName"))).fetch();
     }
 //    private Optional<GetOrderDetailResponseDto> orderDetailInfo(Long orderDetailId) {
 //

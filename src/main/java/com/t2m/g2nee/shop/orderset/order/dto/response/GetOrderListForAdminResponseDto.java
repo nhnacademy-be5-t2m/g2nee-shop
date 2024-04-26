@@ -19,6 +19,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GetOrderListForAdminResponseDto {
     private Long orderId;
+    private String orderNumber;
     private Long customerId;
     private Timestamp orderDate;
     private Orders.OrderState orderState;
@@ -29,5 +30,6 @@ public class GetOrderListForAdminResponseDto {
     private String zipcode;
     private String detailAddress;
     private String message;
+    private String couponName;
 
 }

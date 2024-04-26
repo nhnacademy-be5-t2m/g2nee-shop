@@ -2,6 +2,7 @@ package com.t2m.g2nee.shop.orderset.order.service.impl;
 
 import com.t2m.g2nee.shop.memberset.Customer.repository.CustomerRepository;
 import com.t2m.g2nee.shop.memberset.Member.repository.MemberRepository;
+import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
 import com.t2m.g2nee.shop.orderset.order.repository.OrderRepository;
 import com.t2m.g2nee.shop.orderset.order.service.OrderService;
@@ -68,22 +69,26 @@ public class OrderImplService implements OrderService {
 //                orderRepository.getAllOrderList(pageable);
 //        return new PageResponse<>(returnList);
 //    }
-//
-//    @Override
-//    public PageResponse<GetOrderListResponseDto> getOrderListForMembers(Pageable pageable, Long customerId) {
-//        Page<GetOrderListResponseDto> returnOrderList =
-//                orderRepository.getOrderListForMembers()
-//        return null;
-//    }
-//
-//    //주문 조회
-//    @Override
-//    public GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long customerId) {
-//        GetOrderInfoResponseDto orderInfoResponseDto = orderRepository.findById(orderId).orElseThrow(()
-//                -> new NotFoundException("주문이 존재하지 않습니다."));
-//        return null;
-//    }
-//
+
+    @Override
+    public PageResponse<GetOrderInfoResponseDto> getOrderListForMembers(int page, Long customerId) {
+        GetOrderInfoResponseDto orderListDto = new GetOrderInfoResponseDto();
+        int size = 5;
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdAt"));
+        Page<GetOrderInfoResponseDto> returnOrderList =
+                orderRepository.getOrderListForMembers(Pageable.ofSize(page), customerId);
+        PageResponse<GetOrderInfoResponseDto> pageResponse = new PageResponse<>();
+        return pageResponse.getPageResponse(page, 4, returnOrderList);
+    }
+
+
+    @Override
+    public GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long customerId) {
+        GetOrderInfoResponseDto orderInfoResponseDto =
+                orderRepository.getOrderInfoById(orderId, customerId);
+        return orderInfoResponseDto;
+    }
+
 //    //주문 번호로 조회
 //    @Override
 //    public GetOrderInfoResponseDto getOrderInfoByOrderNumber(String orderNumber) {
@@ -92,7 +97,7 @@ public class OrderImplService implements OrderService {
 //        orderInfoResponseDto.
 //        return null;
 //    }
-//
+
 //    @Override
 //    @Transactional
 //    public void changeOrderState(Long orderId, Order.OrderState orderState) {
@@ -106,3 +111,4 @@ public class OrderImplService implements OrderService {
 
 
 }
+

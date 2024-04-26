@@ -1,12 +1,14 @@
 package com.t2m.g2nee.shop.orderset.order.repository.impl;
 
 import com.querydsl.core.types.Projections;
+import com.t2m.g2nee.shop.couponset.Coupon.domain.QCoupon;
+import com.t2m.g2nee.shop.couponset.CouponType.domain.QCouponType;
 import com.t2m.g2nee.shop.memberset.Customer.domain.QCustomer;
+import com.t2m.g2nee.shop.memberset.Member.domain.QMember;
 import com.t2m.g2nee.shop.orderset.order.domain.Orders;
 import com.t2m.g2nee.shop.orderset.order.domain.QOrders;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
-import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListResponseDto;
 import com.t2m.g2nee.shop.orderset.order.repository.OrderCustomRepository;
 import com.t2m.g2nee.shop.orderset.orderdetail.domain.QOrderDetail;
 import java.util.List;
@@ -17,7 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
- * repository에서 querydsl 사용하기 위한 클래스
+ * OrderRepository 에서 querydsl 사용하기 위한 클래스
  *
  * @author 박재희
  * @since 1.0
@@ -27,7 +29,10 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
 
     QOrders orders = QOrders.orders;
     QCustomer customer = QCustomer.customer;
+    QMember member = QMember.member;
     QOrderDetail orderDetail = QOrderDetail.orderDetail;
+    QCoupon coupon = QCoupon.coupon;
+    QCouponType couponType = QCouponType.couponType;
 
     public OrderRepositoryImpl() {
         super(Orders.class);
@@ -39,8 +44,10 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
 
         List<GetOrderListForAdminResponseDto> queryAdmin = from(orders)
                 .innerJoin(customer).on(orders.customer.customerId.eq(customer.customerId))
+                .leftJoin(couponType).on(orders.coupon.couponType.couponTypeId.eq(couponType.couponTypeId))
                 .select(Projections.fields(GetOrderListForAdminResponseDto.class,
                         orders.orderId,
+                        orders.orderNumber,
                         customer.customerId,
                         orders.orderDate,
                         orders.orderState,
@@ -50,7 +57,8 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
                         orders.receiveAddress,
                         orders.detailAddress,
                         orders.zipcode,
-                        orders.message)).fetch();
+                        orders.message,
+                        couponType.name.as("couponName"))).fetch();
 
         Long count = from(orders)
                 .select(orders.orderId.count()).fetchOne();
@@ -67,13 +75,56 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
 //
 
     @Override
-    public Page<List<GetOrderListResponseDto>> getOrderListForMembers(Pageable pageable, Long customerId) {
-        return null;
+    public Page<GetOrderInfoResponseDto> getOrderListForMembers(Pageable pageable, Long customerId) {
+        List<GetOrderInfoResponseDto> queryMemberOrderList = from(orders)
+                .innerJoin(member).on(orders.customer.customerId.eq(member.customerId))
+                .leftJoin(couponType).on(orders.coupon.couponType.couponTypeId.eq(couponType.couponTypeId))
+                .where(orders.customer.customerId.eq(customerId))
+                .select(Projections.fields(GetOrderInfoResponseDto.class,
+                        orders.orderId,
+                        orders.orderNumber,
+                        orders.orderDate,
+                        orders.deliveryWishDate,
+                        orders.deliveryFee,
+                        orders.orderState,
+                        orders.orderAmount,
+                        orders.receiverName,
+                        orders.receiveAddress,
+                        orders.receiverPhoneNumber,
+                        orders.zipcode,
+                        orders.detailAddress,
+                        orders.message,
+                        couponType.name.as("couponName"))).fetch();
+
+        Long count = from(orders)
+                .select(orders.orderId.count()).fetchOne();
+
+        return new PageImpl<>(queryMemberOrderList, pageable, count);
     }
-    
+
     @Override
-    public Optional<GetOrderInfoResponseDto> getOrderInfoById(Long orderId) {
-        return Optional.empty();
+    public GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long customerId) {
+        GetOrderInfoResponseDto getOrderInfoResponseDto = from(orders)
+                .innerJoin(member).on(orders.customer.customerId.eq(member.customerId))
+                .leftJoin(couponType).on(orders.coupon.couponType.couponTypeId.eq(couponType.couponTypeId))
+                .where(orders.orderId.eq(orderId).and(orders.customer.customerId.eq(customerId)))
+                .select(Projections.fields(GetOrderInfoResponseDto.class,
+                        orders.orderId,
+                        orders.orderNumber,
+                        orders.orderDate,
+                        orders.deliveryWishDate,
+                        orders.deliveryFee,
+                        orders.orderState,
+                        orders.orderAmount,
+                        orders.receiverName,
+                        orders.receiveAddress,
+                        orders.receiverPhoneNumber,
+                        orders.zipcode,
+                        orders.detailAddress,
+                        orders.message,
+                        couponType.name.as("couponName"))).fetchOne();
+
+        return getOrderInfoResponseDto;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.t2m.g2nee.shop.orderset.order.service;
 
+import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 
@@ -35,23 +36,24 @@ public interface OrderService {
 //     */
 //    PageResponse<GetOrderListForAdminResponseDto> getAllOrdersByState(Pageable pageable, Order.OrderState orderState);
 //
-//    /**
-//     * 회원의 전체 주문 조회
-//     *
-//     * @param pageable   paging.
-//     * @param customerId 회원번호.
-//     * @return 회원의 모든 주문 반환
-//     */
-//    PageResponse<GetOrderListResponseDto> getOrderListForMembers(Pageable pageable, Long customerId);
-//
-//    /**
-//     * 주문 정보 조회
-//     *
-//     * @param orderId 주문 id.
-//     * @return 주문 정보 반환
-//     */
-//    GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long customerId);
-//
+
+    /**
+     * 회원의 전체 주문 조회
+     *
+     * @param page       현재 페이지.
+     * @param customerId 회원번호.
+     * @return 회원의 모든 주문 반환
+     */
+    PageResponse<GetOrderInfoResponseDto> getOrderListForMembers(int page, Long customerId);
+
+    /**
+     * 주문 정보 조회
+     *
+     * @param orderId 주문 id.
+     * @return 주문 정보 반환
+     */
+    GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long customerId);
+
 //    /**
 //     * 비회원 주문 정보 조회(주문 번호로 조회)
 //     *
@@ -59,7 +61,7 @@ public interface OrderService {
 //     * @return 주문 정보
 //     */
 //    GetOrderInfoResponseDto getOrderInfoByOrderNumber(String orderNumber);
-//
+
 //    /**
 //     * 주문 상태 변경
 //     *

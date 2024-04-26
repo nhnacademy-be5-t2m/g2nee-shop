@@ -2,8 +2,6 @@ package com.t2m.g2nee.shop.orderset.order.repository;
 
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
-import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListResponseDto;
-import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -42,16 +40,17 @@ public interface OrderCustomRepository {
      * @param customerId 회원번호
      * @return 회원 전체 주문 반환
      */
-    Page<List<GetOrderListResponseDto>> getOrderListForMembers(Pageable pageable, Long customerId);
+    Page<GetOrderInfoResponseDto> getOrderListForMembers(Pageable pageable, Long customerId);
 
 
     /**
      * 주문id로 단일 주문 정보 반환(회원용)
      *
-     * @param orderId 주문id
+     * @param orderId    주문id
+     * @param customerId 회원id
      * @return 주문 정보 반환
      */
-    Optional<GetOrderInfoResponseDto> getOrderInfoById(Long orderId);
+    GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long customerId);
 
     /**
      * 주문번호로 주문 정보 반환(비회원용)

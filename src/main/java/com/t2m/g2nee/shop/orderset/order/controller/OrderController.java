@@ -1,5 +1,6 @@
 package com.t2m.g2nee.shop.orderset.order.controller;
 
+import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
 import com.t2m.g2nee.shop.orderset.order.repository.OrderRepository;
 import com.t2m.g2nee.shop.orderset.order.service.OrderService;
@@ -10,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -74,37 +76,41 @@ public class OrderController {
 //                .body(orderService.getAllOrdersByState(pageable, orderState));
 //    }
 //
-//    /**
-//     * member가 주문을 조회
-//     *
-//     * @param pageable   paging
-//     * @param customerId 회원번호
-//     * @return 200, 회원의 전체 주문
-//     */
-//    @GetMapping("/token/orders/members/{customerId}/")
-//    public ResponseEntity<PageResponse<GetOrderListResponseDto>> getOrderListForMembers(
-//            Pageable pageable, @PathVariable("customerId") Long customerId) {
-//        return ResponseEntity.status(HttpStatus.OK)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .body(orderService.getOrderListForMembers(pageable, customerId));
-//    }
-//
-//    /**
-//     * 주문id로 주문 정보 조회(회원용)
-//     *
-//     * @param orderId
-//     * @return
-//     */
-//    //@MemberAndAuth
-//    @GetMapping("/token/orders/{orderId}/members/{customerId}")
-//    public ResponseEntity<GetOrderInfoResponseDto> getOrderInfoByOrderId(
-//            @PathVariable Long orderId, @PathVariable Long customerId) {
-//        GetOrderInfoResponseDto orderInfoResponseDto = orderService.getOrderInfoById(orderId, customerId);
-//        return ResponseEntity.status(HttpStatus.OK)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .body(orderInfoResponseDto);
-//
-//    }
+
+    /**
+     * member가 주문을 조회
+     *
+     * @param page       현재 page
+     * @param customerId 회원번호
+     * @return 200, 회원의 전체 주문
+     */
+    @GetMapping("/members/{customerId}/")
+    public ResponseEntity<PageResponse<GetOrderInfoResponseDto>> getOrderListForMembers(
+            @RequestParam int page, @PathVariable("customerId") Long customerId) {
+        PageResponse<GetOrderInfoResponseDto> memberListResponse =
+                orderService.getOrderListForMembers(page, customerId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(memberListResponse);
+    }
+
+    /**
+     * 주문id로 주문 정보 조회(회원용)
+     *
+     * @param orderId
+     * @return
+     */
+    //@MemberAndAuth
+    @GetMapping("/members/{customerId}/{orderId}")
+    public ResponseEntity<GetOrderInfoResponseDto> getOrderInfoByOrderId(
+            @PathVariable Long orderId, @PathVariable Long customerId) {
+        GetOrderInfoResponseDto orderInfoResponseDto = orderService.getOrderInfoById(orderId, customerId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(orderInfoResponseDto);
+
+    }
 //
 //    /**
 //     * 주문 번호로 주문 정보 조회(비회원용)

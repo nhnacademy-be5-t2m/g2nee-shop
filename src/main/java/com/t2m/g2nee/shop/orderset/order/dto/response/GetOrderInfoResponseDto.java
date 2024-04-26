@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * 주문 상세 정보 조회하는 dto
@@ -14,49 +15,23 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class GetOrderInfoResponseDto {
-    private final Long orderId;
-    private final String orderNumber;
-    private final Timestamp orderDate;
-    private final Timestamp deliveryWishDate;
-    private final BigDecimal deliveryFee;
-    private final Orders.OrderState orderState;
-    private final BigDecimal netAmount;
-    private final BigDecimal orderAmount;
-    private final String receiverName;
-    private final String receiverPhoneNumber;
-    private final String receiveAddress;
-    private final String zipcode;
-    private final String detail;
-    private final String message;
-    private final Long customerId;
-    private final Long couponId;
-
-    //todo: 주문 이름 (xxx 외 n 건) 추가
-    private String orderName;
-
-    public GetOrderInfoResponseDto(Long orderId, String orderNumber, Timestamp orderDate, Timestamp deliveryWishDate,
-                                   BigDecimal deliveryFee, Orders.OrderState orderState, BigDecimal netAmount,
-                                   BigDecimal orderAmount, String receiverName, String receiverPhoneNumber,
-                                   String receiveAddress, String zipcode, String detail, String message,
-                                   Long customerId, Long couponId) {
-        this.orderId = orderId;
-        this.orderNumber = orderNumber;
-        this.orderDate = orderDate;
-        this.deliveryWishDate = deliveryWishDate;
-        this.deliveryFee = deliveryFee;
-        this.orderState = orderState;
-        this.netAmount = netAmount;
-        this.orderAmount = orderAmount;
-        this.receiverName = receiverName;
-        this.receiverPhoneNumber = receiverPhoneNumber;
-        this.receiveAddress = receiveAddress;
-        this.zipcode = zipcode;
-        this.detail = detail;
-        this.message = message;
-        this.customerId = customerId;
-        this.couponId = couponId;
-    }
+    private Long orderId;
+    private String orderNumber;
+    private Timestamp orderDate;
+    private Timestamp deliveryWishDate;
+    //todo: 배송완료날짜 추가해야 함
+    private BigDecimal deliveryFee;
+    private Orders.OrderState orderState;
+    private BigDecimal orderAmount;
+    private String receiverName;
+    private String receiverPhoneNumber;
+    private String receiveAddress;
+    private String zipcode;
+    private String detailAddress;
+    private String message;
+    private String couponName;
 
 
 }

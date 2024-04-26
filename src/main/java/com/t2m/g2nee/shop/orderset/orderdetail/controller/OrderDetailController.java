@@ -12,7 +12,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -24,17 +23,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Validated
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/orderdetails")
+@RequestMapping("/api/v1/shop/orders")
 public class OrderDetailController {
     private final OrderDetailService orderDetailService;
     private final OrderDetailRepository orderDetailRepository;
 
     /**
+     * 주문id를 기반으로 주문 상세 내역 반환
      *
+     * @param orderId 주문id
+     * @return 200, 주문 상세 내역 반환
      */
-    @GetMapping("/{orderId}")
+    @GetMapping("/orderDetails/{orderId}")//order 추가
     public ResponseEntity<List<GetOrderDetailResponseDto>> getOrderDetailList(
-            @RequestParam @PathVariable("orderId") Long orderId) {
+            @PathVariable("orderId") Long orderId) {
         List<GetOrderDetailResponseDto> orderDetailResponse = orderDetailService.getOrderDetailListByOrderId(orderId);
 
         return ResponseEntity.status(HttpStatus.OK)
