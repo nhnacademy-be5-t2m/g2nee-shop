@@ -1,11 +1,8 @@
 package com.t2m.g2nee.shop.orderset.order.dto.response;
 
 import com.t2m.g2nee.shop.orderset.order.domain.Orders;
-import com.t2m.g2nee.shop.orderset.orderdetail.dto.response.GetOrderDetailListForOrderResponseDto;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -34,7 +31,6 @@ public class GetOrderInfoResponseDto {
     private final String message;
     private final Long customerId;
     private final Long couponId;
-    private List<GetOrderDetailListForOrderResponseDto> orderDetails = new ArrayList<>();
 
     //todo: 주문 이름 (xxx 외 n 건) 추가
     private String orderName;
@@ -62,7 +58,5 @@ public class GetOrderInfoResponseDto {
         this.couponId = couponId;
     }
 
-    public void addOrderDetails(List<GetOrderDetailListForOrderResponseDto> orderDetails) {
-        this.orderDetails = orderDetails;
-    }
+
 }

@@ -6,11 +6,13 @@ import com.t2m.g2nee.shop.orderset.orderdetail.service.OrderDetailService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -30,12 +32,14 @@ public class OrderDetailController {
     /**
      *
      */
-    @GetMapping("/orderId")
+    @GetMapping("/{orderId}")
     public ResponseEntity<List<GetOrderDetailResponseDto>> getOrderDetailList(
-            @PathVariable("orderId") Long orderId) {
+            @RequestParam @PathVariable("orderId") Long orderId) {
         List<GetOrderDetailResponseDto> orderDetailResponse = orderDetailService.getOrderDetailListByOrderId(orderId);
 
-        return ResponseEntity.status(HttpStatus.OK).body(orderDetailResponse);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(orderDetailResponse);
     }
 
 }
