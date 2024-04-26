@@ -18,7 +18,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddressCreateRequestDto {
+public class AddressRequestDto {
     @NotNull(message = "memberId를 입력해주십시오.")
     private Long memberId;
     @NotEmpty(message = "주소별칭을 입력해주십시오.")

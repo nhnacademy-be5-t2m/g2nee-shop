@@ -30,6 +30,7 @@ public class Address {
     private String zipcode;
     private String address;
     private String detail;
+    @Setter
     private Boolean isDefault;
 
     @ManyToOne
