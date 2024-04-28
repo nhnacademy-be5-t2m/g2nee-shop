@@ -162,7 +162,6 @@ public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport impl
          * WHERE c.categoryId = ?;
          */
 
-
         return from(category)
                 .leftJoin(categoryPath).on(category.categoryId.eq(categoryPath.descendant.categoryId)
                         .and(categoryPath.depth.eq(1L)))
