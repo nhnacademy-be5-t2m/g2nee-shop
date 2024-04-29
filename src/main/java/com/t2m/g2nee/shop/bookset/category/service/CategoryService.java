@@ -33,7 +33,7 @@ public interface CategoryService {
      * 카테고리 soft delete하고, 관련된 카테고리 경로는 delete합니다.
      *
      * @param categoryId 카테고리 id
-     * @return boolean 성공 시 false 반환
+     * @return 성공 시 false
      */
     boolean deleteCategory(Long categoryId);
 
@@ -41,7 +41,7 @@ public interface CategoryService {
      * 카테고리 활성화하고, 최상위 카테고리로 경로를 저장합니다.
      *
      * @param categoryId 카테고리 id
-     * @return boolean 성공 시 ture 반환
+     * @return 성공 시 ture
      */
     boolean activeCategory(Long categoryId);
 }

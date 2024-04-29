@@ -3,8 +3,8 @@ package com.t2m.g2nee.shop.bookset.category.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.t2m.g2nee.shop.bookset.category.repository.CategoryRepository;
-import com.t2m.g2nee.shop.bookset.categoryPath.domain.CategoryPath;
-import com.t2m.g2nee.shop.bookset.categoryPath.repository.CategoryPathRepository;
+import com.t2m.g2nee.shop.bookset.categorypath.domain.CategoryPath;
+import com.t2m.g2nee.shop.bookset.categorypath.repository.CategoryPathRepository;
 import com.t2m.g2nee.shop.config.ElasticsearchConfig;
 import com.t2m.g2nee.shop.config.MapperConfig;
 import org.junit.jupiter.api.DisplayName;

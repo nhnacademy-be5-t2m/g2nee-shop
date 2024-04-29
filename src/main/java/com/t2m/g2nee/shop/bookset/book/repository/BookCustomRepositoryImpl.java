@@ -15,7 +15,7 @@ import com.t2m.g2nee.shop.bookset.bookcontributor.dto.BookContributorDto;
 import com.t2m.g2nee.shop.bookset.booktag.domain.QBookTag;
 import com.t2m.g2nee.shop.bookset.category.domain.QCategory;
 import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryInfoDto;
-import com.t2m.g2nee.shop.bookset.categoryPath.domain.QCategoryPath;
+import com.t2m.g2nee.shop.bookset.categorypath.domain.QCategoryPath;
 import com.t2m.g2nee.shop.bookset.contributor.domain.QContributor;
 import com.t2m.g2nee.shop.bookset.publisher.domain.QPublisher;
 import com.t2m.g2nee.shop.bookset.role.domain.QRole;

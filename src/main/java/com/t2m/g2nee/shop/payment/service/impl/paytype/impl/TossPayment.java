@@ -17,7 +17,6 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -31,8 +30,12 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+/**
+ * PaymentRequestMethod의 구현체고, Toss Payment의 결제 시스템을 구현한 클래스입니다.
+ * @author : 김수빈
+ * @since : 1.0
+ */
 @Component
-@Slf4j
 public class TossPayment implements PaymentRequestMethod {
 
     private final RestTemplate restTemplate;
@@ -48,6 +51,14 @@ public class TossPayment implements PaymentRequestMethod {
     @Value("${toss.api.api.url}")
     private String baseUrl;
 
+    /**
+     * TossPayment의 생성자 입니다.
+     * @param restTemplate toss에 api요청을 보낼 restTemplate
+     * @param orderRepository 주문 정보를 확인할 레포지토리
+     * @param customerRepository 고객 정보를 확인할 레포지토리
+     * @param paymentRepository 결제 정보 저장 및 확인을 위한 레포지토리
+     * @param secretKey Toss Payment api 헤더에 들어가야하는 값
+     */
     public TossPayment(RestTemplate restTemplate, OrderRepository orderRepository,
                        CustomerRepository customerRepository, PaymentRepository paymentRepository, String secretKey) {
         this.restTemplate = restTemplate;
@@ -57,11 +68,19 @@ public class TossPayment implements PaymentRequestMethod {
         this.secretKey = secretKey;
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws NotFoundException 유효하지 않은 주문일 경우
+     * @throws CustomException 주문 금액이 주문과 일치하지 않을 경우
+     * @throws NotFoundException 주문자 정보가 존재하지 않을 경우
+     * @throws CustomException 주문자 정보가 일치하지 않을 경우
+     * @throws IllegalArgumentException Toss Payment가 아닐 경우
+     */
     @SneakyThrows
     @Override
     public Payment requestCreatePayment(PaymentRequest request) {
         if (request instanceof TossPaymentRequestDto) {
-            TossPaymentRequestDto tossRequest = (TossPaymentRequestDto) request; // 형변환
+            TossPaymentRequestDto tossRequest = (TossPaymentRequestDto) request;
             //주문이 유효한지 확인
             Order order = orderRepository.findByOrderNumber(tossRequest.getOrderNumber())
                     .orElseThrow(() ->
@@ -119,6 +138,10 @@ public class TossPayment implements PaymentRequestMethod {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws CustomException 결제 취소가 성공적으로 되지 않았을 때
+     */
     @Override
     @SneakyThrows
     public Payment requestCancelPayment(Payment payment) {
@@ -148,6 +171,10 @@ public class TossPayment implements PaymentRequestMethod {
         }
     }
 
+    /**
+     * toss로 api를 보내기 위한 헤더를 생성합니다.
+     * @return HttpHeaders
+     */
     private HttpHeaders makePaymentHeader() {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -156,12 +183,12 @@ public class TossPayment implements PaymentRequestMethod {
 
         return httpHeaders;
     }
-
-
+    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getPayType() {
         return "toss";
     }
 }
-
-//https://docs.tosspayments.com/reference/using-api/api-keys#api-키-에러

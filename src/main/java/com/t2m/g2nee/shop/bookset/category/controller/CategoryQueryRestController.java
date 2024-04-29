@@ -25,8 +25,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/shop/categories")
 public class CategoryQueryRestController {
 
+    /**
+     * 카테고리 쿼리 서비스
+     */
     private final CategoryQueryService service;
 
+    /**
+     * CategoryQueryRestController의 생성자로, CategoryQueryService를 주입받습니다.
+     * @param service 카테고리쿼리 서비스
+     */
     public CategoryQueryRestController(CategoryQueryService service) {
         this.service = service;
     }

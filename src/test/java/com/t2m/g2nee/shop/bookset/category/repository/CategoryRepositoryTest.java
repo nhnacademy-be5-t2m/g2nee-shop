@@ -10,8 +10,8 @@ import static org.junit.Assert.assertTrue;
 
 import com.t2m.g2nee.shop.bookset.category.domain.Category;
 import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryUpdateDto;
-import com.t2m.g2nee.shop.bookset.categoryPath.domain.CategoryPath;
-import com.t2m.g2nee.shop.bookset.categoryPath.repository.CategoryPathRepository;
+import com.t2m.g2nee.shop.bookset.categorypath.domain.CategoryPath;
+import com.t2m.g2nee.shop.bookset.categorypath.repository.CategoryPathRepository;
 import com.t2m.g2nee.shop.config.ElasticsearchConfig;
 import com.t2m.g2nee.shop.config.MapperConfig;
 import java.util.List;
@@ -166,7 +166,7 @@ class CategoryRepositoryTest {
     @Test
     @DisplayName("getFindByCategoryId test")
     void testGetFindByCategoryId() {
-        CategoryUpdateDto category = categoryRepository.getFindByCategoryId(category2.getCategoryId());
+        CategoryUpdateDto category = categoryRepository.getFindByCategoryId(category2.getCategoryId()).orElse(null);
 
         assertEquals(category2.getCategoryId(), category.getCategoryId());
         assertEquals(category2.getCategoryName(), category.getCategoryName());

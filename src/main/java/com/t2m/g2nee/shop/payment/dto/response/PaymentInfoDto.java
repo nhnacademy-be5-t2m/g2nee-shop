@@ -6,6 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 결제 정보를 응답하기 위한 dto입니다.
+ * @author : 김수빈
+ * @since : 1.0
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -47,7 +52,7 @@ public class PaymentInfoDto {
     private String orderNumber;
 
     /**
-     * {책이름} 외 n개
+     * {책이름} 외 n개 형식의 주문 이름
      */
     private String orderName;
 }

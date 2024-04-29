@@ -23,11 +23,18 @@ public class TossConfig {
     private final NhnCloudKeyProperties nhnCloudKeyProperties;
     private final String url;
 
+    /**
+     * TossConfig의 생성자입니다.
+     * @param nhnCloudKeyProperties nhn cloud에 저장된 정보를 받아오기 위한 properties
+     */
     public TossConfig(NhnCloudKeyProperties nhnCloudKeyProperties) {
         this.nhnCloudKeyProperties = nhnCloudKeyProperties;
         this.url = nhnCloudKeyProperties.getUrl() + nhnCloudKeyProperties.getPath() + nhnCloudKeyProperties.getAppKey();
     }
 
+    /**
+     * Toss에서 사용하는 SecretKey를 가져와 Base64로 인코딩합니다.
+     */
     @Bean
     public String getTossSecretKey() {
         TossPaymentProperties properties = getTossPaymentProperties();
