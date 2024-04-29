@@ -1,5 +1,6 @@
 package com.t2m.g2nee.shop.orderset.orderdetail.repository;
 
+import com.t2m.g2nee.shop.orderset.orderdetail.domain.OrderDetail;
 import com.t2m.g2nee.shop.orderset.orderdetail.dto.response.GetOrderDetailResponseDto;
 import java.util.List;
 
@@ -23,8 +24,17 @@ public interface OrderDetailCustomRepository {
      * 주문id 기반으로 주문 상세 내역 확인
      *
      * @param orderId 주문 id
-     * @return
+     * @return 주문 상세 목록 반환
      */
     List<GetOrderDetailResponseDto> getOrderDetailListByOrderId(Long orderId);
+
+    /**
+     * 요청하는 주문id를 가진 OrderDetail 반환
+     *
+     * @param orderId
+     * @return 주문 상세 목록 반환
+     */
+    List<OrderDetail> findByOrder_OrderId(Long orderId);
+
 
 }

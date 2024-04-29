@@ -1,6 +1,7 @@
 package com.t2m.g2nee.shop.orderset.order.service;
 
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
+import com.t2m.g2nee.shop.orderset.order.dto.request.OrderCreateRequestDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
@@ -13,12 +14,12 @@ import com.t2m.g2nee.shop.pageUtils.PageResponse;
  */
 public interface OrderService {
 
-//    /**
-//     * 주문 생성
-//     *
-//     * @param orderCreateRequestDto 해당 dto 객체
-//     */
-//    Long createOrder(OrderCreateRequestDto orderCreateRequestDto);
+    /**
+     * 주문 생성
+     *
+     * @param orderCreateRequestDto 해당 dto 객체
+     */
+    Long createOrder(OrderCreateRequestDto orderCreateRequestDto);
 
     /**
      * 전체 주문 조회(admin용)

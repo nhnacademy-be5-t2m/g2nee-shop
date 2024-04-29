@@ -35,10 +35,12 @@ public interface OrderDetailService {
      */
     List<GetOrderDetailResponseDto> getOrderDetailListByOrderId(Long orderId);
 
-//    /**
-//     * 도서 주문 상세 정보 변경
-//     *
-//     * @param changeRequestDto
-//     */
-//    OrderDetailChangeRequestDto changeOrderDetail(OrderDetailChangeRequestDto changeRequestDto);
+    /**
+     * 주문 상세를 기반으로 주문 이름 생성
+     *
+     * @param orderId
+     * @return 주문 이름
+     */
+    String getOrderName(Long orderId);
+
 }

@@ -1,9 +1,11 @@
 package com.t2m.g2nee.shop.orderset.order.service.impl;
 
 import com.t2m.g2nee.shop.exception.NotFoundException;
+import com.t2m.g2nee.shop.memberset.Customer.domain.Customer;
 import com.t2m.g2nee.shop.memberset.Customer.repository.CustomerRepository;
 import com.t2m.g2nee.shop.memberset.Member.repository.MemberRepository;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
+import com.t2m.g2nee.shop.orderset.order.dto.request.OrderCreateRequestDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
 import com.t2m.g2nee.shop.orderset.order.repository.OrderRepository;
@@ -33,22 +35,23 @@ public class OrderImplService implements OrderService {
     //private final CouponRepository couponRepository;
 
 
-    //    @Override
-//    @Transactional
-//    public Long createOrder(OrderCreateRequestDto orderCreateRequestDto) {
-//        //
-//        Customer customer = null;
+    @Override
+    @Transactional
+    public Long createOrder(OrderCreateRequestDto orderCreateRequestDto) {
+
+        Customer customer = null;
 //        if (Objects.nonNull(orderCreateRequestDto.getCustomerId())) {
-//            customer = customerRepository.findById(orderCreateRequestDto.getCustomerId())
+//            customer = customerRepository.findById(orderCreateRequestDto.getCustomerId());
 //                    .orElseThrow(() -> new NotFoundException("회원이 아닙니다."));
 //        }
-//    String orderNumber = UUID.randomUUID().toString().replace("-", "");
+//        String orderNumber = UUID.randomUUID().toString().replace("-", "");
 //        DeliveryPolicy deliveryPolicy = deliveryPolicyService.getDeliveryPolicy(orderCreateRequestDto.)
 //
-//        Order order = orderRepository.save(new Order());
-//
-//        return null;
-//    }
+//        Order order = orderRepository.save(Order.builder()
+//                .customer(customer));
+
+        return null;
+    }
 
     @Override
     public PageResponse<GetOrderListForAdminResponseDto> getALlOrderList(int page) {
