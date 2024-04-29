@@ -124,7 +124,7 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
 
     @Override
     public GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long customerId) {
-        GetOrderInfoResponseDto getOrderInfoResponseDto = from(orders)
+        return from(orders)
                 .innerJoin(member).on(orders.customer.customerId.eq(member.customerId))
                 .leftJoin(couponType).on(orders.coupon.couponType.couponTypeId.eq(couponType.couponTypeId))
                 .where(orders.orderId.eq(orderId).and(orders.customer.customerId.eq(customerId)))
@@ -143,13 +143,11 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
                         orders.detailAddress,
                         orders.message,
                         couponType.name.as("couponName"))).fetchOne();
-
-        return getOrderInfoResponseDto;
     }
 
     @Override
     public GetOrderInfoResponseDto getOrderInfoByOrderNumber(String orderNumber) {
-        GetOrderInfoResponseDto getOrderInfoResponseDto = from(orders)
+        return from(orders)
                 .innerJoin(customer).on(orders.customer.customerId.eq(customer.customerId))
                 .leftJoin(couponType).on(orders.coupon.couponType.couponTypeId.eq(couponType.couponTypeId))
                 .where(orders.orderNumber.eq(orderNumber))
@@ -168,7 +166,5 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
                         orders.detailAddress,
                         orders.message,
                         couponType.name.as("couponName"))).fetchOne();
-
-        return getOrderInfoResponseDto;
     }
 }

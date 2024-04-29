@@ -53,11 +53,10 @@ public class OrderImplService implements OrderService {
 
     @Override
     public PageResponse<GetOrderListForAdminResponseDto> getALlOrderList(int page) {
-        GetOrderListForAdminResponseDto orderListForAdminResponseDto = new GetOrderListForAdminResponseDto();
         int size = 5;
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdAt"));
         Page<GetOrderListForAdminResponseDto> returnAdminList =
-                orderRepository.getAllOrderList(Pageable.ofSize(page));
+                orderRepository.getAllOrderList(pageable);
         PageResponse<GetOrderListForAdminResponseDto> pageResponse = new PageResponse<>();
         return pageResponse.getPageResponse(page, 4, returnAdminList);
     }
@@ -65,19 +64,20 @@ public class OrderImplService implements OrderService {
     @Override
     public PageResponse<GetOrderListForAdminResponseDto> getAllOrdersByState(int page,
                                                                              Orders.OrderState orderState) {
+        int size = 5;
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdAt"));
         Page<GetOrderListForAdminResponseDto> returnAdminList =
-                orderRepository.getOrderListByState(Pageable.ofSize(page), orderState);
+                orderRepository.getOrderListByState(pageable, orderState);
         PageResponse<GetOrderListForAdminResponseDto> pageResponse = new PageResponse<>();
         return pageResponse.getPageResponse(page, 4, returnAdminList);
     }
 
     @Override
     public PageResponse<GetOrderInfoResponseDto> getOrderListForMembers(int page, Long customerId) {
-        GetOrderInfoResponseDto orderListDto = new GetOrderInfoResponseDto();
         int size = 5;
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdAt"));
         Page<GetOrderInfoResponseDto> returnOrderList =
-                orderRepository.getOrderListForMembers(Pageable.ofSize(page), customerId);
+                orderRepository.getOrderListForMembers(pageable, customerId);
         PageResponse<GetOrderInfoResponseDto> pageResponse = new PageResponse<>();
         return pageResponse.getPageResponse(page, 4, returnOrderList);
     }
@@ -85,17 +85,13 @@ public class OrderImplService implements OrderService {
 
     @Override
     public GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long customerId) {
-        GetOrderInfoResponseDto orderInfoResponseDto =
-                orderRepository.getOrderInfoById(orderId, customerId);
-        return orderInfoResponseDto;
+        return orderRepository.getOrderInfoById(orderId, customerId);
     }
 
     //주문 번호로 조회
     @Override
     public GetOrderInfoResponseDto getOrderInfoByOrderNumber(String orderNumber) {
-        GetOrderInfoResponseDto orderInfoResponseDto =
-                orderRepository.getOrderInfoByOrderNumber(orderNumber);
-        return orderInfoResponseDto;
+        return orderRepository.getOrderInfoByOrderNumber(orderNumber);
     }
 
 //    @Override
