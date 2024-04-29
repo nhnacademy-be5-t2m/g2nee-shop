@@ -7,7 +7,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.ParameterizedTypeReference;
@@ -19,26 +18,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
-@Slf4j
 public class TossConfig {
 
     private final NhnCloudKeyProperties nhnCloudKeyProperties;
-    private final String URL;
+    private final String url;
 
     public TossConfig(NhnCloudKeyProperties nhnCloudKeyProperties) {
         this.nhnCloudKeyProperties = nhnCloudKeyProperties;
-        this.URL = nhnCloudKeyProperties.getUrl() + nhnCloudKeyProperties.getPath() + nhnCloudKeyProperties.getAppKey();
+        this.url = nhnCloudKeyProperties.getUrl() + nhnCloudKeyProperties.getPath() + nhnCloudKeyProperties.getAppKey();
     }
 
     @Bean
     public String getTossSecretKey() {
         TossPaymentProperties properties = getTossPaymentProperties();
-        log.info("toss!! :: " + properties.getSecretKey());
         Base64.Encoder encoder = Base64.getEncoder();
-        byte[] encodedBytes = encoder.encode((properties.getSecretKey() + ":").getBytes(StandardCharsets.UTF_8));
-        String authorizations = "Basic " + new String(encodedBytes);
+        byte[] encodedBytes = encoder.encode(properties.getSecretKey().getBytes(StandardCharsets.UTF_8));
 
-        return authorizations;
+        return new String(encodedBytes);
     }
 
     /**
@@ -65,7 +61,7 @@ public class TossConfig {
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         HttpEntity<String> requestEntity = new HttpEntity<>(httpHeaders);
-        ResponseEntity<KeyResponseDto> exchange = restTemplate.exchange(URL + keyId,
+        ResponseEntity<KeyResponseDto> exchange = restTemplate.exchange(url + keyId,
                 HttpMethod.GET,
                 requestEntity,
                 new ParameterizedTypeReference<>() {

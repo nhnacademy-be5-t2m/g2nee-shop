@@ -1,6 +1,6 @@
 package com.t2m.g2nee.shop.payment.service.impl;
 
-import com.t2m.g2nee.shop.payment.service.impl.payType.PaymentRequestMethod;
+import com.t2m.g2nee.shop.payment.service.impl.paytype.PaymentRequestMethod;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

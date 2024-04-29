@@ -1,4 +1,4 @@
-package com.t2m.g2nee.shop.orderset.Order.domain;
+package com.t2m.g2nee.shop.orderset.order.domain;
 
 import com.t2m.g2nee.shop.couponset.Coupon.domain.Coupon;
 import com.t2m.g2nee.shop.memberset.Customer.domain.Customer;
@@ -44,7 +44,7 @@ public class Order {
     private String receiverPhoneNumber;
     private String receiveAddress;
     private String zipcode;
-    private String detail;
+    private String detailAddress;
     private String message;
 
     @ManyToOne

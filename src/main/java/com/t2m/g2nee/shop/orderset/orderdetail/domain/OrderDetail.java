@@ -1,7 +1,8 @@
-package com.t2m.g2nee.shop.orderset.OrderDetail.domain;
+package com.t2m.g2nee.shop.orderset.orderdetail.domain;
 
 import com.t2m.g2nee.shop.bookset.book.domain.Book;
 import com.t2m.g2nee.shop.memberset.Customer.domain.Customer;
+import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import com.t2m.g2nee.shop.orderset.packageType.domain.PackageType;
 import java.math.BigDecimal;
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 
 @Entity
@@ -31,6 +33,11 @@ public class OrderDetail {
     private BigDecimal price;
     private Integer quantity;
     private Boolean isCancelled;
+
+    @NonNull
+    @ManyToOne
+    @JoinColumn(name = "orderId")
+    private Order order;
 
     @ManyToOne
     @JoinColumn(name = "bookId")

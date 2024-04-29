@@ -16,18 +16,15 @@ public interface PaymentService {
 
     /**
      * 결제를 취소합니다.
-     *
-     * @param orderNumber
      */
-    void cancelPayment(String orderNumber);
+    PaymentInfoDto cancelPayment(Long paymentId);
 
 
     /**
-     * 주문번호로 하나의 결제 내역을 조회합니다.
+     * 주문을통해 하나의 결제 내역을 조회합니다.
      *
-     * @param orderNumber
      */
-    PaymentInfoDto getPayment(String orderNumber);
+    PaymentInfoDto getPayment(Long orderId);
 
 
     /**

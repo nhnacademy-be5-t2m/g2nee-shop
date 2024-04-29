@@ -1,6 +1,7 @@
 package com.t2m.g2nee.shop.payment.dto.response;
 
 import java.math.BigDecimal;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,13 +18,13 @@ public class TossPaymentResponseDto {
     private BigDecimal totalAmount;
     private String status;
     private String approvedAt;
-    private Cancel cancels;
+    private List<Cancel> cancels;
     private Failure failure;
 
     @NoArgsConstructor
     @AllArgsConstructor
     @Getter
-    public class Cancel {
+    public static class Cancel {
         private BigDecimal cancelAmount;
         private String cancelReason;
         private String canceledAt;
@@ -33,7 +34,7 @@ public class TossPaymentResponseDto {
     @NoArgsConstructor
     @AllArgsConstructor
     @Getter
-    public class Failure {
+    public static class Failure {
         private String code;
         private String message;
     }
