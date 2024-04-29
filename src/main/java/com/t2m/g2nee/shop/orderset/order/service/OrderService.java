@@ -1,5 +1,6 @@
 package com.t2m.g2nee.shop.orderset.order.service;
 
+import com.t2m.g2nee.shop.orderset.order.domain.Orders;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
@@ -27,15 +28,15 @@ public interface OrderService {
      */
     PageResponse<GetOrderListForAdminResponseDto> getALlOrderList(int page);
 
-//    /**
-//     * 전체 주문 상태에 따라 반환(admin용)
-//     *
-//     * @param pageable   paging
-//     * @param orderState 주문 상태
-//     * @return 주문 목록
-//     */
-//    PageResponse<GetOrderListForAdminResponseDto> getAllOrdersByState(Pageable pageable, Order.OrderState orderState);
-//
+    /**
+     * 전체 주문 상태에 따라 반환(admin용)
+     *
+     * @param page       현재 페이지
+     * @param orderState 주문 상태
+     * @return 주문 목록
+     */
+    PageResponse<GetOrderListForAdminResponseDto> getAllOrdersByState(int page, Orders.OrderState orderState);
+
 
     /**
      * 회원의 전체 주문 조회

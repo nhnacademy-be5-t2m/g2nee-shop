@@ -2,6 +2,7 @@ package com.t2m.g2nee.shop.orderset.order.service.impl;
 
 import com.t2m.g2nee.shop.memberset.Customer.repository.CustomerRepository;
 import com.t2m.g2nee.shop.memberset.Member.repository.MemberRepository;
+import com.t2m.g2nee.shop.orderset.order.domain.Orders;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
 import com.t2m.g2nee.shop.orderset.order.repository.OrderRepository;
@@ -10,7 +11,6 @@ import com.t2m.g2nee.shop.orderset.orderdetail.repository.OrderDetailRepository;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import com.t2m.g2nee.shop.policyset.deliveryPolicy.service.DeliveryPolicyService;
 import com.t2m.g2nee.shop.policyset.pointPolicy.repository.PointPolicyRepository;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -43,7 +43,7 @@ public class OrderImplService implements OrderService {
 //            customer = customerRepository.findById(orderCreateRequestDto.getCustomerId())
 //                    .orElseThrow(() -> new NotFoundException("회원이 아닙니다."));
 //        }
-    String orderNumber = UUID.randomUUID().toString().replace("-", "");
+//    String orderNumber = UUID.randomUUID().toString().replace("-", "");
 //        DeliveryPolicy deliveryPolicy = deliveryPolicyService.getDeliveryPolicy(orderCreateRequestDto.)
 //
 //        Order order = orderRepository.save(new Order());
@@ -61,14 +61,15 @@ public class OrderImplService implements OrderService {
         PageResponse<GetOrderListForAdminResponseDto> pageResponse = new PageResponse<>();
         return pageResponse.getPageResponse(page, 4, returnAdminList);
     }
-//
-//    @Override
-//    public PageResponse<GetOrderListForAdminResponseDto> getAllOrdersByState(Pageable pageable,
-//                                                                             Order.OrderState orderState) {
-//        Page<GetOrderListForAdminResponseDto> returnList =
-//                orderRepository.getAllOrderList(pageable);
-//        return new PageResponse<>(returnList);
-//    }
+
+    @Override
+    public PageResponse<GetOrderListForAdminResponseDto> getAllOrdersByState(int page,
+                                                                             Orders.OrderState orderState) {
+        Page<GetOrderListForAdminResponseDto> returnAdminList =
+                orderRepository.getOrderListByState(Pageable.ofSize(page), orderState);
+        PageResponse<GetOrderListForAdminResponseDto> pageResponse = new PageResponse<>();
+        return pageResponse.getPageResponse(page, 4, returnAdminList);
+    }
 
     @Override
     public PageResponse<GetOrderInfoResponseDto> getOrderListForMembers(int page, Long customerId) {

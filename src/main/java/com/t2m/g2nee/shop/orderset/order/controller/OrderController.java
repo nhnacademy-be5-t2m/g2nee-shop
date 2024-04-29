@@ -1,5 +1,6 @@
 package com.t2m.g2nee.shop.orderset.order.controller;
 
+import com.t2m.g2nee.shop.orderset.order.domain.Orders;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
 import com.t2m.g2nee.shop.orderset.order.repository.OrderRepository;
@@ -37,7 +38,7 @@ public class OrderController {
 //     * @param createRequest 주문 생성을 위한 dto
 //     * @return 201 반환
 //     */
-//    @PostMapping("/api/orders")
+//    @PostMapping("/api/create")
 //    public ResponseEntity<Long> createOrder(@Valid @RequestBody OrderCreateRequestDto createRequest) {
 //        return ResponseEntity.status(HttpStatus.CREATED)
 //                .contentType(MediaType.APPLICATION_JSON)
@@ -61,21 +62,23 @@ public class OrderController {
     }
 
 
-//    /**
-//     * admin이 주문 상태별로 조회
-//     *
-//     * @param pageable   paging
-//     * @param orderState 주문 상태
-//     * @return 주문 list
-//     */
-//    @GetMapping("/admin/{orderState}")
-//    public ResponseEntity<PageResponse<GetOrderListForAdminResponseDto>> getAllOrdersByState(
-//            Pageable pageable, @PathVariable Order.OrderState orderState) {
-//        return ResponseEntity.status(HttpStatus.OK)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .body(orderService.getAllOrdersByState(pageable, orderState));
-//    }
-//
+    /**
+     * admin이 주문 상태별로 조회
+     *
+     * @param page       현재 페이지
+     * @param orderState 주문 상태
+     * @return 주문 list
+     */
+    @GetMapping("/admin/{orderState}")
+    public ResponseEntity<PageResponse<GetOrderListForAdminResponseDto>> getAllOrdersByState(
+            @RequestParam int page, @PathVariable Orders.OrderState orderState) {
+        PageResponse<GetOrderListForAdminResponseDto> adminListResponse =
+                orderService.getAllOrdersByState(page, orderState);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(adminListResponse);
+    }
+
 
     /**
      * member가 주문을 조회
@@ -98,8 +101,8 @@ public class OrderController {
     /**
      * 주문id로 주문 정보 조회(회원용)
      *
-     * @param orderId
-     * @return
+     * @param orderId 주문 id
+     * @return 200, 주문 정보 반환
      */
     //@MemberAndAuth
     @GetMapping("/members/{customerId}/{orderId}")

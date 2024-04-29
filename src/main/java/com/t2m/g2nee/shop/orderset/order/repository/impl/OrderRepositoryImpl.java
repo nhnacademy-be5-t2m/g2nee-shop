@@ -66,12 +66,33 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
     }
 
 
-    //
-//    @Override
-//    public Page<GetOrderListForAdminResponseDto> getOrderListByState(Pageable pageable, Order.OrderState orderState) {
-//        return null;
-//    }
-//
+    @Override
+    public Page<GetOrderListForAdminResponseDto> getOrderListByState(Pageable pageable, Orders.OrderState orderState) {
+        List<GetOrderListForAdminResponseDto> queryAdmin = from(orders)
+                .innerJoin(customer).on(orders.customer.customerId.eq(customer.customerId))
+                .leftJoin(couponType).on(orders.coupon.couponType.couponTypeId.eq(couponType.couponTypeId))
+                .where(orders.orderState.eq(orderState))
+                .select(Projections.fields(GetOrderListForAdminResponseDto.class,
+                        orders.orderId,
+                        orders.orderNumber,
+                        customer.customerId,
+                        orders.orderDate,
+                        orders.orderState,
+                        orders.orderAmount,
+                        orders.receiverName,
+                        orders.receiverPhoneNumber,
+                        orders.receiveAddress,
+                        orders.detailAddress,
+                        orders.zipcode,
+                        orders.message,
+                        couponType.name.as("couponName"))).fetch();
+
+        Long count = from(orders)
+                .select(orders.orderId.count()).fetchOne();
+
+        return new PageImpl<>(queryAdmin, pageable, count);
+    }
+
 
     @Override
     public Page<GetOrderInfoResponseDto> getOrderListForMembers(Pageable pageable, Long customerId) {
