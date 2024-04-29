@@ -3,7 +3,7 @@ package com.t2m.g2nee.shop.orderset.order.service.impl;
 import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.memberset.Customer.repository.CustomerRepository;
 import com.t2m.g2nee.shop.memberset.Member.repository.MemberRepository;
-import com.t2m.g2nee.shop.orderset.order.domain.Orders;
+import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
 import com.t2m.g2nee.shop.orderset.order.repository.OrderRepository;
@@ -62,7 +62,7 @@ public class OrderImplService implements OrderService {
 
     @Override
     public PageResponse<GetOrderListForAdminResponseDto> getAllOrdersByState(int page,
-                                                                             Orders.OrderState orderState) {
+                                                                             Order.OrderState orderState) {
         int size = 5;
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdAt"));
         Page<GetOrderListForAdminResponseDto> returnAdminList =
@@ -95,9 +95,9 @@ public class OrderImplService implements OrderService {
 
     @Override
     @Transactional
-    public void changeOrderState(Long orderId, Orders.OrderState orderState) {
+    public void changeOrderState(Long orderId, Order.OrderState orderState) {
         //order 존재 여부 확인?
-        Orders order = orderRepository.findById(orderId).orElseThrow(()
+        Order order = orderRepository.findById(orderId).orElseThrow(()
                 -> new NotFoundException("주문이 존재하지 않습니다."));
 
         order.setOrderState(orderState);

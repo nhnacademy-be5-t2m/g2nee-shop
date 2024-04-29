@@ -5,7 +5,7 @@ import com.t2m.g2nee.shop.couponset.Coupon.domain.QCoupon;
 import com.t2m.g2nee.shop.couponset.CouponType.domain.QCouponType;
 import com.t2m.g2nee.shop.memberset.Customer.domain.QCustomer;
 import com.t2m.g2nee.shop.memberset.Member.domain.QMember;
-import com.t2m.g2nee.shop.orderset.order.domain.Orders;
+import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import com.t2m.g2nee.shop.orderset.order.domain.QOrders;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
@@ -34,7 +34,7 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
     QCouponType couponType = QCouponType.couponType;
 
     public OrderRepositoryImpl() {
-        super(Orders.class);
+        super(Order.class);
     }
 
 
@@ -67,7 +67,7 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
 
 
     @Override
-    public Page<GetOrderListForAdminResponseDto> getOrderListByState(Pageable pageable, Orders.OrderState orderState) {
+    public Page<GetOrderListForAdminResponseDto> getOrderListByState(Pageable pageable, Order.OrderState orderState) {
         List<GetOrderListForAdminResponseDto> queryAdmin = from(orders)
                 .innerJoin(customer).on(orders.customer.customerId.eq(customer.customerId))
                 .leftJoin(couponType).on(orders.coupon.couponType.couponTypeId.eq(couponType.couponTypeId))

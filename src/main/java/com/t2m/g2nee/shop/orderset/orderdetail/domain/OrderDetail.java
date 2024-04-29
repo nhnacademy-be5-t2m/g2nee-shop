@@ -2,7 +2,7 @@ package com.t2m.g2nee.shop.orderset.orderdetail.domain;
 
 import com.t2m.g2nee.shop.bookset.book.domain.Book;
 import com.t2m.g2nee.shop.memberset.Customer.domain.Customer;
-import com.t2m.g2nee.shop.orderset.order.domain.Orders;
+import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import com.t2m.g2nee.shop.orderset.packageType.domain.PackageType;
 import java.math.BigDecimal;
 import javax.persistence.Entity;
@@ -37,7 +37,7 @@ public class OrderDetail {
     @NonNull
     @ManyToOne
     @JoinColumn(name = "orderId")
-    private Orders orders;
+    private Order order;
 
     @ManyToOne
     @JoinColumn(name = "bookId")

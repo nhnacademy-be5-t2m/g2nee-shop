@@ -1,7 +1,7 @@
 package com.t2m.g2nee.shop.orderset.delivery.domain;
 
 import com.t2m.g2nee.shop.memberset.Customer.domain.Customer;
-import com.t2m.g2nee.shop.orderset.order.domain.Orders;
+import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import java.sql.Timestamp;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,7 +34,7 @@ public class Delivery {
 
     @ManyToOne
     @JoinColumn(name = "orderId")
-    private Orders orders;
+    private Order order;
 
     @ManyToOne
     @JoinColumn(name = "customerId")

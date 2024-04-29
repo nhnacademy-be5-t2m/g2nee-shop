@@ -1,6 +1,6 @@
 package com.t2m.g2nee.shop.orderset.order.service;
 
-import com.t2m.g2nee.shop.orderset.order.domain.Orders;
+import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
@@ -35,7 +35,7 @@ public interface OrderService {
      * @param orderState 주문 상태
      * @return 주문 목록
      */
-    PageResponse<GetOrderListForAdminResponseDto> getAllOrdersByState(int page, Orders.OrderState orderState);
+    PageResponse<GetOrderListForAdminResponseDto> getAllOrdersByState(int page, Order.OrderState orderState);
 
 
     /**
@@ -69,6 +69,6 @@ public interface OrderService {
      * @param orderId    주문 id
      * @param orderState 주문 상태
      */
-    void changeOrderState(Long orderId, Orders.OrderState orderState);
+    void changeOrderState(Long orderId, Order.OrderState orderState);
 
 }

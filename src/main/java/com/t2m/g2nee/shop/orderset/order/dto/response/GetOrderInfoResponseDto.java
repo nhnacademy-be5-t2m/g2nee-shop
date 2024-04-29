@@ -1,8 +1,8 @@
 package com.t2m.g2nee.shop.orderset.order.dto.response;
 
-import com.t2m.g2nee.shop.orderset.order.domain.Orders;
+import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,11 +19,11 @@ import lombok.NoArgsConstructor;
 public class GetOrderInfoResponseDto {
     private Long orderId;
     private String orderNumber;
-    private Timestamp orderDate;
-    private Timestamp deliveryWishDate;
+    private LocalDateTime orderDate;
+    private LocalDateTime deliveryWishDate;
     //todo: 배송완료날짜 추가해야 함
     private BigDecimal deliveryFee;
-    private Orders.OrderState orderState;
+    private Order.OrderState orderState;
     private BigDecimal orderAmount;
     private String receiverName;
     private String receiverPhoneNumber;

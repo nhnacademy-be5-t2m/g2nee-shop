@@ -1,6 +1,6 @@
 package com.t2m.g2nee.shop.orderset.order.controller;
 
-import com.t2m.g2nee.shop.orderset.order.domain.Orders;
+import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
 import com.t2m.g2nee.shop.orderset.order.service.OrderService;
@@ -69,7 +69,7 @@ public class OrderController {
      */
     @GetMapping("/admin/orders/{orderState}")
     public ResponseEntity<PageResponse<GetOrderListForAdminResponseDto>> getAllOrdersByState(
-            @RequestParam int page, @PathVariable Orders.OrderState orderState) {
+            @RequestParam int page, @PathVariable Order.OrderState orderState) {
         PageResponse<GetOrderListForAdminResponseDto> adminListResponse =
                 orderService.getAllOrdersByState(page, orderState);
         return ResponseEntity.status(HttpStatus.OK)
@@ -103,7 +103,7 @@ public class OrderController {
      * @return 200, 주문 정보 반환
      */
     //@MemberAndAuth
-    @GetMapping("/members/{customerId}/{orderId}")
+    @GetMapping("/members/{customerId}/order/{orderId}")
     public ResponseEntity<GetOrderInfoResponseDto> getOrderInfoByOrderId(
             @PathVariable Long orderId, @PathVariable Long customerId) {
         GetOrderInfoResponseDto orderInfoResponseDto = orderService.getOrderInfoById(orderId, customerId);

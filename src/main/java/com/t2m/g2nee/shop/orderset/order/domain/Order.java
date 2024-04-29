@@ -3,7 +3,7 @@ package com.t2m.g2nee.shop.orderset.order.domain;
 import com.t2m.g2nee.shop.couponset.Coupon.domain.Coupon;
 import com.t2m.g2nee.shop.memberset.Customer.domain.Customer;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -27,14 +27,14 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Orders {
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
     private String orderNumber; //주문번호(비회원 조회용)
-    private Timestamp orderDate;
-    private Timestamp deliveryWishDate;
+    private LocalDateTime orderDate;
+    private LocalDateTime deliveryWishDate;
     private BigDecimal deliveryFee; //배송비
     @Enumerated(EnumType.STRING)
     private OrderState orderState;
