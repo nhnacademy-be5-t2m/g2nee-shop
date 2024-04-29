@@ -111,18 +111,19 @@ public class OrderController {
                 .body(orderInfoResponseDto);
 
     }
-//
-//    /**
-//     * 주문 번호로 주문 정보 조회(비회원용)
-//     *
-//     * @param orderNumber 주문 번호
-//     * @return 200, 주문정보 dto
-//     */
-//    @GetMapping("/api/orders/nonmembers/{orderNumber}")
-//    public ResponseEntity<GetOrderInfoResponseDto> getOrderInfoByOrderNumber(
-//            @PathVariable String orderNumber) {
-//        return ResponseEntity.status(HttpStatus.OK)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .body(orderService.getOrderInfoByOrderNumber(orderNumber));
-//    }
+
+    /**
+     * 주문 번호로 주문 정보 조회(비회원용)
+     *
+     * @param orderNumber 주문 번호
+     * @return 200, 주문정보 dto
+     */
+    @GetMapping("/nonmembers/{orderNumber}")
+    public ResponseEntity<GetOrderInfoResponseDto> getOrderInfoByOrderNumber(
+            @PathVariable String orderNumber) {
+        GetOrderInfoResponseDto customerOrderInfoDto = orderService.getOrderInfoByOrderNumber(orderNumber);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(customerOrderInfoDto);
+    }
 }

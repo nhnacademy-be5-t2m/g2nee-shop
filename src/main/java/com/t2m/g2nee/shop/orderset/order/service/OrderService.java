@@ -54,13 +54,13 @@ public interface OrderService {
      */
     GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long customerId);
 
-//    /**
-//     * 비회원 주문 정보 조회(주문 번호로 조회)
-//     *
-//     * @param orderNumber 주문번호.
-//     * @return 주문 정보
-//     */
-//    GetOrderInfoResponseDto getOrderInfoByOrderNumber(String orderNumber);
+    /**
+     * 비회원 주문 정보 조회(주문 번호로 조회)
+     *
+     * @param orderNumber 주문번호.
+     * @return 주문 정보
+     */
+    GetOrderInfoResponseDto getOrderInfoByOrderNumber(String orderNumber);
 
 //    /**
 //     * 주문 상태 변경

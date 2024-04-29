@@ -12,7 +12,6 @@ import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminRespon
 import com.t2m.g2nee.shop.orderset.order.repository.OrderCustomRepository;
 import com.t2m.g2nee.shop.orderset.orderdetail.domain.QOrderDetail;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -128,7 +127,27 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public Optional<GetOrderInfoResponseDto> getOrderInfoByOrderNumber(String orderNumber) {
-        return Optional.empty();
+    public GetOrderInfoResponseDto getOrderInfoByOrderNumber(String orderNumber) {
+        GetOrderInfoResponseDto getOrderInfoResponseDto = from(orders)
+                .innerJoin(customer).on(orders.customer.customerId.eq(customer.customerId))
+                .leftJoin(couponType).on(orders.coupon.couponType.couponTypeId.eq(couponType.couponTypeId))
+                .where(orders.orderNumber.eq(orderNumber))
+                .select(Projections.fields(GetOrderInfoResponseDto.class,
+                        orders.orderId,
+                        orders.orderNumber,
+                        orders.orderDate,
+                        orders.deliveryWishDate,
+                        orders.deliveryFee,
+                        orders.orderState,
+                        orders.orderAmount,
+                        orders.receiverName,
+                        orders.receiveAddress,
+                        orders.receiverPhoneNumber,
+                        orders.zipcode,
+                        orders.detailAddress,
+                        orders.message,
+                        couponType.name.as("couponName"))).fetchOne();
+
+        return getOrderInfoResponseDto;
     }
 }

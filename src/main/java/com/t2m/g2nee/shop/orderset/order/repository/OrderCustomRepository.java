@@ -2,7 +2,6 @@ package com.t2m.g2nee.shop.orderset.order.repository;
 
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
-import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -58,6 +57,6 @@ public interface OrderCustomRepository {
      * @param orderNumber 주문번호.
      * @return 주문정보 반환
      */
-    Optional<GetOrderInfoResponseDto> getOrderInfoByOrderNumber(String orderNumber);
+    GetOrderInfoResponseDto getOrderInfoByOrderNumber(String orderNumber);
 
 }

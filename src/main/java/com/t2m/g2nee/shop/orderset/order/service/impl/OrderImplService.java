@@ -89,14 +89,13 @@ public class OrderImplService implements OrderService {
         return orderInfoResponseDto;
     }
 
-//    //주문 번호로 조회
-//    @Override
-//    public GetOrderInfoResponseDto getOrderInfoByOrderNumber(String orderNumber) {
-//        GetOrderInfoResponseDto orderInfoResponseDto = orderRepository.getOrderInfoByOrderNumber(orderNumber)
-//                .orElseThrow(() -> new NotFoundException("존재하지 않습니다"));
-//        orderInfoResponseDto.
-//        return null;
-//    }
+    //주문 번호로 조회
+    @Override
+    public GetOrderInfoResponseDto getOrderInfoByOrderNumber(String orderNumber) {
+        GetOrderInfoResponseDto orderInfoResponseDto =
+                orderRepository.getOrderInfoByOrderNumber(orderNumber);
+        return orderInfoResponseDto;
+    }
 
 //    @Override
 //    @Transactional
