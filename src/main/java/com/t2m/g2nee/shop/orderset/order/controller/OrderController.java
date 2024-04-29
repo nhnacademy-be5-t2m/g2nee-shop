@@ -3,7 +3,6 @@ package com.t2m.g2nee.shop.orderset.order.controller;
 import com.t2m.g2nee.shop.orderset.order.domain.Orders;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
-import com.t2m.g2nee.shop.orderset.order.repository.OrderRepository;
 import com.t2m.g2nee.shop.orderset.order.service.OrderService;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
-    private final OrderRepository orderRepository;
 
 //    /**
 //     * 주문을 생성
@@ -69,7 +67,7 @@ public class OrderController {
      * @param orderState 주문 상태
      * @return 주문 list
      */
-    @GetMapping("/admin/{orderState}")
+    @GetMapping("/admin/orders/{orderState}")
     public ResponseEntity<PageResponse<GetOrderListForAdminResponseDto>> getAllOrdersByState(
             @RequestParam int page, @PathVariable Orders.OrderState orderState) {
         PageResponse<GetOrderListForAdminResponseDto> adminListResponse =

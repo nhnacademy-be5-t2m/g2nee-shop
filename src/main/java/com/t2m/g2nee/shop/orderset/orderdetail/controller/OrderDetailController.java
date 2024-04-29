@@ -1,7 +1,6 @@
 package com.t2m.g2nee.shop.orderset.orderdetail.controller;
 
 import com.t2m.g2nee.shop.orderset.orderdetail.dto.response.GetOrderDetailResponseDto;
-import com.t2m.g2nee.shop.orderset.orderdetail.repository.OrderDetailRepository;
 import com.t2m.g2nee.shop.orderset.orderdetail.service.OrderDetailService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/shop/orders")
 public class OrderDetailController {
     private final OrderDetailService orderDetailService;
-    private final OrderDetailRepository orderDetailRepository;
 
     /**
      * 주문id를 기반으로 주문 상세 내역 반환

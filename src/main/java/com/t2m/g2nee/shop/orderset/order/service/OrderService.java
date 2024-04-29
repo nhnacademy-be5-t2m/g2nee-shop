@@ -63,12 +63,12 @@ public interface OrderService {
      */
     GetOrderInfoResponseDto getOrderInfoByOrderNumber(String orderNumber);
 
-//    /**
-//     * 주문 상태 변경
-//     *
-//     * @param
-//     * @
-//     */
-//    void changeOrderState(Long orderId, Order.OrderState orderState);
+    /**
+     * 주문 상태 변경
+     *
+     * @param orderId    주문 id
+     * @param orderState 주문 상태
+     */
+    void changeOrderState(Long orderId, Orders.OrderState orderState);
 
 }

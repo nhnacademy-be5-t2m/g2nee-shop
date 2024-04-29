@@ -1,5 +1,6 @@
 package com.t2m.g2nee.shop.orderset.order.service.impl;
 
+import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.memberset.Customer.repository.CustomerRepository;
 import com.t2m.g2nee.shop.memberset.Member.repository.MemberRepository;
 import com.t2m.g2nee.shop.orderset.order.domain.Orders;
@@ -9,7 +10,6 @@ import com.t2m.g2nee.shop.orderset.order.repository.OrderRepository;
 import com.t2m.g2nee.shop.orderset.order.service.OrderService;
 import com.t2m.g2nee.shop.orderset.orderdetail.repository.OrderDetailRepository;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
-import com.t2m.g2nee.shop.policyset.deliveryPolicy.service.DeliveryPolicyService;
 import com.t2m.g2nee.shop.policyset.pointPolicy.repository.PointPolicyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,6 @@ public class OrderImplService implements OrderService {
     private final CustomerRepository customerRepository;
     private final MemberRepository memberRepository;
     private final OrderDetailRepository orderDetailRepository;
-    private final DeliveryPolicyService deliveryPolicyService;
     private final PointPolicyRepository pointPolicyRepository;
     //private final CouponRepository couponRepository;
 
@@ -94,16 +93,16 @@ public class OrderImplService implements OrderService {
         return orderRepository.getOrderInfoByOrderNumber(orderNumber);
     }
 
-//    @Override
-//    @Transactional
-//    public void changeOrderState(Long orderId, Order.OrderState orderState) {
-//        //order 존재 여부 확인?
-//        Order order = orderRepository.findById(orderId).orElseThrow(()
-//                -> new NotFoundException("주문이 존재하지 않습니다."));
-//
-//        order.setOrderState(orderState);
-//        orderRepository.save(order);
-//    }
+    @Override
+    @Transactional
+    public void changeOrderState(Long orderId, Orders.OrderState orderState) {
+        //order 존재 여부 확인?
+        Orders order = orderRepository.findById(orderId).orElseThrow(()
+                -> new NotFoundException("주문이 존재하지 않습니다."));
+
+        order.setOrderState(orderState);
+        orderRepository.save(order);
+    }
 
 
 }

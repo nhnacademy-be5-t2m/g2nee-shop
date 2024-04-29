@@ -1,6 +1,5 @@
 package com.t2m.g2nee.shop.orderset.order.dto.request;
 
-import com.t2m.g2nee.shop.couponset.Coupon.domain.Coupon;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +16,6 @@ public class OrderChangeRequestDto {
     @NotNull(message = "도서 주문 변경")
     private Long orderDetailId;
     @NotNull(message = "쿠폰")
-    private Coupon coupon;
+    private String couponId;
 
 }
