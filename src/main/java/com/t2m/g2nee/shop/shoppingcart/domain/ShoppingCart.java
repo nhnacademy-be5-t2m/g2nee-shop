@@ -1,7 +1,7 @@
 package com.t2m.g2nee.shop.shoppingcart.domain;
 
 import com.t2m.g2nee.shop.bookset.book.domain.Book;
-import com.t2m.g2nee.shop.memberset.Member.domain.Member;
+import com.t2m.g2nee.shop.memberset.member.domain.Member;
 import lombok.*;
 
 import javax.persistence.*;
