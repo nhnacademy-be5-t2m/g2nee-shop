@@ -6,7 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AddressRepository extends JpaRepository<Address, Long> {
     int countAddressByMemberCustomerId(Long memberId);
+
     List<Address> getAllByMemberCustomerIdOrderByIsDefaultDesc(Long memberId);
 
-    Address findAddressByMemberCustomerIdAndIsDefault(Long memberId,Boolean isDefault);
+    Address findAddressByMemberCustomerIdAndIsDefault(Long memberId, Boolean isDefault);
 }

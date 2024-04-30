@@ -13,8 +13,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,7 +56,7 @@ public class AddressController {
      * @return memberId에 해당하는 주소 list를 반환
      */
     @GetMapping("/getListByMemberId/{memberId}")
-    public ResponseEntity<List<AddressResponseDto>> getAddressList(@PathVariable("memberId") Long memberId){
+    public ResponseEntity<List<AddressResponseDto>> getAddressList(@PathVariable("memberId") Long memberId) {
         List<AddressResponseDto> addressListByMemberId = addressService.getAddressListByMemberId(memberId);
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -68,7 +70,7 @@ public class AddressController {
      * @return 주소 반환
      */
     @GetMapping("/getByAddressId/{addressId}")
-    public ResponseEntity<AddressResponseDto> getAddress(@PathVariable("addressId") Long addressId){
+    public ResponseEntity<AddressResponseDto> getAddress(@PathVariable("addressId") Long addressId) {
         AddressResponseDto response = addressService.getAddressByAddressId(addressId);
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -82,7 +84,7 @@ public class AddressController {
      * @return ResponseEntity<Void> 반환
      */
     @DeleteMapping("/delete/{addressId}")
-    public ResponseEntity<Void> deleteAddress(@PathVariable("addressId") Long addressId){
+    public ResponseEntity<Void> deleteAddress(@PathVariable("addressId") Long addressId) {
         addressService.delete(addressId);
         return ResponseEntity.noContent().build();
     }
@@ -93,12 +95,24 @@ public class AddressController {
      * @param addressRequest 수정할 주소의 정보가 담긴 dto
      * @return 수정된 주소를 반환
      */
-    @PostMapping("/modify/{addressId}")
+    @PatchMapping("/modify/{addressId}")
     public ResponseEntity<AddressResponseDto> modifyAddress(@PathVariable("addressId") Long addressId,
                                                             @Valid @RequestBody AddressRequestDto addressRequest) {
-        AddressResponseDto addressResponse = addressService.modifyAddress(addressId,addressRequest);
-        return ResponseEntity.status(HttpStatus.CREATED)
+        AddressResponseDto addressResponse = addressService.modifyAddress(addressId, addressRequest);
+        return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(addressResponse);
+    }
+
+    /**
+     * 기본 배송지를 수정하는 메소드
+     *
+     * @param addressId 기본배송지로 설정할 배송지 id
+     * @return 응답 결과
+     */
+    @PutMapping("/changeDefaultAddress/{addressId}")
+    public ResponseEntity<Void> changeDefaultAddress(@PathVariable("addressId") Long addressId) {
+        addressService.changeDefaultAddress(addressId);
+        return ResponseEntity.ok().build();
     }
 }

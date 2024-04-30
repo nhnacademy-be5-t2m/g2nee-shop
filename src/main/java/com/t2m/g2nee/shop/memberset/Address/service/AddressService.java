@@ -42,5 +42,12 @@ public interface AddressService {
      *
      * @param addressRequest 수정할 address 정보가 담긴 dto
      */
-    AddressResponseDto modifyAddress(Long addressId,AddressRequestDto addressRequest);
+    AddressResponseDto modifyAddress(Long addressId, AddressRequestDto addressRequest);
+
+    /**
+     * 기본배송지를 수정하는 메소드
+     *
+     * @param addressId 기본배송지로 설정할 주소 id
+     */
+    void changeDefaultAddress(Long addressId);
 }
