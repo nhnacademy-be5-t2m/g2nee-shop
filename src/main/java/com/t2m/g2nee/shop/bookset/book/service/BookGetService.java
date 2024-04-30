@@ -3,7 +3,7 @@ package com.t2m.g2nee.shop.bookset.book.service;
 
 import com.t2m.g2nee.shop.bookset.book.dto.BookDto;
 import com.t2m.g2nee.shop.bookset.book.repository.BookRepository;
-import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import com.t2m.g2nee.shop.pageutils.PageResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

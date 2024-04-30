@@ -61,15 +61,6 @@ public interface CategoryRepositoryCustom {
     void activeCategoryByCategoryId(Long categoryId);
 
     /**
-     * 특정 카테고리를 찾는데, 바로 상위 카테고리의 id를 함께 찾는 메소드 입니다.
-     * 최상위 카테고리의 경우 바로 상위 카테고리 id 값은 0입니다.
-     *
-     * @param categoryId 카테고리 id
-     * @return CategoryUpdateDto
-     */
-    CategoryUpdateDto getFindByCategoryId(Long categoryId);
-
-    /**
      * 요청으로 받은 카테고리 리스트 중 최하위 카테고리만 얻는 메서드
      *
      * @param categoryList 카테고리 아이디 리스트

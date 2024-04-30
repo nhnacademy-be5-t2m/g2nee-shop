@@ -3,7 +3,7 @@ package com.t2m.g2nee.shop.bookset.publisher.controller;
 import com.t2m.g2nee.shop.bookset.publisher.domain.Publisher;
 import com.t2m.g2nee.shop.bookset.publisher.dto.PublisherDto;
 import com.t2m.g2nee.shop.bookset.publisher.service.PublisherService;
-import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import com.t2m.g2nee.shop.pageutils.PageResponse;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;

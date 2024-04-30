@@ -1,7 +1,7 @@
 package com.t2m.g2nee.shop.policyset.deliverypolicy.service.impl;
 
 import com.t2m.g2nee.shop.exception.NotFoundException;
-import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import com.t2m.g2nee.shop.pageutils.PageResponse;
 import com.t2m.g2nee.shop.policyset.deliverypolicy.domain.DeliveryPolicy;
 import com.t2m.g2nee.shop.policyset.deliverypolicy.dto.request.DeliveryPolicySaveDto;
 import com.t2m.g2nee.shop.policyset.deliverypolicy.dto.response.DeliveryPolicyInfoDto;

@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.t2m.g2nee.shop.orderset.packagetype.dto.request.PackageSaveDto;
 import com.t2m.g2nee.shop.orderset.packagetype.dto.response.PackageInfoDto;
 import com.t2m.g2nee.shop.orderset.packagetype.service.PackageService;
-import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import com.t2m.g2nee.shop.pageutils.PageResponse;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

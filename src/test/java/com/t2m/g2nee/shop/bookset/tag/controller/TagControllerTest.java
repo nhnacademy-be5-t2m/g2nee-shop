@@ -15,7 +15,7 @@ import com.t2m.g2nee.shop.bookset.tag.domain.Tag;
 import com.t2m.g2nee.shop.bookset.tag.dto.TagDto;
 import com.t2m.g2nee.shop.bookset.tag.mapper.TagMapper;
 import com.t2m.g2nee.shop.bookset.tag.service.TagService;
-import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import com.t2m.g2nee.shop.pageutils.PageResponse;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;

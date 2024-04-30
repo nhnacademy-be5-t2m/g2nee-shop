@@ -1,6 +1,6 @@
 package com.t2m.g2nee.shop.policyset.pointpolicy.controller;
 
-import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import com.t2m.g2nee.shop.pageutils.PageResponse;
 import com.t2m.g2nee.shop.policyset.pointpolicy.dto.request.PointPolicySaveDto;
 import com.t2m.g2nee.shop.policyset.pointpolicy.dto.response.PointPolicyInfoDto;
 import com.t2m.g2nee.shop.policyset.pointpolicy.service.PointPolicyService;

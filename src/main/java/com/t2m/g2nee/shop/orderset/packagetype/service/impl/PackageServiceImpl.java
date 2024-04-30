@@ -7,7 +7,7 @@ import com.t2m.g2nee.shop.orderset.packagetype.dto.request.PackageSaveDto;
 import com.t2m.g2nee.shop.orderset.packagetype.dto.response.PackageInfoDto;
 import com.t2m.g2nee.shop.orderset.packagetype.repository.PackageRepository;
 import com.t2m.g2nee.shop.orderset.packagetype.service.PackageService;
-import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import com.t2m.g2nee.shop.pageutils.PageResponse;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;

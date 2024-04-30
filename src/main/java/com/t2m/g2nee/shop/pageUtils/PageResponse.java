@@ -1,4 +1,4 @@
-package com.t2m.g2nee.shop.pageUtils;
+package com.t2m.g2nee.shop.pageutils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.List;

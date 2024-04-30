@@ -15,7 +15,7 @@ import com.t2m.g2nee.shop.bookset.contributor.domain.Contributor;
 import com.t2m.g2nee.shop.bookset.contributor.dto.ContributorDto;
 import com.t2m.g2nee.shop.bookset.contributor.mapper.ContributorMapper;
 import com.t2m.g2nee.shop.bookset.contributor.service.ContributorService;
-import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import com.t2m.g2nee.shop.pageutils.PageResponse;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;

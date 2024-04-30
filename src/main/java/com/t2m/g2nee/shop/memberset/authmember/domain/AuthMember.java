@@ -1,4 +1,4 @@
-package com.t2m.g2nee.shop.memberset.authMember.domain;
+package com.t2m.g2nee.shop.memberset.authmember.domain;
 
 import com.t2m.g2nee.shop.memberset.auth.domain.Auth;
 import com.t2m.g2nee.shop.memberset.member.domain.Member;

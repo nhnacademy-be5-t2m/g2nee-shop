@@ -4,7 +4,7 @@ package com.t2m.g2nee.shop.bookset.tag.controller;
 import com.t2m.g2nee.shop.bookset.tag.domain.Tag;
 import com.t2m.g2nee.shop.bookset.tag.dto.TagDto;
 import com.t2m.g2nee.shop.bookset.tag.service.TagService;
-import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import com.t2m.g2nee.shop.pageutils.PageResponse;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -2,7 +2,7 @@ package com.t2m.g2nee.shop.policyset.pointpolicy.service.impl;
 
 import com.t2m.g2nee.shop.exception.AlreadyExistException;
 import com.t2m.g2nee.shop.exception.NotFoundException;
-import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import com.t2m.g2nee.shop.pageutils.PageResponse;
 import com.t2m.g2nee.shop.policyset.pointpolicy.domain.PointPolicy;
 import com.t2m.g2nee.shop.policyset.pointpolicy.dto.request.PointPolicySaveDto;
 import com.t2m.g2nee.shop.policyset.pointpolicy.dto.response.PointPolicyInfoDto;

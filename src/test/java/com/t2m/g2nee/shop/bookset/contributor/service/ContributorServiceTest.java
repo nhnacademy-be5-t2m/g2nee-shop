@@ -13,7 +13,7 @@ import com.t2m.g2nee.shop.bookset.contributor.dto.ContributorDto;
 import com.t2m.g2nee.shop.bookset.contributor.mapper.ContributorMapper;
 import com.t2m.g2nee.shop.bookset.contributor.repository.ContributorRepository;
 import com.t2m.g2nee.shop.exception.NotFoundException;
-import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import com.t2m.g2nee.shop.pageutils.PageResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

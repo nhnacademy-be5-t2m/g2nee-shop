@@ -2,7 +2,7 @@ package com.t2m.g2nee.shop.orderset.packagetype.service;
 
 import com.t2m.g2nee.shop.orderset.packagetype.dto.request.PackageSaveDto;
 import com.t2m.g2nee.shop.orderset.packagetype.dto.response.PackageInfoDto;
-import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import com.t2m.g2nee.shop.pageutils.PageResponse;
 
 /**
  * 포장지를 저장, 수정, 삭제, 읽기 등을 할 수있게 하는 서비스입니다.

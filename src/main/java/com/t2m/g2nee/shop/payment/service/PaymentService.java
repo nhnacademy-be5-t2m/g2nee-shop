@@ -1,6 +1,6 @@
 package com.t2m.g2nee.shop.payment.service;
 
-import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import com.t2m.g2nee.shop.pageutils.PageResponse;
 import com.t2m.g2nee.shop.payment.dto.request.PaymentRequest;
 import com.t2m.g2nee.shop.payment.dto.response.PaymentInfoDto;
 

@@ -9,7 +9,7 @@ import com.t2m.g2nee.shop.memberset.member.domain.Member;
 import com.t2m.g2nee.shop.memberset.member.repository.MemberRepository;
 import com.t2m.g2nee.shop.nhnstorage.AuthService;
 import com.t2m.g2nee.shop.nhnstorage.ObjectService;
-import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import com.t2m.g2nee.shop.pageutils.PageResponse;
 import com.t2m.g2nee.shop.review.domain.Review;
 import com.t2m.g2nee.shop.review.dto.ReviewDto;
 import com.t2m.g2nee.shop.review.repository.ReviewRepository;
@@ -69,7 +69,7 @@ public class ReviewService {
 
         // 이미지가 있을 경우에만 업로드
         String url = null;
-        if(image != null) {
+        if (image != null) {
             String tokenId = authService.requestToken();
             url = uploadImage(image, saveReview, tokenId, book.getEngTitle(), member.getCustomerId());
         }
@@ -87,6 +87,7 @@ public class ReviewService {
 
     /**
      * 리뷰 수정 메서드
+     *
      * @param request 리뷰 정보 객체
      * @return ReviewDto.Response
      */
@@ -96,7 +97,7 @@ public class ReviewService {
                 .orElseThrow(() -> new NotFoundException("리뷰 정보가 없습니다."));
         review.setModifiedAt(LocalDateTime.now());
 
-      //   이미지 파일 변경이 있을 때 실행
+        //   이미지 파일 변경이 있을 때 실행
 //        if (image != null) {
 //            // storage 사용을 위한 토큰을 발급합니다.
 //            String tokenId = authService.requestToken();
@@ -110,48 +111,51 @@ public class ReviewService {
 //            // storage에 새 이미지를 업로드합니다
 //            uploadImage(image, review, tokenId, review.getBook().getEngTitle(), review.getMember().getCustomerId());
 //        }
-            Optional.of(request.getScore()).ifPresent(review::setScore);
-            Optional.ofNullable(request.getContent()).ifPresent(review::setContent);
+        Optional.of(request.getScore()).ifPresent(review::setScore);
+        Optional.ofNullable(request.getContent()).ifPresent(review::setContent);
 
-            Review modifiedReview = reviewRepository.save(review);
+        Review modifiedReview = reviewRepository.save(review);
 
-            return ReviewDto.Response.builder()
-                    .reviewId(modifiedReview.getReviewId())
-                    .score(modifiedReview.getScore())
-                    .content(modifiedReview.getContent())
-                    .nickname(modifiedReview.getMember().getNickname())
-                    .createdAt(modifiedReview.getCreatedAt())
-                    .modifiedAt(modifiedReview.getModifiedAt())
-                    .build();
-        }
+        return ReviewDto.Response.builder()
+                .reviewId(modifiedReview.getReviewId())
+                .score(modifiedReview.getScore())
+                .content(modifiedReview.getContent())
+                .nickname(modifiedReview.getMember().getNickname())
+                .createdAt(modifiedReview.getCreatedAt())
+                .modifiedAt(modifiedReview.getModifiedAt())
+                .build();
+    }
 
 
     /**
      * 리뷰 중복 작성을 막기 위해 해당하는 리뷰를 찾는 메서드
+     *
      * @param memberId 회원 아이디
-     * @param bookId 책 아이디
+     * @param bookId   책 아이디
      * @return ReviewDto.Response
      */
-    public ReviewDto.Response getReview(Long memberId, Long bookId){
+    public ReviewDto.Response getReview(Long memberId, Long bookId) {
         return reviewRepository.getReview(memberId, bookId);
     }
+
     /**
      * 책에 대한 리뷰를 5개씩 페이징 조회하는 메서드
+     *
      * @param bookId 책 아이디
-     * @param page 페이지 번호
+     * @param page   페이지 번호
      * @return PageResponse<ReviewDto.Response>
      */
     @Transactional(readOnly = true)
-    public PageResponse<ReviewDto.Response> getReviews(Long bookId, int page){
+    public PageResponse<ReviewDto.Response> getReviews(Long bookId, int page) {
 
         int size = 5;
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdAt"));
 
-        Page<ReviewDto.Response> reviewPage = reviewRepository.getReviews(bookId,pageable);
+        Page<ReviewDto.Response> reviewPage = reviewRepository.getReviews(bookId, pageable);
 
         PageResponse<ReviewDto.Response> pageResponse = new PageResponse<>();
 
-        return pageResponse.getPageResponse(page,4,reviewPage);
+        return pageResponse.getPageResponse(page, 4, reviewPage);
 
     }
 
@@ -178,7 +182,6 @@ public class ReviewService {
             throw new NotFoundException("파일을 찾을 수 없습니다.");
         }
     }
-
 
 
     /**

@@ -1,6 +1,6 @@
-package com.t2m.g2nee.shop.memberset.authMember.repository;
+package com.t2m.g2nee.shop.memberset.authmember.repository;
 
-import com.t2m.g2nee.shop.memberset.authMember.domain.AuthMember;
+import com.t2m.g2nee.shop.memberset.authmember.domain.AuthMember;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 

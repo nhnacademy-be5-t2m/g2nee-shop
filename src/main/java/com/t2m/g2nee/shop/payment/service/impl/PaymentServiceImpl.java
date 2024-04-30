@@ -2,7 +2,7 @@ package com.t2m.g2nee.shop.payment.service.impl;
 
 import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.orderset.orderdetail.service.OrderDetailService;
-import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import com.t2m.g2nee.shop.pageutils.PageResponse;
 import com.t2m.g2nee.shop.payment.domain.Payment;
 import com.t2m.g2nee.shop.payment.dto.request.PaymentRequest;
 import com.t2m.g2nee.shop.payment.dto.response.PaymentInfoDto;

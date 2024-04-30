@@ -32,7 +32,7 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer =
                 new Customer(customerRequest.getEmail(), customerRequest.getName(), customerRequest.getPassword(),
                         customerRequest.getPhoneNumber());
-        return (Customer) customerRepository.save(customer);
+        return customerRepository.save(customer);
     }
 
     /**
@@ -44,6 +44,6 @@ public class CustomerServiceImpl implements CustomerService {
         if (!customerRepository.existsById(customerId)) {
             throw new NotFoundException(customerId + "의 정보가 없습니다.");
         }
-        return (Customer) customerRepository.findById(customerId).get();
+        return customerRepository.findById(customerId).get();
     }
 }

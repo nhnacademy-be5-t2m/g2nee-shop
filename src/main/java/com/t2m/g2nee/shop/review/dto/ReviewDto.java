@@ -17,13 +17,15 @@ import lombok.Setter;
  */
 public class ReviewDto {
 
-    private ReviewDto(){}
+    private ReviewDto() {
+    }
+
     @Setter
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class Request{
+    public static class Request {
 
         private Long reviewId;
         @NotNull
@@ -39,7 +41,7 @@ public class ReviewDto {
     @AllArgsConstructor
     @Builder
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class Response{
+    public static class Response {
 
         private Long reviewId;
         private String content;

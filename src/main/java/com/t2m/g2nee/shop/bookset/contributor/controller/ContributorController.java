@@ -4,7 +4,7 @@ package com.t2m.g2nee.shop.bookset.contributor.controller;
 import com.t2m.g2nee.shop.bookset.contributor.domain.Contributor;
 import com.t2m.g2nee.shop.bookset.contributor.dto.ContributorDto;
 import com.t2m.g2nee.shop.bookset.contributor.service.ContributorService;
-import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import com.t2m.g2nee.shop.pageutils.PageResponse;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;

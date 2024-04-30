@@ -5,7 +5,7 @@ import static com.t2m.g2nee.shop.memberset.grade.domain.Grade.GradeName.NORMAL;
 import static com.t2m.g2nee.shop.memberset.member.domain.Member.Gender.Male;
 
 import com.t2m.g2nee.shop.memberset.auth.domain.Auth;
-import com.t2m.g2nee.shop.memberset.authMember.domain.AuthMember;
+import com.t2m.g2nee.shop.memberset.authmember.domain.AuthMember;
 import com.t2m.g2nee.shop.memberset.grade.domain.Grade;
 import com.t2m.g2nee.shop.memberset.member.domain.Member;
 

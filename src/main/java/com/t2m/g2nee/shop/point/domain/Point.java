@@ -1,10 +1,6 @@
 package com.t2m.g2nee.shop.point.domain;
 
 import com.t2m.g2nee.shop.memberset.member.domain.Member;
-import lombok.*;
-
-import javax.persistence.*;
-import com.t2m.g2nee.shop.memberset.member.domain.Member;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

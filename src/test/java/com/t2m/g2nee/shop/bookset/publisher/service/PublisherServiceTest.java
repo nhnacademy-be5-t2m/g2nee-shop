@@ -13,7 +13,7 @@ import com.t2m.g2nee.shop.bookset.publisher.dto.PublisherDto;
 import com.t2m.g2nee.shop.bookset.publisher.mapper.PublisherMapper;
 import com.t2m.g2nee.shop.bookset.publisher.repository.PublisherRepository;
 import com.t2m.g2nee.shop.exception.NotFoundException;
-import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import com.t2m.g2nee.shop.pageutils.PageResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
