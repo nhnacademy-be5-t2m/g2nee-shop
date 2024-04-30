@@ -3,7 +3,7 @@ package com.t2m.g2nee.shop.orderset.order.domain;
 import com.t2m.g2nee.shop.couponset.Coupon.domain.Coupon;
 import com.t2m.g2nee.shop.memberset.Customer.domain.Customer;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -32,14 +32,14 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
-    private String orderNumber;
-    private Timestamp orderDate;
-    private Timestamp deliveryWishDate;
-    private BigDecimal deliveryFee;
+    private String orderNumber; //주문번호(비회원 조회용)
+    private LocalDateTime orderDate;
+    private LocalDateTime deliveryWishDate;
+    private BigDecimal deliveryFee; //배송비
     @Enumerated(EnumType.STRING)
     private OrderState orderState;
-    private BigDecimal netAmount;
-    private BigDecimal orderAmount;
+    private BigDecimal netAmount;   //순수 금액
+    private BigDecimal orderAmount; //주문금액
     private String receiverName;
     private String receiverPhoneNumber;
     private String receiveAddress;
@@ -56,8 +56,22 @@ public class Order {
     private Coupon coupon;
 
     public enum OrderState {
-        WAITING, DELIVERING, DELIVERED, RETURNING, RETURNED
+        WAITING("배송대기"), DELIVERING("배송중"), DELIVERED("배송완료"),
+        RETURNING("반품대기"), RETURNED("반품완료");
+        private final String name;
+
+        OrderState(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
 
+
+    public void changeState(OrderState orderState) {
+        this.orderState = orderState;
+    }
 
 }

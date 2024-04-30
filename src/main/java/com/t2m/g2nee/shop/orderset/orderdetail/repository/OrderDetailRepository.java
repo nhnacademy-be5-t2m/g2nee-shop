@@ -1,10 +1,13 @@
 package com.t2m.g2nee.shop.orderset.orderdetail.repository;
 
 import com.t2m.g2nee.shop.orderset.orderdetail.domain.OrderDetail;
-import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> {
+/**
+ * 주문 상세를 DB에서 다루기 위한 repository 클래스
+ */
 
-    List<OrderDetail> findByOrder_OrderId(Long orderId);
+public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long>, OrderDetailCustomRepository {
+
+
 }
