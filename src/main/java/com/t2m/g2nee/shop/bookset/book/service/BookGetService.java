@@ -83,7 +83,10 @@ public class BookGetService {
      */
     @Transactional
     public BookDto.Response getBookDetail(Long memberId,Long bookId) {
-        return bookRepository.getBookDetail(memberId,bookId);
+        BookDto.Response bookDetail = bookRepository.getBookDetail(memberId, bookId);
+        double roundedScore = Math.round(bookDetail.getScoreAverage() * 10.0) / 10.0;
+        bookDetail.setScoreAverage(roundedScore);
+        return bookDetail;
     }
 
     /**

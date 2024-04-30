@@ -2,12 +2,12 @@ package com.t2m.g2nee.shop.review.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.time.LocalDateTime;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.json.JSONPropertyIgnore;
 
 /**
  * 리뷰 dto 클래스
@@ -26,11 +26,14 @@ public class ReviewDto {
     public static class Request{
 
         private Long reviewId;
+        @NotNull
         private String content;
         private int score;
         private Long bookId;
         private Long memberId;
     }
+
+    @Getter
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
@@ -42,6 +45,7 @@ public class ReviewDto {
         private String content;
         private String imageUrl;
         private int score;
+        private Long memberId;
         private String nickname;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;

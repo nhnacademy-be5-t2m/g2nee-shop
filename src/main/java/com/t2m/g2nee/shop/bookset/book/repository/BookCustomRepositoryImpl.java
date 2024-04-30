@@ -106,8 +106,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
 
         List<BookDto.ListResponse> responseList =
                 from(book).innerJoin(publisher).on(book.publisher.publisherId.eq(publisher.publisherId))
-                        .innerJoin(bookCategory).on(book.bookId.eq(bookCategory.book.bookId)).innerJoin(bookFile)
-                        .on(book.bookId.eq(bookFile.book.bookId)
+                        .innerJoin(bookFile).on(book.bookId.eq(bookFile.book.bookId)
                                 .and(bookFile.imageType.eq(BookFile.ImageType.THUMBNAIL)))
                         .select(Projections.fields(BookDto.ListResponse.class, book.bookId,
                                 bookFile.url.as("thumbnailImageUrl"), book.title, book.engTitle, book.publishedDate,
@@ -223,6 +222,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                                 , book.title
                                 , book.engTitle
                                 , book.viewCount
+                                , book.quantity
                                 , book.bookIndex, book.description, publisher.publisherName, publisher.publisherEngName
                                 , book.publishedDate
                                 , book.price
@@ -231,10 +231,11 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                                 , book.viewCount
                                 , book.bookStatus
                                 , book.pages
+                                , review.count().as("reviewCount")
                                 , isLiked.as("isLiked")
                                 , score.as("scoreAverage")
                         ))
-                        .groupBy(book, bookLike, publisher, review)
+                        .groupBy(book, bookLike, publisher)
                         .fetchOne();
         // 조회수 증가
         addViewCount(book, bookId);
@@ -314,7 +315,6 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                         .innerJoin(publisher).on(book.publisher.publisherId.eq(publisher.publisherId))
                         .innerJoin(bookCategory).on(book.bookId.eq(bookCategory.book.bookId))
                         .innerJoin(bookFile).on(book.bookId.eq(bookFile.book.bookId))
-                        .innerJoin(bookContributor).on(bookContributor.book.bookId.eq(book.bookId))
                         .leftJoin(review).on(book.bookId.eq(review.book.bookId))
                         .leftJoin(bookLike).on(book.bookId.eq(bookLike.book.bookId))
                         .where(book.bookId.in(indexIdList)

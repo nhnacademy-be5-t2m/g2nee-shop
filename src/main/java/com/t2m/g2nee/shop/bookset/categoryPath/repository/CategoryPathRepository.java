@@ -18,4 +18,5 @@ public interface CategoryPathRepository extends JpaRepository<CategoryPath, Long
      * @return
      */
     boolean existsByAncestorAndDescendant(Category ancestor, Category descendant);
+
 }

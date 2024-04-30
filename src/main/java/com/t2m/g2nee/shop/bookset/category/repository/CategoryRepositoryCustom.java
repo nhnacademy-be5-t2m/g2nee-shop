@@ -61,4 +61,12 @@ public interface CategoryRepositoryCustom {
      * @return CategoryUpdateDto
      */
     CategoryUpdateDto getFindByCategoryId(Long categoryId);
+
+    /**
+     * 요청으로 받은 카테고리 리스트 중 최하위 카테고리만 얻는 메서드
+     *
+     * @param categoryList 카테고리 아이디 리스트
+     * @return List<Long>
+     */
+    List<Long> getLowestCategory(List<Long> categoryList);
 }

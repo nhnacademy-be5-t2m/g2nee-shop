@@ -41,4 +41,6 @@ public interface CategoryQueryService {
      * @return PageResponse<CategoryInfoDto>
      */
     PageResponse<CategoryInfoDto> getCategoriesByName(String name, int page);
+
+    List<Long> getLowestCategory(List<Long> categoryList);
 }

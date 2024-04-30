@@ -118,6 +118,11 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
                 .build();
     }
 
+    @Override
+    public List<Long> getLowestCategory(List<Long> categoryList) {
+        return categoryRepository.getLowestCategory(categoryList);
+    }
+
     /**
      * Category 객체를 CategoryInfoDto로 변환
      *

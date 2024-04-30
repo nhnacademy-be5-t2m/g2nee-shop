@@ -67,8 +67,12 @@ public class ReviewService {
 
         Review saveReview = reviewRepository.save(review);
 
-        String tokenId = authService.requestToken();
-        String url = uploadImage(image, saveReview, tokenId, book.getEngTitle(), member.getCustomerId());
+        // 이미지가 있을 경우에만 업로드
+        String url = null;
+        if(image != null) {
+            String tokenId = authService.requestToken();
+            url = uploadImage(image, saveReview, tokenId, book.getEngTitle(), member.getCustomerId());
+        }
 
         return ReviewDto.Response.builder()
                 .reviewId(saveReview.getReviewId())
@@ -83,30 +87,29 @@ public class ReviewService {
 
     /**
      * 리뷰 수정 메서드
-     * @param image 이미지
      * @param request 리뷰 정보 객체
      * @return ReviewDto.Response
      */
-    public ReviewDto.Response updateReview(MultipartFile image, ReviewDto.Request request) {
+    public ReviewDto.Response updateReview(ReviewDto.Request request) {
 
         Review review = reviewRepository.findById(request.getReviewId())
                 .orElseThrow(() -> new NotFoundException("리뷰 정보가 없습니다."));
         review.setModifiedAt(LocalDateTime.now());
 
-        // 이미지 파일 변경이 있을 때 실행
-        if (image != null) {
-            // storage 사용을 위한 토큰을 발급합니다.
-            String tokenId = authService.requestToken();
-
-            // 기존 이미지를 삭제합니다
-            ReviewFile reviewFile = reviewFileRepository.findByReviewId(review.getReviewId());
-            String imageUrl = reviewFile.getUrl();
-            deleteImage(imageUrl, tokenId);
-            // 기존 이미지의 연관관계를 없앱니다.
-            reviewFileRepository.deleteByReviewId(review.getReviewId());
-            // storage에 새 이미지를 업로드합니다
-            uploadImage(image, review, tokenId, review.getBook().getEngTitle(), review.getMember().getCustomerId());
-        }
+      //   이미지 파일 변경이 있을 때 실행
+//        if (image != null) {
+//            // storage 사용을 위한 토큰을 발급합니다.
+//            String tokenId = authService.requestToken();
+//
+//            // 기존 이미지를 삭제합니다
+//            ReviewFile reviewFile = reviewFileRepository.findByReviewId(review.getReviewId());
+//            String imageUrl = reviewFile.getUrl();
+//            deleteImage(imageUrl, tokenId);
+//            // 기존 이미지의 연관관계를 없앱니다.
+//            reviewFileRepository.deleteByReviewId(review.getReviewId());
+//            // storage에 새 이미지를 업로드합니다
+//            uploadImage(image, review, tokenId, review.getBook().getEngTitle(), review.getMember().getCustomerId());
+//        }
             Optional.of(request.getScore()).ifPresent(review::setScore);
             Optional.ofNullable(request.getContent()).ifPresent(review::setContent);
 
@@ -201,9 +204,9 @@ public class ReviewService {
      * @param url 이미지 url
      * @param tokenId storage tokenId
      */
-    private void deleteImage(String url, String tokenId) {
-
-        objectService.deleteObject(url, tokenId);
-    }
+//    private void deleteImage(String url, String tokenId) {
+//
+//        objectService.deleteObject(url, tokenId);
+//    }
 }
 

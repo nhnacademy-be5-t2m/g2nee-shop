@@ -7,6 +7,7 @@ import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryUpdateDto;
 import com.t2m.g2nee.shop.bookset.category.repository.CategoryRepositoryCustom;
 import com.t2m.g2nee.shop.bookset.categoryPath.domain.QCategoryPath;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
@@ -170,6 +171,31 @@ public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport impl
                         category.categoryId, category.categoryName, category.categoryEngName, category.isActivated,
                         categoryPath.ancestor.categoryId.coalesce(0L)))
                 .fetchOne();
+    }
+
+    /**
+     * 최하위 카테고리 값을 얻는 메서드
+     *
+     * @param categoryList 카테고리 아이디 리스트
+     * @return List<Long>
+     * @author : 신동민
+     * @since : 1.0
+     */
+    @Override
+    public List<Long> getLowestCategory(List<Long> categoryList) {
+
+        QCategory category = QCategory.category;
+        QCategoryPath categoryPath = QCategoryPath.categoryPath;
+
+        return from(category)
+                .innerJoin(categoryPath).on(category.categoryId.eq(categoryPath.ancestor.categoryId))
+                .where(category.categoryId.in(categoryList))
+                .select(category)
+                .groupBy(category.categoryId)
+                .having(category.count().eq(1L))
+                .fetch()
+                .stream()
+                .map(Category::getCategoryId).collect(Collectors.toList());
     }
 
 }

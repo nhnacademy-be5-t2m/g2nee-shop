@@ -14,4 +14,5 @@ public interface CategoryPathRepositoryCustom {
      * @param categoryId
      */
     void deleteCategoryPathByAncestorIdAndDescendantId(Long categoryId);
+
 }

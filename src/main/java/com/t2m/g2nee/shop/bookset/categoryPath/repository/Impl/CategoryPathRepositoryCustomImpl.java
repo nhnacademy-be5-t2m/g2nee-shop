@@ -16,6 +16,7 @@ public class CategoryPathRepositoryCustomImpl extends QuerydslRepositorySupport 
         CategoryPathRepositoryCustom {
 
     private final EntityManager entityManager;
+    QCategoryPath categoryPath = QCategoryPath.categoryPath;
 
     public CategoryPathRepositoryCustomImpl(EntityManager entityManager) {
         super(CategoryPath.class);
@@ -24,7 +25,6 @@ public class CategoryPathRepositoryCustomImpl extends QuerydslRepositorySupport 
 
     @Override
     public void deleteCategoryPathByAncestorIdAndDescendantId(Long categoryId) {
-        QCategoryPath categoryPath = QCategoryPath.categoryPath;
 
         /**
          * DELETE FROM t2m_dev.CategoryPaths
