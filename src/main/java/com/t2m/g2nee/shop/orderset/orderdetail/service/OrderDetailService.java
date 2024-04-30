@@ -43,4 +43,11 @@ public interface OrderDetailService {
      */
     String getOrderName(Long orderId);
 
+    /**
+     * 주문 상세 취소 상태 변경
+     *
+     * @param orderDetailId
+     */
+    void changeOrderDetailIsCancelled(Long orderDetailId);
+
 }
