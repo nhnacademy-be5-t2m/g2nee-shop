@@ -32,7 +32,7 @@ public interface CategoryBasicService {
      * 카테고리를 soft delete하는 메소드입니다.
      *
      * @param categoryId 카테고리 id
-     * @return boolen 성공시 false 반환
+     * @return boolen 성공시 false
      */
     boolean deleteCategoryBasic(Long categoryId);
 

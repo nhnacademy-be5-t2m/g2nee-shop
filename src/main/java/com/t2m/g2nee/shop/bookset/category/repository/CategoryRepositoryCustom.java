@@ -3,6 +3,7 @@ package com.t2m.g2nee.shop.bookset.category.repository;
 import com.t2m.g2nee.shop.bookset.category.domain.Category;
 import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryUpdateDto;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * QueryDSL을 사용하여 복잡한 쿼리를 통해 카테고리 데이터베이스에 접근하기 위한 인터페이스 입니다.
@@ -41,7 +42,7 @@ public interface CategoryRepositoryCustom {
      *
      * @param categoryId 카테고리 id
      * @param active     true일 경우 활성인지 확인, false의 경우 비활성인지 확인
-     * @return boolean
+     * @return 존재하면 true, 없으면 false
      */
     boolean getExistsByCategoryIdAndisActivated(Long categoryId, boolean active);
 
@@ -66,5 +67,5 @@ public interface CategoryRepositoryCustom {
      * @param categoryId 카테고리 id
      * @return CategoryUpdateDto
      */
-    CategoryUpdateDto getFindByCategoryId(Long categoryId);
+    Optional<CategoryUpdateDto> getFindByCategoryId(Long categoryId);
 }

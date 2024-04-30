@@ -43,6 +43,12 @@ public class Category {
      */
     private Boolean isActivated;
 
+    /**
+     * categoryId를 제외한 생성자: save에 사용
+     * @param categoryName 카테고리 이름
+     * @param categoryEngName 카테고리 영문 이름
+     * @param isActivated 카테고리 활성화 여부
+     */
     public Category(String categoryName, String categoryEngName, boolean isActivated) {
         this.categoryName = categoryName;
         this.categoryEngName = categoryEngName;

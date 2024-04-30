@@ -26,8 +26,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/shop/categories")
 public class CategoryRestController {
 
+    /**
+     * 카테고리 서비스 인터페이스 입니다.
+     */
     private final CategoryService service;
 
+    /**
+     * CategoryRestController 생성자로, CategoryService를 주입받음
+     * @param service 카테고리 서비스
+     */
     public CategoryRestController(CategoryService service) {
         this.service = service;
     }
