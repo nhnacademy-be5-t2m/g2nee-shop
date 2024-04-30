@@ -50,6 +50,7 @@ public class TagService {
         } else {
 
             Tag saveTag = tagRepository.save(tag);
+            saveTag.setActivated(true);
             return mapper.entityToDto(saveTag);
         }
     }

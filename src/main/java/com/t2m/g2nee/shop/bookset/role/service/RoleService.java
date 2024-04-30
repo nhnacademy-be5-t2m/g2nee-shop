@@ -43,7 +43,7 @@ public class RoleService {
         } else {
 
             Role saveRole = roleRepository.save(role);
-
+            saveRole.setActivated(true);
             return mapper.entityToDto(saveRole);
         }
     }

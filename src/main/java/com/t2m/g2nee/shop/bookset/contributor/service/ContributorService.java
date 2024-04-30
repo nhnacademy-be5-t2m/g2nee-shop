@@ -42,7 +42,7 @@ public class ContributorService {
         } else {
 
             Contributor saveContributor = contributorRepository.save(contributor);
-
+            saveContributor.setActivated(true);
             return mapper.entityToDto(saveContributor);
         }
     }
