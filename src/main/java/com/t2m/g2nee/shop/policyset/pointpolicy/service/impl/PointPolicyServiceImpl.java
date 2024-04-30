@@ -36,6 +36,7 @@ public class PointPolicyServiceImpl implements PointPolicyService {
 
     /**
      * {@inheritDoc}
+     *
      * @throws AlreadyExistException 정책 이름이 중복되는 경우
      */
     @Override
@@ -52,7 +53,8 @@ public class PointPolicyServiceImpl implements PointPolicyService {
 
     /**
      * {@inheritDoc}
-     * @throws NotFoundException 유효하지 않은 정책 id일 경우
+     *
+     * @throws NotFoundException     유효하지 않은 정책 id일 경우
      * @throws AlreadyExistException 정책 이름이 중복되는 경우
      */
     @Override
@@ -75,6 +77,7 @@ public class PointPolicyServiceImpl implements PointPolicyService {
 
     /**
      * {@inheritDoc}
+     *
      * @throws NotFoundException 정책 id가 유효하지 않은 경우
      */
     @Override
@@ -91,6 +94,7 @@ public class PointPolicyServiceImpl implements PointPolicyService {
 
     /**
      * {@inheritDoc}
+     *
      * @throws NotFoundException 정책 id가 유효하지 않은 경우
      */
     @Override
@@ -136,6 +140,7 @@ public class PointPolicyServiceImpl implements PointPolicyService {
 
     /**
      * PointPolicy 객체를 PointPolicyInfoDto로 변환
+     *
      * @param pointPolicy 포인트 정책 객체
      * @return PointPolicyInfoDto
      */
@@ -156,6 +161,7 @@ public class PointPolicyServiceImpl implements PointPolicyService {
 
     /**
      * PointPolicySaveDto를 PointPolicy로 변환
+     *
      * @param pointPolicySaveDto
      * @return PointPolicy
      */

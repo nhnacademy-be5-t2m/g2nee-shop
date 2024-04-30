@@ -32,6 +32,7 @@ public class PackageServiceImpl implements PackageService {
 
     /**
      * PackageServiceImp의 생성자 입니다.
+     *
      * @param packageRepository 패키지 레포지토리
      */
     public PackageServiceImpl(PackageRepository packageRepository) {
@@ -40,6 +41,7 @@ public class PackageServiceImpl implements PackageService {
 
     /**
      * {@inheritDoc}
+     *
      * @throws AlreadyExistException 포장지 이름이 중복될 때
      */
     @Override
@@ -55,7 +57,8 @@ public class PackageServiceImpl implements PackageService {
 
     /**
      * {@inheritDoc}
-     * @throws NotFoundException 수정할 포장지 id가 유효하지 않을 때
+     *
+     * @throws NotFoundException     수정할 포장지 id가 유효하지 않을 때
      * @throws AlreadyExistException 수정하는 이름이 이미 존재하는 포장지 이름일 때
      */
     @Override
@@ -75,6 +78,7 @@ public class PackageServiceImpl implements PackageService {
 
     /**
      * {@inheritDoc}
+     *
      * @throws NotFoundException 유효한 포장지 id가 아닐 때
      */
     @Override
@@ -122,6 +126,7 @@ public class PackageServiceImpl implements PackageService {
 
     /**
      * {@inheritDoc}
+     *
      * @throws NotFoundException 유효한 포장지 id가 없을 경우
      */
     @Override
@@ -138,6 +143,7 @@ public class PackageServiceImpl implements PackageService {
 
     /**
      * {@inheritDoc}
+     *
      * @throws NotFoundException 유효한 포장지 id가 없을 꼉우
      */
     @Override

@@ -19,8 +19,8 @@ public class OrderServiceImpl implements OrderDetailService {
     public String getOrderName(Long orderId) {
         List<OrderDetail> orderDetails = orderDetailRepository.findByOrder_OrderId(orderId);
         String orderName = orderDetails.get(0).getBook().getTitle();
-        if(orderDetails.size() > 1){
-            orderName = orderName + " 외 "+(orderDetails.size()-1);
+        if (orderDetails.size() > 1) {
+            orderName = orderName + " 외 " + (orderDetails.size() - 1);
         }
 
         return orderName;

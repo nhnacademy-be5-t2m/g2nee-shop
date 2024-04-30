@@ -2,7 +2,7 @@ package com.t2m.g2nee.shop.review.repository;
 
 import com.querydsl.core.types.Projections;
 import com.t2m.g2nee.shop.fileset.reviewfile.domain.QReviewFile;
-import com.t2m.g2nee.shop.memberset.Member.domain.QMember;
+import com.t2m.g2nee.shop.memberset.member.domain.QMember;
 import com.t2m.g2nee.shop.review.domain.QReview;
 import com.t2m.g2nee.shop.review.domain.Review;
 import com.t2m.g2nee.shop.review.dto.ReviewDto;

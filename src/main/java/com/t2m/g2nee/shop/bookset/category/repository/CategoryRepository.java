@@ -25,7 +25,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long>, Categ
     /**
      * name인 카테고리인데 특정 카테고리 id를 갖지 않는 카테고리가 있는지 확인하는 메소드입니다.
      *
-     * @param name 카테고리 이름
+     * @param name       카테고리 이름
      * @param categoryId 카테고리 id
      * @return 존재하면 true, 없으면 false
      */

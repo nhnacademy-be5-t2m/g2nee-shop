@@ -13,6 +13,7 @@ public interface CategoryPathBasicService {
 
     /**
      * 카테고리 경로를 저장합니다.
+     *
      * @param categoryPath 저장할 카테고리 경로 객체
      * @return 저장된 CategoryPath
      */
@@ -20,6 +21,7 @@ public interface CategoryPathBasicService {
 
     /**
      * 카테고리 경로를 삭제합니다.
+     *
      * @param categoryId 삭제할 카테고리 id
      */
     void deleteCategoryPathBasic(Long categoryId);

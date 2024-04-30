@@ -27,6 +27,7 @@ public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport impl
 
     /**
      * CategoryRepositoryCustomImpl의 생성자 입니다.
+     *
      * @param entityManager 엔티티매니저
      */
     public CategoryRepositoryCustomImpl(EntityManager entityManager) {
@@ -195,13 +196,14 @@ public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport impl
 
         return Optional.ofNullable(
                 from(category)
-                .leftJoin(categoryPath).on(category.categoryId.eq(categoryPath.descendant.categoryId)
-                        .and(categoryPath.depth.eq(1L)))
-                .where(category.categoryId.eq(categoryId))
-                .select(Projections.constructor(CategoryUpdateDto.class,
-                        category.categoryId, category.categoryName, category.categoryEngName, category.isActivated,
-                        categoryPath.ancestor.categoryId.coalesce(0L)))
-                .fetchOne());
+                        .leftJoin(categoryPath).on(category.categoryId.eq(categoryPath.descendant.categoryId)
+                                .and(categoryPath.depth.eq(1L)))
+                        .where(category.categoryId.eq(categoryId))
+                        .select(Projections.constructor(CategoryUpdateDto.class,
+                                category.categoryId, category.categoryName, category.categoryEngName,
+                                category.isActivated,
+                                categoryPath.ancestor.categoryId.coalesce(0L)))
+                        .fetchOne());
     }
 
 }

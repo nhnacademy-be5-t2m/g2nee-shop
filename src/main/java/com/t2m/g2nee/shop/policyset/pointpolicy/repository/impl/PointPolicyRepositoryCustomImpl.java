@@ -23,6 +23,7 @@ public class PointPolicyRepositoryCustomImpl extends QuerydslRepositorySupport i
 
     /**
      * PointPolicyRepositoryCustomImpl의 생성자입니다.
+     *
      * @param entityManager 엔티티 매니저
      */
     public PointPolicyRepositoryCustomImpl(EntityManager entityManager) {

@@ -29,7 +29,7 @@ public class PackageInfoDto {
      * 패키지 가격
      */
     private int price;
-    
+
     /**
      * 패키지 활성 여부
      */

@@ -23,6 +23,7 @@ public class CategoryPathBasicServiceImpl implements CategoryPathBasicService {
 
     /**
      * CategoryPathBasicServiceImpl의 생성자 입니다.
+     *
      * @param categoryPathRepository
      */
     public CategoryPathBasicServiceImpl(CategoryPathRepository categoryPathRepository) {
@@ -31,6 +32,7 @@ public class CategoryPathBasicServiceImpl implements CategoryPathBasicService {
 
     /**
      * {@inheritDoc}
+     *
      * @throws AlreadyExistException 카테고리 경로가 존재할 경우
      */
     @Override

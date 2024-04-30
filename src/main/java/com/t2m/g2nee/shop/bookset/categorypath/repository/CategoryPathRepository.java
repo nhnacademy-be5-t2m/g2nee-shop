@@ -14,7 +14,8 @@ public interface CategoryPathRepository extends JpaRepository<CategoryPath, Long
 
     /**
      * path의 (조상, 자식)경로가 있는지 확인합니다.
-     * @param ancestor 조상 카테고리
+     *
+     * @param ancestor   조상 카테고리
      * @param descendant 자식 카테고리
      * @return 존재하면 true, 없으면 false
      */

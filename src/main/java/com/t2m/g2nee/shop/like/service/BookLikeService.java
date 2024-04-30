@@ -6,8 +6,8 @@ import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.like.domain.BookLike;
 import com.t2m.g2nee.shop.like.dto.BookLikeDto;
 import com.t2m.g2nee.shop.like.repository.BookLikeRepository;
-import com.t2m.g2nee.shop.memberset.Member.domain.Member;
-import com.t2m.g2nee.shop.memberset.Member.repository.MemberRepository;
+import com.t2m.g2nee.shop.memberset.member.domain.Member;
+import com.t2m.g2nee.shop.memberset.member.repository.MemberRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -74,12 +74,13 @@ public class BookLikeService {
 
     /**
      * 회원 좋아요 개수를 조회하는 메서드
+     *
      * @param memberId 회원 아이디
      * @return Long
      */
 
     public Long getMemberLikesNum(Long memberId) {
 
-       return bookLikeRepository.getMemberLikesNum(memberId);
+        return bookLikeRepository.getMemberLikesNum(memberId);
     }
 }

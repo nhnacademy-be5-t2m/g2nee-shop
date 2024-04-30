@@ -23,6 +23,7 @@ public class CategoryPathRepositoryCustomImpl extends QuerydslRepositorySupport 
 
     /**
      * CategoryPathRepositoryCustomImpl
+     *
      * @param entityManager 엔티티 매니저
      */
     public CategoryPathRepositoryCustomImpl(EntityManager entityManager) {

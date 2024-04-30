@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * PaymentService의 구현체입니다.
+ *
  * @author : 김수빈
  * @since : 1.0
  */
@@ -35,9 +36,10 @@ public class PaymentServiceImpl implements PaymentService {
 
     /**
      * PaymentServiceImpl의 생성자 입니다.
-     * @param paymentRepository 결제 레포지토리
+     *
+     * @param paymentRepository  결제 레포지토리
      * @param orderDetailService 주문 상세 서비스
-     * @param factory 결제 시, 어떤 pg사의 결제 구현을 사용할 지 정하는 메소드
+     * @param factory            결제 시, 어떤 pg사의 결제 구현을 사용할 지 정하는 메소드
      */
     public PaymentServiceImpl(PaymentRepository paymentRepository, OrderDetailService orderDetailService,
                               PaymentServiceFactory factory) {
@@ -50,7 +52,7 @@ public class PaymentServiceImpl implements PaymentService {
      * {@inheritDoc}
      */
     @Override
-    public PaymentInfoDto createPayment(PaymentRequest request){
+    public PaymentInfoDto createPayment(PaymentRequest request) {
         //결제 요청을 보냄
         PaymentRequestMethod paymentMethod = factory.getPaymentRequest(request.getPayType());
 
@@ -62,7 +64,8 @@ public class PaymentServiceImpl implements PaymentService {
      */
     @Override
     public PaymentInfoDto cancelPayment(Long paymentId) {
-        Payment payment = paymentRepository.findById(paymentId).orElseThrow(() -> new NotFoundException("결제가 존재하지 않습니다."));
+        Payment payment =
+                paymentRepository.findById(paymentId).orElseThrow(() -> new NotFoundException("결제가 존재하지 않습니다."));
         PaymentRequestMethod paymentMethod = factory.getPaymentRequest(payment.getPayType().split("-")[0].trim());
 
         return convertToPaymentInfoDto(paymentMethod.requestCancelPayment(payment));
@@ -74,7 +77,8 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public PaymentInfoDto getPayment(Long orderId) {
         return convertToPaymentInfoDto(
-                paymentRepository.findByOrder_OrderId(orderId).orElseThrow(() -> new NotFoundException("결제가 존재하지 않습니다.")));
+                paymentRepository.findByOrder_OrderId(orderId)
+                        .orElseThrow(() -> new NotFoundException("결제가 존재하지 않습니다.")));
     }
 
     /**
@@ -110,6 +114,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     /**
      * payment 객체를 PaymentInfoDto로 변환합니다.
+     *
      * @param payment
      * @return
      */
@@ -118,6 +123,6 @@ public class PaymentServiceImpl implements PaymentService {
         return new PaymentInfoDto(payment.getPaymentId(), payment.getAmount(), payment.getPayType(),
                 payment.getPaymentDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
                 payment.getPayStatus().getName(), payment.getOrder().getOrderId(),
-                payment.getOrder().getOrderNumber(),orderDetailService.getOrderName(payment.getOrder().getOrderId()));
+                payment.getOrder().getOrderNumber(), orderDetailService.getOrderName(payment.getOrder().getOrderId()));
     }
 }

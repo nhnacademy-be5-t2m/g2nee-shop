@@ -218,7 +218,7 @@ public class BookMgmtService {
      * @return BookDto.statusResponse
      */
 
-    public BookDto.statusResponse modifyStatus(Long bookId, BookDto.Request request) {
+    public BookDto.StatusResponse modifyStatus(Long bookId, BookDto.Request request) {
 
         Optional<Book> optionalBook = bookRepository.findById(bookId);
 
@@ -227,7 +227,7 @@ public class BookMgmtService {
             Book book = optionalBook.get();
             book.setBookStatus(request.getBookStatus());
 
-            return BookDto.statusResponse.builder()
+            return BookDto.StatusResponse.builder()
                     .status(book.getBookStatus())
                     .build();
         } else {

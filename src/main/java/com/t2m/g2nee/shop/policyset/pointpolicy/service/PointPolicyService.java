@@ -6,6 +6,7 @@ import com.t2m.g2nee.shop.policyset.pointpolicy.dto.response.PointPolicyInfoDto;
 
 /**
  * 포인트 정책 서비스를 위한 인터페이스입니다.
+ *
  * @author : 김수빈
  * @since : 1.0
  */

@@ -29,7 +29,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     /**
      * CategoryServiceImpl의 생성자입니다.
-     * @param categoryBasicService 카테고리의 기본 CURD를 하는 서비스
+     *
+     * @param categoryBasicService     카테고리의 기본 CURD를 하는 서비스
      * @param categoryPathBasicService 카테고리 경로의 기본 CURD를 하는 서비스
      */
     public CategoryServiceImpl(CategoryBasicService categoryBasicService,

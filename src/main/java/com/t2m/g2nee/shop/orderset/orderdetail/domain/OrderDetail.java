@@ -1,7 +1,6 @@
 package com.t2m.g2nee.shop.orderset.orderdetail.domain;
 
 import com.t2m.g2nee.shop.bookset.book.domain.Book;
-import com.t2m.g2nee.shop.memberset.Customer.domain.Customer;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import com.t2m.g2nee.shop.orderset.packagetype.domain.PackageType;
 import java.math.BigDecimal;
@@ -46,9 +45,5 @@ public class OrderDetail {
     @ManyToOne
     @JoinColumn(name = "packageTypeId")
     private PackageType packageType;
-
-    @ManyToOne
-    @JoinColumn(name = "customerId")
-    private Customer customer;
 
 }

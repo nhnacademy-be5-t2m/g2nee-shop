@@ -25,6 +25,7 @@ public class TossConfig {
 
     /**
      * TossConfig의 생성자입니다.
+     *
      * @param nhnCloudKeyProperties nhn cloud에 저장된 정보를 받아오기 위한 properties
      */
     public TossConfig(NhnCloudKeyProperties nhnCloudKeyProperties) {

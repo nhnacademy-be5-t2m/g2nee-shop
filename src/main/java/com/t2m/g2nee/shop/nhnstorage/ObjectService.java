@@ -1,6 +1,5 @@
 package com.t2m.g2nee.shop.nhnstorage;
 
-import com.sun.istack.NotNull;
 import com.t2m.g2nee.shop.properties.NhnCloudStorageProperties;
 import java.io.InputStream;
 import lombok.Data;
@@ -51,10 +50,6 @@ public class ObjectService {
         return properties.getStorageUrl() + properties.getAuth() + properties.getContainerName() + "/" + objectPath +
                 "/" + objectName;
     }
-
-//    private String getUrl(NhnCloudStorageProperties properties, @NotNull String objectName) {
-//        return properties.getStorageUrl() + properties.getAuth() + properties.getContainerName() + "/" + objectName;
-//    }
 
     /**
      * nhncloud api를 호출하여 storage에 이미지를 저장하는 메서드

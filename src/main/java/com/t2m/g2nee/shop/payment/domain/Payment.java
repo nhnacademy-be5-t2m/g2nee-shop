@@ -1,6 +1,6 @@
 package com.t2m.g2nee.shop.payment.domain;
 
-import com.t2m.g2nee.shop.memberset.Customer.domain.Customer;
+import com.t2m.g2nee.shop.memberset.customers.domain.Customer;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -58,7 +58,7 @@ public class Payment {
         this.paymentKey = paymentKey;
     }
 
-    public void setCancel(LocalDateTime paymentDate){
+    public void setCancel(LocalDateTime paymentDate) {
         this.payStatus = PayStatus.CANCELLED;
         this.paymentDate = paymentDate;
     }

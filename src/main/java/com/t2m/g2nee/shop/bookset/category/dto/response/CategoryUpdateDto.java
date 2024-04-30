@@ -19,10 +19,11 @@ public class CategoryUpdateDto extends CategoryHierarchyDto {
 
     /**
      * CategoryUpdateDto의 생성자 입니다.
-     * @param categoryId 카테고리 id
-     * @param categoryName 카테고리 이름
-     * @param categoryEngName 카테고리 영문이름
-     * @param isActivated 카테고리 활성화 여부
+     *
+     * @param categoryId         카테고리 id
+     * @param categoryName       카테고리 이름
+     * @param categoryEngName    카테고리 영문이름
+     * @param isActivated        카테고리 활성화 여부
      * @param ancestorCategoryId 조상 카테고리 id
      */
     public CategoryUpdateDto(Long categoryId, String categoryName, String categoryEngName, Boolean isActivated,

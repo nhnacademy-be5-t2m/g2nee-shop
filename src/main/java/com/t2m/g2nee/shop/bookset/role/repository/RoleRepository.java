@@ -1,8 +1,6 @@
 package com.t2m.g2nee.shop.bookset.role.repository;
 
-import com.t2m.g2nee.shop.bookset.publisher.domain.Publisher;
 import com.t2m.g2nee.shop.bookset.role.domain.Role;
-import com.t2m.g2nee.shop.bookset.tag.domain.Tag;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;

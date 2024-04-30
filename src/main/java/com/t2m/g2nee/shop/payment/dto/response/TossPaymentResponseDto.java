@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * Toss Paymenr에서 응답을 받기 위한 dto입니다.
+ *
  * @author : 김수빈
  * @since : 1.0
  */
