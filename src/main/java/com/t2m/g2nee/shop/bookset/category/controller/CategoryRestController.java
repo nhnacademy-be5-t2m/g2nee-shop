@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 카테고리에 변경을 요구하는 작업을 처리하는 컨트롤러 입니다.
+ *
  * @author : 김수빈
  * @since : 1.0
  */
@@ -25,14 +26,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/shop/categories")
 public class CategoryRestController {
 
+    /**
+     * 카테고리 서비스 인터페이스 입니다.
+     */
     private final CategoryService service;
 
+    /**
+     * CategoryRestController 생성자로, CategoryService를 주입받음
+     *
+     * @param service 카테고리 서비스
+     */
     public CategoryRestController(CategoryService service) {
         this.service = service;
     }
 
     /**
      * 카테고리를 저장하는 컨트롤러 입니다.
+     *
      * @param request 카테고리 저장 정보 객체
      * @return ResponseEntity<CategoryInfoDto>
      */
@@ -45,8 +55,9 @@ public class CategoryRestController {
 
     /**
      * 카테고리를 수정하는 컨트롤러 입니다.
+     *
      * @param categoryId 수정하려는 카테고리 id
-     * @param request 카테고리 수정 정보 객체
+     * @param request    카테고리 수정 정보 객체
      * @return ResponseEntity<CategoryInfoDto>
      */
     @PutMapping("/{categoryId}")
@@ -59,6 +70,7 @@ public class CategoryRestController {
 
     /**
      * 카테고리를 soft delete 하는 컨트롤러입니다.
+     *
      * @param categoryId 삭제하려는 카테고리 id
      * @return ResponseEntity<Boolean> 성공할 경우, false 반환
      */
@@ -70,6 +82,7 @@ public class CategoryRestController {
 
     /**
      * soft delete 된 카테고리를 다시 활성화하는 컨트롤러입니다.
+     *
      * @param categoryId 활성화 하려는 카테고리 id
      * @return ResponseEntity<Boolean> 성공 시, true 반환
      */

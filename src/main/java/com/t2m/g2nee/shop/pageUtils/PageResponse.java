@@ -1,7 +1,6 @@
 package com.t2m.g2nee.shop.pageUtils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.t2m.g2nee.shop.review.dto.ReviewDto;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

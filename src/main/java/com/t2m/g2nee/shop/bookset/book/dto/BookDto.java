@@ -26,6 +26,7 @@ public class BookDto {
 
     private BookDto() {
     }
+
     @Setter
     @Getter
     @NoArgsConstructor
@@ -125,15 +126,16 @@ public class BookDto {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class statusResponse {
+    public static class StatusResponse {
         private BookStatus status;
     }
+
     @Setter
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class quantityResponse{
+    public static class QuantityResponse {
         private int quantity;
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface ReviewCustomRepository {
 
-    Page<ReviewDto.Response> getReviews(Long bookId,Pageable pageable);
+    Page<ReviewDto.Response> getReviews(Long bookId, Pageable pageable);
 
     ReviewDto.Response getReview(Long memberId, Long bookId);
 }

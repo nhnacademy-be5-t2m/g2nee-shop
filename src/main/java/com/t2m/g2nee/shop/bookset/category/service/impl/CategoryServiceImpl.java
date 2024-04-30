@@ -6,8 +6,8 @@ import com.t2m.g2nee.shop.bookset.category.dto.request.CategorySaveDto;
 import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryInfoDto;
 import com.t2m.g2nee.shop.bookset.category.service.CategoryBasicService;
 import com.t2m.g2nee.shop.bookset.category.service.CategoryService;
-import com.t2m.g2nee.shop.bookset.categoryPath.domain.CategoryPath;
-import com.t2m.g2nee.shop.bookset.categoryPath.service.CategoryPathBasicService;
+import com.t2m.g2nee.shop.bookset.categorypath.domain.CategoryPath;
+import com.t2m.g2nee.shop.bookset.categorypath.service.CategoryPathBasicService;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.stereotype.Service;
@@ -27,6 +27,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryPathBasicService categoryPathBasicService;
 
+    /**
+     * CategoryServiceImpl의 생성자입니다.
+     *
+     * @param categoryBasicService     카테고리의 기본 CURD를 하는 서비스
+     * @param categoryPathBasicService 카테고리 경로의 기본 CURD를 하는 서비스
+     */
     public CategoryServiceImpl(CategoryBasicService categoryBasicService,
                                CategoryPathBasicService categoryPathBasicService) {
         this.categoryBasicService = categoryBasicService;
@@ -34,6 +40,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CategoryInfoDto saveCategory(CategorySaveDto categorySaveDto) {
         //저장을 위해 카테고리 객체로 변환화여 저장
@@ -73,6 +82,9 @@ public class CategoryServiceImpl implements CategoryService {
         return new CategoryInfoDto(category);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CategoryInfoDto updateCategory(Long categoryId, CategorySaveDto categorySaveDto) {
         //카테고리 저장을 위해 dto를 카테고리 객체로 변환
@@ -137,6 +149,9 @@ public class CategoryServiceImpl implements CategoryService {
         return new CategoryInfoDto(category);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean deleteCategory(Long categoryId) {
         //삭제하는 카테고리와 관련된 경로 삭제 
@@ -145,6 +160,9 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryBasicService.deleteCategoryBasic(categoryId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean activeCategory(Long categoryId) {
         //비활성화 카테고리를 활성화로 변환

@@ -65,11 +65,12 @@ public class RoleService {
         return mapper.entityToDto(saveRole);
 
     }
+
     /**
      * 모든 역할을 조회하는 메서드 입니다
      */
     @Transactional(readOnly = true)
-    public List<RoleDto.Response> getAllRole(){
+    public List<RoleDto.Response> getAllRole() {
 
         return mapper.entitiesToDtos(roleRepository.findAllActivated());
     }

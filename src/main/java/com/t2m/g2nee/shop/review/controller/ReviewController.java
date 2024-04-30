@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
 /**
  * 리뷰 controller 클래스
  *
@@ -33,7 +34,8 @@ public class ReviewController {
 
     /**
      * 리뷰 등록 컨트롤러
-     * @param image 이미지
+     *
+     * @param image   이미지
      * @param request 리뷰 정보 객체
      * @return ResponseEntity<ReviewDto.Response>
      */
@@ -58,10 +60,13 @@ public class ReviewController {
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
     /**
      * 리뷰 하나를 조회하는 컨트롤러
      * @param memberId 회원아이디
      * @param bookId 책 아이디
+     *
+     * @param request 리뷰 정보 객체
      * @return ResponseEntity<ReviewDto.Response>
      * 확인 용이기 떄문에 응답에 id 값만 있음
      */
@@ -76,13 +81,14 @@ public class ReviewController {
 
     /**
      * 책에 대한 리뷰 조회 컨트롤러
+     *
      * @param bookId 책 아이디
-     * @param page 페이지 번호
-     * @return ResponseEntity<PageResponse<ReviewDto.Response>>
+     * @param page   페이지 번호
+     * @return ResponseEntity<PageResponse < ReviewDto.Response>>
      */
     @GetMapping("/book/{bookId}")
     public ResponseEntity<PageResponse<ReviewDto.Response>> getReviews(@PathVariable("bookId") Long bookId,
-                                                         @RequestParam(defaultValue = "1") int page) {
+                                                                       @RequestParam(defaultValue = "1") int page) {
 
         PageResponse<ReviewDto.Response> responses = reviewService.getReviews(bookId, page);
 

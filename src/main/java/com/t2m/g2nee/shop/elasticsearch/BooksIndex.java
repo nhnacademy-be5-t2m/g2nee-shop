@@ -18,15 +18,15 @@ public class BooksIndex {
     @Id
     @Field(type = FieldType.Long)
     private Long bookId;
-    @Field(type= FieldType.Text)
+    @Field(type = FieldType.Text)
     private String title;
-    @Field(type= FieldType.Text)
+    @Field(type = FieldType.Text)
     private String bookIndex;
-    @Field(type= FieldType.Text)
+    @Field(type = FieldType.Text)
     private String description;
-    @Field(type= FieldType.Text)
+    @Field(type = FieldType.Text)
     private String contributorName;
-    @Field(type= FieldType.Text)
+    @Field(type = FieldType.Text)
     private String publisherName;
     @Field(type = FieldType.Long)
     private Long salePrice;

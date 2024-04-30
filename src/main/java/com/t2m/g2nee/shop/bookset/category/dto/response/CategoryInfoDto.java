@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * 카테고리 기본 정보를 반환하는 객체
+ *
  * @author : 김수빈
  * @since : 1.0
  */
@@ -35,6 +36,11 @@ public class CategoryInfoDto {
      */
     private Boolean isActivated;
 
+    /**
+     * 카테고리 객체를 받아 CategoryInfoDto를 초기화하는 생성자 입니다.
+     *
+     * @param category 카테고리 객체
+     */
     public CategoryInfoDto(Category category) {
         this.categoryId = category.getCategoryId();
         this.categoryName = category.getCategoryName();

@@ -14,15 +14,17 @@ public class NhnCloudKeyProperties {
     private String urlKeyId;
     private String usernameKeyId;
     private String passwordKeyId;
+    private String tossKeyId;
 
     @ConstructorBinding
     public NhnCloudKeyProperties(String url, String path, String appKey, String urlKeyId, String usernameKeyId,
-                                 String passwordKeyId) {
+                                 String passwordKeyId, String tossKeyId) {
         this.url = url;
         this.path = path;
         this.appKey = appKey;
         this.urlKeyId = urlKeyId;
         this.usernameKeyId = usernameKeyId;
         this.passwordKeyId = passwordKeyId;
+        this.tossKeyId = tossKeyId;
     }
 }
