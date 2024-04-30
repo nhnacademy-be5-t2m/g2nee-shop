@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@Transactional(readOnly = true)
 public class OrderDetailServiceImpl implements OrderDetailService {
 
     private final OrderDetailRepository orderDetailRepository;
@@ -36,16 +35,19 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 //        return orderDetailResponseDto;
 //    }
     @Override
+    @Transactional(readOnly = true)
     public List<GetOrderDetailResponseDto> getOrderDetailListByOrderId(Long orderId) {
         return orderDetailRepository.getOrderDetailListByOrderId(orderId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public String getOrderName(Long orderId) {
         return null;
     }
 
     @Override
+    @Transactional
     public void changeOrderDetailIsCancelled(Long orderDetailId) {
         OrderDetail orderDetail = orderDetailRepository.findById(orderDetailId)
                 .orElseThrow(() -> new NotFoundException("주문 상세가 존재하지 않습니다."));
@@ -55,9 +57,10 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     }
 
-//    @Override
-//    @Transactional
-//    public OrderDetailChangeRequestDto changeOrderDetail(OrderDetailChangeRequestDto changeRequestDto) {
-//        return null;
-//    }
+    @Override
+    public void deleteOrderDetail(Long orderDetailId) {
+        orderDetailRepository.deleteById(orderDetailId);
+    }
+
+
 }

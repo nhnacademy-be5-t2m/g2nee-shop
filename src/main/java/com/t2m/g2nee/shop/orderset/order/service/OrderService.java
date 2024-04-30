@@ -5,6 +5,7 @@ import com.t2m.g2nee.shop.orderset.order.dto.request.OrderCreateRequestDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import java.time.LocalDateTime;
 
 /**
  * 주문 서비스
@@ -71,5 +72,21 @@ public interface OrderService {
      * @param orderState 주문 상태
      */
     void changeOrderState(Long orderId, Order.OrderState orderState);
+
+    /**
+     * 30일 이상 된 비회원 여부 확인
+     *
+     * @param orderDate  주문 날짜
+     * @param customerId 비회원 Id
+     * @return
+     */
+    boolean getNonMemberOrderForOneMonth(LocalDateTime orderDate, Long customerId);
+ 
+    /**
+     * 주문 soft delete
+     *
+     * @param orderId 주문Id
+     */
+    void deleteOrder(Long orderId);
 
 }

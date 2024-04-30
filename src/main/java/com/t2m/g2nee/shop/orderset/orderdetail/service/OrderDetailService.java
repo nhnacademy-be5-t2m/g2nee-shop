@@ -38,7 +38,7 @@ public interface OrderDetailService {
     /**
      * 주문 상세를 기반으로 주문 이름 생성
      *
-     * @param orderId
+     * @param orderId 주문 id
      * @return 주문 이름
      */
     String getOrderName(Long orderId);
@@ -50,4 +50,10 @@ public interface OrderDetailService {
      */
     void changeOrderDetailIsCancelled(Long orderDetailId);
 
+    /**
+     * 주문 상세 삭제
+     *
+     * @param orderDetailId
+     */
+    void deleteOrderDetail(Long orderDetailId);
 }
