@@ -35,12 +35,14 @@ public class ReviewCustomRepositoryImpl extends QuerydslRepositorySupport implem
 
         List<ReviewDto.Response> reviewList = from(review)
                 .innerJoin(member).on(review.member.customerId.eq(member.customerId))
-                .innerJoin(reviewFile).on(review.reviewId.eq(reviewFile.review.reviewId))
+                .leftJoin(reviewFile).on(review.reviewId.eq(reviewFile.review.reviewId))
                 .where(review.book.bookId.eq(bookId))
                 .select(Projections.fields(ReviewDto.Response.class
                         , review.reviewId
                         , review.content
                         , review.score
+                        , member.nickname
+                        , member.customerId.as("memberId")
                         , reviewFile.url.as("imageUrl")
                         , review.createdAt
                         , review.modifiedAt))

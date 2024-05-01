@@ -48,19 +48,14 @@ public class ReviewController {
 
     /**
      * 리뷰 수정 컨트롤러
-     *
-     * @param reviewId 리뷰 아이디
      * @param request  리뷰 정보 객체
-     * @param image    이미지
      * @return ResponseEntity<ReviewDto.Response>
      */
     @PatchMapping("/{reviewId}")
-    public ResponseEntity<ReviewDto.Response> updateReview(@PathVariable("reviewId") Long reviewId,
-                                                           @RequestPart ReviewDto.Request request,
-                                                           @RequestPart(required = false) MultipartFile image) {
+    public ResponseEntity<ReviewDto.Response> updateReview(@RequestBody ReviewDto.Request request) {
 
-        request.setReviewId(reviewId);
-        ReviewDto.Response response = reviewService.updateReview(image, request);
+
+        ReviewDto.Response response = reviewService.updateReview(request);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

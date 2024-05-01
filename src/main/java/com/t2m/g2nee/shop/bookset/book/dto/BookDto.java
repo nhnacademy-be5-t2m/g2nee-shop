@@ -91,6 +91,7 @@ public class BookDto {
         private String publisherName;
         private String publisherEngName;
         private boolean isLiked;
+        private Long reviewCount;
         private Double scoreAverage;
     }
 

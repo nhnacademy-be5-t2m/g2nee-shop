@@ -232,10 +232,11 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                                 , book.viewCount
                                 , book.bookStatus
                                 , book.pages
+                                , review.count().as("reviewCount")
                                 , isLiked.as("isLiked")
                                 , score.as("scoreAverage")
                         ))
-                        .groupBy(book, bookLike, publisher, review)
+                        .groupBy(book, bookLike, publisher)
                         .fetchOne();
         // 조회수 증가
         addViewCount(book, bookId);
