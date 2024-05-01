@@ -152,18 +152,18 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
 
           /*
             검색할 카테고리의 모든 하위 카테고리 id를 함께 가져옵니다.
-            ex) 이과 / 수학 / 미분 일때 이과를 검색 시 이과, 수학, 미분 카테고리를 가진 모든 책이 조회됩니다.
-            ex) 수학만 검색 시 수학, 미분이 카테고리를 가진 책이 검색됩니다.
+            ex) 이과 / 수학, 과학 / 미분, 적분 일때 이과를 검색 시 이과, 수학, 과학, 미분, 적분 카테고리를 가진 모든 책이 조회됩니다.
+            ex) 수학만 검색 시 수학, 미분 , 적분이 카테고리를 가진 책이 검색됩니다.
          */
         List<BookDto.ListResponse> responseList =
                 from(book)
                         .innerJoin(publisher).on(book.publisher.publisherId.eq(publisher.publisherId))
-                        .innerJoin(bookCategory).on(book.bookId.eq(bookCategory.book.bookId))
                         .innerJoin(bookFile).on(book.bookId.eq(bookFile.book.bookId))
                         .leftJoin(review).on(book.bookId.eq(review.book.bookId))
                         .leftJoin(bookLike).on(book.bookId.eq(bookLike.book.bookId))
-                        .where(eqCategoryId(bookCategory, categoryPath, categoryId)
-                                .and(bookFile.imageType.eq(BookFile.ImageType.THUMBNAIL)))
+                        .where(bookFile.imageType.eq(BookFile.ImageType.THUMBNAIL)
+                                .and(eqCategoryBookId(categoryId)
+                        ))
                         .select(Projections.fields(BookDto.ListResponse.class
                                 , book.bookId
                                 , bookFile.url.as("thumbnailImageUrl")
@@ -264,7 +264,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
 
         // 가중치 설정
-        MatchQueryBuilder titleQuery = QueryBuilders.matchQuery("title", keyword).boost(50);
+        MatchQueryBuilder titleQuery = QueryBuilders.matchQuery("title", keyword).boost(60);
         MatchQueryBuilder bookIndexQuery = QueryBuilders.matchQuery("bookIndex", keyword).boost(10);
         MatchQueryBuilder descriptionQuery = QueryBuilders.matchQuery("description", keyword).boost(20);
         MatchQueryBuilder contributorQuery = QueryBuilders.matchQuery("contributorName", keyword).boost(35);
@@ -313,13 +313,12 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
         List<BookDto.ListResponse> responseList =
                 from(book)
                         .innerJoin(publisher).on(book.publisher.publisherId.eq(publisher.publisherId))
-                        .innerJoin(bookCategory).on(book.bookId.eq(bookCategory.book.bookId))
                         .innerJoin(bookFile).on(book.bookId.eq(bookFile.book.bookId))
                         .innerJoin(bookContributor).on(bookContributor.book.bookId.eq(book.bookId))
                         .leftJoin(review).on(book.bookId.eq(review.book.bookId))
                         .leftJoin(bookLike).on(book.bookId.eq(bookLike.book.bookId))
                         .where(book.bookId.in(indexIdList)
-                                .and(eqCategoryId(bookCategory, categoryPath, categoryId))
+                                .and(eqCategoryBookId(categoryId))
                                 .and(bookFile.imageType.eq(BookFile.ImageType.THUMBNAIL)))
                         .select(Projections.fields(BookDto.ListResponse.class
                                 , book.bookId
@@ -529,12 +528,10 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
 
     /**
      * 카테고리 ID가 요청으로 왔을 때 필터링을 위한 메서드
-     *
-     * @param bookCategory bookCategory 객체
      * @param categoryId   카테고리 아이디
      * @return BooleanExpression
      */
-    private BooleanExpression eqCategoryId(QBookCategory bookCategory, QCategoryPath categoryPath, Long categoryId) {
+    private BooleanExpression eqCategoryBookId(Long categoryId) {
         if (categoryId == null) {
             return null;
         } else {
@@ -553,9 +550,34 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                     .boxed()
                     .collect(Collectors.toList());
 
+            // 위 코드에서 얻은 카테고리 아이디를 가진 책의 아이디를 가져옵니다.
+            List<Long> bookIdList = from(book)
+                    .innerJoin(bookCategory).on(bookCategory.book.bookId.eq(book.bookId))
+                    .where(bookCategory.category.categoryId.in(categoryIdList))
+                    .distinct()
+                    .select(book.bookId)
+                    .fetch();
 
-            return bookCategory.category.categoryId.in(categoryIdList);
+            return book.bookId.in(bookIdList);
         }
+    }
+
+    /**
+     * 받은 카테고리 아이디에서 최하위 카테고리만 얻는 메서드
+     *
+     * @param categoryIdList 카테고리 아이디 리스트
+     * @return List<Long>
+     */
+    public List<Long> getLowestCategoryId(List<Long> categoryIdList) {
+
+        return from(category)
+                .innerJoin(categoryPath).on(categoryPath.ancestor.categoryId.eq(category.categoryId))
+                .where(category.categoryId.in(categoryIdList))
+                .select(category.categoryId)
+                .groupBy(category)
+                .having(category.count().eq(1L))
+                .fetch();
+
     }
 
     /**
