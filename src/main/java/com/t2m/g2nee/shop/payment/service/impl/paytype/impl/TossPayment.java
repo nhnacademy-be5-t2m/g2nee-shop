@@ -2,8 +2,8 @@ package com.t2m.g2nee.shop.payment.service.impl.paytype.impl;
 
 import com.t2m.g2nee.shop.exception.CustomException;
 import com.t2m.g2nee.shop.exception.NotFoundException;
-import com.t2m.g2nee.shop.memberset.Customer.domain.Customer;
-import com.t2m.g2nee.shop.memberset.Customer.repository.CustomerRepository;
+import com.t2m.g2nee.shop.memberset.customer.domain.Customer;
+import com.t2m.g2nee.shop.memberset.customer.repository.CustomerRepository;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import com.t2m.g2nee.shop.orderset.order.repository.OrderRepository;
 import com.t2m.g2nee.shop.payment.domain.Payment;
@@ -16,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import lombok.SneakyThrows;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
@@ -159,7 +160,9 @@ public class TossPayment implements PaymentRequestMethod {
                 .exchange(url.toUriString(), HttpMethod.POST,
                         new HttpEntity<>(param.toString().getBytes(StandardCharsets.UTF_8), makePaymentHeader()), TossPaymentResponseDto.class);
 
-        TossPaymentResponseDto tossResponse = response.getBody();
+        TossPaymentResponseDto tossResponse = Optional.ofNullable(response.getBody()).orElseThrow(
+                () -> new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, "예상하지 못한 오류가 발새했습니다.")
+        );
 
         //취소 성공후, 저장 상태 변경
         if (response.getStatusCode() == HttpStatus.OK && tossResponse.getCancels().get(0).getCancelStatus().equals("DONE")) {

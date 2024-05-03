@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetOrderDetailResponseDto {
+
     private Long orderDetailId;
     private BigDecimal price;
     private Integer quantity;

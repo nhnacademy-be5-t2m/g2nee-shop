@@ -1,8 +1,9 @@
-package com.t2m.g2nee.shop.like.domain;
+package com.t2m.g2nee.shop.orderset.refund.domain;
 
-import com.t2m.g2nee.shop.bookset.book.domain.Book;
-import com.t2m.g2nee.shop.memberset.member.domain.Member;
+import com.t2m.g2nee.shop.orderset.orderdetail.domain.OrderDetail;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,23 +17,26 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "BookLikes")
+@Table(name = "Returns")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookLike {
-
+public class Return {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long bookLikeId;
+    private Long returnId;
+    @Enumerated(EnumType.STRING)
+    private ReturnStatus status;
+    private Long returnQuantity;
+    private String returnReason;
 
     @ManyToOne
-    @JoinColumn(name = "bookId")
-    private Book book;
+    @JoinColumn(name = "orderDetailId")
+    private OrderDetail orderDetail;
 
-    @ManyToOne
-    @JoinColumn(name = "memberId")
-    private Member member;
+    public enum ReturnStatus {
+        WAITING, RETURNED
+    }
 }

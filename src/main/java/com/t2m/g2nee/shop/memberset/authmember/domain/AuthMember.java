@@ -1,6 +1,6 @@
-package com.t2m.g2nee.shop.like.domain;
+package com.t2m.g2nee.shop.memberset.authmember.domain;
 
-import com.t2m.g2nee.shop.bookset.book.domain.Book;
+import com.t2m.g2nee.shop.memberset.auth.domain.Auth;
 import com.t2m.g2nee.shop.memberset.member.domain.Member;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,23 +16,29 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "BookLikes")
+@Table(name = "AuthMember")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookLike {
+public class AuthMember {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long bookLikeId;
+    private Long authMemberId;
 
     @ManyToOne
-    @JoinColumn(name = "bookId")
-    private Book book;
+    @JoinColumn(name = "authId")
+    private Auth auth;
 
     @ManyToOne
     @JoinColumn(name = "memberId")
     private Member member;
+
+    @Builder
+    public AuthMember(Auth auth, Member member) {
+        this.auth = auth;
+        this.member = member;
+    }
 }

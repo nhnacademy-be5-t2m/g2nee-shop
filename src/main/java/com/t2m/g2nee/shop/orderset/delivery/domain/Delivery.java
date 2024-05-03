@@ -1,6 +1,6 @@
 package com.t2m.g2nee.shop.orderset.delivery.domain;
 
-import com.t2m.g2nee.shop.memberset.Customer.domain.Customer;
+import com.t2m.g2nee.shop.memberset.customer.domain.Customer;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import java.sql.Timestamp;
 import javax.persistence.Entity;
