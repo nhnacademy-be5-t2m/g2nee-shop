@@ -13,7 +13,7 @@ import com.t2m.g2nee.shop.memberset.auth.domain.Auth;
 import com.t2m.g2nee.shop.memberset.auth.repository.AuthRepository;
 import com.t2m.g2nee.shop.memberset.authmember.domain.AuthMember;
 import com.t2m.g2nee.shop.memberset.authmember.repository.AuthMemberRepository;
-import com.t2m.g2nee.shop.memberset.customers.repository.CustomerRepository;
+import com.t2m.g2nee.shop.memberset.customer.repository.CustomerRepository;
 import com.t2m.g2nee.shop.memberset.grade.domain.Grade;
 import com.t2m.g2nee.shop.memberset.grade.repository.GradeRepository;
 import com.t2m.g2nee.shop.memberset.member.domain.Member;

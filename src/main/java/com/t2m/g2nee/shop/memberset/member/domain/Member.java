@@ -1,6 +1,6 @@
 package com.t2m.g2nee.shop.memberset.member.domain;
 
-import com.t2m.g2nee.shop.memberset.customers.domain.Customer;
+import com.t2m.g2nee.shop.memberset.customer.domain.Customer;
 import com.t2m.g2nee.shop.memberset.grade.domain.Grade;
 import java.time.LocalDateTime;
 import javax.persistence.DiscriminatorValue;

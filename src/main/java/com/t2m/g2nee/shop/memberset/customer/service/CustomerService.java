@@ -1,7 +1,7 @@
-package com.t2m.g2nee.shop.memberset.customers.service;
+package com.t2m.g2nee.shop.memberset.customer.service;
 
-import com.t2m.g2nee.shop.memberset.customers.domain.Customer;
-import com.t2m.g2nee.shop.memberset.customers.dto.CustomerSaveRequest;
+import com.t2m.g2nee.shop.memberset.customer.domain.Customer;
+import com.t2m.g2nee.shop.memberset.customer.dto.CustomerSaveRequest;
 
 public interface CustomerService {
 

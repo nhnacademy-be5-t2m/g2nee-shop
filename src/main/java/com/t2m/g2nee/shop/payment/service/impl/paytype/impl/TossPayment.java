@@ -2,8 +2,8 @@ package com.t2m.g2nee.shop.payment.service.impl.paytype.impl;
 
 import com.t2m.g2nee.shop.exception.CustomException;
 import com.t2m.g2nee.shop.exception.NotFoundException;
-import com.t2m.g2nee.shop.memberset.customers.domain.Customer;
-import com.t2m.g2nee.shop.memberset.customers.repository.CustomerRepository;
+import com.t2m.g2nee.shop.memberset.customer.domain.Customer;
+import com.t2m.g2nee.shop.memberset.customer.repository.CustomerRepository;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import com.t2m.g2nee.shop.orderset.order.repository.OrderRepository;
 import com.t2m.g2nee.shop.payment.domain.Payment;

@@ -1,6 +1,6 @@
-package com.t2m.g2nee.shop.memberset.customers.domain;
+package com.t2m.g2nee.shop.memberset.customer.domain;
 
-import com.t2m.g2nee.shop.memberset.Member.domain.Member;
+import com.t2m.g2nee.shop.memberset.member.domain.Member;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

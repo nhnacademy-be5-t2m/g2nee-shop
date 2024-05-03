@@ -1,10 +1,10 @@
 package com.t2m.g2nee.shop.orderset.order.service.impl;
 
 import com.t2m.g2nee.shop.exception.NotFoundException;
-import com.t2m.g2nee.shop.memberset.Customer.domain.Customer;
-import com.t2m.g2nee.shop.memberset.Customer.repository.CustomerRepository;
-import com.t2m.g2nee.shop.memberset.Customer.service.CustomerService;
-import com.t2m.g2nee.shop.memberset.Member.repository.MemberRepository;
+import com.t2m.g2nee.shop.memberset.customer.domain.Customer;
+import com.t2m.g2nee.shop.memberset.customer.repository.CustomerRepository;
+import com.t2m.g2nee.shop.memberset.customer.service.CustomerService;
+import com.t2m.g2nee.shop.memberset.member.repository.MemberRepository;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import com.t2m.g2nee.shop.orderset.order.dto.request.OrderCreateRequestDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
@@ -13,7 +13,7 @@ import com.t2m.g2nee.shop.orderset.order.repository.OrderRepository;
 import com.t2m.g2nee.shop.orderset.order.service.OrderService;
 import com.t2m.g2nee.shop.orderset.orderdetail.repository.OrderDetailRepository;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
-import com.t2m.g2nee.shop.policyset.pointPolicy.repository.PointPolicyRepository;
+import com.t2m.g2nee.shop.policyset.pointpolicy.repository.PointPolicyRepository;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import lombok.RequiredArgsConstructor;

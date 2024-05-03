@@ -1,7 +1,7 @@
 package com.t2m.g2nee.shop.orderset.orderdetail.service.impl;
 
 import com.t2m.g2nee.shop.exception.NotFoundException;
-import com.t2m.g2nee.shop.memberset.Customer.repository.CustomerRepository;
+import com.t2m.g2nee.shop.memberset.customer.repository.CustomerRepository;
 import com.t2m.g2nee.shop.orderset.orderdetail.domain.OrderDetail;
 import com.t2m.g2nee.shop.orderset.orderdetail.dto.response.GetOrderDetailResponseDto;
 import com.t2m.g2nee.shop.orderset.orderdetail.repository.OrderDetailRepository;
@@ -40,11 +40,6 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         return orderDetailRepository.getOrderDetailListByOrderId(orderId);
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public String getOrderName(Long orderId) {
-        return null;
-    }
 
     @Override
     @Transactional
@@ -62,5 +57,14 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         orderDetailRepository.deleteById(orderDetailId);
     }
 
+    @Override
+    public String getOrderName(Long orderId) {
+        List<OrderDetail> orderDetails = orderDetailRepository.findByOrder_OrderId(orderId);
+        String orderName = orderDetails.get(0).getBook().getTitle();
+        if (orderDetails.size() > 1) {
+            orderName = orderName + " 외 " + (orderDetails.size() - 1);
+        }
 
+        return orderName;
+    }
 }

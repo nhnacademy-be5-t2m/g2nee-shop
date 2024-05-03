@@ -1,8 +1,8 @@
-package com.t2m.g2nee.shop.memberset.customers.controller;
+package com.t2m.g2nee.shop.memberset.customer.controller;
 
-import com.t2m.g2nee.shop.memberset.customers.domain.Customer;
-import com.t2m.g2nee.shop.memberset.customers.dto.CustomerSaveRequest;
-import com.t2m.g2nee.shop.memberset.customers.service.CustomerService;
+import com.t2m.g2nee.shop.memberset.customer.domain.Customer;
+import com.t2m.g2nee.shop.memberset.customer.dto.CustomerSaveRequest;
+import com.t2m.g2nee.shop.memberset.customer.service.CustomerService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
