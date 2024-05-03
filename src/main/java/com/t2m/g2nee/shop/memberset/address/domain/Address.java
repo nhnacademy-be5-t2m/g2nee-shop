@@ -1,6 +1,5 @@
-package com.t2m.g2nee.shop.like.domain;
+package com.t2m.g2nee.shop.memberset.address.domain;
 
-import com.t2m.g2nee.shop.bookset.book.domain.Book;
 import com.t2m.g2nee.shop.memberset.member.domain.Member;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,21 +15,23 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "BookLikes")
+@Table(name = "Address")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookLike {
+public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long bookLikeId;
+    private Long addressId;
 
-    @ManyToOne
-    @JoinColumn(name = "bookId")
-    private Book book;
+    private String alias;
+    private String zipcode;
+    private String address;
+    private String detail;
+    private boolean isDefault;
 
     @ManyToOne
     @JoinColumn(name = "memberId")
