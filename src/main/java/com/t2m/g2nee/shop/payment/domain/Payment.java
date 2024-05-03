@@ -1,6 +1,6 @@
 package com.t2m.g2nee.shop.payment.domain;
 
-import com.t2m.g2nee.shop.memberset.Customer.domain.Customer;
+import com.t2m.g2nee.shop.memberset.customer.domain.Customer;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
