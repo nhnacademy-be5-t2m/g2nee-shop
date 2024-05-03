@@ -81,7 +81,7 @@ public interface OrderService {
      * @return
      */
     boolean getNonMemberOrderForOneMonth(LocalDateTime orderDate, Long customerId);
- 
+
     /**
      * 주문 soft delete
      *

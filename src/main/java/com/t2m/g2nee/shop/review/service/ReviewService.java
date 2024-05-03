@@ -68,7 +68,7 @@ public class ReviewService {
         Review saveReview = reviewRepository.save(review);
 
         String url = null;
-        if(image != null) {
+        if (image != null) {
             String tokenId = authService.requestToken();
             url = uploadImage(image, saveReview, tokenId, book.getEngTitle(), member.getCustomerId());
         }

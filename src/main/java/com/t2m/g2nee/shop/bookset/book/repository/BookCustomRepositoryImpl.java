@@ -163,7 +163,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                         .leftJoin(bookLike).on(book.bookId.eq(bookLike.book.bookId))
                         .where(bookFile.imageType.eq(BookFile.ImageType.THUMBNAIL)
                                 .and(eqCategoryBookId(categoryId)
-                        ))
+                                ))
                         .select(Projections.fields(BookDto.ListResponse.class
                                 , book.bookId
                                 , bookFile.url.as("thumbnailImageUrl")
