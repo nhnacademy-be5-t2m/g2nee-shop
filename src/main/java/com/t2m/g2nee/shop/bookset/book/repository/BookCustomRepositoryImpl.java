@@ -116,7 +116,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
         Long count = from(book).select(book.count()).fetchOne();
 
 
-        List<BookDto.ListResponse> responses = toListResponseList(responseList, bookContributor);
+        List<BookDto.ListResponse> responses = toListResponseList(responseList);
 
         return new PageImpl<>(responses, pageable, count);
 
@@ -186,7 +186,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                         .limit(pageable.getPageSize())
                         .fetch();
 
-        List<BookDto.ListResponse> responses = toListResponseList(responseList, bookContributor);
+        List<BookDto.ListResponse> responses = toListResponseList(responseList);
 
         return new PageImpl<>(responses, pageable, responses.size());
     }
@@ -314,7 +314,6 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                 from(book)
                         .innerJoin(publisher).on(book.publisher.publisherId.eq(publisher.publisherId))
                         .innerJoin(bookFile).on(book.bookId.eq(bookFile.book.bookId))
-                        .innerJoin(bookContributor).on(bookContributor.book.bookId.eq(book.bookId))
                         .leftJoin(review).on(book.bookId.eq(review.book.bookId))
                         .leftJoin(bookLike).on(book.bookId.eq(bookLike.book.bookId))
                         .where(book.bookId.in(indexIdList)
@@ -343,7 +342,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                         .limit(pageable.getPageSize())
                         .fetch();
 
-        List<BookDto.ListResponse> responses = toListResponseList(responseList, bookContributor);
+        List<BookDto.ListResponse> responses = toListResponseList(responseList);
 
         return new PageImpl<>(responses, pageable, responses.size());
 
@@ -381,11 +380,9 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
      * 도서에 기여자와 역할 정보를 설정하고 반환하는 메서드입니다.
      *
      * @param responseList    책 responseDto 리스트
-     * @param bookContributor 책, 기여자, 역할 관계 객체
      * @return dto response
      */
-    private List<BookDto.ListResponse> toListResponseList(List<BookDto.ListResponse> responseList,
-                                                          QBookContributor bookContributor) {
+    private List<BookDto.ListResponse> toListResponseList(List<BookDto.ListResponse> responseList) {
 
         // 빈 리스트면 바로 반환
         if (responseList.isEmpty()) {
