@@ -2,6 +2,7 @@ package com.t2m.g2nee.shop.orderset.packagetype.service.impl;
 
 import com.t2m.g2nee.shop.exception.AlreadyExistException;
 import com.t2m.g2nee.shop.exception.NotFoundException;
+import com.t2m.g2nee.shop.fileset.file.repository.FileRepository;
 import com.t2m.g2nee.shop.fileset.packagefile.domain.PackageFile;
 import com.t2m.g2nee.shop.fileset.packagefile.repository.PackageFileRepository;
 import com.t2m.g2nee.shop.nhnstorage.AuthService;
@@ -40,6 +41,8 @@ public class PackageServiceImpl implements PackageService {
     private final AuthService authService;
     private final PackageFileRepository packageFileRepository;
 
+    private final FileRepository fileRepository;
+
     /**
      * PackageServiceImp의 생성자 입니다.
      * @param packageRepository 포장지 레포지토리
@@ -48,11 +51,12 @@ public class PackageServiceImpl implements PackageService {
      * @param authService
      */
     public PackageServiceImpl(PackageRepository packageRepository, ObjectService objectService, AuthService authService,
-                              PackageFileRepository packageFileRepository) {
+                              PackageFileRepository packageFileRepository, FileRepository fileRepository) {
         this.packageRepository = packageRepository;
         this.objectService = objectService;
         this.authService = authService;
         this.packageFileRepository = packageFileRepository;
+        this.fileRepository = fileRepository;
     }
 
     /**
@@ -95,9 +99,11 @@ public class PackageServiceImpl implements PackageService {
             PackageType packageType = packageRepository.save(new PackageType(
                     packageId, request.getName(), BigDecimal.valueOf(request.getPrice()), request.getIsActivated()));
             //이미지 수정
-            String url = packageFileRepository.findByPackageType_PackageId(packageId)
-                    .orElseThrow(() -> new NotFoundException("기존 포장지에 대한 이미지가 없습니다.")).getUrl();
+            PackageFile packageFile = packageFileRepository.findByPackageType_PackageId(packageId)
+                    .orElseThrow(() -> new NotFoundException("기존 포장지에 대한 이미지가 없습니다."));
+            String url = packageFile.getUrl();
             if (image != null) {
+                fileRepository.deleteById(packageFile.getFileId());
                 String tokenId = authService.requestToken();
                 url = uploadImage(image, packageType, tokenId);
             }
