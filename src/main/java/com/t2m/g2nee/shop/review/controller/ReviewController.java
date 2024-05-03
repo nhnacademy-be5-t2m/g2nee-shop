@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,7 +39,7 @@ public class ReviewController {
      * @return ResponseEntity<ReviewDto.Response>
      */
     @PostMapping
-    public ResponseEntity<ReviewDto.Response> postReview(@RequestPart MultipartFile image,
+    public ResponseEntity<ReviewDto.Response> postReview(@RequestPart(required = false) MultipartFile image,
                                                          @RequestPart ReviewDto.Request request) {
 
         ReviewDto.Response response = reviewService.postReview(image, request);
@@ -51,7 +52,7 @@ public class ReviewController {
      * @param request  리뷰 정보 객체
      * @return ResponseEntity<ReviewDto.Response>
      */
-    @PatchMapping("/{reviewId}")
+    @PatchMapping
     public ResponseEntity<ReviewDto.Response> updateReview(@RequestBody ReviewDto.Request request) {
 
 
@@ -68,7 +69,7 @@ public class ReviewController {
      * 확인 용이기 떄문에 응답에 id 값만 있음
      */
     @GetMapping
-    public ResponseEntity<ReviewDto.Response> getReview(@RequestBody ReviewDto.Request request) {
+    public ResponseEntity<ReviewDto.Response> getReview(@ModelAttribute ReviewDto.Request request) {
 
         ReviewDto.Response response = reviewService.getReview(request.getMemberId(), request.getBookId());
 

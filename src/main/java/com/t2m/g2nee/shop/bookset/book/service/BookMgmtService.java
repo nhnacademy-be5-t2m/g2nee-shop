@@ -93,7 +93,8 @@ public class BookMgmtService {
             uploadImage(details.get(i), book, tokenId, objectName, ImageType.DETAIL);
         }
         // 도서카테고리 연관 관계를 설정합니다.
-        saveBookCategory(request.getCategoryIdList(), book);
+        List<Long> lowestCategoryId = bookRepository.getLowestCategoryId(request.getCategoryIdList());
+        saveBookCategory(lowestCategoryId, book);
 
         // 도서태그 연관관계를 설정해줍니다.
         saveBookTag(book, request.getTagIdList());
