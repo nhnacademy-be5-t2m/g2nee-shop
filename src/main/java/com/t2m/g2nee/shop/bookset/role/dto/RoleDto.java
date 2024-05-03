@@ -13,8 +13,8 @@ public class RoleDto {
     private RoleDto() {
     }
 
-    @Getter
     @Setter
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
@@ -25,8 +25,8 @@ public class RoleDto {
 
     }
 
-    @Getter
     @Setter
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder

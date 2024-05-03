@@ -77,10 +77,10 @@ public class BookMgmtController {
      * @param request 변경할 상태가 담긴 객체
      */
     @PatchMapping("/status/{bookId}")
-    public ResponseEntity<BookDto.statusResponse> modifyBookStatus(@PathVariable("bookId") Long bookId,
+    public ResponseEntity<BookDto.StatusResponse> modifyBookStatus(@PathVariable("bookId") Long bookId,
                                                                    @RequestBody BookDto.Request request) {
 
-        BookDto.statusResponse response = bookMgmtService.modifyStatus(bookId, request);
+        BookDto.StatusResponse response = bookMgmtService.modifyStatus(bookId, request);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

@@ -1,6 +1,5 @@
 package com.t2m.g2nee.shop.bookset.tag.repository;
 
-import com.t2m.g2nee.shop.bookset.publisher.domain.Publisher;
 import com.t2m.g2nee.shop.bookset.tag.domain.Tag;
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +18,6 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
 
     @Query("SELECT t FROM Tag t WHERE t.isActivated=true ORDER BY t.tagName")
     List<Tag> findAllActivated();
-
 
 
 }

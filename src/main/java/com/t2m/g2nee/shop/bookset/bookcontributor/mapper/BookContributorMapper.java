@@ -16,7 +16,7 @@ import org.mapstruct.Mapper;
 @Mapper
 public interface BookContributorMapper {
 
-    default List<BookContributorDto.Response> entitiesToDtos(List<BookContributor> bookContributorList){
+    default List<BookContributorDto.Response> entitiesToDtos(List<BookContributor> bookContributorList) {
         return bookContributorList.stream()
                 .map(bc ->
                         BookContributorDto.Response.builder()

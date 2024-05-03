@@ -31,7 +31,7 @@ public class BookGetController {
 
     @GetMapping("/{bookId}")
     public ResponseEntity<BookDto.Response> getBookById(@PathVariable("bookId") Long bookId,
-                                                        @RequestParam("memberId") Long memberId) {
+                                                        @RequestParam(required = false) Long memberId) {
 
         BookDto.Response response = bookGetService.getBookDetail(memberId, bookId);
 
@@ -40,10 +40,11 @@ public class BookGetController {
 
     /**
      * 가장 최근 출판된 책 8권을 조회하는 컨트롤러 입니다.
+     *
      * @return List<BookDto.ListResponse>
      */
     @GetMapping("/new")
-    public ResponseEntity<List<BookDto.ListResponse>> getNewBooks(){
+    public ResponseEntity<List<BookDto.ListResponse>> getNewBooks() {
 
         List<BookDto.ListResponse> responses = bookGetService.getNewBooks();
 
@@ -52,11 +53,12 @@ public class BookGetController {
 
     /**
      * 관리자 도서 목록에서 사용할 모든 책을 조회하는 컨트롤러 입니다.
+     *
      * @param page 페이지 번호
-     * @return ResponseEntity<PageResponse<BookDto.ListResponse>>
+     * @return ResponseEntity<PageResponse < BookDto.ListResponse>>
      */
     @GetMapping("/list")
-    public ResponseEntity<PageResponse<BookDto.ListResponse>> getBooks(@RequestParam int page){
+    public ResponseEntity<PageResponse<BookDto.ListResponse>> getBooks(@RequestParam int page) {
 
         PageResponse<BookDto.ListResponse> responses = bookGetService.getAllBook(page);
         return ResponseEntity.status(HttpStatus.OK).body(responses);
@@ -65,18 +67,22 @@ public class BookGetController {
 
     /**
      * 카테고리와 하위 카테고리에 해당하는 책을 조회하는 컨트롤러 입니다.
-     * @param memberId 회원 아이디
-     * @param page 페이지 번호
+     *
+     * @param memberId   회원 아이디
+     * @param page       페이지 번호
      * @param categoryId 카테고리 아이디
      * @return List<BookDto.ListResponse>
      */
     @GetMapping("/category/{categoryId}")
-    public ResponseEntity<PageResponse<BookDto.ListResponse>> getBooksByCategory(@PathVariable("categoryId") Long categoryId,
-                                                                                 @RequestParam(required = false)
-                                                                                 Long memberId,
-                                                                                 @RequestParam(required = false) String sort,
-                                                                                 @RequestParam int page){
-        if(!StringUtils.hasText(sort)) sort = "viewCount";
+    public ResponseEntity<PageResponse<BookDto.ListResponse>> getBooksByCategory(
+            @PathVariable("categoryId") Long categoryId,
+            @RequestParam(required = false)
+            Long memberId,
+            @RequestParam(required = false) String sort,
+            @RequestParam int page) {
+        if (!StringUtils.hasText(sort)) {
+            sort = "viewCount";
+        }
 
         PageResponse<BookDto.ListResponse> responses =
                 bookGetService.getBooksByCategory(page, memberId, categoryId, sort);
@@ -87,11 +93,12 @@ public class BookGetController {
 
     /**
      * Elasticsearch를 이용해서 책을 조회하는 컨트롤러 입니다.
+     *
      * @param categoryId 카테고리 아이디
-     * @param sort 정렬 기준
-     * @param keyword 키워드
-     * @param page 페이지 번호
-     * @return ResponseEntity<PageResponse<BookDto.ListResponse>>
+     * @param sort       정렬 기준
+     * @param keyword    키워드
+     * @param page       페이지 번호
+     * @return ResponseEntity<PageResponse < BookDto.ListResponse>>
      */
     @GetMapping("/search")
     public ResponseEntity<PageResponse<BookDto.ListResponse>> getBookByElasticsearchAndCategory(
@@ -101,7 +108,9 @@ public class BookGetController {
             @RequestParam String keyword,
             @RequestParam int page) {
 
-        if(!StringUtils.hasText(sort)) sort = "viewCount";
+        if (!StringUtils.hasText(sort)) {
+            sort = "viewCount";
+        }
 
         PageResponse<BookDto.ListResponse> responses =
                 bookGetService.getBookByCategoryAndElasticsearch(page, memberId, categoryId, keyword, sort);
@@ -111,7 +120,8 @@ public class BookGetController {
 
     /**
      * 카테고리에 맞는 책을 조회하는 컨트롤러
-     * @param bookId 책 아이디
+     *
+     * @param bookId         책 아이디
      * @param categoryIdList 카테고리 아이디 리스트
      */
     @GetMapping("/{bookId}/recommend")

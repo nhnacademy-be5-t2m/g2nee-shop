@@ -1,12 +1,12 @@
 package com.t2m.g2nee.shop.pageUtils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.t2m.g2nee.shop.review.dto.ReviewDto;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.domain.Page;
 
 /**
@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
  */
 
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,7 +33,7 @@ public class PageResponse<T> {
 
 
     public PageResponse<T> getPageResponse(int page, int maxPageButtons,
-                                                             Page<T> objectPage) {
+                                           Page<T> objectPage) {
 
         int startPage = (int) Math.max(1, objectPage.getNumber() - Math.floor((double) maxPageButtons / 2));
         int endPage = Math.min(startPage + maxPageButtons - 1, objectPage.getTotalPages());

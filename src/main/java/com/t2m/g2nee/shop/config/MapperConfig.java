@@ -12,7 +12,6 @@ import com.t2m.g2nee.shop.bookset.role.mapper.RoleMapper;
 import com.t2m.g2nee.shop.bookset.role.mapper.RoleMapperImpl;
 import com.t2m.g2nee.shop.bookset.tag.mapper.TagMapper;
 import com.t2m.g2nee.shop.bookset.tag.mapper.TagMapperImpl;
-import net.bytebuddy.utility.nullability.NeverNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -50,8 +49,9 @@ public class MapperConfig {
 
         return new RoleMapperImpl();
     }
+
     @Bean
-    public PublisherMapper publisherMapper(){
+    public PublisherMapper publisherMapper() {
         return new PublisherMapperImpl();
     }
 

@@ -16,7 +16,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.Setter;
 
 @Entity
@@ -34,7 +33,6 @@ public class OrderDetail {
     private Integer quantity;
     private Boolean isCancelled;
 
-    @NonNull
     @ManyToOne
     @JoinColumn(name = "orderId")
     private Order order;
@@ -46,8 +44,7 @@ public class OrderDetail {
     @ManyToOne
     @JoinColumn(name = "packageTypeId")
     private PackageType packageType;
-    //todo: 포장지 가격은 권당 포장이 아니라 orderDetail당 1번씩 계산
-    @NonNull
+
     @ManyToOne
     @JoinColumn(name = "customerId")
     private Customer customer;

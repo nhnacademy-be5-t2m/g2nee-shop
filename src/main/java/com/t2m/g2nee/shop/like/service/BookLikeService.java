@@ -6,8 +6,8 @@ import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.like.domain.BookLike;
 import com.t2m.g2nee.shop.like.dto.BookLikeDto;
 import com.t2m.g2nee.shop.like.repository.BookLikeRepository;
-import com.t2m.g2nee.shop.memberset.Member.domain.Member;
-import com.t2m.g2nee.shop.memberset.Member.repository.MemberRepository;
+import com.t2m.g2nee.shop.memberset.member.domain.Member;
+import com.t2m.g2nee.shop.memberset.member.repository.MemberRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,6 +30,7 @@ public class BookLikeService {
 
     /**
      * 책에 좋아요를 설정하는 메서드
+     *
      * @param request 책과 회원 정보가 아이디가 담긴 객체
      * @return BookLikeDto
      */
@@ -41,10 +42,11 @@ public class BookLikeService {
         Book book = bookRepository.findById(request.getBookId())
                 .orElseThrow(() -> new NotFoundException("책 정보가 없습니다."));
 
-       Optional<BookLike> optionalBookLike = bookLikeRepository.findBookLike(request.getMemberId(), request.getBookId());
+        Optional<BookLike> optionalBookLike =
+                bookLikeRepository.findBookLike(request.getMemberId(), request.getBookId());
 
-       // 동일한 좋아요가 없으면 생성
-        if(optionalBookLike.isEmpty()) {
+        // 동일한 좋아요가 없으면 생성
+        if (optionalBookLike.isEmpty()) {
 
             BookLike bookLike = BookLike.builder()
                     .book(book)
@@ -56,6 +58,7 @@ public class BookLikeService {
             return BookLikeDto.builder()
                     .bookId(saveBookLike.getBook().getBookId())
                     .memberId(saveBookLike.getMember().getCustomerId())
+                    .isLiked(true)
                     .build();
         } else {
 
@@ -63,7 +66,21 @@ public class BookLikeService {
             BookLike bookLike = optionalBookLike.get();
             bookLikeRepository.deleteById(bookLike.getBookLikeId());
 
-            return null;
+            return BookLikeDto.builder()
+                    .isLiked(false)
+                    .build();
         }
+    }
+
+    /**
+     * 회원 좋아요 개수를 조회하는 메서드
+     *
+     * @param memberId 회원 아이디
+     * @return Long
+     */
+
+    public Long getMemberLikesNum(Long memberId) {
+
+        return bookLikeRepository.getMemberLikesNum(memberId);
     }
 }

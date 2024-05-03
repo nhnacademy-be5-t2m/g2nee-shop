@@ -5,25 +5,39 @@ import com.t2m.g2nee.shop.bookset.category.domain.Category;
 import com.t2m.g2nee.shop.bookset.category.domain.QCategory;
 import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryUpdateDto;
 import com.t2m.g2nee.shop.bookset.category.repository.CategoryRepositoryCustom;
-import com.t2m.g2nee.shop.bookset.categoryPath.domain.QCategoryPath;
+import com.t2m.g2nee.shop.bookset.categorypath.domain.QCategoryPath;
 import java.util.List;
+import java.util.Optional;
 import javax.persistence.EntityManager;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
  * QueryDSL을 사용하여 카테고리에 대한 복잡한 쿼리를 작성하기 위한 구현체입니다.
+ *
  * @author : 김수빈
  * @since : 1.0
  */
 public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport implements CategoryRepositoryCustom {
 
+    /**
+     * 영속성 컨텍스트를 관리하기 위한 EntityManager입니다.
+     * update 쿼리 사용시, 영속성 업데이트를 위해 사용합니다.
+     */
     private final EntityManager entityManager;
 
+    /**
+     * CategoryRepositoryCustomImpl의 생성자 입니다.
+     *
+     * @param entityManager 엔티티매니저
+     */
     public CategoryRepositoryCustomImpl(EntityManager entityManager) {
         super(Category.class);
         this.entityManager = entityManager;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Category> getSubCategoriesByCategoryId(Long categoryId) {
         QCategory category = QCategory.category;
@@ -49,10 +63,14 @@ public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport impl
                 .orderBy(category.categoryName.asc()).fetch();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Category> getRootCategories() {
         QCategory category = QCategory.category;
         QCategoryPath categoryPath = QCategoryPath.categoryPath;
+
 
         /**
          * SELECT c.*
@@ -69,6 +87,9 @@ public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport impl
                 .fetch();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Category> getFindAncestorIdsByCategoryId(Long categoryId) {
         QCategory category = QCategory.category;
@@ -94,6 +115,9 @@ public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport impl
                 .fetch();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean getExistsByCategoryIdAndisActivated(Long categoryId, boolean active) {
         QCategory category = QCategory.category;
@@ -118,6 +142,9 @@ public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport impl
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void softDeleteByCategoryId(Long categoryId) {
         QCategory category = QCategory.category;
@@ -134,6 +161,9 @@ public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport impl
         entityManager.flush();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void activeCategoryByCategoryId(Long categoryId) {
         QCategory category = QCategory.category;
@@ -149,8 +179,11 @@ public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport impl
         entityManager.flush();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public CategoryUpdateDto getFindByCategoryId(Long categoryId) {
+    public Optional<CategoryUpdateDto> getFindByCategoryId(Long categoryId) {
         QCategory category = QCategory.category;
         QCategoryPath categoryPath = QCategoryPath.categoryPath;
 
@@ -161,15 +194,16 @@ public class CategoryRepositoryCustomImpl extends QuerydslRepositorySupport impl
          * WHERE c.categoryId = ?;
          */
 
-
-        return from(category)
-                .leftJoin(categoryPath).on(category.categoryId.eq(categoryPath.descendant.categoryId)
-                        .and(categoryPath.depth.eq(1L)))
-                .where(category.categoryId.eq(categoryId))
-                .select(Projections.constructor(CategoryUpdateDto.class,
-                        category.categoryId, category.categoryName, category.categoryEngName, category.isActivated,
-                        categoryPath.ancestor.categoryId.coalesce(0L)))
-                .fetchOne();
+        return Optional.ofNullable(
+                from(category)
+                        .leftJoin(categoryPath).on(category.categoryId.eq(categoryPath.descendant.categoryId)
+                                .and(categoryPath.depth.eq(1L)))
+                        .where(category.categoryId.eq(categoryId))
+                        .select(Projections.constructor(CategoryUpdateDto.class,
+                                category.categoryId, category.categoryName, category.categoryEngName,
+                                category.isActivated,
+                                categoryPath.ancestor.categoryId.coalesce(0L)))
+                        .fetchOne());
     }
 
 }

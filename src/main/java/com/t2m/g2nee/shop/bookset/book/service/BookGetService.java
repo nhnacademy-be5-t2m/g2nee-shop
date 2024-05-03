@@ -7,7 +7,6 @@ import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -56,7 +55,7 @@ public class BookGetService {
      * 카테고리와 하위 카테고리의 책을 모두 조회하고 sort에 따라 정렬하는 메서드 입니다.
      *
      * @param page       페이지 번호
-     * @param memberId  회원 아이디
+     * @param memberId   회원 아이디
      * @param categoryId 카테고리 아이디
      * @param sort       정렬 기준
      * @return PageResponse<BookDto.ListResponse>
@@ -67,10 +66,10 @@ public class BookGetService {
 
         // 조건에 맞게 정렬하여 페이지 생성
         int size = 8;
-        Pageable pageable = PageRequest.of(page-1, size);
+        Pageable pageable = PageRequest.of(page - 1, size);
 
         Page<BookDto.ListResponse> bookPage =
-                bookRepository.getBookListByCategory(categoryId, memberId, pageable, sort);
+                bookRepository.getBookListByCategory(memberId, categoryId, pageable, sort);
 
         return getPageResponse(page, bookPage);
     }
@@ -78,13 +77,14 @@ public class BookGetService {
 
     /**
      * 책 상세 정보를 조회하는 메서드입니다.
+     *
      * @param memberId 회원 아이디
-     * @param bookId 책 아이디
+     * @param bookId   책 아이디
      * @return BookDto.Response
      */
     @Transactional
-    public BookDto.Response getBookDetail(Long memberId,Long bookId) {
-        return bookRepository.getBookDetail(memberId,bookId);
+    public BookDto.Response getBookDetail(Long memberId, Long bookId) {
+        return bookRepository.getBookDetail(memberId, bookId);
     }
 
     /**
@@ -101,7 +101,7 @@ public class BookGetService {
                                                                                 String keyword, String sort) {
         // 조건에 맞게 정렬하여 페이지 생성
         int size = 8;
-        Pageable pageable = PageRequest.of(page-1, size);
+        Pageable pageable = PageRequest.of(page - 1, size);
 
         // categoryId가 null 일 경우 repository에서 키워드만 받도록 처리
         Page<BookDto.ListResponse> bookPage =
@@ -113,12 +113,13 @@ public class BookGetService {
 
     /**
      * 추천책 15권을 조회하는 메서드
+     *
      * @param categoryIdList 카테고리 아이디 리스트
      * @return List<BookDto.ListResponse>
      */
-    public List<BookDto.ListResponse> getRecommendBooks(List<Long> categoryIdList, Long bookId){
+    public List<BookDto.ListResponse> getRecommendBooks(List<Long> categoryIdList, Long bookId) {
 
-        return bookRepository.getRecommendBooks(categoryIdList,bookId);
+        return bookRepository.getRecommendBooks(categoryIdList, bookId);
     }
 
     /**

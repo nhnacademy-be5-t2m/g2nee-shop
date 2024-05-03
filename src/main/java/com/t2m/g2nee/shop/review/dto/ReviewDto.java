@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.json.JSONPropertyIgnore;
 
 /**
  * 리뷰 dto 클래스
@@ -17,13 +16,15 @@ import org.json.JSONPropertyIgnore;
  */
 public class ReviewDto {
 
-    private ReviewDto(){}
-    @Getter
+    private ReviewDto() {
+    }
+
     @Setter
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class Request{
+    public static class Request {
 
         private Long reviewId;
         private String content;
@@ -31,13 +32,13 @@ public class ReviewDto {
         private Long bookId;
         private Long memberId;
     }
-    @Getter
+
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class Response{
+    public static class Response {
 
         private Long reviewId;
         private String content;

@@ -3,9 +3,6 @@ package com.t2m.g2nee.shop.bookset.bookcontributor.dto;
 import com.t2m.g2nee.shop.bookset.book.domain.Book;
 import com.t2m.g2nee.shop.bookset.contributor.domain.Contributor;
 import com.t2m.g2nee.shop.bookset.role.domain.Role;
-import com.t2m.g2nee.shop.bookset.tag.domain.Tag;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,8 +21,8 @@ public class BookContributorDto {
     private BookContributorDto() {
     }
 
-    @Getter
     @Setter
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
@@ -36,8 +33,8 @@ public class BookContributorDto {
         private Role role;
     }
 
-    @Getter
     @Setter
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder

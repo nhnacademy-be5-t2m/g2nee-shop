@@ -28,12 +28,25 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
 
     private final CategoryRepository categoryRepository;
 
-    private static int maxPageButtons = 5;
+    /**
+     * 페이징 시, 보여줄 최대 버튼 수
+     */
+    private static final int MAXPAGEBUTTONS = 5;
 
+    /**
+     * CategoryQueryServiceImpl의 생성자입니다.
+     *
+     * @param categoryRepository 카테고리 레포지토리
+     */
     public CategoryQueryServiceImpl(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws NotFoundException 카테고리가 존재하지 않을 경우
+     */
     @Override
     public List<CategoryHierarchyDto> getSubCategories(Long categoryId) {
         //카테고리가 존재하는지 확인
@@ -48,10 +61,16 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
         throw new NotFoundException("카테고리가 존재하지 않습니다.");
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws NotFoundException 상위 카테고리가 유효한 id가 아닌 경우
+     */
     @Override
     public CategoryUpdateDto getCategory(Long categoryId) {
         //카테고리와 카테고리의 상위 id를 가져옴
-        CategoryUpdateDto category = categoryRepository.getFindByCategoryId(categoryId);
+        CategoryUpdateDto category = categoryRepository.getFindByCategoryId(categoryId).orElseThrow(
+                () -> new NotFoundException("상위 카테고리를 찾을 수 없습니다."));
 
         //서브 카테고리 목록 설정
         List<CategoryHierarchyDto> subCategories = getSubCategories(categoryId);
@@ -62,6 +81,9 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<CategoryHierarchyDto> getRootCategories() {
         //카테고리를 계층 구조로 반환
@@ -69,7 +91,7 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
                 .map(this::convertToCategoryHierarchyDto)
                 .collect(Collectors.toList());
 
-        for(CategoryHierarchyDto rootCategory:rootCategories){
+        for (CategoryHierarchyDto rootCategory : rootCategories) {
             List<CategoryHierarchyDto> subCategories = getSubCategories(rootCategory.getCategoryId());
             rootCategory.setChildren(subCategories);
             //하위 카테고리도 자식 설정
@@ -80,6 +102,7 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
 
     /**
      * 카테고리 계층 설정
+     *
      * @param categories 계층 설정할 카테고리
      */
     public void setHierarchy(List<CategoryHierarchyDto> categories) {
@@ -91,6 +114,9 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PageResponse<CategoryInfoDto> getCategoriesByName(String name, int page) {
         //이름으로 검색한 카테고리를 페이징처리하여 반환
@@ -101,11 +127,11 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
                 .stream().map(this::convertToCategoryInfoDto)
                 .collect(Collectors.toList());
 
-        int startPage = (int) Math.max(1, categories.getNumber() - Math.floor((double) maxPageButtons / 2));
-        int endPage = Math.min(startPage + maxPageButtons - 1, categories.getTotalPages());
+        int startPage = (int) Math.max(1, categories.getNumber() - Math.floor((double) MAXPAGEBUTTONS / 2));
+        int endPage = Math.min(startPage + MAXPAGEBUTTONS - 1, categories.getTotalPages());
 
-        if (endPage - startPage + 1 < maxPageButtons) {
-            startPage = Math.max(1, endPage - maxPageButtons + 1);
+        if (endPage - startPage + 1 < MAXPAGEBUTTONS) {
+            startPage = Math.max(1, endPage - MAXPAGEBUTTONS + 1);
         }
 
         return PageResponse.<CategoryInfoDto>builder()

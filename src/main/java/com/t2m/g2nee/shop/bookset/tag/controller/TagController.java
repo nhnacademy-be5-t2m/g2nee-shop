@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
-
 /**
  * 태그 관리에 대한 controller 입니다.
  *
@@ -74,6 +73,7 @@ public class TagController {
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
     /**
      * 모든 태그를 조회하는 컨트롤러 입니다.
      */
