@@ -8,4 +8,6 @@ public interface PackageFileRepository extends JpaRepository<PackageFile, Long> 
 
     Optional<PackageFile> findByPackageType_PackageId(Long packageId);
 
+    void deleteByPackageType_PackageId(Long packageId);
+
 }
