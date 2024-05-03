@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.json.JSONPropertyIgnore;
 
 /**
  * 리뷰 dto 클래스
@@ -35,6 +34,7 @@ public class ReviewDto {
     }
 
     @Setter
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
@@ -46,6 +46,7 @@ public class ReviewDto {
         private String imageUrl;
         private int score;
         private String nickname;
+        private Long memberId;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
     }

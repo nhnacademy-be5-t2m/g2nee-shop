@@ -44,8 +44,9 @@ public class PackageType {
 
     /**
      * PackageType의 생성자 입니다.
-     * @param name 패키지 이름
-     * @param price 패키지 가격
+     *
+     * @param name        패키지 이름
+     * @param price       패키지 가격
      * @param isActivated 패키지 활성 정보
      */
     public PackageType(String name, BigDecimal price, Boolean isActivated) {

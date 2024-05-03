@@ -41,7 +41,7 @@ public class DatasourceConfig {
         basicDataSource.setUsername(dataSourceProperties.getUsername());
         basicDataSource.setPassword(dataSourceProperties.getPassword());
         basicDataSource.setValidationQuery("SELECT 1");
-        basicDataSource.setMinIdle(10);
+        basicDataSource.setMinIdle(20);
         basicDataSource.setMaxIdle(20);
         return basicDataSource;
 

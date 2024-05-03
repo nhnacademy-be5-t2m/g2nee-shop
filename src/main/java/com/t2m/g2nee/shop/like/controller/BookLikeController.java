@@ -27,6 +27,7 @@ public class BookLikeController {
 
     /**
      * 좋아요 설정, 해제 하는 컨트롤러
+     *
      * @param request 정보가 담긴 객체
      * @return ResponseEntity<BookLikeDto>
      */
@@ -40,11 +41,12 @@ public class BookLikeController {
 
     /**
      * 회원의 좋아요한 개수를 가져오는 컨트롤러
+     *
      * @param memberId 회원 아이디
      * @return ResponseEntity<Long>
      */
     @GetMapping("/member/{memberId}")
-    public ResponseEntity<Long> getMemberLikesNum(@PathVariable("memberId") Long memberId){
+    public ResponseEntity<Long> getMemberLikesNum(@PathVariable("memberId") Long memberId) {
 
         Long response = bookLikeService.getMemberLikesNum(memberId);
 

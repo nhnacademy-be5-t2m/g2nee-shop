@@ -22,6 +22,7 @@ public class CategoryHierarchyDto extends CategoryInfoDto {
 
     /**
      * 카테고리 객체를 받아 CategoryHierarchyDto를 초기화하는 생성자입니다.
+     *
      * @param category 카테고리 객체
      */
     public CategoryHierarchyDto(Category category) {
@@ -30,10 +31,11 @@ public class CategoryHierarchyDto extends CategoryInfoDto {
 
     /**
      * CategoryHierarchyDto의 생성자입니다.
-     * @param categoryId 카테고리 id
-     * @param categoryName 카테고리 이름
+     *
+     * @param categoryId      카테고리 id
+     * @param categoryName    카테고리 이름
      * @param categoryEngName 카테고리 영문 이름
-     * @param isActivated 활성화 여부
+     * @param isActivated     활성화 여부
      */
     public CategoryHierarchyDto(Long categoryId, String categoryName, String categoryEngName, Boolean isActivated) {
         super(categoryId, categoryName, categoryEngName, isActivated);

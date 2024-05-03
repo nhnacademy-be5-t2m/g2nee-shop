@@ -12,6 +12,7 @@ import lombok.Setter;
 
 /**
  * 결제요청을 다양하게 받기 위한 추상클래스 입니다.
+ *
  * @author : 김수빈
  * @since : 1.0
  */

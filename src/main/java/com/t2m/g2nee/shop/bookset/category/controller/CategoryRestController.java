@@ -33,6 +33,7 @@ public class CategoryRestController {
 
     /**
      * CategoryRestController 생성자로, CategoryService를 주입받음
+     *
      * @param service 카테고리 서비스
      */
     public CategoryRestController(CategoryService service) {

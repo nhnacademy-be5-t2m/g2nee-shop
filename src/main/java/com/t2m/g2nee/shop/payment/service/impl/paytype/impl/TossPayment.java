@@ -33,6 +33,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * PaymentRequestMethod의 구현체고, Toss Payment의 결제 시스템을 구현한 클래스입니다.
+ *
  * @author : 김수빈
  * @since : 1.0
  */
@@ -54,11 +55,12 @@ public class TossPayment implements PaymentRequestMethod {
 
     /**
      * TossPayment의 생성자 입니다.
-     * @param restTemplate toss에 api요청을 보낼 restTemplate
-     * @param orderRepository 주문 정보를 확인할 레포지토리
+     *
+     * @param restTemplate       toss에 api요청을 보낼 restTemplate
+     * @param orderRepository    주문 정보를 확인할 레포지토리
      * @param customerRepository 고객 정보를 확인할 레포지토리
-     * @param paymentRepository 결제 정보 저장 및 확인을 위한 레포지토리
-     * @param secretKey Toss Payment api 헤더에 들어가야하는 값
+     * @param paymentRepository  결제 정보 저장 및 확인을 위한 레포지토리
+     * @param secretKey          Toss Payment api 헤더에 들어가야하는 값
      */
     public TossPayment(RestTemplate restTemplate, OrderRepository orderRepository,
                        CustomerRepository customerRepository, PaymentRepository paymentRepository, String secretKey) {
@@ -71,10 +73,11 @@ public class TossPayment implements PaymentRequestMethod {
 
     /**
      * {@inheritDoc}
-     * @throws NotFoundException 유효하지 않은 주문일 경우
-     * @throws CustomException 주문 금액이 주문과 일치하지 않을 경우
-     * @throws NotFoundException 주문자 정보가 존재하지 않을 경우
-     * @throws CustomException 주문자 정보가 일치하지 않을 경우
+     *
+     * @throws NotFoundException        유효하지 않은 주문일 경우
+     * @throws CustomException          주문 금액이 주문과 일치하지 않을 경우
+     * @throws NotFoundException        주문자 정보가 존재하지 않을 경우
+     * @throws CustomException          주문자 정보가 일치하지 않을 경우
      * @throws IllegalArgumentException Toss Payment가 아닐 경우
      */
     @SneakyThrows
@@ -85,7 +88,7 @@ public class TossPayment implements PaymentRequestMethod {
             //주문이 유효한지 확인
             Order order = orderRepository.findByOrderNumber(tossRequest.getOrderNumber())
                     .orElseThrow(() ->
-                        new NotFoundException("유효하지 않은 주문입니다.")
+                            new NotFoundException("유효하지 않은 주문입니다.")
                     );
             // 1. 주문서 저장된 금액과 실제 요청 금액이 일치하는지
             if (!order.getNetAmount().equals(tossRequest.getAmount())) {
@@ -111,7 +114,8 @@ public class TossPayment implements PaymentRequestMethod {
 
             ResponseEntity<TossPaymentResponseDto> response = restTemplate
                     .exchange(url.toUriString(), HttpMethod.POST,
-                            new HttpEntity<>(param.toString().getBytes(StandardCharsets.UTF_8), makePaymentHeader()), TossPaymentResponseDto.class);
+                            new HttpEntity<>(param.toString().getBytes(StandardCharsets.UTF_8), makePaymentHeader()),
+                            TossPaymentResponseDto.class);
 
             TossPaymentResponseDto tossResponse = response.getBody();
 
@@ -124,9 +128,10 @@ public class TossPayment implements PaymentRequestMethod {
                     status = Payment.PayStatus.ABORTED;
                 }
 
-                Payment payment= new Payment(
+                Payment payment = new Payment(
                         tossResponse.getTotalAmount(), "toss - " + tossResponse.getMethod(),
-                        OffsetDateTime.parse(tossResponse.getApprovedAt()).toLocalDateTime(), tossResponse.getPaymentKey(),
+                        OffsetDateTime.parse(tossResponse.getApprovedAt()).toLocalDateTime(),
+                        tossResponse.getPaymentKey(),
                         status, customer, order
                 );
 
@@ -141,6 +146,7 @@ public class TossPayment implements PaymentRequestMethod {
 
     /**
      * {@inheritDoc}
+     *
      * @throws CustomException 결제 취소가 성공적으로 되지 않았을 때
      */
     @Override
@@ -152,30 +158,34 @@ public class TossPayment implements PaymentRequestMethod {
         param.put("cancelReason", "배송 전 고객 변심");
 
         UriComponents url = UriComponentsBuilder.fromUriString(baseUrl)
-                .path("/"+payment.getPaymentKey())
+                .path("/" + payment.getPaymentKey())
                 .path("/cancel")
                 .build();
 
         ResponseEntity<TossPaymentResponseDto> response = restTemplate
                 .exchange(url.toUriString(), HttpMethod.POST,
-                        new HttpEntity<>(param.toString().getBytes(StandardCharsets.UTF_8), makePaymentHeader()), TossPaymentResponseDto.class);
+                        new HttpEntity<>(param.toString().getBytes(StandardCharsets.UTF_8), makePaymentHeader()),
+                        TossPaymentResponseDto.class);
 
         TossPaymentResponseDto tossResponse = Optional.ofNullable(response.getBody()).orElseThrow(
                 () -> new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, "예상하지 못한 오류가 발새했습니다.")
         );
 
         //취소 성공후, 저장 상태 변경
-        if (response.getStatusCode() == HttpStatus.OK && tossResponse.getCancels().get(0).getCancelStatus().equals("DONE")) {
+        if (response.getStatusCode() == HttpStatus.OK &&
+                tossResponse.getCancels().get(0).getCancelStatus().equals("DONE")) {
             Payment updatePayment = payment;
-            updatePayment.setCancel(OffsetDateTime.parse(tossResponse.getCancels().get(0).getCanceledAt()).toLocalDateTime());
+            updatePayment.setCancel(
+                    OffsetDateTime.parse(tossResponse.getCancels().get(0).getCanceledAt()).toLocalDateTime());
             return paymentRepository.save(updatePayment);
-        }else{
+        } else {
             throw new CustomException(HttpStatus.BAD_REQUEST, tossResponse.getFailure().getMessage());
         }
     }
 
     /**
      * toss로 api를 보내기 위한 헤더를 생성합니다.
+     *
      * @return HttpHeaders
      */
     private HttpHeaders makePaymentHeader() {
@@ -186,7 +196,7 @@ public class TossPayment implements PaymentRequestMethod {
 
         return httpHeaders;
     }
-    
+
     /**
      * {@inheritDoc}
      */

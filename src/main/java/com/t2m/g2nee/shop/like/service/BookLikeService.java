@@ -74,12 +74,13 @@ public class BookLikeService {
 
     /**
      * 회원 좋아요 개수를 조회하는 메서드
+     *
      * @param memberId 회원 아이디
      * @return Long
      */
 
     public Long getMemberLikesNum(Long memberId) {
 
-       return bookLikeRepository.getMemberLikesNum(memberId);
+        return bookLikeRepository.getMemberLikesNum(memberId);
     }
 }

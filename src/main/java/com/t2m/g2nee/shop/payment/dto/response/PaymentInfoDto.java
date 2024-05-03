@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * 결제 정보를 응답하기 위한 dto입니다.
+ *
  * @author : 김수빈
  * @since : 1.0
  */

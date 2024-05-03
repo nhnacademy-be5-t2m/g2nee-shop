@@ -1,17 +1,18 @@
 package com.t2m.g2nee.shop.orderset.order.repository.impl;
 
 import com.querydsl.core.types.Projections;
-import com.t2m.g2nee.shop.couponset.Coupon.domain.QCoupon;
-import com.t2m.g2nee.shop.couponset.CouponType.domain.QCouponType;
-import com.t2m.g2nee.shop.memberset.Customer.domain.QCustomer;
-import com.t2m.g2nee.shop.memberset.Member.domain.QMember;
+import com.t2m.g2nee.shop.couponset.coupon.domain.QCoupon;
+import com.t2m.g2nee.shop.couponset.coupontype.domain.QCouponType;
+import com.t2m.g2nee.shop.memberset.customer.domain.QCustomer;
+import com.t2m.g2nee.shop.memberset.member.domain.QMember;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
-import com.t2m.g2nee.shop.orderset.order.domain.QOrders;
+import com.t2m.g2nee.shop.orderset.order.domain.QOrder;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
 import com.t2m.g2nee.shop.orderset.order.repository.OrderCustomRepository;
 import com.t2m.g2nee.shop.orderset.orderdetail.domain.QOrderDetail;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +27,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 public class OrderRepositoryImpl extends QuerydslRepositorySupport
         implements OrderCustomRepository {
 
-    QOrders orders = QOrders.orders;
+    QOrder order = QOrder.order;
     QCustomer customer = QCustomer.customer;
     QMember member = QMember.member;
     QOrderDetail orderDetail = QOrderDetail.orderDetail;
@@ -41,26 +42,26 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
     @Override
     public Page<GetOrderListForAdminResponseDto> getAllOrderList(Pageable pageable) {
 
-        List<GetOrderListForAdminResponseDto> queryAdmin = from(orders)
-                .innerJoin(customer).on(orders.customer.customerId.eq(customer.customerId))
-                .leftJoin(couponType).on(orders.coupon.couponType.couponTypeId.eq(couponType.couponTypeId))
+        List<GetOrderListForAdminResponseDto> queryAdmin = from(order)
+                .innerJoin(customer).on(order.customer.customerId.eq(customer.customerId))
+                .leftJoin(couponType).on(order.coupon.couponType.couponTypeId.eq(couponType.couponTypeId))
                 .select(Projections.fields(GetOrderListForAdminResponseDto.class,
-                        orders.orderId,
-                        orders.orderNumber,
+                        order.orderId,
+                        order.orderNumber,
                         customer.customerId,
-                        orders.orderDate,
-                        orders.orderState,
-                        orders.orderAmount,
-                        orders.receiverName,
-                        orders.receiverPhoneNumber,
-                        orders.receiveAddress,
-                        orders.detailAddress,
-                        orders.zipcode,
-                        orders.message,
+                        order.orderDate,
+                        order.orderState,
+                        order.orderAmount,
+                        order.receiverName,
+                        order.receiverPhoneNumber,
+                        order.receiveAddress,
+                        order.detailAddress,
+                        order.zipcode,
+                        order.message,
                         couponType.name.as("couponName"))).fetch();
 
-        Long count = from(orders)
-                .select(orders.orderId.count()).fetchOne();
+        Long count = from(order)
+                .select(order.orderId.count()).fetchOne();
 
         return new PageImpl<>(queryAdmin, pageable, count);
     }
@@ -68,27 +69,27 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
 
     @Override
     public Page<GetOrderListForAdminResponseDto> getOrderListByState(Pageable pageable, Order.OrderState orderState) {
-        List<GetOrderListForAdminResponseDto> queryAdmin = from(orders)
-                .innerJoin(customer).on(orders.customer.customerId.eq(customer.customerId))
-                .leftJoin(couponType).on(orders.coupon.couponType.couponTypeId.eq(couponType.couponTypeId))
-                .where(orders.orderState.eq(orderState))
+        List<GetOrderListForAdminResponseDto> queryAdmin = from(order)
+                .innerJoin(customer).on(order.customer.customerId.eq(customer.customerId))
+                .leftJoin(couponType).on(order.coupon.couponType.couponTypeId.eq(couponType.couponTypeId))
+                .where(order.orderState.eq(orderState))
                 .select(Projections.fields(GetOrderListForAdminResponseDto.class,
-                        orders.orderId,
-                        orders.orderNumber,
+                        order.orderId,
+                        order.orderNumber,
                         customer.customerId,
-                        orders.orderDate,
-                        orders.orderState,
-                        orders.orderAmount,
-                        orders.receiverName,
-                        orders.receiverPhoneNumber,
-                        orders.receiveAddress,
-                        orders.detailAddress,
-                        orders.zipcode,
-                        orders.message,
+                        order.orderDate,
+                        order.orderState,
+                        order.orderAmount,
+                        order.receiverName,
+                        order.receiverPhoneNumber,
+                        order.receiveAddress,
+                        order.detailAddress,
+                        order.zipcode,
+                        order.message,
                         couponType.name.as("couponName"))).fetch();
 
-        Long count = from(orders)
-                .select(orders.orderId.count()).fetchOne();
+        Long count = from(order)
+                .select(order.orderId.count()).fetchOne();
 
         return new PageImpl<>(queryAdmin, pageable, count);
     }
@@ -96,75 +97,82 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
 
     @Override
     public Page<GetOrderInfoResponseDto> getOrderListForMembers(Pageable pageable, Long customerId) {
-        List<GetOrderInfoResponseDto> queryMemberOrderList = from(orders)
-                .innerJoin(member).on(orders.customer.customerId.eq(member.customerId))
-                .leftJoin(couponType).on(orders.coupon.couponType.couponTypeId.eq(couponType.couponTypeId))
-                .where(orders.customer.customerId.eq(customerId))
+        List<GetOrderInfoResponseDto> queryMemberOrderList = from(order)
+                .innerJoin(member).on(order.customer.customerId.eq(member.customerId))
+                .leftJoin(couponType).on(order.coupon.couponType.couponTypeId.eq(couponType.couponTypeId))
+                .where(order.customer.customerId.eq(customerId))
                 .select(Projections.fields(GetOrderInfoResponseDto.class,
-                        orders.orderId,
-                        orders.orderNumber,
-                        orders.orderDate,
-                        orders.deliveryWishDate,
-                        orders.deliveryFee,
-                        orders.orderState,
-                        orders.orderAmount,
-                        orders.receiverName,
-                        orders.receiveAddress,
-                        orders.receiverPhoneNumber,
-                        orders.zipcode,
-                        orders.detailAddress,
-                        orders.message,
+                        order.orderId,
+                        order.orderNumber,
+                        order.orderDate,
+                        order.deliveryWishDate,
+                        order.deliveryFee,
+                        order.orderState,
+                        order.orderAmount,
+                        order.receiverName,
+                        order.receiveAddress,
+                        order.receiverPhoneNumber,
+                        order.zipcode,
+                        order.detailAddress,
+                        order.message,
                         couponType.name.as("couponName"))).fetch();
 
-        Long count = from(orders)
-                .select(orders.orderId.count()).fetchOne();
+        Long count = from(order)
+                .select(order.orderId.count()).fetchOne();
 
         return new PageImpl<>(queryMemberOrderList, pageable, count);
     }
 
     @Override
     public GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long customerId) {
-        return from(orders)
-                .innerJoin(member).on(orders.customer.customerId.eq(member.customerId))
-                .leftJoin(couponType).on(orders.coupon.couponType.couponTypeId.eq(couponType.couponTypeId))
-                .where(orders.orderId.eq(orderId).and(orders.customer.customerId.eq(customerId)))
+        return from(order)
+                .innerJoin(member).on(order.customer.customerId.eq(member.customerId))
+                .leftJoin(couponType).on(order.coupon.couponType.couponTypeId.eq(couponType.couponTypeId))
+                .where(order.orderId.eq(orderId).and(order.customer.customerId.eq(customerId)))
                 .select(Projections.fields(GetOrderInfoResponseDto.class,
-                        orders.orderId,
-                        orders.orderNumber,
-                        orders.orderDate,
-                        orders.deliveryWishDate,
-                        orders.deliveryFee,
-                        orders.orderState,
-                        orders.orderAmount,
-                        orders.receiverName,
-                        orders.receiveAddress,
-                        orders.receiverPhoneNumber,
-                        orders.zipcode,
-                        orders.detailAddress,
-                        orders.message,
+                        order.orderId,
+                        order.orderNumber,
+                        order.orderDate,
+                        order.deliveryWishDate,
+                        order.deliveryFee,
+                        order.orderState,
+                        order.orderAmount,
+                        order.receiverName,
+                        order.receiveAddress,
+                        order.receiverPhoneNumber,
+                        order.zipcode,
+                        order.detailAddress,
+                        order.message,
                         couponType.name.as("couponName"))).fetchOne();
     }
 
     @Override
     public GetOrderInfoResponseDto getOrderInfoByOrderNumber(String orderNumber) {
-        return from(orders)
-                .innerJoin(customer).on(orders.customer.customerId.eq(customer.customerId))
-                .leftJoin(couponType).on(orders.coupon.couponType.couponTypeId.eq(couponType.couponTypeId))
-                .where(orders.orderNumber.eq(orderNumber))
+        return from(order)
+                .innerJoin(customer).on(order.customer.customerId.eq(customer.customerId))
+                .leftJoin(couponType).on(order.coupon.couponType.couponTypeId.eq(couponType.couponTypeId))
+                .where(order.orderNumber.eq(orderNumber))
                 .select(Projections.fields(GetOrderInfoResponseDto.class,
-                        orders.orderId,
-                        orders.orderNumber,
-                        orders.orderDate,
-                        orders.deliveryWishDate,
-                        orders.deliveryFee,
-                        orders.orderState,
-                        orders.orderAmount,
-                        orders.receiverName,
-                        orders.receiveAddress,
-                        orders.receiverPhoneNumber,
-                        orders.zipcode,
-                        orders.detailAddress,
-                        orders.message,
+                        order.orderId,
+                        order.orderNumber,
+                        order.orderDate,
+                        order.deliveryWishDate,
+                        order.deliveryFee,
+                        order.orderState,
+                        order.orderAmount,
+                        order.receiverName,
+                        order.receiveAddress,
+                        order.receiverPhoneNumber,
+                        order.zipcode,
+                        order.detailAddress,
+                        order.message,
                         couponType.name.as("couponName"))).fetchOne();
     }
+
+    @Override
+    public Optional<Order> findByOrderNumber(String orderNumber) {
+        return Optional.empty();
+    }
+
+
 }

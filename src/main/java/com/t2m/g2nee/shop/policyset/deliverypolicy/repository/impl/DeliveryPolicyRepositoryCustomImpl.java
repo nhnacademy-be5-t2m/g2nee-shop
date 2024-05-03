@@ -23,6 +23,7 @@ public class DeliveryPolicyRepositoryCustomImpl extends QuerydslRepositorySuppor
 
     /**
      * DeliveryPolicyRepositoryCustomImpl의 생성자입니다.
+     *
      * @param entityManager 엔티티 매니저
      */
     public DeliveryPolicyRepositoryCustomImpl(EntityManager entityManager) {

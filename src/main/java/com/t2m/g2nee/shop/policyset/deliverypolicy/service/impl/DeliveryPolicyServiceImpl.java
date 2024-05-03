@@ -33,6 +33,7 @@ public class DeliveryPolicyServiceImpl implements DeliveryPolicyService {
 
     /**
      * DeliveryPolicyServiceImpl의 생성자입니다.
+     *
      * @param deliveryPolicyRepository 배송비 정책 레포지토리
      */
     public DeliveryPolicyServiceImpl(DeliveryPolicyRepository deliveryPolicyRepository) {
@@ -67,6 +68,7 @@ public class DeliveryPolicyServiceImpl implements DeliveryPolicyService {
 
     /**
      * {@inheritDoc}
+     *
      * @throws NotFoundException 유효한 배송비 정책이 존재하지 않을 때
      */
     @Override

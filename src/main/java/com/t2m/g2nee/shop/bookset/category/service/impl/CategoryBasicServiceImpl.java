@@ -23,6 +23,7 @@ public class CategoryBasicServiceImpl implements CategoryBasicService {
 
     /**
      * CategoryBasicServiceImpl의 생성자입니다.
+     *
      * @param categoryRepository 카테고리 레포지토리
      */
     public CategoryBasicServiceImpl(CategoryRepository categoryRepository) {
@@ -31,6 +32,7 @@ public class CategoryBasicServiceImpl implements CategoryBasicService {
 
     /**
      * {@inheritDoc}
+     *
      * @throws AlreadyExistException 카테고리 이름이 중복될 경우
      */
     @Override
@@ -47,7 +49,8 @@ public class CategoryBasicServiceImpl implements CategoryBasicService {
 
     /**
      * {@inheritDoc}
-     * @throws NotFoundException 수정 할 카테고리가 존재하지 않을 때
+     *
+     * @throws NotFoundException     수정 할 카테고리가 존재하지 않을 때
      * @throws AlreadyExistException 수정하는 카테고리 이름이 중복될 때
      */
     @Override
@@ -69,6 +72,7 @@ public class CategoryBasicServiceImpl implements CategoryBasicService {
 
     /**
      * {@inheritDoc}
+     *
      * @throws NotFoundException 삭제할 카테고리 id가 유효하지 않을 때
      */
     @Override
@@ -87,6 +91,7 @@ public class CategoryBasicServiceImpl implements CategoryBasicService {
 
     /**
      * {@inheritDoc}
+     *
      * @throws NotFoundException 카테고리가 존재하지 않을 때
      */
     @Override
@@ -103,6 +108,7 @@ public class CategoryBasicServiceImpl implements CategoryBasicService {
 
     /**
      * {@inheritDoc}
+     *
      * @throws NotFoundException 활성화할 카테고리 id가 유효하지 않을 때
      * @throws NotFoundException 유효한 카테고리 id가 아닐 때
      */

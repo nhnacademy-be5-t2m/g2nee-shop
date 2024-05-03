@@ -51,7 +51,8 @@ public class DeliveryPolicy {
 
     /**
      * DeliveryPolicy의 deliveryPolicyId를 제외한 생성자 입니다.
-     * @param deliveryFee 배송비
+     *
+     * @param deliveryFee          배송비
      * @param freeDeliveryStandard 무료 배송 기준 금액
      */
     public DeliveryPolicy(BigDecimal deliveryFee, BigDecimal freeDeliveryStandard) {

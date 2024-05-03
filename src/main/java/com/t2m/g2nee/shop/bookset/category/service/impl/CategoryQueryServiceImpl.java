@@ -35,6 +35,7 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
 
     /**
      * CategoryQueryServiceImpl의 생성자입니다.
+     *
      * @param categoryRepository 카테고리 레포지토리
      */
     public CategoryQueryServiceImpl(CategoryRepository categoryRepository) {
@@ -43,6 +44,7 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
 
     /**
      * {@inheritDoc}
+     *
      * @throws NotFoundException 카테고리가 존재하지 않을 경우
      */
     @Override
@@ -61,6 +63,7 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
 
     /**
      * {@inheritDoc}
+     *
      * @throws NotFoundException 상위 카테고리가 유효한 id가 아닌 경우
      */
     @Override

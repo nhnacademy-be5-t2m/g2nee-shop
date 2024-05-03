@@ -24,7 +24,8 @@ public interface PackageRepository extends JpaRepository<PackageType, Long>, Pac
     /**
      * 특정 포장지 이름이면서 특정 포장지 id가 아닌 포장지가 존재하는지 확인합니다.
      * 다른 말로 포장지 id인 포장지를 제외하고 나머지 포장지 중 특정 이름을 가진 포장지가 있는지 확인합니다.
-     * @param name 포장지 이름
+     *
+     * @param name      포장지 이름
      * @param packageId 패지키 id
      * @return 존재하면 ture, 없으면 false
      */

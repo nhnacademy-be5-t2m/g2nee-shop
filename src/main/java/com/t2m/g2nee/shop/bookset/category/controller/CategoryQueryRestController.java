@@ -32,6 +32,7 @@ public class CategoryQueryRestController {
 
     /**
      * CategoryQueryRestController의 생성자로, CategoryQueryService를 주입받습니다.
+     *
      * @param service 카테고리쿼리 서비스
      */
     public CategoryQueryRestController(CategoryQueryService service) {

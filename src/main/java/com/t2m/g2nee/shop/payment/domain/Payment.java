@@ -58,7 +58,7 @@ public class Payment {
         this.paymentKey = paymentKey;
     }
 
-    public void setCancel(LocalDateTime paymentDate){
+    public void setCancel(LocalDateTime paymentDate) {
         this.payStatus = PayStatus.CANCELLED;
         this.paymentDate = paymentDate;
     }

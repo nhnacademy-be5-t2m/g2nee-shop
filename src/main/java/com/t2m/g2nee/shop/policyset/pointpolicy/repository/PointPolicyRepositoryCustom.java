@@ -2,6 +2,7 @@ package com.t2m.g2nee.shop.policyset.pointpolicy.repository;
 
 /**
  * QueryDSL을 사용하여 복잡한 쿼리를 작성합니다.
+ *
  * @author : 김수빈
  * @since : 1.0
  */

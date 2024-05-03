@@ -1,7 +1,7 @@
 package com.t2m.g2nee.shop.orderset.order.domain;
 
-import com.t2m.g2nee.shop.couponset.Coupon.domain.Coupon;
-import com.t2m.g2nee.shop.memberset.Customer.domain.Customer;
+import com.t2m.g2nee.shop.couponset.coupon.domain.Coupon;
+import com.t2m.g2nee.shop.memberset.customer.domain.Customer;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;

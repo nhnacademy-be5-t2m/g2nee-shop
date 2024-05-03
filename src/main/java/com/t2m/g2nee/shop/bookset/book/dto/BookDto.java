@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.t2m.g2nee.shop.bookset.bookcontributor.dto.BookContributorDto;
 import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryInfoDto;
 import com.t2m.g2nee.shop.bookset.tag.dto.TagDto;
-import com.t2m.g2nee.shop.review.dto.ReviewDto;
 import java.time.LocalDate;
 import java.util.List;
 import javax.validation.constraints.NotNull;
@@ -92,6 +91,7 @@ public class BookDto {
         private String publisherName;
         private String publisherEngName;
         private boolean isLiked;
+        private Long reviewCount;
         private Double scoreAverage;
     }
 
@@ -126,7 +126,7 @@ public class BookDto {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class statusResponse {
+    public static class StatusResponse {
         private BookStatus status;
     }
 
@@ -135,7 +135,7 @@ public class BookDto {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class quantityResponse {
+    public static class QuantityResponse {
         private int quantity;
     }
 }

@@ -17,7 +17,8 @@ public class PolicyTypeValidator implements ConstraintValidator<PolicyType, Poin
 
     /**
      * PolicyType에 따라 amount의 유효성을 검사하는 validator입니다.
-     * @param pointPolicySaveDto 포인트 정책 저장 dto
+     *
+     * @param pointPolicySaveDto         포인트 정책 저장 dto
      * @param constraintValidatorContext 유효성 검사 객체
      * @return 유효 시 true
      */
