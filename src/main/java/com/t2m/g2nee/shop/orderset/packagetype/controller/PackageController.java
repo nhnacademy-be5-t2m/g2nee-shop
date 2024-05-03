@@ -13,10 +13,11 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 포장지에 대한 컨트롤러 입니다.
@@ -45,9 +46,10 @@ public class PackageController {
      * @return ResponseEntity<PackageInfoDto>
      */
     @PostMapping
-    public ResponseEntity<PackageInfoDto> createPackage(@RequestBody @Valid PackageSaveDto request) {
+    public ResponseEntity<PackageInfoDto> createPackage(@RequestPart MultipartFile image,
+                                                        @RequestPart @Valid PackageSaveDto request) {
         return ResponseEntity.status(HttpStatus.CREATED).contentType(MediaType.APPLICATION_JSON)
-                .body(packageService.savePackage(request));
+                .body(packageService.savePackage(image, request));
     }
 
     /**
@@ -59,9 +61,10 @@ public class PackageController {
      */
     @PutMapping("/{packageId}")
     public ResponseEntity<PackageInfoDto> updatePackage(@PathVariable("packageId") Long packageId,
-                                                        @RequestBody @Valid PackageSaveDto request) {
+                                                        @RequestPart(required = false) MultipartFile image,
+                                                        @RequestPart @Valid PackageSaveDto request) {
         return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
-                .body(packageService.updatePackage(packageId, request));
+                .body(packageService.updatePackage(packageId, image, request));
     }
 
     /**
@@ -86,6 +89,18 @@ public class PackageController {
     public ResponseEntity<PageResponse<PackageInfoDto>> getAllPackage(@RequestParam int page) {
         return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
                 .body(packageService.getAllPackages(page));
+    }
+
+    /**
+     * 활성화된 모든 포장지를 페이징하여 반환하는 컨트롤러 입니다.
+     *
+     * @param page 현재 페이지
+     * @return ResponseEntity<PageResponse < PackageInfoDto>>
+     */
+    @GetMapping("/activated")
+    public ResponseEntity<PageResponse<PackageInfoDto>> getActivatePackage(@RequestParam int page) {
+        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
+                .body(packageService.getActivatePackages(page));
     }
 
     /**

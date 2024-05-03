@@ -37,4 +37,12 @@ public interface PackageRepository extends JpaRepository<PackageType, Long>, Pac
      * @return Page<PackageType>
      */
     Page<PackageType> findAll(Pageable pageable);
+
+    /**
+     * 활성화된 모든 포장지 정보를 페이징 처리하여 반환합니다.
+     *
+     * @param pageable 페이지 객체
+     * @return Page<PackageType>
+     */
+    Page<PackageType> findByIsActivatedTrue(Pageable pageable);
 }
