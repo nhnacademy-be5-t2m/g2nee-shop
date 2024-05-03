@@ -1,4 +1,4 @@
-package com.t2m.g2nee.shop.memberset.customers.dto;
+package com.t2m.g2nee.shop.memberset.customer.dto;
 
 import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;

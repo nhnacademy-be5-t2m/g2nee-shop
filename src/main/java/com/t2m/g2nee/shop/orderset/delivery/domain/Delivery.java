@@ -1,10 +1,8 @@
-package com.t2m.g2nee.shop.orderset.orderdetail.domain;
+package com.t2m.g2nee.shop.orderset.delivery.domain;
 
-import com.t2m.g2nee.shop.bookset.book.domain.Book;
 import com.t2m.g2nee.shop.memberset.customer.domain.Customer;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
-import com.t2m.g2nee.shop.orderset.packagetype.domain.PackageType;
-import java.math.BigDecimal;
+import java.sql.Timestamp;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,34 +17,26 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "OrderDetails")
+@Table(name = "Deliveries")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderDetail {
+public class Delivery {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orderDetailId;
-    private BigDecimal price;
-    private Integer quantity;
-    private Boolean isCancelled;
+    private Long deliveryId;
+    private String trackingNumber;
+    private Timestamp deliveryTime;
+    private String deliveryStatus;
 
     @ManyToOne
     @JoinColumn(name = "orderId")
     private Order order;
 
     @ManyToOne
-    @JoinColumn(name = "bookId")
-    private Book book;
-
-    @ManyToOne
-    @JoinColumn(name = "packageTypeId")
-    private PackageType packageType;
-
-    @ManyToOne
     @JoinColumn(name = "customerId")
     private Customer customer;
-
 }

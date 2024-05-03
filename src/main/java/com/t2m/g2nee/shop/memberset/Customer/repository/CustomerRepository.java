@@ -1,6 +1,6 @@
-package com.t2m.g2nee.shop.memberset.customers.repository;
+package com.t2m.g2nee.shop.memberset.customer.repository;
 
-import com.t2m.g2nee.shop.memberset.customers.domain.Customer;
+import com.t2m.g2nee.shop.memberset.customer.domain.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {

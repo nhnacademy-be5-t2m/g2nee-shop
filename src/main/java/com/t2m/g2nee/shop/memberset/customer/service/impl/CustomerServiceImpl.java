@@ -1,10 +1,10 @@
-package com.t2m.g2nee.shop.memberset.customers.service.impl;
+package com.t2m.g2nee.shop.memberset.customer.service.impl;
 
 import com.t2m.g2nee.shop.exception.NotFoundException;
-import com.t2m.g2nee.shop.memberset.customers.domain.Customer;
-import com.t2m.g2nee.shop.memberset.customers.dto.CustomerSaveRequest;
-import com.t2m.g2nee.shop.memberset.customers.repository.CustomerRepository;
-import com.t2m.g2nee.shop.memberset.customers.service.CustomerService;
+import com.t2m.g2nee.shop.memberset.customer.domain.Customer;
+import com.t2m.g2nee.shop.memberset.customer.dto.CustomerSaveRequest;
+import com.t2m.g2nee.shop.memberset.customer.repository.CustomerRepository;
+import com.t2m.g2nee.shop.memberset.customer.service.CustomerService;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
