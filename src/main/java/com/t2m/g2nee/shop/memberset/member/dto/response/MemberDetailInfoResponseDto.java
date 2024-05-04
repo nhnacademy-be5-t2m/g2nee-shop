@@ -17,6 +17,7 @@ public class MemberDetailInfoResponseDto {
     private String birthday;
     private String phoneNumber;
     private String email;
+    private String grade;
     private List<String> authorities;
 //    private List<MemberAddressResponseDto> address;
 }

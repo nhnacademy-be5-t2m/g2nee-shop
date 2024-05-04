@@ -107,6 +107,16 @@ public class PointPolicyServiceImpl implements PointPolicyService {
 
     /**
      * {@inheritDoc}
+     *
+     * @throws NotFoundException 정책 이름이 유효하지 않은 경우
+     */
+    @Override
+    public PointPolicyInfoDto getPointPolicyByPointName(String policyName) {
+        return convertToPointPolicyInfoDto(pointPolicyRepository.getByPolicyNameAndIsActivatedTrue(policyName).orElseThrow(()->new NotFoundException("포인트 정책이 존재하지 않습니다.")));
+    }
+
+    /**
+     * {@inheritDoc}
      */
     @Override
     @Transactional(readOnly = true)

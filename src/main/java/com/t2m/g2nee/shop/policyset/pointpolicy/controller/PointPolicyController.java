@@ -95,4 +95,16 @@ public class PointPolicyController {
         return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
                 .body(pointPolicyService.getAllPointPolicy(page));
     }
+
+    /**
+     * 정책이름으로 포인트정책정보를 가져올 수 있는 메소드
+     *
+     * @param policyName 포인트 이름
+     * @return point정보가 담긴 dto 객체
+     */
+    @GetMapping("/getByPolicyName")
+    public ResponseEntity<PointPolicyInfoDto> getPointPolicy(@RequestParam String policyName) {
+        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
+                .body(pointPolicyService.getPointPolicyByPointName(policyName));
+    }
 }

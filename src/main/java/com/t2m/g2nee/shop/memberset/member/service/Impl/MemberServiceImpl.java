@@ -162,6 +162,7 @@ public class MemberServiceImpl implements MemberService {
                 member.getBirthday(),
                 member.getPhoneNumber(),
                 member.getEmail(),
+                member.getGrade().getGradeName().getName(),
                 authorities
         );
         return memberDetail;
