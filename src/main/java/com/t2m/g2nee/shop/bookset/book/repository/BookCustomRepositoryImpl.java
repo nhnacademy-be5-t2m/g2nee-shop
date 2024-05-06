@@ -163,7 +163,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                         .leftJoin(bookLike).on(book.bookId.eq(bookLike.book.bookId))
                         .where(bookFile.imageType.eq(BookFile.ImageType.THUMBNAIL)
                                 .and(eqCategoryBookId(categoryId)
-                        ))
+                                ))
                         .select(Projections.fields(BookDto.ListResponse.class
                                 , book.bookId
                                 , bookFile.url.as("thumbnailImageUrl")
@@ -379,7 +379,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
     /**
      * 도서에 기여자와 역할 정보를 설정하고 반환하는 메서드입니다.
      *
-     * @param responseList    책 responseDto 리스트
+     * @param responseList 책 responseDto 리스트
      * @return dto response
      */
     private List<BookDto.ListResponse> toListResponseList(List<BookDto.ListResponse> responseList) {
@@ -525,7 +525,8 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
 
     /**
      * 카테고리 ID가 요청으로 왔을 때 필터링을 위한 메서드
-     * @param categoryId   카테고리 아이디
+     *
+     * @param categoryId 카테고리 아이디
      * @return BooleanExpression
      */
     private BooleanExpression eqCategoryBookId(Long categoryId) {

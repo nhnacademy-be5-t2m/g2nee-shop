@@ -112,7 +112,8 @@ public class PointPolicyServiceImpl implements PointPolicyService {
      */
     @Override
     public PointPolicyInfoDto getPointPolicyByPointName(String policyName) {
-        return convertToPointPolicyInfoDto(pointPolicyRepository.getByPolicyNameAndIsActivatedTrue(policyName).orElseThrow(()->new NotFoundException("포인트 정책이 존재하지 않습니다.")));
+        return convertToPointPolicyInfoDto(pointPolicyRepository.getByPolicyNameAndIsActivatedTrue(policyName)
+                .orElseThrow(() -> new NotFoundException("포인트 정책이 존재하지 않습니다.")));
     }
 
     /**

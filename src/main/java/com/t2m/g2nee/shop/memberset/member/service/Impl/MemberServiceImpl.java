@@ -137,7 +137,7 @@ public class MemberServiceImpl implements MemberService {
     /**
      * {@inheritDoc}
      *
-     * @throws NotFoundException 으로 username 에 해당하는 정보가 없는 경우 예외를 던집니다.
+     * @throws NotFoundException 으로 customerId 에 해당하는 정보가 없는 경우 예외를 던집니다.
      */
     @Override
     public MemberDetailInfoResponseDto getMemberDetailInfo(Long customerId) {
@@ -163,6 +163,7 @@ public class MemberServiceImpl implements MemberService {
                 member.getPhoneNumber(),
                 member.getEmail(),
                 member.getGrade().getGradeName().getName(),
+                member.getMemberStatus(),
                 authorities
         );
         return memberDetail;

@@ -10,7 +10,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author : 김수빈
  * @since : 1.0
  */
-public interface CategoryPathRepository extends JpaRepository<CategoryPath, Long>, CategoryPathRepositoryCustom {
+public interface CategoryPathRepository extends JpaRepository<CategoryPath, Long>,
+        com.t2m.g2nee.shop.bookset.categorypath.repository.CategoryPathRepositoryCustom {
 
     /**
      * path의 (조상, 자식)경로가 있는지 확인합니다.

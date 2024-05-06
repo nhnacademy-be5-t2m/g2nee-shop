@@ -1,6 +1,7 @@
 package com.t2m.g2nee.shop.point.domain;
 
 import com.t2m.g2nee.shop.memberset.member.domain.Member;
+import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,17 +30,29 @@ public class Point {
     private Long pointId;
 
     private int point;
-    private ReasonChange reasonChange;
+    private ChangeReason changeReason;
     private LocalDateTime changeDate;
 
-    //TODO: order Mapping
+    @ManyToOne
+    @JoinColumn(name = "orderId")
+    private Order order;
 
     @ManyToOne
     @JoinColumn(name = "memberId")
     private Member member;
 
-    public enum ReasonChange {
+    public enum ChangeReason {
+        REVIEW("리뷰작성 적립"), SIGNUP("회원가입 적립"), PURCHASE("구매 적립"), RETIRE("구매 적립금 회수(반품)"), RETURN("사용 포인트 반환(반품)"),
+        USE("포인트 사용");
 
-        REVIEW, SINGUP, PURCHASE, RETURN
+        private final String name;
+
+        ChangeReason(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
 }

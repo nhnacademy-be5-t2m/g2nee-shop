@@ -49,7 +49,8 @@ public class ReviewController {
 
     /**
      * 리뷰 수정 컨트롤러
-     * @param request  리뷰 정보 객체
+     *
+     * @param request 리뷰 정보 객체
      * @return ResponseEntity<ReviewDto.Response>
      */
     @PatchMapping
