@@ -101,15 +101,20 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
     @Override
     public Page<BookDto.ListResponse> getAllBook(Pageable pageable) {
 
-
         List<BookDto.ListResponse> responseList =
                 from(book).innerJoin(publisher).on(book.publisher.publisherId.eq(publisher.publisherId))
-                        .innerJoin(bookCategory).on(book.bookId.eq(bookCategory.book.bookId)).innerJoin(bookFile)
-                        .on(book.bookId.eq(bookFile.book.bookId)
+                        .innerJoin(bookFile).on(book.bookId.eq(bookFile.book.bookId)
                                 .and(bookFile.imageType.eq(BookFile.ImageType.THUMBNAIL)))
-                        .select(Projections.fields(BookDto.ListResponse.class, book.bookId,
-                                bookFile.url.as("thumbnailImageUrl"), book.title, book.engTitle, book.publishedDate,
-                                book.price, book.salePrice, book.bookStatus, publisher.publisherName,
+                        .select(Projections.fields(BookDto.ListResponse.class
+                                , book.bookId
+                                , bookFile.url.as("thumbnailImageUrl")
+                                , book.title
+                                , book.engTitle
+                                , book.publishedDate
+                                , book.price
+                                , book.salePrice
+                                , book.bookStatus
+                                , publisher.publisherName,
                                 publisher.publisherEngName)).offset(pageable.getOffset()).limit(pageable.getPageSize())
                         .fetch();
 
@@ -232,6 +237,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                                 , book.viewCount
                                 , book.bookStatus
                                 , book.pages
+                                , book.quantity
                                 , review.count().as("reviewCount")
                                 , isLiked.as("isLiked")
                                 , score.as("scoreAverage")

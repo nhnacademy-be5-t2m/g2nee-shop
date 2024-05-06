@@ -18,7 +18,6 @@ import lombok.Setter;
 @Entity
 @Table(name = "BookCategory")
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
