@@ -92,6 +92,7 @@ public class BookGetService {
         BookDto.Response bookDetail = bookRepository.getBookDetail(memberId, bookId);
         bookDetail.setBookIndex(markDownUtil.markdown(bookDetail.getBookIndex()));
         bookDetail.setDescription(markDownUtil.markdown(bookDetail.getDescription()));
+        bookDetail.setScoreAverage(Math.round(bookDetail.getScoreAverage() * 10) / 10.0);
 
         return bookDetail;
     }

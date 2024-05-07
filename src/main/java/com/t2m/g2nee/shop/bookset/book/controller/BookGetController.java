@@ -39,7 +39,7 @@ public class BookGetController {
     }
 
     @GetMapping("/{bookId}/update")
-    public ResponseEntity<BookDto.Response> getBookById(@PathVariable("bookId") Long bookId) {
+    public ResponseEntity<BookDto.Response> getBookByIdForUpdate(@PathVariable("bookId") Long bookId) {
 
         BookDto.Response response = bookGetService.getUpdateBook(bookId);
 
