@@ -47,7 +47,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         OrderDetail orderDetail = orderDetailRepository.findById(orderDetailId)
                 .orElseThrow(() -> new NotFoundException("주문 상세가 존재하지 않습니다."));
         Boolean isCancelled = !orderDetail.getIsCancelled();
-        orderDetail.setIsCancelled(isCancelled);
+        orderDetail.changeIsCancelled(isCancelled);
         orderDetailRepository.save(orderDetail);
 
     }

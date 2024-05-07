@@ -49,4 +49,9 @@ public class OrderDetail {
     @JoinColumn(name = "customerId")
     private Customer customer;
 
+    public void changeIsCancelled(Boolean isCancelled) {
+        this.isCancelled = isCancelled;
+    }
+
+
 }
