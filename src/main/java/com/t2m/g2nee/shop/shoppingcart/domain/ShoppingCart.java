@@ -28,7 +28,6 @@ public class ShoppingCart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long shoppingCartId;
     private int quantity;
-
     @ManyToOne
     @JoinColumn(name = "bookId")
     private Book book;
