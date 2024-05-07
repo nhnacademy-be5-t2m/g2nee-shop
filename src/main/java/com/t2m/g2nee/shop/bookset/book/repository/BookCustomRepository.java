@@ -20,4 +20,5 @@ public interface BookCustomRepository {
                                                                   Pageable pageable, String sort);
 
     List<BookDto.ListResponse> getRecommendBooks(List<Long> categoryIdList, Long bookId);
+    List<Long> getLowestCategoryId(List<Long> categoryIdList);
 }

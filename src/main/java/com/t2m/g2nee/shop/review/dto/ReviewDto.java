@@ -34,6 +34,7 @@ public class ReviewDto {
     }
 
     @Setter
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
@@ -45,6 +46,7 @@ public class ReviewDto {
         private String imageUrl;
         private int score;
         private String nickname;
+        private Long memberId;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
     }
