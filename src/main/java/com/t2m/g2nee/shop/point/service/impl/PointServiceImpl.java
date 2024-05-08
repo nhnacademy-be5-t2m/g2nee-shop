@@ -1,5 +1,12 @@
 package com.t2m.g2nee.shop.point.service.impl;
 
+import static com.t2m.g2nee.shop.point.domain.Point.ChangeReason.PURCHASE;
+import static com.t2m.g2nee.shop.point.domain.Point.ChangeReason.RETURN;
+import static com.t2m.g2nee.shop.point.domain.Point.ChangeReason.REVIEW;
+import static com.t2m.g2nee.shop.point.domain.Point.ChangeReason.SIGNUP;
+import static com.t2m.g2nee.shop.point.domain.Point.ChangeReason.USE;
+
+import com.t2m.g2nee.shop.exception.BadRequestException;
 import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.memberset.member.domain.Member;
 import com.t2m.g2nee.shop.memberset.member.repository.MemberRepository;
@@ -9,6 +16,10 @@ import com.t2m.g2nee.shop.point.domain.Point;
 import com.t2m.g2nee.shop.point.dto.request.PointCreateRequestDto;
 import com.t2m.g2nee.shop.point.repository.PointRepository;
 import com.t2m.g2nee.shop.point.service.PointService;
+import com.t2m.g2nee.shop.policyset.pointpolicy.dto.response.PointPolicyInfoDto;
+import com.t2m.g2nee.shop.policyset.pointpolicy.service.PointPolicyService;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,6 +37,7 @@ public class PointServiceImpl implements PointService {
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
     private final PointRepository pointRepository;
+    private final PointPolicyService pointPolicyService;
 
     /**
      * {@inheritDoc}
@@ -36,7 +48,6 @@ public class PointServiceImpl implements PointService {
     public void savePoint(PointCreateRequestDto request) {
         Member member = memberRepository.findActiveMemberById(request.getMemberId())
                 .orElseThrow(() -> new NotFoundException("회원 정보를 찾을 수 없습니다."));
-        Point point = new Point();
         Order order = null;
 
         // 주문반품시 포인트 회수/반환을 위해 orderId가 저장된 경우 고려
@@ -44,14 +55,108 @@ public class PointServiceImpl implements PointService {
             order = orderRepository.findById(request.getOrderId())
                     .orElseThrow(() -> new NotFoundException("주문 정보가 없습니다."));
         }
-
-        point.builder()
+        Point point = Point.builder()
                 .point(request.getPoint())
                 .member(member)
-                .changeReason(request.getReason())
                 .order(order)
+                .changeReason(request.getReason())
+                .changeDate(LocalDateTime.now())
                 .build();
 
         pointRepository.save(point);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void giveSignUpPoint(Member member) {
+        PointPolicyInfoDto pointPolicyInfoDto = pointPolicyService.getPointPolicyByPointName(SIGNUP.getName());
+        PointCreateRequestDto pointCreateRequestDto = new PointCreateRequestDto(
+                member.getCustomerId(),
+                null,
+                Integer.parseInt(pointPolicyInfoDto.getAmount()),
+                SIGNUP
+        );
+        savePoint(pointCreateRequestDto);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void giveReviewPoint(Member member) {
+        PointPolicyInfoDto pointPolicyInfoDto = pointPolicyService.getPointPolicyByPointName(REVIEW.getName());
+        PointCreateRequestDto pointCreateRequestDto = new PointCreateRequestDto(
+                member.getCustomerId(),
+                null,
+                Integer.parseInt(pointPolicyInfoDto.getAmount()),
+                REVIEW
+        );
+        savePoint(pointCreateRequestDto);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void givePurchasePoint(Member member, BigDecimal orderAmount) {
+        PointPolicyInfoDto pointPolicyInfoDto =
+                pointPolicyService.getPointPolicyByPointName(member.getMemberStatus().getName());
+        int point = new BigDecimal(pointPolicyInfoDto.getAmount()).multiply(orderAmount).intValue();
+        PointCreateRequestDto pointCreateRequestDto = new PointCreateRequestDto(
+                member.getCustomerId(),
+                null,
+                point,
+                PURCHASE
+        );
+        savePoint(pointCreateRequestDto);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void usePoint(Long memberId, Long orderId, int point) {
+        int totalPoint = pointRepository.getTotalPoint(memberId);
+        if (totalPoint - point < 0) {
+            throw new BadRequestException("잔여 포인트가 부족합니다.");
+        }
+        PointCreateRequestDto pointCreateRequestDto = new PointCreateRequestDto(
+                memberId,
+                orderId,
+                point * (-1),
+                USE
+        );
+        savePoint(pointCreateRequestDto);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void returnPoint(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException("order 정보가 없습니다."));
+        Point point = pointRepository.findUsePointByOrderId(orderId)
+                .orElseThrow(() -> new NotFoundException("orderId에 해당하는 사용된 포인트가 없습니다."));
+        if (pointRepository.findReturnPointByOrderId(orderId) != null) {
+            new BadRequestException("해당 주문에 사용된 포인트는 이미 반환되었습니다.");
+        }
+        PointCreateRequestDto pointCreateRequestDto = new PointCreateRequestDto(
+                order.getCustomer().getCustomerId(),
+                orderId,
+                point.getPoint(),
+                RETURN
+        );
+        savePoint(pointCreateRequestDto);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Integer getTotalPoint(Long memberId) {
+        return pointRepository.getTotalPoint(memberId);
     }
 }

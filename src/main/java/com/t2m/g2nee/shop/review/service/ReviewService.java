@@ -72,6 +72,8 @@ public class ReviewService {
             String tokenId = authService.requestToken();
             url = uploadImage(image, saveReview, tokenId, book.getEngTitle(), member.getCustomerId());
         }
+        //리뷰적립금 부여
+
 
         return ReviewDto.Response.builder()
                 .reviewId(saveReview.getReviewId())

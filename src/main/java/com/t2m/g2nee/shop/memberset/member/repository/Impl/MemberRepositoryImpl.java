@@ -10,14 +10,10 @@ import javax.persistence.EntityManager;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 public class MemberRepositoryImpl extends QuerydslRepositorySupport implements MemberCustomRepository {
-
-
-    private final EntityManager entityManager;
     private final JPAQueryFactory queryFactory;
 
     public MemberRepositoryImpl(EntityManager entityManager) {
         super(Customer.class);
-        this.entityManager = entityManager;
         this.queryFactory = new JPAQueryFactory(entityManager);
     }
 

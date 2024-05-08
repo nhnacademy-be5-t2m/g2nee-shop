@@ -16,6 +16,7 @@ import com.t2m.g2nee.shop.memberset.member.dto.response.MemberResponse;
 import com.t2m.g2nee.shop.memberset.member.dto.response.MemberResponseToAuth;
 import com.t2m.g2nee.shop.memberset.member.repository.MemberRepository;
 import com.t2m.g2nee.shop.memberset.member.service.MemberService;
+import com.t2m.g2nee.shop.point.service.PointService;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -43,6 +44,7 @@ public class MemberServiceImpl implements MemberService {
     private final CustomerRepository customerRepository;
     private final AuthRepository authRepository;
     private final GradeRepository gradeRepository;
+    private final PointService pointService;
 
 
     /**
@@ -74,9 +76,9 @@ public class MemberServiceImpl implements MemberService {
                 .isOAuth(signUpDto.getIsOAuth())
                 .gender(Member.Gender.valueOf(signUpDto.getGender()))
                 .build();
-        Member member = (Member) customerRepository.save(memberInfo);
+        Member member = customerRepository.save(memberInfo);
         authMemberRepository.save(new AuthMember(authRepository.findByAuthName(Auth.AuthName.ROLE_MEMBER), member));
-
+        pointService.giveSignUpPoint(member);
         return new MemberResponse(member.getUsername(), member.getName(), member.getNickname(),
                 member.getGrade().getGradeName().toString());
     }
