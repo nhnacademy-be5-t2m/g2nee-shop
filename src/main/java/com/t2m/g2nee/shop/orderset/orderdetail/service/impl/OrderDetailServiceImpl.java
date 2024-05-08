@@ -110,8 +110,12 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         List<OrderDetail> orderDetailList = orderDetailRepository.findByOrder_OrderId(orderId);
 
         for (OrderDetail orderDetail : orderDetailList) {
-            //주문 취소 상태로 변경
-            changeOrderDetailIsCancelled(orderDetail.getOrderDetailId());
+            //취소 상태 변경
+            orderDetail.setIsCancelled();
+            orderDetailRepository.save(orderDetail);
+
+            //취소 분량만큼 책 수량 추가
+            bookMgmtService.modifyQuantity(orderDetail.getBook().getBookId(), orderDetail.getQuantity());
         }
     }
 
@@ -156,5 +160,4 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 coupon
         );
     }
-
 }
