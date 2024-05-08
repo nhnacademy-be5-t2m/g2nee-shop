@@ -15,4 +15,3 @@ public class AddressResponseDto {
     private String detail;
     private Boolean isDefault;
 }
-

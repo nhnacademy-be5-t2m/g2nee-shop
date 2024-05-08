@@ -16,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import lombok.SneakyThrows;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
@@ -166,7 +167,9 @@ public class TossPayment implements PaymentRequestMethod {
                         new HttpEntity<>(param.toString().getBytes(StandardCharsets.UTF_8), makePaymentHeader()),
                         TossPaymentResponseDto.class);
 
-        TossPaymentResponseDto tossResponse = response.getBody();
+        TossPaymentResponseDto tossResponse = Optional.ofNullable(response.getBody()).orElseThrow(
+                () -> new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, "예상하지 못한 오류가 발새했습니다.")
+        );
 
         //취소 성공후, 저장 상태 변경
         if (response.getStatusCode() == HttpStatus.OK &&
