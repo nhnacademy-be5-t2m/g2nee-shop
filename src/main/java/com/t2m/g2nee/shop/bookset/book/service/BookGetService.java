@@ -6,7 +6,9 @@ import com.t2m.g2nee.shop.bookset.book.dto.BookDto;
 import com.t2m.g2nee.shop.bookset.book.repository.BookRepository;
 import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import com.t2m.g2nee.shop.utils.MarkDownUtil;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class BookGetService {
 
     private final BookRepository bookRepository;
+    private final MarkDownUtil markDownUtil;
 
     /**
      * 가장 최신 출판된 6개의 책을 조회하는 메서드 입니다.
@@ -86,7 +89,41 @@ public class BookGetService {
      */
     @Transactional
     public BookDto.Response getBookDetail(Long memberId, Long bookId) {
-        return bookRepository.getBookDetail(memberId, bookId);
+        BookDto.Response bookDetail = bookRepository.getBookDetail(memberId, bookId);
+        bookDetail.setBookIndex(markDownUtil.markdown(bookDetail.getBookIndex()));
+        bookDetail.setDescription(markDownUtil.markdown(bookDetail.getDescription()));
+        bookDetail.setScoreAverage(Math.round(bookDetail.getScoreAverage() * 10) / 10.0);
+
+        return bookDetail;
+    }
+
+    /**
+     * 책 수정을 위한 책 객체에 대한 정보를 얻는 메서드
+     * @param bookId 책 아이디
+     * @return BookDto.Response
+     */
+    public BookDto.Response getUpdateBook(Long bookId) {
+        Optional<Book> optionalBook = bookRepository.findById(bookId);
+        if (optionalBook.isPresent()) {
+
+            Book book = optionalBook.get();
+            return BookDto.Response.builder()
+                    .bookId(book.getBookId())
+                    .title(book.getTitle())
+                    .engTitle(book.getEngTitle())
+                    .bookIndex(book.getBookIndex())
+                    .description(book.getDescription())
+                    .publishedDate(book.getPublishedDate())
+                    .price(book.getPrice())
+                    .salePrice(book.getSalePrice())
+                    .isbn(book.getIsbn())
+                    .pages(book.getPages())
+                    .quantity(book.getQuantity())
+                    .build();
+
+        } else {
+            throw new NotFoundException("책 정보가 없습니다.");
+        }
     }
 
     /**
