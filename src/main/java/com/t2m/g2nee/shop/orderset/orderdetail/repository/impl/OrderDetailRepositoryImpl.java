@@ -39,9 +39,4 @@ public class OrderDetailRepositoryImpl extends QuerydslRepositorySupport
                         book.title.as("bookName"),
                         packageType.name.as("packageName"))).fetch();
     }
-
-    @Override
-    public List<OrderDetail> findByOrder_OrderId(Long orderId) {
-        return null;
-    }
 }

@@ -2,7 +2,6 @@ package com.t2m.g2nee.shop.bookset.category.dto.request;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,7 +23,6 @@ public class CategorySaveDto {
      */
     @NotBlank(message = "카테고리 이름은 비울 수 없습니다.")
     @Size(min = 1, max = 50, message = "50자 미만으로 입력해 주세요.")
-    @Pattern(regexp = "^[가-힣\\s0-9]+$", message = "카테고리 한글 이름을 입력해주세요.")
     private String categoryName;
 
     /**
@@ -32,7 +30,6 @@ public class CategorySaveDto {
      */
     @NotBlank(message = "카테고리 이름은 비울 수 없습니다.")
     @Size(min = 1, max = 50, message = "50자 미만으로 입력해 주세요.")
-    @Pattern(regexp = "^[A-Za-z\\s0-9]+$", message = "카테고리 영문 이름을 입력해주세요.")
     private String categoryEngName;
 
     /**

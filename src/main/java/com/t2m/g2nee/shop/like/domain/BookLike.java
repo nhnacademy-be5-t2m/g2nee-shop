@@ -18,7 +18,6 @@ import lombok.Setter;
 @Entity
 @Table(name = "BookLikes")
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

@@ -38,6 +38,15 @@ public class BookGetController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @GetMapping("/{bookId}/update")
+    public ResponseEntity<BookDto.Response> getBookByIdForUpdate(@PathVariable("bookId") Long bookId) {
+
+        BookDto.Response response = bookGetService.getUpdateBook(bookId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+
     /**
      * 가장 최근 출판된 책 8권을 조회하는 컨트롤러 입니다.
      *
@@ -58,7 +67,7 @@ public class BookGetController {
      * @return ResponseEntity<PageResponse < BookDto.ListResponse>>
      */
     @GetMapping("/list")
-    public ResponseEntity<PageResponse<BookDto.ListResponse>> getBooks(@RequestParam int page) {
+    public ResponseEntity<PageResponse<BookDto.ListResponse>> getBooks(@RequestParam(defaultValue = "1") int page) {
 
         PageResponse<BookDto.ListResponse> responses = bookGetService.getAllBook(page);
         return ResponseEntity.status(HttpStatus.OK).body(responses);

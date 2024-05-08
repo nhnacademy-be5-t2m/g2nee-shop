@@ -21,7 +21,6 @@ public class GetOrderInfoResponseDto {
     private String orderNumber;
     private LocalDateTime orderDate;
     private LocalDateTime deliveryWishDate;
-    //todo: 배송완료날짜 추가해야 함
     private BigDecimal deliveryFee;
     private Order.OrderState orderState;
     private BigDecimal orderAmount;
@@ -31,7 +30,4 @@ public class GetOrderInfoResponseDto {
     private String zipcode;
     private String detailAddress;
     private String message;
-    private String couponName;
-
-
 }

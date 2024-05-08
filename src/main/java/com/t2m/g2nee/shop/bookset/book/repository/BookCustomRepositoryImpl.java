@@ -27,6 +27,7 @@ import com.t2m.g2nee.shop.fileset.bookfile.domain.QBookFile;
 import com.t2m.g2nee.shop.fileset.file.domain.QFile;
 import com.t2m.g2nee.shop.like.domain.QBookLike;
 import com.t2m.g2nee.shop.review.domain.QReview;
+import com.t2m.g2nee.shop.shoppingcart.dto.ShoppingCartDto;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -101,15 +102,20 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
     @Override
     public Page<BookDto.ListResponse> getAllBook(Pageable pageable) {
 
-
         List<BookDto.ListResponse> responseList =
                 from(book).innerJoin(publisher).on(book.publisher.publisherId.eq(publisher.publisherId))
-                        .innerJoin(bookCategory).on(book.bookId.eq(bookCategory.book.bookId)).innerJoin(bookFile)
-                        .on(book.bookId.eq(bookFile.book.bookId)
+                        .innerJoin(bookFile).on(book.bookId.eq(bookFile.book.bookId)
                                 .and(bookFile.imageType.eq(BookFile.ImageType.THUMBNAIL)))
-                        .select(Projections.fields(BookDto.ListResponse.class, book.bookId,
-                                bookFile.url.as("thumbnailImageUrl"), book.title, book.engTitle, book.publishedDate,
-                                book.price, book.salePrice, book.bookStatus, publisher.publisherName,
+                        .select(Projections.fields(BookDto.ListResponse.class
+                                , book.bookId
+                                , bookFile.url.as("thumbnailImageUrl")
+                                , book.title
+                                , book.engTitle
+                                , book.publishedDate
+                                , book.price
+                                , book.salePrice
+                                , book.bookStatus
+                                , publisher.publisherName,
                                 publisher.publisherEngName)).offset(pageable.getOffset()).limit(pageable.getPageSize())
                         .fetch();
 
@@ -163,7 +169,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                         .leftJoin(bookLike).on(book.bookId.eq(bookLike.book.bookId))
                         .where(bookFile.imageType.eq(BookFile.ImageType.THUMBNAIL)
                                 .and(eqCategoryBookId(categoryId)
-                        ))
+                                ))
                         .select(Projections.fields(BookDto.ListResponse.class
                                 , book.bookId
                                 , bookFile.url.as("thumbnailImageUrl")
@@ -184,7 +190,13 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                         .orderBy(orderSpecifier)
                         .offset(pageable.getOffset())
                         .limit(pageable.getPageSize())
-                        .fetch();
+                        .fetch().stream()
+                        .map(b -> {
+                            double roundedScore = Math.round(b.getScoreAverage() * 10) / 10.0;
+                            b.setScoreAverage(roundedScore);
+                            return b;
+                        })
+                        .collect(Collectors.toList());
 
         List<BookDto.ListResponse> responses = toListResponseList(responseList);
 
@@ -232,6 +244,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                                 , book.viewCount
                                 , book.bookStatus
                                 , book.pages
+                                , book.quantity
                                 , review.count().as("reviewCount")
                                 , isLiked.as("isLiked")
                                 , score.as("scoreAverage")
@@ -247,7 +260,6 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
 
 
     }
-
     /**
      * Elasticsearch를 이용해서 키워드를 통해 가중치를 부여하여 검색하고 필요에 따라 카테고리를 필터링하여 검색하는 메서드 입니다.
      *
@@ -264,11 +276,11 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
 
         // 가중치 설정
-        MatchQueryBuilder titleQuery = QueryBuilders.matchQuery("title", keyword).boost(60);
-        MatchQueryBuilder bookIndexQuery = QueryBuilders.matchQuery("bookIndex", keyword).boost(10);
-        MatchQueryBuilder descriptionQuery = QueryBuilders.matchQuery("description", keyword).boost(20);
-        MatchQueryBuilder contributorQuery = QueryBuilders.matchQuery("contributorName", keyword).boost(35);
-        MatchQueryBuilder publisherQuery = QueryBuilders.matchQuery("publisherName", keyword).boost(35);
+        MatchQueryBuilder titleQuery = QueryBuilders.matchQuery("title", keyword).boost(75);
+        MatchQueryBuilder bookIndexQuery = QueryBuilders.matchQuery("bookIndex", keyword).boost(5);
+        MatchQueryBuilder descriptionQuery = QueryBuilders.matchQuery("description", keyword).boost(5);
+        MatchQueryBuilder contributorQuery = QueryBuilders.matchQuery("contributorName", keyword).boost(30);
+        MatchQueryBuilder publisherQuery = QueryBuilders.matchQuery("publisherName", keyword).boost(30);
 
         boolQuery.should(titleQuery);
         boolQuery.should(bookIndexQuery);
@@ -340,7 +352,13 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                         .orderBy(orderSpecifier)
                         .offset(pageable.getOffset())
                         .limit(pageable.getPageSize())
-                        .fetch();
+                        .fetch().stream()
+                        .map(b -> {
+                            double roundedScore = Math.round(b.getScoreAverage() * 10) / 10.0;
+                            b.setScoreAverage(roundedScore);
+                            return b;
+                        })
+                        .collect(Collectors.toList());
 
         List<BookDto.ListResponse> responses = toListResponseList(responseList);
 

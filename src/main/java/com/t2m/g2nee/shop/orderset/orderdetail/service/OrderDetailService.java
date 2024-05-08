@@ -1,5 +1,7 @@
 package com.t2m.g2nee.shop.orderset.orderdetail.service;
 
+import com.t2m.g2nee.shop.orderset.order.domain.Order;
+import com.t2m.g2nee.shop.orderset.orderdetail.dto.request.OrderDetailSaveDto;
 import com.t2m.g2nee.shop.orderset.orderdetail.dto.response.GetOrderDetailResponseDto;
 import java.util.List;
 
@@ -10,22 +12,7 @@ import java.util.List;
  * @since : 1.0
  */
 public interface OrderDetailService {
-//    /**
-//     * 도서 주문 생성
-//     *
-//     * @param createRequestDto dto 객체
-//     * @param order            해당 도서를 주문하는 전체 주문
-//     */
-//    Long createOrderDetail(OrderDetailCreateRequestDto createRequestDto,
-//                           Order order);
-//
-//    /**
-//     * 도서 주문 상세 정보 조회
-//     *
-//     * @param orderDetailId
-//     * @return 주문 상세 반환
-//     */
-//    GetOrderDetailResponseDto getOrderDetailById(Long orderDetailId);
+
 
     /**
      * 도서 주문의 상세 내역 조회
@@ -36,10 +23,12 @@ public interface OrderDetailService {
     List<GetOrderDetailResponseDto> getOrderDetailListByOrderId(Long orderId);
 
     /**
-     * 주문 상세를 기반으로 주문 이름 생성
+     * 주문 상세를 기반으로 주문 이름 생성합니다.
      *
      * @param orderId 주문 id
      * @return 주문 이름
+     * @author : 김수빈
+     * @since : 1.0
      */
     String getOrderName(Long orderId);
 
@@ -56,4 +45,37 @@ public interface OrderDetailService {
      * @param orderDetailId
      */
     void deleteOrderDetail(Long orderDetailId);
+
+
+    /**
+     * 주문 상세를 저장합니다.
+     *
+     * @param order           주문서
+     * @param orderDetailList 주문 상세 리스트
+     * @return 주문 상세 리스트 목록
+     * @author : 김수빈
+     * @since : 1.0
+     */
+    List<GetOrderDetailResponseDto> saveOrderDetails(Order order, List<OrderDetailSaveDto> orderDetailList);
+
+    /**
+     * 주문에 해당하는 주문 상세를 취소합니다.
+     * 배송 전 결제 취소에 대한 주문 취소를 위한 메소드 입니다.
+     *
+     * @param orderId 주문 id
+     * @author : 김수빈
+     * @since : 1.0
+     */
+    void cancelAllOrderDetail(Long orderId);
+
+
+    /**
+     * 주문 id에 따른 주문 상세의
+     * 결제 성공 시 재고를 줄이기 위해 사용합니다.
+     *
+     * @param orderId 주문 id
+     * @author : 김수빈
+     * @since : 1.0
+     */
+    void setBookQuantity(Long orderId);
 }
