@@ -1,5 +1,6 @@
 package com.t2m.g2nee.shop.orderset.packagetype.service;
 
+import com.t2m.g2nee.shop.orderset.packagetype.domain.PackageType;
 import com.t2m.g2nee.shop.orderset.packagetype.dto.request.PackageSaveDto;
 import com.t2m.g2nee.shop.orderset.packagetype.dto.response.PackageInfoDto;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
@@ -32,7 +33,7 @@ public interface PackageService {
     PackageInfoDto updatePackage(Long packageId, MultipartFile image, PackageSaveDto request);
 
     /**
-     * 하나의 포장지를 얻어옵니다.
+     * 하나의 포장지를 포장지 이미지 url과 함께 얻어옵니다.
      *
      * @param packageId 포장지 id
      * @return PackageInfoDto
@@ -70,5 +71,13 @@ public interface PackageService {
      * @return boolean
      */
     boolean activatedPackage(Long packageId);
+
+    /**
+     * 하나의 포장지를 얻습니다.
+     *
+     * @param packageId 포장지 id
+     * @return PackageType 객체
+     */
+    PackageType getPackageType(Long packageId);
 
 }

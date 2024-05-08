@@ -312,9 +312,16 @@ public class BookMgmtService {
         if (optionalBook.isPresent()) {
 
             Book book = optionalBook.get();
-            book.setQuantity(book.getQuantity() + quantity);
 
-            return book.getQuantity();
+            int modifyQuantity = book.getQuantity() + quantity;
+
+            if (modifyQuantity < 0) {
+                throw new BadRequestException("책 수량은 음수가 될 수 없습니다.");
+            }
+
+            book.setQuantity(modifyQuantity);
+
+            return bookRepository.save(book).getQuantity();
         } else {
             throw new NotFoundException("책 정보가 없습니다");
         }

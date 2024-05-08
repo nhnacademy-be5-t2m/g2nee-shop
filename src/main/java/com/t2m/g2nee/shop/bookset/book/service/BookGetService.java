@@ -1,8 +1,10 @@
 package com.t2m.g2nee.shop.bookset.book.service;
 
 
+import com.t2m.g2nee.shop.bookset.book.domain.Book;
 import com.t2m.g2nee.shop.bookset.book.dto.BookDto;
 import com.t2m.g2nee.shop.bookset.book.repository.BookRepository;
+import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -150,5 +152,15 @@ public class BookGetService {
                 .totalPage(bookPage.getTotalPages())
                 .totalElements(bookPage.getTotalElements())
                 .build();
+    }
+
+    /**
+     * bookId로 책을 얻는 메소드입니다.
+     *
+     * @param bookId 책 id
+     * @return Book 객체
+     */
+    public Book getBook(Long bookId) {
+        return bookRepository.findById(bookId).orElseThrow(() -> new NotFoundException("책 정보가 없습니다"));
     }
 }

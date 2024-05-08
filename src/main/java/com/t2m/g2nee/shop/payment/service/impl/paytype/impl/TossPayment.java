@@ -108,6 +108,7 @@ public class TossPayment implements PaymentRequestMethod {
             param.put("orderId", tossRequest.getOrderNumber());
             param.put("amount", tossRequest.getAmount());
 
+            //결제 승인
             UriComponents url = UriComponentsBuilder.fromUriString(baseUrl)
                     .path("/confirm")
                     .build();
@@ -117,25 +118,29 @@ public class TossPayment implements PaymentRequestMethod {
                             new HttpEntity<>(param.toString().getBytes(StandardCharsets.UTF_8), makePaymentHeader()),
                             TossPaymentResponseDto.class);
 
-            TossPaymentResponseDto tossResponse = response.getBody();
+            //결제 승인 결과
+            TossPaymentResponseDto tossResponse = Optional.ofNullable(response.getBody())
+                    .orElseThrow(() -> new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, "tossResponse가 null입니다."));
 
-            //결제 성공: db에 저장
+
             if (response.getStatusCode() == HttpStatus.OK) {
                 Payment.PayStatus status;
+
+                //결제 성공: db에 저장
                 if (Objects.nonNull(tossResponse.getStatus()) && tossResponse.getStatus().equals("DONE")) {
                     status = Payment.PayStatus.COMPLETE;
+
+                    return new Payment(
+                            tossResponse.getTotalAmount(), "toss - " + tossResponse.getMethod(),
+                            OffsetDateTime.parse(tossResponse.getApprovedAt()).toLocalDateTime(),
+                            tossResponse.getPaymentKey(),
+                            status, customer, order
+                    );
+
+                    //결제 실패
                 } else {
-                    status = Payment.PayStatus.ABORTED;
+                    return null;
                 }
-
-                Payment payment = new Payment(
-                        tossResponse.getTotalAmount(), "toss - " + tossResponse.getMethod(),
-                        OffsetDateTime.parse(tossResponse.getApprovedAt()).toLocalDateTime(),
-                        tossResponse.getPaymentKey(),
-                        status, customer, order
-                );
-
-                return paymentRepository.save(payment);
             } else {
                 throw new CustomException(HttpStatus.BAD_REQUEST, tossResponse.getFailure().getMessage());
             }

@@ -112,17 +112,27 @@ public class PackageServiceImpl implements PackageService {
         }
     }
 
+
     /**
      * {@inheritDoc}
      * @throws NotFoundException 유효한 포장지 id가 아닐 때
      */
     @Override
+    public PackageType getPackageType(Long packageId) {
+        return packageRepository.findById(packageId).orElseThrow(
+                () -> new NotFoundException("존재하지 않는 포장지입니다."));
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws NotFoundException 포장지 이미지가 존재하지 않는 경우
+     */
+    @Override
     @Transactional(readOnly = true)
     public PackageInfoDto getPackage(Long packageId) {
         //특정 포장지를 가져와 없으면 예외
-        return convertToPackageInfoDto(
-                packageRepository.findById(packageId).orElseThrow(
-                        () -> new NotFoundException("존재하지 않는 포장지입니다.")),
+        return convertToPackageInfoDto(getPackageType(packageId),
                 packageFileRepository.findByPackageType_PackageId(packageId).orElseThrow(
                         () -> new NotFoundException("포장지 이미지가 존재하지 않습니다.")).getUrl());
     }
