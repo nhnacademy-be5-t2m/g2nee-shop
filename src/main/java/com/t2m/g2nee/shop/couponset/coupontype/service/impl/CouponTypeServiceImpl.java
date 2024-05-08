@@ -1,21 +1,22 @@
-package com.t2m.g2nee.shop.couponset.coupon.service.impl;
+package com.t2m.g2nee.shop.couponset.coupontype.service.impl;
 
 import com.t2m.g2nee.shop.couponset.coupon.domain.Coupon;
-import com.t2m.g2nee.shop.couponset.coupon.dto.CouponInfoDto;
-import com.t2m.g2nee.shop.couponset.coupon.repository.CouponRepository;
-import com.t2m.g2nee.shop.couponset.coupon.repository.CustomCouponRepository;
-import com.t2m.g2nee.shop.couponset.coupon.service.CouponService;
+import com.t2m.g2nee.shop.couponset.coupontype.dto.CouponTypeInfoDto;
+import com.t2m.g2nee.shop.couponset.coupontype.repository.CouponTypeRepository;
+import com.t2m.g2nee.shop.couponset.coupontype.repository.CustomCouponTypeRepository;
+import com.t2m.g2nee.shop.couponset.coupontype.service.CouponTypeService;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
-import com.t2m.g2nee.shop.review.dto.ReviewDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 /**
  * 쿠폰 controller 클래스
@@ -25,12 +26,12 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
-public class CouponServiceImpl implements CouponService {
+public class CouponTypeServiceImpl implements CouponTypeService {
 
 
-    private final CustomCouponRepository customCouponRepository;
+    private final CustomCouponTypeRepository customCouponTypeRepository;
 
-    private final CouponRepository couponRepository;
+    private final CouponTypeRepository couponTypeRepository;
 
     /**
      * 각 회원에게 발급된 쿠폰 리스트 조회 컨트롤러
@@ -39,28 +40,28 @@ public class CouponServiceImpl implements CouponService {
      */
 
     @Override
-    public List<CouponInfoDto> findAllByCustomer_CustomerId(Long customerId) {
-        List<Coupon> coupons = couponRepository.findAllByCustomer_CustomerId(customerId);
+    public List<CouponTypeInfoDto> findAllByCustomer_CustomerId(Long customerId) {
+        List<Coupon> coupons = couponTypeRepository.findAllByCustomer_CustomerId(customerId);
         return coupons.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
     @Override
-    public PageResponse<CouponInfoDto> getAllCoupons(Long customerId, int page) {
+    public PageResponse<CouponTypeInfoDto> getAllCoupons(Long customerId, int page) {
 
         int size = 10;
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdAt"));
 
-        Page<CouponInfoDto> couponPage = customCouponRepository.getAllCoupons(customerId, pageable);
+        Page<CouponTypeInfoDto> couponPage = customCouponTypeRepository.getAllCoupons(customerId, pageable);
 
-        PageResponse<CouponInfoDto> pageResponse = new PageResponse<>();
+        PageResponse<CouponTypeInfoDto> pageResponse = new PageResponse<>();
 
         return pageResponse.getPageResponse(page, 4, couponPage);
 
     }
 
 
-    private CouponInfoDto convertToDTO(Coupon coupon) {
-        return CouponInfoDto.builder()
+    private CouponTypeInfoDto convertToDTO(Coupon coupon) {
+        return CouponTypeInfoDto.builder()
                 .couponId(coupon.getCouponId())
                 .issuedDate(coupon.getIssuedDate().toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
                 .expirationDate(coupon.getExpirationDate().toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))

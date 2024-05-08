@@ -1,8 +1,11 @@
-package com.t2m.g2nee.shop.couponset.coupon.dto;
+package com.t2m.g2nee.shop.couponset.coupontype.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
-
 
 /**
  * 쿠폰에 대한 정보를 반환하는 객체입니다.
@@ -14,7 +17,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Getter
 @Builder
-public class CouponInfoDto {
+public class CouponTypeInfoDto {
 
 
     private Long couponId;
