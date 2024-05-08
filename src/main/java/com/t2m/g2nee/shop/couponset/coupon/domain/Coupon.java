@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.t2m.g2nee.shop.memberset.customer.domain.Customer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,6 +37,11 @@ public class Coupon {
 
     @Enumerated(EnumType.STRING)
     private CouponStatus status;
+
+
+    @ManyToOne
+    @JoinColumn(name = "customerId")
+    private Customer customer;
 
     @ManyToOne
     @JoinColumn(name = "couponTypeId")
