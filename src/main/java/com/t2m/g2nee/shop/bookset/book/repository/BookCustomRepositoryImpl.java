@@ -275,14 +275,16 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
          */
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
 
-        // 가중치 설정
-        MatchQueryBuilder titleQuery = QueryBuilders.matchQuery("title", keyword).boost(75);
-        MatchQueryBuilder bookIndexQuery = QueryBuilders.matchQuery("bookIndex", keyword).boost(5);
-        MatchQueryBuilder descriptionQuery = QueryBuilders.matchQuery("description", keyword).boost(5);
-        MatchQueryBuilder contributorQuery = QueryBuilders.matchQuery("contributorName", keyword).boost(30);
-        MatchQueryBuilder publisherQuery = QueryBuilders.matchQuery("publisherName", keyword).boost(30);
+        // 가중치 설정, 제목과 정확히 일치하면 점수를 매우 높게 설정
+        MatchQueryBuilder titleQuery = QueryBuilders.matchQuery("title.token", keyword).boost(75);
+        MatchQueryBuilder titleKeywordQuery = QueryBuilders.matchQuery("title.keyword", keyword).boost(150);
+        MatchQueryBuilder bookIndexQuery = QueryBuilders.matchQuery("bookIndex.token", keyword).boost(5);
+        MatchQueryBuilder descriptionQuery = QueryBuilders.matchQuery("description.token", keyword).boost(5);
+        MatchQueryBuilder contributorQuery = QueryBuilders.matchQuery("contributorName.token", keyword).boost(30);
+        MatchQueryBuilder publisherQuery = QueryBuilders.matchQuery("publisherName.token", keyword).boost(30);
 
         boolQuery.should(titleQuery);
+        boolQuery.should(titleKeywordQuery);
         boolQuery.should(bookIndexQuery);
         boolQuery.should(descriptionQuery);
         boolQuery.should(contributorQuery);

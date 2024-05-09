@@ -5,7 +5,5 @@ import java.util.List;
 
 public interface ShoppingCartCustomRepository{
 
-    List<ShoppingCartDto.Response> getShoppingCart(Long memberId);
-
-    ShoppingCartDto.Response getCartBook(Long bookId);
+    ShoppingCartDto.Response getBookForCart(Long bookId);
 }
