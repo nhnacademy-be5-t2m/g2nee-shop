@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 장바구니 controller 클래스
+ *
  * @author : 신동민
  * @since : 1.0
  */
@@ -27,7 +28,7 @@ public class ShoppingCartController {
     private final ShoppingCartService shoppingCartService;
 
     @PostMapping
-    public ResponseEntity<ShoppingCartDto.Response> putBook(@RequestBody ShoppingCartDto.Request request){
+    public ResponseEntity<ShoppingCartDto.Response> putBook(@RequestBody ShoppingCartDto.Request request) {
 
         ShoppingCartDto.Response response = shoppingCartService.putBookInCart(request);
 
@@ -44,7 +45,8 @@ public class ShoppingCartController {
     }
 
     @DeleteMapping("/{cartId}")
-    public ResponseEntity<List<ShoppingCartDto.Response>> deleteCartInBook(@PathVariable("cartId") Long shoppingCartId) {
+    public ResponseEntity<List<ShoppingCartDto.Response>> deleteCartInBook(
+            @PathVariable("cartId") Long shoppingCartId) {
 
 
         shoppingCartService.deleteBookInCart(shoppingCartId);
