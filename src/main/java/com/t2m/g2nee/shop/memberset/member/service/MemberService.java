@@ -5,6 +5,13 @@ import com.t2m.g2nee.shop.memberset.member.dto.response.MemberDetailInfoResponse
 import com.t2m.g2nee.shop.memberset.member.dto.response.MemberResponse;
 import com.t2m.g2nee.shop.memberset.member.dto.response.MemberResponseToAuth;
 
+/**
+ * 회원 정보를 위한 service 입니다.
+ *
+ * @author : 정지은
+ * @since : 1.0
+ */
+
 public interface MemberService {
 
     /**

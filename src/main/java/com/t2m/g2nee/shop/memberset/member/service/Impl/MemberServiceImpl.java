@@ -6,7 +6,7 @@ import com.t2m.g2nee.shop.memberset.auth.domain.Auth;
 import com.t2m.g2nee.shop.memberset.auth.repository.AuthRepository;
 import com.t2m.g2nee.shop.memberset.authmember.domain.AuthMember;
 import com.t2m.g2nee.shop.memberset.authmember.repository.AuthMemberRepository;
-import com.t2m.g2nee.shop.memberset.customers.repository.CustomerRepository;
+import com.t2m.g2nee.shop.memberset.customer.repository.CustomerRepository;
 import com.t2m.g2nee.shop.memberset.grade.domain.Grade;
 import com.t2m.g2nee.shop.memberset.grade.repository.GradeRepository;
 import com.t2m.g2nee.shop.memberset.member.domain.Member;
@@ -16,6 +16,7 @@ import com.t2m.g2nee.shop.memberset.member.dto.response.MemberResponse;
 import com.t2m.g2nee.shop.memberset.member.dto.response.MemberResponseToAuth;
 import com.t2m.g2nee.shop.memberset.member.repository.MemberRepository;
 import com.t2m.g2nee.shop.memberset.member.service.MemberService;
+import com.t2m.g2nee.shop.point.service.PointService;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -43,6 +44,7 @@ public class MemberServiceImpl implements MemberService {
     private final CustomerRepository customerRepository;
     private final AuthRepository authRepository;
     private final GradeRepository gradeRepository;
+    private final PointService pointService;
 
 
     /**
@@ -74,9 +76,9 @@ public class MemberServiceImpl implements MemberService {
                 .isOAuth(signUpDto.getIsOAuth())
                 .gender(Member.Gender.valueOf(signUpDto.getGender()))
                 .build();
-        Member member = (Member) customerRepository.save(memberInfo);
+        Member member = customerRepository.save(memberInfo);
         authMemberRepository.save(new AuthMember(authRepository.findByAuthName(Auth.AuthName.ROLE_MEMBER), member));
-
+        pointService.giveSignUpPoint(member);
         return new MemberResponse(member.getUsername(), member.getName(), member.getNickname(),
                 member.getGrade().getGradeName().toString());
     }
@@ -137,7 +139,7 @@ public class MemberServiceImpl implements MemberService {
     /**
      * {@inheritDoc}
      *
-     * @throws NotFoundException 으로 username 에 해당하는 정보가 없는 경우 예외를 던집니다.
+     * @throws NotFoundException 으로 customerId 에 해당하는 정보가 없는 경우 예외를 던집니다.
      */
     @Override
     public MemberDetailInfoResponseDto getMemberDetailInfo(Long customerId) {
@@ -162,6 +164,8 @@ public class MemberServiceImpl implements MemberService {
                 member.getBirthday(),
                 member.getPhoneNumber(),
                 member.getEmail(),
+                member.getGrade().getGradeName().getName(),
+                member.getMemberStatus(),
                 authorities
         );
         return memberDetail;

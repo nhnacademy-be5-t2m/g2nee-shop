@@ -4,6 +4,12 @@ import com.t2m.g2nee.shop.memberset.address.dto.request.AddressRequestDto;
 import com.t2m.g2nee.shop.memberset.address.dto.response.AddressResponseDto;
 import java.util.List;
 
+/**
+ * 주소 정보를 위한 service interface 입니다.
+ *
+ * @author : 정지은
+ * @since : 1.0
+ */
 public interface AddressService {
     /**
      * 주소 정보를 받아와 저장하는 메소드

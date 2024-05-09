@@ -46,6 +46,14 @@ public interface PointPolicyService {
     PointPolicyInfoDto getPointPolicy(Long pointPolicyId);
 
     /**
+     * 포인트 이름으로 포인트 정책을 가져오는 메소드
+     *
+     * @param policyName 포인트 정책 이름
+     * @return PointPolicyInfoDto
+     */
+    PointPolicyInfoDto getPointPolicyByPointName(String policyName);
+
+    /**
      * 모든 포인트 정책을 페이징 처리하여 반환합니다.
      *
      * @param page 현재 페이지
