@@ -37,8 +37,33 @@ public class CouponType {
     private BigDecimal discount;
     private BigDecimal minimumOrderAmount;
     private BigDecimal maximumDiscount;
+    @Enumerated(EnumType.STRING)
+    private CouponTypeStatus status;
+
 
     public enum Type {
-        AMOUNT, PERCENT
+        AMOUNT("금액쿠폰"), PERCENT("퍼센트쿠폰");
+        private final String name;
+
+        Type(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
+    public enum CouponTypeStatus{
+        DELETE("삭제"), BATCH("일괄발급"), INDIVIDUAL("개별발급");
+        private final String name;
+
+        CouponTypeStatus(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
 }

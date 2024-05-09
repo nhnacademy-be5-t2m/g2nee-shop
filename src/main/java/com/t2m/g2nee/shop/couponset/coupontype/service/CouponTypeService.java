@@ -15,21 +15,13 @@ import java.util.List;
 @Service
 public interface CouponTypeService {
 
-    /**
-     * customerId로 각 고객의 쿠폰을 조회할 수 있는 Service
-     * @param customerId
-     * @return
-     */
-    List<CouponTypeInfoDto> findAllByCustomer_CustomerId(Long customerId);
 
     /**
      * 관리자가 모든 쿠폰을 조회할 수 있는 Service
-     * @param customerId
      * @param page
      * @return
      */
-    PageResponse<CouponTypeInfoDto> getAllCoupons(Long customerId, int page);
-
+    PageResponse<CouponTypeInfoDto> getAllCoupons(int page);
 
 
 

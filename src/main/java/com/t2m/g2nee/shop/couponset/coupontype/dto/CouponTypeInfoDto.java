@@ -1,9 +1,6 @@
 package com.t2m.g2nee.shop.couponset.coupontype.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -16,17 +13,10 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 @Builder
 public class CouponTypeInfoDto {
 
-
-    private Long couponId;
-
-    private String issuedDate;
-
-    private String expirationDate;
-
-    private String  status;
 
     private Long couponTypeId;
 
@@ -46,8 +36,5 @@ public class CouponTypeInfoDto {
 
     private Long bookId;
 
-
-
-
-
+    private String  status;
 }
