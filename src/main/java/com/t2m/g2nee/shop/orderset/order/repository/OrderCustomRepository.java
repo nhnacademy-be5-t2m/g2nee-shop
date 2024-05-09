@@ -47,11 +47,10 @@ public interface OrderCustomRepository {
     /**
      * 주문id로 단일 주문 정보 반환(회원용)
      *
-     * @param orderId    주문id
-     * @param customerId 회원id
+     * @param orderId 주문id
      * @return 주문 정보 반환
      */
-    GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long customerId);
+    GetOrderInfoResponseDto getOrderInfoById(Long orderId);
 
     /**
      * 주문번호로 주문 정보 반환(비회원용)

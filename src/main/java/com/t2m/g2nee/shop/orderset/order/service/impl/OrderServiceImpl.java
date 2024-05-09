@@ -76,8 +76,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long customerId) {
-        return orderRepository.getOrderInfoById(orderId, customerId);
+    public GetOrderInfoResponseDto getOrderInfoById(Long orderId) {
+        return orderRepository.getOrderInfoById(orderId);
     }
 
     //주문 번호로 조회
@@ -128,7 +128,7 @@ public class OrderServiceImpl implements OrderService {
         //주문 저장
         Order order = orderRepository.save(
                 Order.builder()
-                        .orderNumber("g2nee-order-" + UUID.randomUUID().toString())
+                        .orderNumber("g2nee-order-" + UUID.randomUUID())
                         .orderDate(LocalDateTime.now())
                         .deliveryWishDate(wishDate)
                         .deliveryFee(BigDecimal.valueOf(orderSaveDto.getDeliveryFee()))

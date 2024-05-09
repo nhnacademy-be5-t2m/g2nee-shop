@@ -41,7 +41,7 @@ public class OrderController {
      * @param page 현재 페이지
      * @return 전체 주문 반환
      */
-    @GetMapping("/admin/orders")
+    @GetMapping("/admin/orders/list")
     public ResponseEntity<PageResponse<GetOrderListForAdminResponseDto>> getAllOrders(
             @RequestParam int page) {
         PageResponse<GetOrderListForAdminResponseDto> adminListResponse = orderService.getALlOrderList(page);
@@ -58,7 +58,7 @@ public class OrderController {
      * @param orderState 주문 상태
      * @return 주문 list
      */
-    @GetMapping("/admin/orders/{orderState}")
+    @GetMapping("/admin/orders/list/{orderState}")
     public ResponseEntity<PageResponse<GetOrderListForAdminResponseDto>> getAllOrdersByState(
             @RequestParam int page, @PathVariable Order.OrderState orderState) {
         PageResponse<GetOrderListForAdminResponseDto> adminListResponse =
@@ -96,8 +96,8 @@ public class OrderController {
     //@MemberAndAuth
     @GetMapping("/members/{customerId}/order/{orderId}")
     public ResponseEntity<GetOrderInfoResponseDto> getOrderInfoByOrderId(
-            @PathVariable Long orderId, @PathVariable Long customerId) {
-        GetOrderInfoResponseDto orderInfoResponseDto = orderService.getOrderInfoById(orderId, customerId);
+            @PathVariable Long orderId, @PathVariable(required = false) Long customerId) {
+        GetOrderInfoResponseDto orderInfoResponseDto = orderService.getOrderInfoById(orderId);
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(orderInfoResponseDto);
