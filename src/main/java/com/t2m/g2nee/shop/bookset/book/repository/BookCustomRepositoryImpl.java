@@ -27,7 +27,6 @@ import com.t2m.g2nee.shop.fileset.bookfile.domain.QBookFile;
 import com.t2m.g2nee.shop.fileset.file.domain.QFile;
 import com.t2m.g2nee.shop.like.domain.QBookLike;
 import com.t2m.g2nee.shop.review.domain.QReview;
-import com.t2m.g2nee.shop.shoppingcart.dto.ShoppingCartDto;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -260,6 +259,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
 
 
     }
+
     /**
      * Elasticsearch를 이용해서 키워드를 통해 가중치를 부여하여 검색하고 필요에 따라 카테고리를 필터링하여 검색하는 메서드 입니다.
      *
