@@ -41,7 +41,6 @@ public class ReviewController {
     @PostMapping
     public ResponseEntity<ReviewDto.Response> postReview(@RequestPart(required = false) MultipartFile image,
                                                          @RequestPart ReviewDto.Request request) {
-
         ReviewDto.Response response = reviewService.postReview(image, request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);

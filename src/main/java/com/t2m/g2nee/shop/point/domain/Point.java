@@ -42,7 +42,7 @@ public class Point {
     private Member member;
 
     public enum ChangeReason {
-        REVIEW("리뷰작성"), SIGNUP("회원가입"), PURCHASE("구매 적립"), RETIRE("구매 적립금 회수(반품)"), RETURN("사용 포인트 반환"),
+        REVIEW("리뷰작성"), PHOTO_REVIEW("사진리뷰작성"), SIGNUP("회원가입"), PURCHASE("구매 적립"), RETIRE("구매 적립금 회수(반품)"), RETURN("사용 포인트 반환"),
         USE("포인트 사용");
 
         private final String name;

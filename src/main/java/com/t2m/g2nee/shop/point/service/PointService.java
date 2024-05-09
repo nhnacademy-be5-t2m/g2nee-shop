@@ -34,6 +34,13 @@ public interface PointService {
     void giveReviewPoint(Member member);
 
     /**
+     * member에게 사진 리뷰 포인트를 주는 메소드
+     *
+     * @param member
+     */
+    void givePhotoReviewPoint(Member member);
+
+    /**
      * member에게 구매시 포인트를 주는 메소드
      *
      * @param member      포인트를 줄 대상

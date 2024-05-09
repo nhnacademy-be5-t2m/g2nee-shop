@@ -1,5 +1,6 @@
 package com.t2m.g2nee.shop.point.service.impl;
 
+import static com.t2m.g2nee.shop.point.domain.Point.ChangeReason.PHOTO_REVIEW;
 import static com.t2m.g2nee.shop.point.domain.Point.ChangeReason.PURCHASE;
 import static com.t2m.g2nee.shop.point.domain.Point.ChangeReason.RETURN;
 import static com.t2m.g2nee.shop.point.domain.Point.ChangeReason.REVIEW;
@@ -92,6 +93,18 @@ public class PointServiceImpl implements PointService {
                 null,
                 Integer.parseInt(pointPolicyInfoDto.getAmount()),
                 REVIEW
+        );
+        savePoint(pointCreateRequestDto);
+    }
+
+    @Override
+    public void givePhotoReviewPoint(Member member) {
+        PointPolicyInfoDto pointPolicyInfoDto = pointPolicyService.getPointPolicyByPointName(PHOTO_REVIEW.getName());
+        PointCreateRequestDto pointCreateRequestDto = new PointCreateRequestDto(
+                member.getCustomerId(),
+                null,
+                Integer.parseInt(pointPolicyInfoDto.getAmount()),
+                PHOTO_REVIEW
         );
         savePoint(pointCreateRequestDto);
     }
