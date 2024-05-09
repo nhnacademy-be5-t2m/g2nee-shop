@@ -179,6 +179,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                                 , book.price
                                 , book.salePrice
                                 , book.bookStatus
+                                , book.quantity
                                 , publisher.publisherName
                                 , publisher.publisherEngName
                                 , isLiked.as("isLiked")
@@ -340,6 +341,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                                 , book.engTitle
                                 , book.publishedDate
                                 , book.viewCount
+                                , book.quantity
                                 , book.price
                                 , book.salePrice
                                 , book.bookStatus
@@ -387,6 +389,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                         , book.bookId
                         , bookFile.url.as("thumbnailImageUrl")
                         , book.title
+                        , book.quantity
                         , book.engTitle
                         , book.bookStatus
                         , book.viewCount))
