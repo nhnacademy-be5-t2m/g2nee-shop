@@ -1,6 +1,7 @@
 package com.t2m.g2nee.shop.policyset.pointpolicy.repository;
 
 import com.t2m.g2nee.shop.policyset.pointpolicy.domain.PointPolicy;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -38,4 +39,6 @@ public interface PointPolicyRepository extends JpaRepository<PointPolicy, Long>,
      * @return Page<PointPolicy>
      */
     Page<PointPolicy> findAll(Pageable pageable);
+
+    Optional<PointPolicy> getByPolicyNameAndIsActivatedTrue(String pointName);
 }

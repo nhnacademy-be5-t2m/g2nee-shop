@@ -4,7 +4,6 @@ import com.querydsl.core.types.Projections;
 import com.t2m.g2nee.shop.bookset.book.domain.QBook;
 import com.t2m.g2nee.shop.fileset.bookfile.domain.BookFile;
 import com.t2m.g2nee.shop.fileset.bookfile.domain.QBookFile;
-import com.t2m.g2nee.shop.memberset.member.domain.QMember;
 import com.t2m.g2nee.shop.shoppingcart.domain.QShoppingCart;
 import com.t2m.g2nee.shop.shoppingcart.domain.ShoppingCart;
 import com.t2m.g2nee.shop.shoppingcart.dto.ShoppingCartDto;

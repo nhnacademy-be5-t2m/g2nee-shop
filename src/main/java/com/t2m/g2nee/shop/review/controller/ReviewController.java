@@ -41,7 +41,6 @@ public class ReviewController {
     @PostMapping
     public ResponseEntity<ReviewDto.Response> postReview(@RequestPart(required = false) MultipartFile image,
                                                          @RequestPart ReviewDto.Request request) {
-
         ReviewDto.Response response = reviewService.postReview(image, request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -49,7 +48,8 @@ public class ReviewController {
 
     /**
      * 리뷰 수정 컨트롤러
-     * @param request  리뷰 정보 객체
+     *
+     * @param request 리뷰 정보 객체
      * @return ResponseEntity<ReviewDto.Response>
      */
     @PatchMapping
