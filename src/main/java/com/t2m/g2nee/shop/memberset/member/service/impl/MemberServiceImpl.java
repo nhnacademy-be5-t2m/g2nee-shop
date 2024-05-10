@@ -16,6 +16,7 @@ import com.t2m.g2nee.shop.memberset.member.dto.response.MemberResponse;
 import com.t2m.g2nee.shop.memberset.member.dto.response.MemberResponseToAuth;
 import com.t2m.g2nee.shop.memberset.member.repository.MemberRepository;
 import com.t2m.g2nee.shop.memberset.member.service.MemberService;
+import com.t2m.g2nee.shop.point.service.PointService;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -42,6 +43,7 @@ public class MemberServiceImpl implements MemberService {
     private final CustomerRepository customerRepository;
     private final AuthRepository authRepository;
     private final GradeRepository gradeRepository;
+    private final PointService pointService;
 
 
     /**
@@ -76,7 +78,7 @@ public class MemberServiceImpl implements MemberService {
                 .build();
         Member member = customerRepository.save(memberInfo);
         authMemberRepository.save(new AuthMember(authRepository.findByAuthName(Auth.AuthName.ROLE_MEMBER), member));
-
+        pointService.giveSignUpPoint(member);
         return new MemberResponse(member.getUsername(), member.getName(), member.getNickname(),
                 member.getGrade().getGradeName().toString());
     }
@@ -140,7 +142,7 @@ public class MemberServiceImpl implements MemberService {
     /**
      * {@inheritDoc}
      *
-     * @throws NotFoundException 으로 username 에 해당하는 정보가 없는 경우 예외를 던집니다.
+     * @throws NotFoundException 으로 customerId 에 해당하는 정보가 없는 경우 예외를 던집니다.
      */
     @Override
     @Transactional(readOnly = true)
@@ -165,6 +167,8 @@ public class MemberServiceImpl implements MemberService {
                 member.getBirthday(),
                 member.getPhoneNumber(),
                 member.getEmail(),
+                member.getGrade().getGradeName().getName(),
+                member.getMemberStatus(),
                 authorities
         );
     }

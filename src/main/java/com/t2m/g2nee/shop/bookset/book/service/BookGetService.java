@@ -99,6 +99,7 @@ public class BookGetService {
 
     /**
      * 책 수정을 위한 책 객체에 대한 정보를 얻는 메서드
+     *
      * @param bookId 책 아이디
      * @return BookDto.Response
      */
