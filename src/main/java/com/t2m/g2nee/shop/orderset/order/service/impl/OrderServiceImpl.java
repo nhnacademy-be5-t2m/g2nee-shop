@@ -20,7 +20,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -78,12 +77,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(readOnly = true)
     public GetOrderInfoResponseDto getOrderInfoById(Long orderId) {
-        Optional<Order> order = orderRepository.findById(orderId);
-        if (order.isPresent()) {
-            return orderRepository.getOrderInfoById(orderId);
-        } else {
-            throw new NotFoundException("해당 주문 정보가 없습니다.");
-        }
+        orderRepository.findById(orderId).orElseThrow(()
+                -> new NotFoundException("주문이 존재하지 않습니다."));
+
+        return orderRepository.getOrderInfoById(orderId);
+
     }
 
     //주문 번호로 조회
@@ -195,4 +193,6 @@ public class OrderServiceImpl implements OrderService {
                 order.getReceiveAddress(), order.getZipcode(), order.getDetailAddress(), order.getMessage(), couponName
         );
     }
+
+
 }
