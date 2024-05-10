@@ -78,4 +78,11 @@ public interface OrderDetailService {
      * @since : 1.0
      */
     void setBookQuantity(Long orderId);
+
+    /**
+     * 결제 완료 시
+     *
+     * @param orderId
+     */
+    void applyUseCoupon(Order order);
 }

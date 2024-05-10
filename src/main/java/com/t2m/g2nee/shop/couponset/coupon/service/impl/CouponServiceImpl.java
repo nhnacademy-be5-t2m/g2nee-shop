@@ -49,9 +49,13 @@ public class CouponServiceImpl implements CouponService {
     @Transactional
     public CouponInfoDto issueCoupon(CouponIssueDto request) {
         List<Member> members = memberService.getAllMembers();
-        if (!members.isEmpty()) {
-            CouponType couponType = couponTypeService.getCoupon(request.getCouponTypeId());
 
+        if (!members.isEmpty()) {
+            if (couponRepository.existsByCouponType_CouponTypeId(request.getCouponTypeId())) {
+                throw new BadRequestException("이미 발급한 쿠폰입니다.");
+            }
+
+            CouponType couponType = couponTypeService.getCoupon(request.getCouponTypeId());
             if (!couponType.getStatus().equals(CouponType.CouponTypeStatus.BATCH)) {
                 throw new BadRequestException("올바르지 않은 쿠폰 발급입니다.");
             }
@@ -80,7 +84,14 @@ public class CouponServiceImpl implements CouponService {
     @Override
     @Transactional
     public CouponInfoDto downloadCoupon(CouponDownloadDto request) {
+        //쿠폰 중복 발급을 막음
+        if (couponRepository.existsByCouponType_CouponTypeIdAndMember_CustomerId(request.getCouponTypeId(),
+                request.getCustomerId())) {
+            throw new BadRequestException("이미 발급한 쿠폰입니다.");
+        }
+
         Member member = memberService.getMember(request.getCustomerId());
+
         CouponType couponType = couponTypeService.getCoupon(request.getCouponTypeId());
         if (!couponType.getStatus().equals(CouponType.CouponTypeStatus.INDIVIDUAL)) {
             throw new BadRequestException("올바르지 않은 쿠폰 발급입니다.");
@@ -189,7 +200,6 @@ public class CouponServiceImpl implements CouponService {
 
 
     private CouponInfoDto convertToCouponInfoDto(Coupon coupon) {
-
         String discount = coupon.getCouponType().getDiscount().toString();
         if (coupon.getCouponType().getType().equals(CouponType.Type.AMOUNT)) {
             //금액의 경우 소수점을 떼고 보여줌
@@ -223,7 +233,16 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Coupon getCoupon(Long couponId) {
         return couponRepository.findById(couponId).orElseThrow(() -> new NotFoundException("쿠폰이 존재하지 않습니다."));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public void useCoupon(Long couponId) {
+        Coupon coupon = couponRepository.findById(couponId).orElseThrow(() -> new NotFoundException("쿠폰이 존재하지 않습니다."));
+        coupon.changeCouponStatus(Coupon.CouponStatus.USED);
+        couponRepository.save(coupon);
     }
 }

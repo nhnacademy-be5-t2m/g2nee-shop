@@ -8,13 +8,16 @@ import com.t2m.g2nee.shop.couponset.coupon.service.CouponService;
 import com.t2m.g2nee.shop.exception.BadRequestException;
 import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
+import com.t2m.g2nee.shop.orderset.order.service.OrderService;
 import com.t2m.g2nee.shop.orderset.orderdetail.domain.OrderDetail;
 import com.t2m.g2nee.shop.orderset.orderdetail.dto.request.OrderDetailSaveDto;
 import com.t2m.g2nee.shop.orderset.orderdetail.dto.response.GetOrderDetailResponseDto;
 import com.t2m.g2nee.shop.orderset.orderdetail.repository.OrderDetailRepository;
+import com.t2m.g2nee.shop.orderset.orderdetail.repository.OrderDetailSaveRepository;
 import com.t2m.g2nee.shop.orderset.orderdetail.service.OrderDetailService;
 import com.t2m.g2nee.shop.orderset.packagetype.service.PackageService;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -33,6 +36,8 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     private final BookGetService bookGetService;
     private final PackageService packageService;
     private final CouponService couponService;
+    private final OrderService orderService;
+    private final OrderDetailSaveRepository orderDetailSaveRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -68,6 +73,8 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     public List<GetOrderDetailResponseDto> saveOrderDetails(Order order, List<OrderDetailSaveDto> orderDetailList) {
         //주문 상세 리스트를 돌며 각 주문 상세 저장
 
+        List<OrderDetail> orderDetails = new ArrayList<>();
+
         for (OrderDetailSaveDto orderDetailSaveDto : orderDetailList) {
             //책 수량 확인
             Book book = bookGetService.getBook(orderDetailSaveDto.getBookId());
@@ -81,8 +88,8 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 coupon = couponService.getCoupon(orderDetailSaveDto.getCouponId());
             }
 
-            //주문 상세 저장
-            orderDetailRepository.save(
+            //주문 상세 리스트 저장
+            orderDetails.add(
                     OrderDetail.builder()
                             .price(BigDecimal.valueOf(orderDetailSaveDto.getPrice()))
                             .quantity(orderDetailSaveDto.getQuantity())
@@ -95,8 +102,11 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             );
         }
 
+        //주문 상세 저장
+        orderDetailSaveRepository.saveAll(orderDetails);
+
         //주문 상세 목록 반환
-        return orderDetailRepository.findByOrder_OrderId(order.getOrderId())
+        return orderDetails
                 .stream().map(this::convertToGetOrderDetailResponseDto)
                 .collect(Collectors.toList());
     }
@@ -130,6 +140,22 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         for (OrderDetail orderDetail : orderDetails) {
             bookMgmtService.modifyQuantity(orderDetail.getBook().getBookId(), orderDetail.getQuantity() * (-1));
         }
+    }
+
+    @Override
+    public void applyUseCoupon(Order order) {
+        if (order.getCoupon() == null) {
+            List<OrderDetail> orderDetails = orderDetailRepository.findByOrder_OrderId(order.getOrderId());
+            for (OrderDetail orderDetail : orderDetails) {
+                Coupon coupon = orderDetail.getCoupon();
+                if (coupon != null) {//쿠폰이 있을 경우 사용 처리
+                    couponService.useCoupon(coupon.getCouponId());
+                    //사용후, 만약에 쿠폰을 사용한 다른 주문이 있을 경우 결제 실패 처리
+                    orderService.abortOrders(order.getOrderId(), coupon.getCouponId());
+                }
+            }
+        }
+
     }
 
     /**

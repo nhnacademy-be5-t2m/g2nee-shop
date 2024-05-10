@@ -317,6 +317,8 @@ public class BookMgmtService {
 
             if (modifyQuantity < 0) {
                 throw new BadRequestException("책 수량은 음수가 될 수 없습니다.");
+            } else if (modifyQuantity == 0) {//책 상태 변경
+                book.setBookStatus(Book.BookStatus.SOLDOUT);
             }
 
             book.setQuantity(modifyQuantity);

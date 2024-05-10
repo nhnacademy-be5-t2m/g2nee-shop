@@ -58,4 +58,11 @@ public interface CouponService {
      * @return 쿠폰 객체
      */
     Coupon getCoupon(Long couponId);
+
+    /**
+     * 쿠폰 사용으로 변경하는 메소드입니다.
+     *
+     * @param couponId 쿠폰 id
+     */
+    void useCoupon(Long couponId);
 }
