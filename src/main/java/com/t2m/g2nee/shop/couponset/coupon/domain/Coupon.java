@@ -1,8 +1,8 @@
 package com.t2m.g2nee.shop.couponset.coupon.domain;
 
 import com.t2m.g2nee.shop.couponset.coupontype.domain.CouponType;
-import java.sql.Timestamp;
-import javax.persistence.DiscriminatorColumn;
+import com.t2m.g2nee.shop.memberset.member.domain.Member;
+import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -12,19 +12,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.t2m.g2nee.shop.memberset.customer.domain.Customer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "Coupons")
-@DiscriminatorColumn
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,8 +27,8 @@ public class Coupon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long couponId;
-    private Timestamp issuedDate;
-    private Timestamp expirationDate;
+    private LocalDateTime issuedDate;
+    private LocalDateTime expirationDate;
 
     @Enumerated(EnumType.STRING)
     private CouponStatus status;
@@ -41,13 +36,23 @@ public class Coupon {
 
     @ManyToOne
     @JoinColumn(name = "customerId")
-    private Customer customer;
+    private Member member;
 
     @ManyToOne
     @JoinColumn(name = "couponTypeId")
     private CouponType couponType;
 
     public enum CouponStatus {
-        USED, NOTUSED, EXPIRED
+        USED("사용"), NOTUSED("미사용"), EXPIRED("만료");
+
+        private final String name;
+
+        CouponStatus(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
 }
