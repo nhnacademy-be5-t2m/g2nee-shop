@@ -1,6 +1,5 @@
 package com.t2m.g2nee.shop.elasticsearch;
 
-import java.time.LocalDate;
 import javax.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +8,7 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.stereotype.Service;
 
-@Document(indexName = "books")
+@Document(indexName = "g2nee_book")
 @Getter
 @Setter
 @Service
@@ -21,6 +20,8 @@ public class BooksIndex {
     @Field(type = FieldType.Text)
     private String title;
     @Field(type = FieldType.Text)
+    private String engTitle;
+    @Field(type = FieldType.Text)
     private String bookIndex;
     @Field(type = FieldType.Text)
     private String description;
@@ -28,12 +29,5 @@ public class BooksIndex {
     private String contributorName;
     @Field(type = FieldType.Text)
     private String publisherName;
-    @Field(type = FieldType.Long)
-    private Long salePrice;
-    @Field(type = FieldType.Long)
-    private Long viewCount;
-    @Field(type = FieldType.Date)
-    private LocalDate publishedDate;
-
 
 }
