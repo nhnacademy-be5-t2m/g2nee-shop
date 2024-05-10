@@ -13,7 +13,7 @@ import com.t2m.g2nee.shop.memberset.member.dto.request.SignUpMemberRequestDto;
 import com.t2m.g2nee.shop.memberset.member.dto.request.UsernameRequestDto;
 import com.t2m.g2nee.shop.memberset.member.dto.response.MemberResponse;
 import com.t2m.g2nee.shop.memberset.member.dto.response.MemberResponseToAuth;
-import com.t2m.g2nee.shop.memberset.member.service.impl.MemberServiceImpl;
+import com.t2m.g2nee.shop.memberset.member.service.MemberService;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -32,7 +32,7 @@ class MemberControllerTest {
     MockMvc mvc;
     ObjectMapper objectMapper;
     @MockBean
-    private MemberServiceImpl memberService;
+    private MemberService memberService;
 
     SignUpMemberRequestDto signUpMemberRequestDto;
     MemberResponse memberResponse;
