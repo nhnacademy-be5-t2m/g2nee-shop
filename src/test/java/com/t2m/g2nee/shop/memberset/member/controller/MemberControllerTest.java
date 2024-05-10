@@ -13,7 +13,7 @@ import com.t2m.g2nee.shop.memberset.member.dto.request.SignUpMemberRequestDto;
 import com.t2m.g2nee.shop.memberset.member.dto.request.UsernameRequestDto;
 import com.t2m.g2nee.shop.memberset.member.dto.response.MemberResponse;
 import com.t2m.g2nee.shop.memberset.member.dto.response.MemberResponseToAuth;
-import com.t2m.g2nee.shop.memberset.member.service.Impl.MemberServiceImpl;
+import com.t2m.g2nee.shop.memberset.member.service.impl.MemberServiceImpl;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
