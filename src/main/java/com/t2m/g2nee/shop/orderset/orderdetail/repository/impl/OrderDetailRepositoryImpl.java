@@ -43,6 +43,6 @@ public class OrderDetailRepositoryImpl extends QuerydslRepositorySupport
                         orderDetail.isCancelled,
                         book.title.as("bookName"),
                         packageType.name.as("packageName"),
-                        couponType.name.as("couponName"))).fetch();
+                        couponType.name.as("couponName"))).orderBy(orderDetail.orderDetailId.desc()).fetch();
     }
 }

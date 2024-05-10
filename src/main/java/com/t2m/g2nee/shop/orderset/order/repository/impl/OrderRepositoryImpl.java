@@ -160,6 +160,8 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
                         order.orderId,
                         order.orderNumber,
                         order.orderDate,
+                        customer.customerId.as("customerId"),
+                        customer.name.as("customerName"),
                         order.deliveryWishDate,
                         order.deliveryFee,
                         order.orderState,
