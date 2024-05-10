@@ -21,11 +21,12 @@ import org.springframework.web.client.RestTemplate;
 public class DatasourceConfig {
 
     private final NhnCloudKeyProperties nhnCloudKeyProperties;
-    private final String URL;
+    private final String nhnCloudUrl;
 
     public DatasourceConfig(NhnCloudKeyProperties nhnCloudKeyProperties) {
         this.nhnCloudKeyProperties = nhnCloudKeyProperties;
-        this.URL = nhnCloudKeyProperties.getUrl() + nhnCloudKeyProperties.getPath() + nhnCloudKeyProperties.getAppKey();
+        this.nhnCloudUrl =
+                nhnCloudKeyProperties.getUrl() + nhnCloudKeyProperties.getPath() + nhnCloudKeyProperties.getAppKey();
 
     }
 
@@ -37,7 +38,7 @@ public class DatasourceConfig {
 
         BasicDataSource basicDataSource = new BasicDataSource();
         basicDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        basicDataSource.setUrl(dataSourceProperties.getUrl());
+        basicDataSource.setUrl(dataSourceProperties.getUrl() + "?rewriteBatchedStatements=true");
         basicDataSource.setUsername(dataSourceProperties.getUsername());
         basicDataSource.setPassword(dataSourceProperties.getPassword());
         basicDataSource.setValidationQuery("SELECT 1");
@@ -79,7 +80,7 @@ public class DatasourceConfig {
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         HttpEntity<String> requestEntity = new HttpEntity<>(httpHeaders);
-        ResponseEntity<KeyResponseDto> exchange = restTemplate.exchange(URL + keyId,
+        ResponseEntity<KeyResponseDto> exchange = restTemplate.exchange(nhnCloudUrl + keyId,
                 HttpMethod.GET,
                 requestEntity,
                 new ParameterizedTypeReference<>() {
