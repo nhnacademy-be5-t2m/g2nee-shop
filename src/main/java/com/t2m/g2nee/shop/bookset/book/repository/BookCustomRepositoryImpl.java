@@ -269,27 +269,14 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
      * @return List<BookDto.ListResponse>
      */
     public Page<BookDto.ListResponse> getBooksByElasticSearchAndCategory(Long memberId, Long categoryId, String keyword,
-                                                                         Pageable pageable, String sort) {
+                                                                         Pageable pageable, String sort,
+                                                                         String condition) {
 
         /*
          Elasticsearch search 쿼리
          */
-        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
 
-        // 가중치 설정, 제목과 정확히 일치하면 점수를 매우 높게 설정
-        MatchQueryBuilder titleQuery = QueryBuilders.matchQuery("title.token", keyword).boost(75);
-        MatchQueryBuilder titleKeywordQuery = QueryBuilders.matchQuery("title.keyword", keyword).boost(150);
-        MatchQueryBuilder bookIndexQuery = QueryBuilders.matchQuery("bookIndex.token", keyword).boost(5);
-        MatchQueryBuilder descriptionQuery = QueryBuilders.matchQuery("description.token", keyword).boost(5);
-        MatchQueryBuilder contributorQuery = QueryBuilders.matchQuery("contributorName.token", keyword).boost(30);
-        MatchQueryBuilder publisherQuery = QueryBuilders.matchQuery("publisherName.token", keyword).boost(30);
-
-        boolQuery.should(titleQuery);
-        boolQuery.should(titleKeywordQuery);
-        boolQuery.should(bookIndexQuery);
-        boolQuery.should(descriptionQuery);
-        boolQuery.should(contributorQuery);
-        boolQuery.should(publisherQuery);
+        BoolQueryBuilder boolQuery = searchCondition(keyword,condition);
 
         NativeSearchQueryBuilder searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(boolQuery);
@@ -648,5 +635,45 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                 orderSpecifier = book.viewCount.desc();
         }
         return orderSpecifier;
+    }
+
+    /**
+     * 통합검색, 출판사 검색, 기여자검색, 태그 검색 선택 시 조건을 반영하는 메서드
+     * @param keyword 검색 키워드
+     * @param condition 검색 조건
+     * @return
+     */
+    private BoolQueryBuilder searchCondition(String keyword, String condition) {
+
+        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+
+        switch (condition) {
+
+            case "PUBLISHER":
+
+                MatchQueryBuilder publisherQuery = QueryBuilders.matchQuery("publisherName.token", keyword).boost(100);
+                return boolQuery.should(publisherQuery);
+            case "CONTRIBUTOR":
+
+                MatchQueryBuilder contributorQuery =
+                        QueryBuilders.matchQuery("contributorName.token", keyword).boost(100);
+                return boolQuery.should(contributorQuery);
+            case "TAG":
+
+                MatchQueryBuilder tagQuery = QueryBuilders.matchQuery("tagName.token", keyword).boost(100);
+                return boolQuery.should(tagQuery);
+            default:
+                // 가중치 설정
+                MatchQueryBuilder titleQuery = QueryBuilders.matchQuery("title.token", keyword).boost(100);
+                MatchQueryBuilder bookIndexQuery = QueryBuilders.matchQuery("bookIndex.token", keyword).boost(5);
+                MatchQueryBuilder descriptionQuery = QueryBuilders.matchQuery("description.token", keyword).boost(5);
+
+                boolQuery.should(titleQuery);
+                boolQuery.should(bookIndexQuery);
+                boolQuery.should(descriptionQuery);
+
+                return boolQuery;
+
+        }
     }
 }

@@ -61,4 +61,16 @@ public class Book {
         }
     }
 
+    @Getter
+    public enum SearchCondition {
+
+        INTEGRATION("통합검색"), PUBLISHER("출판사"), CONTRIBUTOR("참여자"), TAG("태그");
+
+        private final String condition;
+
+        SearchCondition(String condition) {
+            this.condition = condition;
+        }
+    }
+
 }

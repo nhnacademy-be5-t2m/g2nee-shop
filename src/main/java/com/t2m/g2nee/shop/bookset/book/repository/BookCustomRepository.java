@@ -17,7 +17,7 @@ public interface BookCustomRepository {
     BookDto.Response getBookDetail(Long memberId, Long bookId);
 
     Page<BookDto.ListResponse> getBooksByElasticSearchAndCategory(Long memberId, Long categoryId, String keyword,
-                                                                  Pageable pageable, String sort);
+                                                                  Pageable pageable, String sort,String condition);
 
     List<BookDto.ListResponse> getRecommendBooks(List<Long> categoryIdList, Long bookId);
 

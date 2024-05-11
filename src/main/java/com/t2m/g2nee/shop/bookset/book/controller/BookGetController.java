@@ -115,6 +115,7 @@ public class BookGetController {
             @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) String sort,
             @RequestParam String keyword,
+            @RequestParam String condition,
             @RequestParam int page) {
 
         if (!StringUtils.hasText(sort)) {
@@ -122,7 +123,7 @@ public class BookGetController {
         }
 
         PageResponse<BookDto.ListResponse> responses =
-                bookGetService.getBookByCategoryAndElasticsearch(page, memberId, categoryId, keyword, sort);
+                bookGetService.getBookByCategoryAndElasticsearch(page, memberId, categoryId, keyword, sort,condition);
 
         return ResponseEntity.status(HttpStatus.OK).body(responses);
     }
