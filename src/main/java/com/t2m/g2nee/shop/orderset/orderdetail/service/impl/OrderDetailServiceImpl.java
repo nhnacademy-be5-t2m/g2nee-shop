@@ -8,7 +8,6 @@ import com.t2m.g2nee.shop.couponset.coupon.service.CouponService;
 import com.t2m.g2nee.shop.exception.BadRequestException;
 import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
-import com.t2m.g2nee.shop.orderset.order.service.OrderService;
 import com.t2m.g2nee.shop.orderset.orderdetail.domain.OrderDetail;
 import com.t2m.g2nee.shop.orderset.orderdetail.dto.request.OrderDetailSaveDto;
 import com.t2m.g2nee.shop.orderset.orderdetail.dto.response.GetOrderDetailResponseDto;
@@ -36,7 +35,6 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     private final BookGetService bookGetService;
     private final PackageService packageService;
     private final CouponService couponService;
-    private final OrderService orderService;
     private final OrderDetailSaveRepository orderDetailSaveRepository;
 
     @Override
@@ -143,19 +141,20 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     }
 
     @Override
-    public void applyUseCoupon(Order order) {
+    public List<Order> applyUseCoupon(Order order) {
         if (order.getCoupon() == null) {
             List<OrderDetail> orderDetails = orderDetailRepository.findByOrder_OrderId(order.getOrderId());
             for (OrderDetail orderDetail : orderDetails) {
                 Coupon coupon = orderDetail.getCoupon();
                 if (coupon != null) {//쿠폰이 있을 경우 사용 처리
                     couponService.useCoupon(coupon.getCouponId());
-                    //사용후, 만약에 쿠폰을 사용한 다른 주문이 있을 경우 결제 실패 처리
-                    orderService.abortOrders(order.getOrderId(), coupon.getCouponId());
+                    //사용후, 만약에 쿠폰을 사용한 다른 주문이 있는지 확인하여
+                    return orderDetailRepository.getRemainOrders(orderDetail.getOrderDetailId(), coupon.getCouponId());
+
                 }
             }
         }
-
+        return List.of();
     }
 
     /**

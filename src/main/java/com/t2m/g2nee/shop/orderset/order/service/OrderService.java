@@ -94,6 +94,4 @@ public interface OrderService {
     Order getOrder(String orderNumber);
 
     void applyUseCoupon(Order order);
-
-    void abortOrders(Long orderId, Long couponId);
 }

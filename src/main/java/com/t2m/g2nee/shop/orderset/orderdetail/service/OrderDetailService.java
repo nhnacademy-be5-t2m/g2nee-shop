@@ -80,9 +80,8 @@ public interface OrderDetailService {
     void setBookQuantity(Long orderId);
 
     /**
-     * 결제 완료 시
+     * 결제 완료 시 쿠폰 취소
      *
-     * @param orderId
      */
-    void applyUseCoupon(Order order);
+    List<Order> applyUseCoupon(Order order);
 }

@@ -185,16 +185,19 @@ public class OrderServiceImpl implements OrderService {
             couponService.useCoupon(coupon.getCouponId());
 
             //사용후, 만약에 쿠폰을 사용한 다른 주문이 있을 경우 결제 실패 처리
-            abortOrders(order.getOrderId(), coupon.getCouponId());
+            List<Order> remainOrders =
+                    orderRepository.findByCoupon_CouponIdAndOrderIdNot(coupon.getCouponId(), order.getOrderId());
+            abortOrders(remainOrders);
 
         } else {//전체 적용 쿠폰이 null일 경우, orderDetail 쿠폰 확인
-            orderDetailService.applyUseCoupon(order);
+            List<Order> remainOrders = orderDetailService.applyUseCoupon(order);
+            //사용후, 만약에 쿠폰을 사용한 다른 주문이 있을 경우 결제 실패 처리
+            abortOrders(remainOrders);
         }
     }
 
-    @Override
-    public void abortOrders(Long orderId, Long couponId) {
-        List<Order> remainOrders = orderRepository.findByCoupon_CouponIdAndOrderIdNot(couponId, orderId);
+
+    private void abortOrders(List<Order> remainOrders) {
         if (!remainOrders.isEmpty()) {
             for (Order remainOrder : remainOrders) {
                 changeOrderState(remainOrder.getOrderId(), Order.OrderState.ABORTED);
