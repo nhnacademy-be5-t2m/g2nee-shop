@@ -32,12 +32,12 @@ public class ShoppingCartService {
     private final BookRepository bookRepository;
     private final MemberRepository memberRepository;
 
-    public ShoppingCartDto.Response getBookForCart(String bookId, int quantity){
+    public ShoppingCartDto.Response getBookForCart(String bookId, int quantity) {
 
         ShoppingCartDto.Response response = shoppingCartRepository.getBookForCart(Long.valueOf(bookId));
         response.setQuantity(quantity);
 
-        if(response.getBookQuantity() < quantity){
+        if (response.getBookQuantity() < quantity) {
             throw new BadRequestException("재고보다 많이 담을 수는 없습니다.");
         }
         return response;

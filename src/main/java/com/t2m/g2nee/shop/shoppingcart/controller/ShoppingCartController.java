@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 장바구니 controller 클래스
+ *
  * @author : 신동민
  * @since : 1.0
  */
@@ -29,7 +30,7 @@ public class ShoppingCartController {
 
     @GetMapping("/book/{bookId}")
     public ResponseEntity<ShoppingCartDto.Response> getBookForCart(@PathVariable String bookId,
-                                                                   @RequestParam("quantity")int quantity){
+                                                                   @RequestParam("quantity") int quantity) {
 
         ShoppingCartDto.Response response = shoppingCartService.getBookForCart(bookId, quantity);
 

@@ -21,4 +21,13 @@ public interface MemberCustomRepository {
      */
     Optional<Member> findActiveMemberById(Long memberId);
 
+
+    /**
+     * ACTIVE 상태의 회원을 찾아 반환하는 메소드
+     *
+     * @param username 찾을 username
+     * @return Optional<Member> member정보
+     */
+    Optional<Member> findActiveMemberByUsername(String username);
+
 }
