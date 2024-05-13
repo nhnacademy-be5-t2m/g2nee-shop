@@ -151,7 +151,7 @@ public class OrderServiceImpl implements OrderService {
                         .orderAmount(BigDecimal.valueOf(orderSaveDto.getOrderAmount()))
                         .receiverName(orderSaveDto.getReceiverName())
                         .receiverPhoneNumber(orderSaveDto.getReceiverPhoneNumber())
-                        .receiveAddress(orderSaveDto.getReceiveAddress())
+                        .receiveAddress(orderSaveDto.getReceiverAddress())
                         .zipcode(orderSaveDto.getZipcode())
                         .detailAddress(orderSaveDto.getDetailAddress())
                         .message(orderSaveDto.getMessage())

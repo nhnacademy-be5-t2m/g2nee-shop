@@ -75,7 +75,7 @@ public class ReviewService {
             url = uploadImage(image, saveReview, tokenId, book.getEngTitle(), member.getCustomerId());
             //사진 리뷰적립금 부여
             pointService.givePhotoReviewPoint(member);
-        }else{
+        } else {
             //리뷰적립금 부여
             pointService.giveReviewPoint(member);
 

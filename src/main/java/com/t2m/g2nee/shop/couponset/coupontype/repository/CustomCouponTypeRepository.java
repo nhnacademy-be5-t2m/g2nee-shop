@@ -9,6 +9,7 @@ public interface CustomCouponTypeRepository {
 
     /**
      * admin에서 쿠폰 조회하는 controller
+     *
      * @param customerId
      * @param pageable
      * @return

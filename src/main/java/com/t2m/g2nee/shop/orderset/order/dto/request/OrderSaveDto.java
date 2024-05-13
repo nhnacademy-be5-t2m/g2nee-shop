@@ -38,7 +38,7 @@ public class OrderSaveDto {
 
     @Size(max = 100, message = "100자 이하로 작성해 주십시오.")
     @NotEmpty(message = "주소를 입력해주십시오.")
-    private String receiveAddress;
+    private String receiverAddress;
 
     @Pattern(regexp = "^(\\d{3}-\\d{3}|\\d{5})$", message = "우편번호의 형식이 올바르지 않습니다.")
     private String zipcode;

@@ -37,11 +37,11 @@ public class CustomerController {
      * @return 비회원정보 저장 후 저장된 정보 반환
      */
     @PostMapping("/save")
-    public ResponseEntity<Customer> customerSave(@Valid @RequestBody CustomerSaveRequest customerRequest) {
+    public ResponseEntity<Long> customerSave(@Valid @RequestBody CustomerSaveRequest customerRequest) {
         Customer customer = customerService.saveCustomer(customerRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(customer);
+                .body(customer.getCustomerId());
 
     }
 
