@@ -78,4 +78,10 @@ public interface OrderDetailService {
      * @since : 1.0
      */
     void setBookQuantity(Long orderId);
+
+    /**
+     * 결제 완료 시 쿠폰 취소
+     *
+     */
+    List<Order> applyUseCoupon(Order order);
 }

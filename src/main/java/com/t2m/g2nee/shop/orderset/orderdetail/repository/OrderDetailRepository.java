@@ -17,5 +17,4 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long>,
      * @return 주문 상세 목록 반환
      */
     List<OrderDetail> findByOrder_OrderId(Long orderId);
-
 }

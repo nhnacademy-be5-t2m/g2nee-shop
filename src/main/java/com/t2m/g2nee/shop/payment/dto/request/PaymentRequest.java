@@ -52,4 +52,9 @@ public abstract class PaymentRequest {
      */
     @NotBlank
     private String payType;
+
+    /**
+     * 사용 포인트
+     */
+    private int point;
 }

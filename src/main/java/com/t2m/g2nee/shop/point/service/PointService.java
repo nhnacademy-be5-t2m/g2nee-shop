@@ -43,10 +43,9 @@ public interface PointService {
     /**
      * member에게 구매시 포인트를 주는 메소드
      *
-     * @param member      포인트를 줄 대상
      * @param orderAmount 결제금액
      */
-    void givePurchasePoint(Member member, BigDecimal orderAmount);
+    void givePurchasePoint(Long memberId, BigDecimal orderAmount);
 
     /**
      * member가 구매시 포인트를 사용하는 메소드

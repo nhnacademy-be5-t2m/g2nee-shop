@@ -4,11 +4,13 @@ import com.t2m.g2nee.shop.orderset.orderdetail.dto.response.GetOrderDetailRespon
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Getter
 public class OrderForPaymentDto {
     private String orderName;
@@ -29,4 +31,5 @@ public class OrderForPaymentDto {
     private String detailAddress;
     private String message;
     private String couponName;
+
 }

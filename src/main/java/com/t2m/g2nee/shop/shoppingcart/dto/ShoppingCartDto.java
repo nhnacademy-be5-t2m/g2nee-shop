@@ -26,8 +26,8 @@ public class ShoppingCartDto {
     public static class Request {
 
         private int quantity;
-        private Long bookId;
-        private Long memberId;
+        private String bookId;
+        private String customerId;
     }
 
     @Setter
@@ -38,11 +38,11 @@ public class ShoppingCartDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class Response {
 
-        private Long shoppingCartId;
-        private Long memberId;
         private Long bookId;
+        private String customerId;
         private int quantity;
         private String title;
+        private String engTitle;
         private String imageUrl;
         private int price;
         private int bookQuantity;
