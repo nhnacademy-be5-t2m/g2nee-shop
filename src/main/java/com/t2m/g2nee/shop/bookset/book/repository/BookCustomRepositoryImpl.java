@@ -30,6 +30,7 @@ import com.t2m.g2nee.shop.review.domain.QReview;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.elasticsearch.index.query.AbstractQueryBuilder;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -276,10 +277,10 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
          Elasticsearch search 쿼리
          */
 
-        BoolQueryBuilder boolQuery = searchCondition(keyword,condition);
+        AbstractQueryBuilder<?> query = searchCondition(keyword, condition);
 
         NativeSearchQueryBuilder searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(boolQuery);
+                .withQuery(query);
         /*
             search 결과로 가져온 인덱스 객체들을 포함하는 hitList
          */
@@ -648,29 +649,46 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
 
         switch (condition) {
-
             case "PUBLISHER":
 
-                MatchQueryBuilder publisherQuery = QueryBuilders.matchQuery("publisherName.token", keyword).boost(100);
-                return boolQuery.should(publisherQuery);
+                MatchQueryBuilder publisherTokenQuery = QueryBuilders.matchQuery("publisherName.token", keyword);
+                MatchQueryBuilder publisherJasoQuery = QueryBuilders.matchQuery("publisherName.jaso", keyword);
+                return boolQuery
+                        .must(publisherTokenQuery)
+                        .must(publisherJasoQuery);
+
             case "CONTRIBUTOR":
-
-                MatchQueryBuilder contributorQuery =
-                        QueryBuilders.matchQuery("contributorName.token", keyword).boost(100);
-                return boolQuery.should(contributorQuery);
+                MatchQueryBuilder contributorTokenQuery = QueryBuilders.matchQuery("contributorName.token", keyword);
+                MatchQueryBuilder contributorJasoQuery = QueryBuilders.matchQuery("contributorName.jaso", keyword);
+                return boolQuery
+                        .must(contributorTokenQuery)
+                        .must(contributorJasoQuery);
             case "TAG":
-
-                MatchQueryBuilder tagQuery = QueryBuilders.matchQuery("tagName.token", keyword).boost(100);
-                return boolQuery.should(tagQuery);
+                MatchQueryBuilder tagTokenQuery = QueryBuilders.matchQuery("tagName.token", keyword);
+                MatchQueryBuilder tagJasoQuery = QueryBuilders.matchQuery("tagName.jaso", keyword);
+                return boolQuery
+                        .must(tagTokenQuery)
+                        .must(tagJasoQuery);
             default:
-                // 가중치 설정
-                MatchQueryBuilder titleQuery = QueryBuilders.matchQuery("title.token", keyword).boost(100);
+
+                // 통합 검색은 가중치 설정
+                MatchQueryBuilder titleTokenQuery = QueryBuilders.matchQuery("title.token", keyword).boost(60);
+                MatchQueryBuilder titleJasoQuery = QueryBuilders.matchQuery("title.jaso", keyword).boost(60);
+
                 MatchQueryBuilder bookIndexQuery = QueryBuilders.matchQuery("bookIndex.token", keyword).boost(5);
                 MatchQueryBuilder descriptionQuery = QueryBuilders.matchQuery("description.token", keyword).boost(5);
+                MatchQueryBuilder contributorQuery =
+                        QueryBuilders.matchQuery("contributorName.token", keyword).boost(20);
+                MatchQueryBuilder tagQuery = QueryBuilders.matchQuery("tagName.token", keyword).boost(15);
+                MatchQueryBuilder publisherQuery = QueryBuilders.matchQuery("publisherName.token", keyword).boost(20);
 
-                boolQuery.should(titleQuery);
+                boolQuery.should(titleTokenQuery);
+                boolQuery.should(titleJasoQuery);
                 boolQuery.should(bookIndexQuery);
                 boolQuery.should(descriptionQuery);
+                boolQuery.should(contributorQuery);
+                boolQuery.should(tagQuery);
+                boolQuery.should(publisherQuery);
 
                 return boolQuery;
 
