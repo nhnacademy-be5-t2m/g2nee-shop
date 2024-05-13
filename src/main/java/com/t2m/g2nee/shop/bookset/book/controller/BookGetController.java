@@ -11,6 +11,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -144,5 +145,15 @@ public class BookGetController {
         return ResponseEntity.status(HttpStatus.OK).body(responses);
     }
 
+    /**
+     * 주문 시 책의 재고 확인을 위해 책 재고를 조회하는 컨트롤러
+     *
+     * @param bookIdList 책 아이디 리스트
+     */
+    @GetMapping("/stock")
+    public ResponseEntity<List<BookDto.ListResponse>> getBookStock(@RequestParam List<Long> bookIdList) {
 
+        List<BookDto.ListResponse> responses = bookGetService.getBookStock(bookIdList);
+        return ResponseEntity.status(HttpStatus.OK).body(responses);
+    }
 }

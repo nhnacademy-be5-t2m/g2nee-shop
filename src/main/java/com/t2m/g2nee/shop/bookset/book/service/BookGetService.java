@@ -9,6 +9,7 @@ import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import com.t2m.g2nee.shop.utils.MarkDownUtil;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -152,6 +153,16 @@ public class BookGetService {
                         condition);
 
         return getPageResponse(page, bookPage);
+
+    }
+
+    /**
+     * 책 수량을 조회하는 메서드
+     * @return List<BookDto.ListResponse>
+     */
+    public List<BookDto.ListResponse> getBookStock(List<Long> bookIdList){
+
+        return  bookRepository.getBookStock(bookIdList);
 
     }
 

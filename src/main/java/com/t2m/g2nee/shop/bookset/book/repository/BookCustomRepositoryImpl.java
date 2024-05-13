@@ -386,6 +386,23 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                 .fetch();
     }
 
+    /**
+     * 책 수량을 조회하는 메서드
+     *
+     * @param bookIdList 책 아이디 리스트
+     * @return List<BookDto.ListResponse>
+     */
+    @Override
+    public List<BookDto.ListResponse> getBookStock(List<Long> bookIdList) {
+        return from(book)
+                .where(book.bookId.in(bookIdList))
+                .select(Projections.fields(BookDto.ListResponse.class
+                        , book.bookId
+                        , book.title
+                        , book.quantity))
+                .fetch();
+    }
+
 
     /**
      * 도서에 기여자와 역할 정보를 설정하고 반환하는 메서드입니다.
