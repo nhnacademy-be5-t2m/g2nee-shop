@@ -11,7 +11,6 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 public class CouponTypeRepositoryImpl extends QuerydslRepositorySupport implements CustomCouponTypeRepository {
 
 
-
     public CouponTypeRepositoryImpl() {
         super(Coupon.class);
     }
