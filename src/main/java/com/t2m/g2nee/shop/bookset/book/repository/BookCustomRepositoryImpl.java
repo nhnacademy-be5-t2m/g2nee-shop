@@ -88,8 +88,8 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                         , book.title
                         , book.engTitle
                         , book.publishedDate
+                        , book.quantity
                         , book.price, book.salePrice, book.bookStatus
-                        , publisher.publisherName
                         , publisher.publisherName
                 )).orderBy(book.publishedDate.desc()).limit(6)
                 .fetch();
