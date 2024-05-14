@@ -31,6 +31,7 @@ public class Member extends Customer {
     private String nickname;
     private String birthday;
     private int point;
+    @Setter
     @Enumerated(EnumType.STRING)
     private MemberStatus memberStatus;
     private LocalDateTime recentLoginDate;

@@ -1,9 +1,12 @@
 package com.t2m.g2nee.shop.memberset.member.service;
 
+import com.t2m.g2nee.shop.memberset.member.domain.Member;
+import com.t2m.g2nee.shop.memberset.member.dto.request.MemberLoginRequestDto;
 import com.t2m.g2nee.shop.memberset.member.dto.request.SignUpMemberRequestDto;
 import com.t2m.g2nee.shop.memberset.member.dto.response.MemberDetailInfoResponseDto;
 import com.t2m.g2nee.shop.memberset.member.dto.response.MemberResponse;
 import com.t2m.g2nee.shop.memberset.member.dto.response.MemberResponseToAuth;
+import java.util.List;
 
 /**
  * 회원 정보를 위한 service 입니다.
@@ -70,4 +73,31 @@ public interface MemberService {
      * @return 회원의 세부정보를 반환
      */
     MemberDetailInfoResponseDto getMemberDetailInfoToAccessToken(String accessToken);
+
+
+    /**
+     * 모든 멤버를 가져오는 메소드
+     *
+     * @return List<Member> 모든 멤버 리스트
+     * @author : 김수빈
+     */
+    List<Member> getAllMembers();
+
+    /**
+     * 한 회원을 가져오는 메소드
+     *
+     * @param customerId 고객 id
+     * @return Member객체
+     * @author : 김수빈
+     */
+    Member getMember(Long customerId);
+
+    /**
+     * 회원의 상태를 변경하는 메소드
+     *
+     * @param status   바꿀 status
+     * @param memberId 바꿔야할 회원 id
+     * @return 바꿔진 Member 객체
+     */
+    Member modifyStatus(Long memberId, String status);
 }
