@@ -2,6 +2,7 @@ package com.t2m.g2nee.shop.orderset.order.service.impl;
 
 import com.t2m.g2nee.shop.couponset.coupon.domain.Coupon;
 import com.t2m.g2nee.shop.couponset.coupon.service.CouponService;
+import com.t2m.g2nee.shop.exception.BadRequestException;
 import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.memberset.customer.domain.Customer;
 import com.t2m.g2nee.shop.memberset.customer.service.CustomerService;
@@ -15,6 +16,8 @@ import com.t2m.g2nee.shop.orderset.order.service.OrderService;
 import com.t2m.g2nee.shop.orderset.orderdetail.dto.response.GetOrderDetailResponseDto;
 import com.t2m.g2nee.shop.orderset.orderdetail.service.OrderDetailService;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import com.t2m.g2nee.shop.policyset.deliverypolicy.dto.response.DeliveryPolicyInfoDto;
+import com.t2m.g2nee.shop.policyset.deliverypolicy.service.DeliveryPolicyService;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -38,6 +41,7 @@ public class OrderServiceImpl implements OrderService {
     private final CustomerService customerService;
     private final OrderDetailService orderDetailService;
     private final CouponService couponService;
+    private final DeliveryPolicyService deliveryPolicyService;
 
     @Override
     @Transactional(readOnly = true)
@@ -94,7 +98,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public void changeOrderState(Long orderId, Order.OrderState orderState) {
-        //order 존재 여부 확인?
         Order order = orderRepository.findById(orderId).orElseThrow(()
                 -> new NotFoundException("주문이 존재하지 않습니다."));
 
@@ -129,19 +132,30 @@ public class OrderServiceImpl implements OrderService {
             wishDate = LocalDateTime.parse(orderSaveDto.getDeliveryWishDate());
         }
 
+        //배송비 확인
+        DeliveryPolicyInfoDto deliveryPolicy = deliveryPolicyService.getDeliveryPolicy();
+        int deliveryFee = orderSaveDto.getDeliveryFee();
+        boolean overDelivery = (orderSaveDto.getOrderAmount() < deliveryPolicy.getFreeDeliveryStandard()) &&
+                (deliveryFee != deliveryPolicy.getDeliveryFee());
+        boolean underDelivery = (orderSaveDto.getOrderAmount() >= deliveryPolicy.getFreeDeliveryStandard()) &&
+                (deliveryFee != 0);
+        if (overDelivery || underDelivery) {
+            throw new BadRequestException("배송비가 일치하지 않습니다.");
+        }
+
         //주문 저장
         Order order = orderRepository.save(
                 Order.builder()
-                        .orderNumber("g2nee-order-" + UUID.randomUUID())
+                        .orderNumber(UUID.randomUUID().toString())
                         .orderDate(LocalDateTime.now())
                         .deliveryWishDate(wishDate)
-                        .deliveryFee(BigDecimal.valueOf(orderSaveDto.getDeliveryFee()))
+                        .deliveryFee(BigDecimal.valueOf(deliveryFee))
                         .orderState(Order.OrderState.PAYWAITING)
                         .netAmount(BigDecimal.valueOf(orderSaveDto.getNetAmount()))
                         .orderAmount(BigDecimal.valueOf(orderSaveDto.getOrderAmount()))
                         .receiverName(orderSaveDto.getReceiverName())
                         .receiverPhoneNumber(orderSaveDto.getReceiverPhoneNumber())
-                        .receiveAddress(orderSaveDto.getReceiveAddress())
+                        .receiveAddress(orderSaveDto.getReceiverAddress())
                         .zipcode(orderSaveDto.getZipcode())
                         .detailAddress(orderSaveDto.getDetailAddress())
                         .message(orderSaveDto.getMessage())
@@ -149,6 +163,7 @@ public class OrderServiceImpl implements OrderService {
                         .coupon(coupon)
                         .build()
         );
+
         //주문 상세 저장
         List<GetOrderDetailResponseDto> orderDetails =
                 orderDetailService.saveOrderDetails(order, orderSaveDto.getOrderDetailList());
@@ -160,10 +175,42 @@ public class OrderServiceImpl implements OrderService {
      * {@inheritDoc}
      */
     @Override
+    @Transactional(readOnly = true)
     public Order getOrder(String orderNumber) {
         return orderRepository.findByOrderNumber(orderNumber)
                 .orElseThrow(() -> new NotFoundException("주문이 존재하지 않습니다."));
     }
+
+    @Override
+    public void applyUseCoupon(Order order) {
+        //쿠폰이 있을 경우에 사용 처리
+        Coupon coupon = order.getCoupon();
+        if (coupon != null) {
+            couponService.useCoupon(coupon.getCouponId());
+
+            //사용후, 만약에 쿠폰을 사용한 다른 주문이 있을 경우 결제 실패 처리
+            List<Order> remainOrders =
+                    orderRepository.findByCoupon_CouponIdAndOrderIdNot(coupon.getCouponId(), order.getOrderId());
+            abortOrders(remainOrders);
+
+        } else {//전체 적용 쿠폰이 null일 경우, orderDetail 쿠폰 확인
+            List<Order> remainOrders = orderDetailService.applyUseCoupon(order);
+            //사용후, 만약에 쿠폰을 사용한 다른 주문이 있을 경우 결제 실패 처리
+            abortOrders(remainOrders);
+        }
+    }
+
+
+    private void abortOrders(List<Order> remainOrders) {
+        if (!remainOrders.isEmpty()) {
+            for (Order remainOrder : remainOrders) {
+                changeOrderState(remainOrder.getOrderId(), Order.OrderState.ABORTED);
+                //주문 상세는 주문 취소 처리
+                orderDetailService.cancelAllOrderDetail(remainOrder.getOrderId());
+            }
+        }
+    }
+
 
     /**
      * 주문과 주문 상세 객체를 OrderForPaymentDto로 변환합니다.
@@ -184,15 +231,14 @@ public class OrderServiceImpl implements OrderService {
                 orderDetailService.getOrderName(order.getOrderId()),
                 order.getOrderNumber(), order.getOrderAmount(), order.getCustomer().getCustomerId(),
                 orderDetails,
-
                 order.getOrderId(), order.getOrderDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
                 order.getDeliveryWishDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
                 order.getDeliveryFee(),
                 order.getOrderState().getName(), order.getNetAmount(), order.getReceiverName(),
                 order.getReceiverPhoneNumber(),
-                order.getReceiveAddress(), order.getZipcode(), order.getDetailAddress(), order.getMessage(), couponName
+                order.getReceiveAddress(), order.getZipcode(), order.getDetailAddress(), order.getMessage(), couponName,
+                order.getCustomer().getEmail(), order.getCustomer().getPhoneNumber(), order.getCustomer().getName()
         );
     }
-
 
 }

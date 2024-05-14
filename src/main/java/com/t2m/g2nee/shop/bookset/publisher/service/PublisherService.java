@@ -45,7 +45,7 @@ public class PublisherService {
 
             return mapper.entityToDto(findPublisher);
         } else {
-
+            publisher.setActivated(true);
             Publisher savePublisher = publisherRepository.save(publisher);
 
             return mapper.entityToDto(savePublisher);

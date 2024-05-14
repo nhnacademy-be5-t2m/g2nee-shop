@@ -42,6 +42,7 @@ public class RoleService {
             return mapper.entityToDto(findRole);
         } else {
 
+            role.setActivated(true);
             Role saveRole = roleRepository.save(role);
 
             return mapper.entityToDto(saveRole);

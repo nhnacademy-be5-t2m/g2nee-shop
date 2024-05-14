@@ -3,6 +3,9 @@ package com.t2m.g2nee.shop.payment.service.impl;
 import com.t2m.g2nee.shop.exception.BadRequestException;
 import com.t2m.g2nee.shop.exception.CustomException;
 import com.t2m.g2nee.shop.exception.NotFoundException;
+import com.t2m.g2nee.shop.memberset.customer.domain.Customer;
+import com.t2m.g2nee.shop.memberset.customer.service.CustomerService;
+import com.t2m.g2nee.shop.memberset.member.service.MemberService;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import com.t2m.g2nee.shop.orderset.order.service.OrderService;
 import com.t2m.g2nee.shop.orderset.orderdetail.service.OrderDetailService;
@@ -12,11 +15,13 @@ import com.t2m.g2nee.shop.payment.dto.request.PaymentRequest;
 import com.t2m.g2nee.shop.payment.dto.response.PaymentInfoDto;
 import com.t2m.g2nee.shop.payment.repository.PaymentRepository;
 import com.t2m.g2nee.shop.payment.service.PaymentService;
+import com.t2m.g2nee.shop.payment.service.PaymentSupportService;
 import com.t2m.g2nee.shop.payment.service.impl.paytype.PaymentRequestMethod;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -31,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @since : 1.0
  */
 @Service
+@RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
 
     private static final int MAXPAGEBUTTONS = 5;
@@ -41,22 +47,10 @@ public class PaymentServiceImpl implements PaymentService {
     private final OrderService orderService;
 
     private final PaymentServiceFactory factory;
+    private final MemberService memberService;
+    private final CustomerService customerService;
+    private final PaymentSupportService paymentSupportService;
 
-
-    /**
-     * PaymentServiceImpl의 생성자 입니다.
-     *
-     * @param paymentRepository  결제 레포지토리
-     * @param orderDetailService 주문 상세 서비스
-     * @param factory            결제 시, 어떤 pg사의 결제 구현을 사용할 지 정하는 메소드
-     */
-    public PaymentServiceImpl(PaymentRepository paymentRepository, OrderDetailService orderDetailService,
-                              PaymentServiceFactory factory, OrderService orderService) {
-        this.paymentRepository = paymentRepository;
-        this.orderDetailService = orderDetailService;
-        this.factory = factory;
-        this.orderService = orderService;
-    }
 
     /**
      * {@inheritDoc}
@@ -64,14 +58,28 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     @Transactional
     public PaymentInfoDto createPayment(PaymentRequest request) {
+        //유효한 주문인지 확인
         Order order = orderService.getOrder(request.getOrderNumber());
 
+        //주문한 사람과 일치하는지 확인
+        Customer customer = customerService.getCustomerInfo(order.getCustomer().getCustomerId());
+        if (!customer.getCustomerId().equals(request.getCustomerId())) {
+            throw new BadRequestException("주문한 사람이 일치하지 않습니다.");
+        }
+
+        // 주문서 저장된 금액과 실제 요청 금액이 일치하는지
+        if (!order.getOrderAmount().equals(request.getAmount())) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, "주문 금액이 유효하지 않습니다.");
+        }
+
         //주문상태가 결제대기인지 확인
-        if (order.getOrderState() == Order.OrderState.PAYWAITING) {
+        if (order.getOrderState().equals(Order.OrderState.PAYWAITING)) {
+            //재고 변경
+            orderDetailService.setBookQuantity(order.getOrderId());
 
             //결제 승인
             PaymentRequestMethod paymentMethod = factory.getPaymentRequest(request.getPayType());
-            Payment payment = paymentMethod.requestCreatePayment(request);
+            Payment payment = paymentMethod.requestCreatePayment(request, customer, order);
 
             //결제 실패 경우: 주문 상태 변경
             if (Objects.isNull(payment)) {
@@ -79,22 +87,19 @@ public class PaymentServiceImpl implements PaymentService {
                 throw new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, "결제에 실패하였습니다.");
             }
 
-            //재고 변경
-            orderDetailService.setBookQuantity(order.getOrderId());
+            payment = paymentSupportService.memberPayment(order.getOrderId(), payment);
 
-            //TODO: 포인트 사용 + 포인트 저장
+            //회원의 경우 포인트 및 쿠폰 처리
+            if (memberService.isMember(request.getCustomerId())) {
+                paymentSupportService.memberPoint(request.getCustomerId(), order, request.getPoint());
+                paymentSupportService.memberCoupon(order);
+            }
 
-            //TODO: 쿠폰 사용으로 변경
-
-            //TODO: 결제가 완료되면 장바구니에 같은 물건이 있을 경우 지우기
-
-            //결제 테이블 저장
-            return convertToPaymentInfoDto(paymentRepository.save(payment));
+            return convertToPaymentInfoDto(payment);
         }
 
         //결제 대기 상태가 아닌 경우 예외
         throw new BadRequestException("결제에 유효한 주문이 아닙니다.");
-
     }
 
     /**
@@ -168,7 +173,8 @@ public class PaymentServiceImpl implements PaymentService {
      */
     private PaymentInfoDto convertToPaymentInfoDto(Payment payment) {
 
-        return new PaymentInfoDto(payment.getPaymentId(), payment.getAmount(), payment.getPayType(),
+        return new PaymentInfoDto(payment.getPaymentId(), payment.getAmount(),
+                payment.getPayType().split("-")[1].trim(),
                 payment.getPaymentDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
                 payment.getPayStatus().getName(), payment.getOrder().getOrderId(),
                 payment.getOrder().getOrderNumber(), orderDetailService.getOrderName(payment.getOrder().getOrderId()));

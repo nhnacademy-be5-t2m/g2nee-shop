@@ -40,7 +40,7 @@ public class ContributorService {
             findContributor.setActivated(true);
             return mapper.entityToDto(findContributor);
         } else {
-
+            contributor.setActivated(true);
             Contributor saveContributor = contributorRepository.save(contributor);
 
             return mapper.entityToDto(saveContributor);

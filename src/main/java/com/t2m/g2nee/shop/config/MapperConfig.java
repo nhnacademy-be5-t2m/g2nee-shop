@@ -55,4 +55,5 @@ public class MapperConfig {
         return new PublisherMapperImpl();
     }
 
+
 }

@@ -3,8 +3,10 @@ package com.t2m.g2nee.shop.orderset.orderdetail.repository.impl;
 import com.querydsl.core.types.Projections;
 import com.t2m.g2nee.shop.bookset.book.domain.QBook;
 import com.t2m.g2nee.shop.couponset.coupon.domain.QCoupon;
+import com.t2m.g2nee.shop.couponset.coupon.domain.QCoupon;
 import com.t2m.g2nee.shop.couponset.coupontype.domain.QCouponType;
 import com.t2m.g2nee.shop.memberset.customer.domain.QCustomer;
+import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import com.t2m.g2nee.shop.orderset.order.domain.QOrder;
 import com.t2m.g2nee.shop.orderset.orderdetail.domain.OrderDetail;
 import com.t2m.g2nee.shop.orderset.orderdetail.domain.QOrderDetail;
@@ -44,5 +46,16 @@ public class OrderDetailRepositoryImpl extends QuerydslRepositorySupport
                         book.title.as("bookName"),
                         packageType.name.as("packageName"),
                         couponType.name.as("couponName"))).orderBy(orderDetail.orderDetailId.desc()).fetch();
+    }
+
+    @Override
+    public List<Order> getRemainOrders(Long orderDetailId, Long couponId) {
+        QCoupon coupon = QCoupon.coupon;
+        return from(orderDetail)
+                .where(coupon.couponId.eq(couponId)
+                        .and(orderDetail.orderDetailId.ne(orderDetailId)))
+                .select(order)
+                .distinct()
+                .fetch();
     }
 }

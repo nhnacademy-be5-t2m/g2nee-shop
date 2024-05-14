@@ -3,9 +3,7 @@ package com.t2m.g2nee.shop.payment.service.impl.paytype.impl;
 import com.t2m.g2nee.shop.exception.CustomException;
 import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.memberset.customer.domain.Customer;
-import com.t2m.g2nee.shop.memberset.customer.repository.CustomerRepository;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
-import com.t2m.g2nee.shop.orderset.order.repository.OrderRepository;
 import com.t2m.g2nee.shop.payment.domain.Payment;
 import com.t2m.g2nee.shop.payment.dto.request.PaymentRequest;
 import com.t2m.g2nee.shop.payment.dto.request.TossPaymentRequestDto;
@@ -42,10 +40,6 @@ public class TossPayment implements PaymentRequestMethod {
 
     private final RestTemplate restTemplate;
 
-    private final OrderRepository orderRepository;
-
-    private final CustomerRepository customerRepository;
-
     private final PaymentRepository paymentRepository;
 
     private String secretKey;
@@ -57,16 +51,11 @@ public class TossPayment implements PaymentRequestMethod {
      * TossPayment의 생성자 입니다.
      *
      * @param restTemplate       toss에 api요청을 보낼 restTemplate
-     * @param orderRepository    주문 정보를 확인할 레포지토리
-     * @param customerRepository 고객 정보를 확인할 레포지토리
      * @param paymentRepository  결제 정보 저장 및 확인을 위한 레포지토리
      * @param secretKey          Toss Payment api 헤더에 들어가야하는 값
      */
-    public TossPayment(RestTemplate restTemplate, OrderRepository orderRepository,
-                       CustomerRepository customerRepository, PaymentRepository paymentRepository, String secretKey) {
+    public TossPayment(RestTemplate restTemplate, PaymentRepository paymentRepository, String secretKey) {
         this.restTemplate = restTemplate;
-        this.orderRepository = orderRepository;
-        this.customerRepository = customerRepository;
         this.paymentRepository = paymentRepository;
         this.secretKey = secretKey;
     }
@@ -82,25 +71,9 @@ public class TossPayment implements PaymentRequestMethod {
      */
     @SneakyThrows
     @Override
-    public Payment requestCreatePayment(PaymentRequest request) {
+    public Payment requestCreatePayment(PaymentRequest request, Customer customer, Order order) {
         if (request instanceof TossPaymentRequestDto) {
             TossPaymentRequestDto tossRequest = (TossPaymentRequestDto) request;
-            //주문이 유효한지 확인
-            Order order = orderRepository.findByOrderNumber(tossRequest.getOrderNumber())
-                    .orElseThrow(() ->
-                            new NotFoundException("유효하지 않은 주문입니다.")
-                    );
-            // 1. 주문서 저장된 금액과 실제 요청 금액이 일치하는지
-            if (!order.getNetAmount().equals(tossRequest.getAmount())) {
-                throw new CustomException(HttpStatus.BAD_REQUEST, "주문 금액이 유효하지 않습니다.");
-            }
-            //2. 결제 주체가 동일한지
-            Customer customer = customerRepository.findById(tossRequest.getCustomerId())
-                    .orElseThrow(() -> new NotFoundException("유효하지 않은 고객입니다."));
-            if (!Objects.equals(customer.getCustomerId(), tossRequest.getCustomerId())) {
-                throw new CustomException(HttpStatus.BAD_REQUEST, "주문자 정보가 유효하지 않습니다.");
-            }
-
 
             //toss RequestBody Param
             JSONObject param = new JSONObject();

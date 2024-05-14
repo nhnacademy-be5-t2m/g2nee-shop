@@ -92,4 +92,6 @@ public interface OrderService {
      * @since : 1.0
      */
     Order getOrder(String orderNumber);
+
+    void applyUseCoupon(Order order);
 }

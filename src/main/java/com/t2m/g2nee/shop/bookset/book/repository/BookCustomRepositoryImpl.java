@@ -26,10 +26,12 @@ import com.t2m.g2nee.shop.fileset.bookfile.domain.BookFile;
 import com.t2m.g2nee.shop.fileset.bookfile.domain.QBookFile;
 import com.t2m.g2nee.shop.fileset.file.domain.QFile;
 import com.t2m.g2nee.shop.like.domain.QBookLike;
+import com.t2m.g2nee.shop.orderset.orderdetail.domain.QOrderDetail;
 import com.t2m.g2nee.shop.review.domain.QReview;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.elasticsearch.index.query.AbstractQueryBuilder;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -60,6 +62,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
     QBookTag bookTag = QBookTag.bookTag;
     QReview review = QReview.review;
     QBookLike bookLike = QBookLike.bookLike;
+    QOrderDetail orderDetail = QOrderDetail.orderDetail;
 
     public BookCustomRepositoryImpl(ElasticsearchOperations operations) {
         super(Book.class);
@@ -255,8 +258,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
         addViewCount(book, bookId);
 
 
-        return toResponse(bookId, bookResponse, contributor, role, bookContributor, bookFile, bookCategory, tag,
-                bookTag, category, categoryPath);
+        return toResponse(bookId, bookResponse);
 
 
     }
@@ -269,30 +271,17 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
      * @return List<BookDto.ListResponse>
      */
     public Page<BookDto.ListResponse> getBooksByElasticSearchAndCategory(Long memberId, Long categoryId, String keyword,
-                                                                         Pageable pageable, String sort) {
+                                                                         Pageable pageable, String sort,
+                                                                         String condition) {
 
         /*
          Elasticsearch search 쿼리
          */
-        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
 
-        // 가중치 설정, 제목과 정확히 일치하면 점수를 매우 높게 설정
-        MatchQueryBuilder titleQuery = QueryBuilders.matchQuery("title.token", keyword).boost(75);
-        MatchQueryBuilder titleKeywordQuery = QueryBuilders.matchQuery("title.keyword", keyword).boost(150);
-        MatchQueryBuilder bookIndexQuery = QueryBuilders.matchQuery("bookIndex.token", keyword).boost(5);
-        MatchQueryBuilder descriptionQuery = QueryBuilders.matchQuery("description.token", keyword).boost(5);
-        MatchQueryBuilder contributorQuery = QueryBuilders.matchQuery("contributorName.token", keyword).boost(30);
-        MatchQueryBuilder publisherQuery = QueryBuilders.matchQuery("publisherName.token", keyword).boost(30);
-
-        boolQuery.should(titleQuery);
-        boolQuery.should(titleKeywordQuery);
-        boolQuery.should(bookIndexQuery);
-        boolQuery.should(descriptionQuery);
-        boolQuery.should(contributorQuery);
-        boolQuery.should(publisherQuery);
+        AbstractQueryBuilder<?> query = searchCondition(keyword, condition);
 
         NativeSearchQueryBuilder searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(boolQuery);
+                .withQuery(query);
         /*
             search 결과로 가져온 인덱스 객체들을 포함하는 hitList
          */
@@ -398,6 +387,23 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                 .fetch();
     }
 
+    /**
+     * 책 수량을 조회하는 메서드
+     *
+     * @param bookIdList 책 아이디 리스트
+     * @return List<BookDto.ListResponse>
+     */
+    @Override
+    public List<BookDto.ListResponse> getBookStock(List<Long> bookIdList) {
+        return from(book)
+                .where(book.bookId.in(bookIdList))
+                .select(Projections.fields(BookDto.ListResponse.class
+                        , book.bookId
+                        , book.title
+                        , book.quantity))
+                .fetch();
+    }
+
 
     /**
      * 도서에 기여자와 역할 정보를 설정하고 반환하는 메서드입니다.
@@ -441,25 +447,9 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
      *
      * @param bookId          책 아이디
      * @param bookResponse    책 responseDto
-     * @param contributor     기여자 객체
-     * @param role            역할 객체
-     * @param bookContributor 책, 기여자, 역할 관계 객체
-     * @param bookFile        이미지 관계 객체
-     * @param bookCategory    카테고리 관계 객체
-     * @param tag             태그 관계 객체
-     * @param bookTag         책태그 관계 객체
-     * @param categoryPath    카테고리들의 관계 객체
      * @return dto response
      */
-    private BookDto.Response toResponse(Long bookId, BookDto.Response bookResponse,
-                                        QContributor contributor, QRole role,
-                                        QBookContributor bookContributor,
-                                        QBookFile bookFile,
-                                        QBookCategory bookCategory,
-                                        QTag tag,
-                                        QBookTag bookTag,
-                                        QCategory category,
-                                        QCategoryPath categoryPath) {
+    private BookDto.Response toResponse(Long bookId, BookDto.Response bookResponse) {
 
 
         /*
@@ -602,6 +592,65 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
     }
 
     /**
+     * 회원이 좋아요한 책을 조회하는 메서드
+     *
+     * @param memberId 회원 아이디
+     * @return List<BookDto.ListResponse>
+     */
+    @Override
+    public Page<BookDto.ListResponse> getMemberLikeBook(Pageable pageable, Long memberId) {
+
+        BooleanExpression isLiked;
+        if (memberId == null) {
+            isLiked = Expressions.asBoolean(false);
+        } else {
+            isLiked = new CaseBuilder().when(bookLike.member.customerId.eq(memberId)).then(true)
+                    .otherwise(false);
+        }
+
+        List<BookDto.ListResponse> bookList = from(book)
+                .innerJoin(bookFile).on(book.bookId.eq(bookFile.book.bookId))
+                .innerJoin(bookLike).on(book.bookId.eq(bookLike.book.bookId))
+                .where(bookFile.imageType.eq(BookFile.ImageType.THUMBNAIL).and(bookLike.member.customerId.eq(memberId)))
+                .select(Projections.fields(BookDto.ListResponse.class
+                        , book.bookId
+                        , book.title
+                        , book.engTitle
+                        , book.bookStatus
+                        , book.quantity
+                        , bookFile.url.as("thumbnailImageUrl")
+                        , isLiked.as("isLiked")))
+                .fetch();
+
+        return new PageImpl<>(bookList, pageable, bookList.size());
+    }
+
+    @Override
+    public List<BookDto.ListResponse> getBestSeller() {
+
+        return from(book)
+                .innerJoin(publisher).on(book.publisher.publisherId.eq(publisher.publisherId))
+                .innerJoin(bookFile).on(book.bookId.eq(bookFile.book.bookId))
+                .innerJoin(orderDetail).on(book.bookId.eq(orderDetail.book.bookId))
+                .where(bookFile.imageType.eq(BookFile.ImageType.THUMBNAIL))
+                .groupBy(book, bookFile)
+                .select(Projections.fields(BookDto.ListResponse.class
+                        , book.bookId
+                        , bookFile.url.as("thumbnailImageUrl")
+                        , book.title
+                        , book.engTitle
+                        , book.publishedDate
+                        , book.price, book.salePrice, book.bookStatus
+                        , publisher.publisherName
+                        , publisher.publisherName
+                        , orderDetail.quantity.sum()
+                ))
+                .orderBy(orderDetail.quantity.sum().desc())
+                .limit(6)
+                .fetch();
+    }
+
+    /**
      * 조회수를 증가 시키는 메서드
      *
      * @param book   책 객체
@@ -648,5 +697,62 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                 orderSpecifier = book.viewCount.desc();
         }
         return orderSpecifier;
+    }
+
+    /**
+     * 통합검색, 출판사 검색, 기여자검색, 태그 검색 선택 시 조건을 반영하는 메서드
+     * @param keyword 검색 키워드
+     * @param condition 검색 조건
+     * @return
+     */
+    private BoolQueryBuilder searchCondition(String keyword, String condition) {
+
+        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+
+        switch (condition) {
+            case "PUBLISHER":
+
+                MatchQueryBuilder publisherTokenQuery = QueryBuilders.matchQuery("publisherName.token", keyword);
+                MatchQueryBuilder publisherJasoQuery = QueryBuilders.matchQuery("publisherName.jaso", keyword);
+                return boolQuery
+                        .must(publisherTokenQuery)
+                        .must(publisherJasoQuery);
+
+            case "CONTRIBUTOR":
+                MatchQueryBuilder contributorTokenQuery = QueryBuilders.matchQuery("contributorName.token", keyword);
+                MatchQueryBuilder contributorJasoQuery = QueryBuilders.matchQuery("contributorName.jaso", keyword);
+                return boolQuery
+                        .must(contributorTokenQuery)
+                        .must(contributorJasoQuery);
+            case "TAG":
+                MatchQueryBuilder tagTokenQuery = QueryBuilders.matchQuery("tagName.token", keyword);
+                MatchQueryBuilder tagJasoQuery = QueryBuilders.matchQuery("tagName.jaso", keyword);
+                return boolQuery
+                        .must(tagTokenQuery)
+                        .must(tagJasoQuery);
+            default:
+
+                // 통합 검색은 가중치 설정
+                MatchQueryBuilder titleTokenQuery = QueryBuilders.matchQuery("title.token", keyword).boost(60);
+                MatchQueryBuilder titleJasoQuery = QueryBuilders.matchQuery("title.jaso", keyword).boost(60);
+
+                MatchQueryBuilder bookIndexQuery = QueryBuilders.matchQuery("bookIndex.token", keyword).boost(5);
+                MatchQueryBuilder descriptionQuery = QueryBuilders.matchQuery("description.token", keyword).boost(5);
+                MatchQueryBuilder contributorQuery =
+                        QueryBuilders.matchQuery("contributorName.token", keyword).boost(20);
+                MatchQueryBuilder tagQuery = QueryBuilders.matchQuery("tagName.token", keyword).boost(15);
+                MatchQueryBuilder publisherQuery = QueryBuilders.matchQuery("publisherName.token", keyword).boost(20);
+
+                boolQuery.should(titleTokenQuery);
+                boolQuery.should(titleJasoQuery);
+                boolQuery.should(bookIndexQuery);
+                boolQuery.should(descriptionQuery);
+                boolQuery.should(contributorQuery);
+                boolQuery.should(tagQuery);
+                boolQuery.should(publisherQuery);
+
+                return boolQuery;
+
+        }
     }
 }
