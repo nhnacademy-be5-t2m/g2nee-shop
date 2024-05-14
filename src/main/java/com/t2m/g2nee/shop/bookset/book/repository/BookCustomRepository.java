@@ -24,5 +24,7 @@ public interface BookCustomRepository {
 
     List<Long> getLowestCategoryId(List<Long> categoryIdList);
 
+    Page<BookDto.ListResponse> getMemberLikeBook(Pageable pageable, Long memberId);
+
 
 }

@@ -9,7 +9,6 @@ import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import com.t2m.g2nee.shop.utils.MarkDownUtil;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -175,6 +174,21 @@ public class BookGetService {
     public List<BookDto.ListResponse> getRecommendBooks(List<Long> categoryIdList, Long bookId) {
 
         return bookRepository.getRecommendBooks(categoryIdList, bookId);
+    }
+
+    /**
+     * 회원이 좋아요한 책을 조회하는 메서드
+     *
+     * @param memberId 회원 아이디
+     * @return List<BookDto.ListResponse>
+     */
+    public PageResponse<BookDto.ListResponse> getMemberLikeBook(int page, Long memberId) {
+        int size = 8;
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        Page<BookDto.ListResponse> bookList = bookRepository.getMemberLikeBook(pageable, memberId);
+
+        return getPageResponse(page, bookList);
     }
 
     /**

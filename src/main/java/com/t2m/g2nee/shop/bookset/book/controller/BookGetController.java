@@ -11,7 +11,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -154,6 +153,20 @@ public class BookGetController {
     public ResponseEntity<List<BookDto.ListResponse>> getBookStock(@RequestParam List<Long> bookIdList) {
 
         List<BookDto.ListResponse> responses = bookGetService.getBookStock(bookIdList);
+        return ResponseEntity.status(HttpStatus.OK).body(responses);
+    }
+
+    /**
+     * 회원이 좋아요한 책을 조회하는 컨트롤러
+     *
+     * @param memberId 회원 아이디
+     * @return ResponseEntity<List < BookDto.ListResponse>>
+     */
+    @GetMapping("/like/member/{memberId}")
+    public ResponseEntity<PageResponse<BookDto.ListResponse>> getMemberLikeBook(
+            @RequestParam(defaultValue = "1") int page, @PathVariable Long memberId) {
+
+        PageResponse<BookDto.ListResponse> responses = bookGetService.getMemberLikeBook(page, memberId);
         return ResponseEntity.status(HttpStatus.OK).body(responses);
     }
 }

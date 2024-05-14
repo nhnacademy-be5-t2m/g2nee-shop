@@ -256,8 +256,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
         addViewCount(book, bookId);
 
 
-        return toResponse(bookId, bookResponse, contributor, role, bookContributor, bookFile, bookCategory, tag,
-                bookTag, category, categoryPath);
+        return toResponse(bookId, bookResponse);
 
 
     }
@@ -446,25 +445,9 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
      *
      * @param bookId          책 아이디
      * @param bookResponse    책 responseDto
-     * @param contributor     기여자 객체
-     * @param role            역할 객체
-     * @param bookContributor 책, 기여자, 역할 관계 객체
-     * @param bookFile        이미지 관계 객체
-     * @param bookCategory    카테고리 관계 객체
-     * @param tag             태그 관계 객체
-     * @param bookTag         책태그 관계 객체
-     * @param categoryPath    카테고리들의 관계 객체
      * @return dto response
      */
-    private BookDto.Response toResponse(Long bookId, BookDto.Response bookResponse,
-                                        QContributor contributor, QRole role,
-                                        QBookContributor bookContributor,
-                                        QBookFile bookFile,
-                                        QBookCategory bookCategory,
-                                        QTag tag,
-                                        QBookTag bookTag,
-                                        QCategory category,
-                                        QCategoryPath categoryPath) {
+    private BookDto.Response toResponse(Long bookId, BookDto.Response bookResponse) {
 
 
         /*
@@ -604,6 +587,40 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                 .having(category.count().eq(1L))
                 .fetch();
 
+    }
+
+    /**
+     * 회원이 좋아요한 책을 조회하는 메서드
+     *
+     * @param memberId 회원 아이디
+     * @return List<BookDto.ListResponse>
+     */
+    @Override
+    public Page<BookDto.ListResponse> getMemberLikeBook(Pageable pageable, Long memberId) {
+
+        BooleanExpression isLiked;
+        if (memberId == null) {
+            isLiked = Expressions.asBoolean(false);
+        } else {
+            isLiked = new CaseBuilder().when(bookLike.member.customerId.eq(memberId)).then(true)
+                    .otherwise(false);
+        }
+
+        List<BookDto.ListResponse> bookList = from(book)
+                .innerJoin(bookFile).on(book.bookId.eq(bookFile.book.bookId))
+                .innerJoin(bookLike).on(book.bookId.eq(bookLike.book.bookId))
+                .where(bookFile.imageType.eq(BookFile.ImageType.THUMBNAIL).and(bookLike.member.customerId.eq(memberId)))
+                .select(Projections.fields(BookDto.ListResponse.class
+                        , book.bookId
+                        , book.title
+                        , book.engTitle
+                        , book.bookStatus
+                        , book.quantity
+                        , bookFile.url.as("thumbnailImageUrl")
+                        , isLiked.as("isLiked")))
+                .fetch();
+
+        return new PageImpl<>(bookList, pageable, bookList.size());
     }
 
     /**
