@@ -1,4 +1,4 @@
-package com.t2m.g2nee.shop.couponset.coupontype.dto;
+package com.t2m.g2nee.shop.couponset.coupontype.dto.response;
 
 import lombok.*;
 
@@ -16,6 +16,9 @@ import java.math.BigDecimal;
 @Setter
 @Builder
 public class CouponTypeInfoDto {
+    /**
+     * admin 페이지에서 쿠폰의 모든 정보를 얻기위한 dto
+     */
 
 
     private Long couponTypeId;
@@ -37,4 +40,6 @@ public class CouponTypeInfoDto {
     private Long bookId;
 
     private String  status;
+
+
 }

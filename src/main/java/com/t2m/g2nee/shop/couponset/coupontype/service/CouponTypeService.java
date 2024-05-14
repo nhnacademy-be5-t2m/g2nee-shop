@@ -1,10 +1,10 @@
 package com.t2m.g2nee.shop.couponset.coupontype.service;
 
-import com.t2m.g2nee.shop.couponset.coupontype.dto.CouponTypeInfoDto;
+import com.t2m.g2nee.shop.couponset.coupontype.dto.request.CouponTypeRequestDto;
+import com.t2m.g2nee.shop.couponset.coupontype.dto.response.CouponTypeCreatedDto;
+import com.t2m.g2nee.shop.couponset.coupontype.dto.response.CouponTypeInfoDto;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * 마이페이지 쿠폰확인 서비스를 위한 인터페이스입니다.
@@ -12,7 +12,6 @@ import java.util.List;
  * @since : 1.0
  */
 
-@Service
 public interface CouponTypeService {
 
 
@@ -23,6 +22,7 @@ public interface CouponTypeService {
      */
     PageResponse<CouponTypeInfoDto> getAllCoupons(int page);
 
+    CouponTypeCreatedDto createCouponType(CouponTypeRequestDto couponTypeRequestDto);
 
 
 

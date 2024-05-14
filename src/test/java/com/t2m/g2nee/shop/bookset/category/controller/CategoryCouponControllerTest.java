@@ -27,7 +27,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class CategoryControllerTest {
+class CategoryCouponControllerTest {
 
     ObjectMapper objectMapper;
     @Autowired
