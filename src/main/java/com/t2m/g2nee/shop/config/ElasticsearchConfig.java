@@ -1,7 +1,7 @@
 package com.t2m.g2nee.shop.config;
 
+import com.t2m.g2nee.shop.properties.NhnCloudKeyProperties;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.client.ClientConfiguration;
 import org.springframework.data.elasticsearch.client.RestClients;
@@ -10,13 +10,16 @@ import org.springframework.data.elasticsearch.config.AbstractElasticsearchConfig
 @Configuration
 public class ElasticsearchConfig extends AbstractElasticsearchConfiguration {
 
-    @Value("${elasticsearch.url}")
-    private String elasticsearchUrl;
+    private final NhnCloudKeyProperties nhnCloudKeyProperties;
+
+    public ElasticsearchConfig(NhnCloudKeyProperties nhnCloudKeyProperties) {
+        this.nhnCloudKeyProperties = nhnCloudKeyProperties;
+    }
 
     @Override
     public RestHighLevelClient elasticsearchClient() {
         ClientConfiguration clientConfiguration = ClientConfiguration.builder()
-                .connectedTo(elasticsearchUrl)
+                .connectedTo(nhnCloudKeyProperties.getProperties(nhnCloudKeyProperties.getElasticsearchUrl()))
                 .build();
         return RestClients.create(clientConfiguration).rest();
     }
