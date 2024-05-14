@@ -443,8 +443,8 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
     /**
      * 도서 응답에 필요한 객체를 설정하고 반환하는 메서드입니다.
      *
-     * @param bookId          책 아이디
-     * @param bookResponse    책 responseDto
+     * @param bookId       책 아이디
+     * @param bookResponse 책 responseDto
      * @return dto response
      */
     private BookDto.Response toResponse(Long bookId, BookDto.Response bookResponse) {
@@ -674,7 +674,8 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
 
     /**
      * 통합검색, 출판사 검색, 기여자검색, 태그 검색 선택 시 조건을 반영하는 메서드
-     * @param keyword 검색 키워드
+     *
+     * @param keyword   검색 키워드
      * @param condition 검색 조건
      * @return
      */

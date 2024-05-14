@@ -134,7 +134,7 @@ public class BookGetService {
      * @param categoryId 카테고리 아이디
      * @param keyword    키워드
      * @param sort       정렬 기준 default viewCount
-     * @param condition 정렬 조건 default INTEGRATION
+     * @param condition  정렬 조건 default INTEGRATION
      * @return PageResponse<BookDto.ListResponse>
      */
     public PageResponse<BookDto.ListResponse> getBookByCategoryAndElasticsearch(int page, Long memberId,
@@ -157,11 +157,12 @@ public class BookGetService {
 
     /**
      * 책 수량을 조회하는 메서드
+     *
      * @return List<BookDto.ListResponse>
      */
-    public List<BookDto.ListResponse> getBookStock(List<Long> bookIdList){
+    public List<BookDto.ListResponse> getBookStock(List<Long> bookIdList) {
 
-        return  bookRepository.getBookStock(bookIdList);
+        return bookRepository.getBookStock(bookIdList);
 
     }
 
