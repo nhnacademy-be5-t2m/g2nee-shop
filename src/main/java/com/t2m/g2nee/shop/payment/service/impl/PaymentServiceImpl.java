@@ -3,6 +3,8 @@ package com.t2m.g2nee.shop.payment.service.impl;
 import com.t2m.g2nee.shop.exception.BadRequestException;
 import com.t2m.g2nee.shop.exception.CustomException;
 import com.t2m.g2nee.shop.exception.NotFoundException;
+import com.t2m.g2nee.shop.memberset.customer.domain.Customer;
+import com.t2m.g2nee.shop.memberset.customer.service.CustomerService;
 import com.t2m.g2nee.shop.memberset.member.service.MemberService;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import com.t2m.g2nee.shop.orderset.order.service.OrderService;
@@ -47,6 +49,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentServiceFactory factory;
     private final MemberService memberService;
     private final PointService pointService;
+    private final CustomerService customerService;
 
 
     /**
@@ -55,19 +58,26 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     @Transactional
     public PaymentInfoDto createPayment(PaymentRequest request) {
+        //유효한 주문인지 확인
         Order order = orderService.getOrder(request.getOrderNumber());
 
         //주문한 사람과 일치하는지 확인
-        if (order.getCustomer().getCustomerId().equals(request.getCustomerId())) {
+        Customer customer = customerService.getCustomerInfo(order.getCustomer().getCustomerId());
+        if (!customer.getCustomerId().equals(request.getCustomerId())) {
             throw new BadRequestException("주문한 사람이 일치하지 않습니다.");
         }
 
+        // 주문서 저장된 금액과 실제 요청 금액이 일치하는지
+        if (!order.getOrderAmount().equals(request.getAmount())) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, "주문 금액이 유효하지 않습니다.");
+        }
+
         //주문상태가 결제대기인지 확인
-        if (order.getOrderState() == Order.OrderState.PAYWAITING) {
+        if (order.getOrderState().equals(Order.OrderState.PAYWAITING)) {
 
             //결제 승인
             PaymentRequestMethod paymentMethod = factory.getPaymentRequest(request.getPayType());
-            Payment payment = paymentMethod.requestCreatePayment(request);
+            Payment payment = paymentMethod.requestCreatePayment(request, customer, order);
 
             //결제 실패 경우: 주문 상태 변경
             if (Objects.isNull(payment)) {
@@ -77,6 +87,8 @@ public class PaymentServiceImpl implements PaymentService {
 
             //재고 변경
             orderDetailService.setBookQuantity(order.getOrderId());
+            //order상태 변경
+            orderService.changeOrderState(order.getOrderId(), Order.OrderState.WAITING);
 
             //회원의 경우 포인트 및 쿠폰 처리
             if (memberService.isMember(request.getCustomerId())) {
