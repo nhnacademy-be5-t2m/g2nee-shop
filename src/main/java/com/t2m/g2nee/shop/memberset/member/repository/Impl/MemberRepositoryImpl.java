@@ -31,6 +31,9 @@ public class MemberRepositoryImpl extends QuerydslRepositorySupport implements M
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Member> findActiveMemberByUsername(String username) {
         QMember member = QMember.member;

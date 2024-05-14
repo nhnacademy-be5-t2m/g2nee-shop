@@ -1,7 +1,6 @@
 package com.t2m.g2nee.shop.memberset.member.controller;
 
 import com.t2m.g2nee.shop.memberset.member.domain.Member;
-import com.t2m.g2nee.shop.memberset.member.dto.request.MemberLoginRequestDto;
 import com.t2m.g2nee.shop.memberset.member.dto.request.SignUpMemberRequestDto;
 import com.t2m.g2nee.shop.memberset.member.dto.request.UsernameRequestDto;
 import com.t2m.g2nee.shop.memberset.member.dto.response.MemberDetailInfoResponseDto;

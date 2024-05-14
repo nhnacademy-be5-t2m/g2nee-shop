@@ -5,6 +5,7 @@ import com.t2m.g2nee.shop.orderset.order.dto.request.OrderCreateRequestDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import com.t2m.g2nee.shop.point.dto.response.GradeResponseDto;
 import java.time.LocalDateTime;
 
 /**
@@ -89,4 +90,10 @@ public interface OrderService {
      */
     void deleteOrder(Long orderId);
 
+    /**
+     * 주문 총액을 가져오는 메소드
+     *
+     * @param memberId
+     */
+    GradeResponseDto getGradeResponse(Long memberId);
 }

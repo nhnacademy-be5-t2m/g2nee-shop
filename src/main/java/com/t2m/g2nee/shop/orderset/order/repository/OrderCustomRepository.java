@@ -3,6 +3,8 @@ package com.t2m.g2nee.shop.orderset.order.repository;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -69,5 +71,13 @@ public interface OrderCustomRepository {
      */
     Optional<Order> findByOrderNumber(String orderNumber);
 
+    /**
+     * member의 지난 3달간의 주문총액
+     *
+     * @param memberId    memberId
+     * @param currentTime 지난 3달 계산을 위한 현재 시간
+     * @return 지난 3달간의 주문총액
+     */
+    BigDecimal getTotalOrderAmount(LocalDateTime currentTime, Long memberId);
 
 }

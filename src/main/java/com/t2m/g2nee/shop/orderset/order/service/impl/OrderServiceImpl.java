@@ -1,9 +1,17 @@
 package com.t2m.g2nee.shop.orderset.order.service.impl;
 
+import static com.t2m.g2nee.shop.memberset.grade.domain.Grade.GradeName.GOLD;
+import static com.t2m.g2nee.shop.memberset.grade.domain.Grade.GradeName.NORMAL;
+import static com.t2m.g2nee.shop.memberset.grade.domain.Grade.GradeName.PLATINUM;
+import static com.t2m.g2nee.shop.memberset.grade.domain.Grade.GradeName.ROYAL;
+
 import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.memberset.customer.domain.Customer;
 import com.t2m.g2nee.shop.memberset.customer.repository.CustomerRepository;
 import com.t2m.g2nee.shop.memberset.customer.service.CustomerService;
+import com.t2m.g2nee.shop.memberset.grade.domain.Grade;
+import com.t2m.g2nee.shop.memberset.grade.repository.GradeRepository;
+import com.t2m.g2nee.shop.memberset.member.domain.Member;
 import com.t2m.g2nee.shop.memberset.member.repository.MemberRepository;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import com.t2m.g2nee.shop.orderset.order.dto.request.OrderCreateRequestDto;
@@ -13,6 +21,7 @@ import com.t2m.g2nee.shop.orderset.order.repository.OrderRepository;
 import com.t2m.g2nee.shop.orderset.order.service.OrderService;
 import com.t2m.g2nee.shop.orderset.orderdetail.repository.OrderDetailRepository;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import com.t2m.g2nee.shop.point.dto.response.GradeResponseDto;
 import com.t2m.g2nee.shop.policyset.pointpolicy.repository.PointPolicyRepository;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -36,6 +45,7 @@ public class OrderServiceImpl implements OrderService {
     private final MemberRepository memberRepository;
     private final OrderDetailRepository orderDetailRepository;
     private final PointPolicyRepository pointPolicyRepository;
+    private final GradeRepository gradeRepository;
     //private final CouponRepository couponRepository;
 
 
@@ -131,6 +141,36 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void deleteOrder(Long orderId) {
         orderRepository.deleteById(orderId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GradeResponseDto getGradeResponse(Long memberId) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        Member member =
+                memberRepository.findActiveMemberById(memberId).orElseThrow(() -> new NotFoundException("회원정보가 없습니다."));
+        Long totalOrderAmount = Long.parseLong(
+                String.valueOf(orderRepository.getTotalOrderAmount(currentTime, memberId)));
+        Grade originGradeName = member.getGrade();
+        Grade newGradeName = null;
+        if (0L <= totalOrderAmount && totalOrderAmount < 100000L) {
+            newGradeName = gradeRepository.findByGradeName(NORMAL);
+        } else if (100000 <= totalOrderAmount && totalOrderAmount < 200000) {
+            newGradeName = gradeRepository.findByGradeName(ROYAL);
+        } else if (200000 <= totalOrderAmount && totalOrderAmount < 300000) {
+            newGradeName = gradeRepository.findByGradeName(GOLD);
+        } else {
+            newGradeName = gradeRepository.findByGradeName(PLATINUM);
+        }
+
+        if (originGradeName != newGradeName) {
+            member.setGrade(newGradeName);
+            memberRepository.save(member);
+        }
+
+        return new GradeResponseDto(totalOrderAmount, newGradeName.getGradeName().getName());
     }
 
 

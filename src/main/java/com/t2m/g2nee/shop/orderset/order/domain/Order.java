@@ -38,7 +38,7 @@ public class Order {
     private BigDecimal deliveryFee; //배송비
     @Enumerated(EnumType.STRING)
     private OrderState orderState;
-    private BigDecimal netAmount;   //순수 금액
+    private BigDecimal netAmount;   //순수금액
     private BigDecimal orderAmount; //주문금액
     private String receiverName;
     private String receiverPhoneNumber;

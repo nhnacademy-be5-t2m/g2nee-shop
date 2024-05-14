@@ -10,7 +10,6 @@ import com.t2m.g2nee.shop.memberset.customer.repository.CustomerRepository;
 import com.t2m.g2nee.shop.memberset.grade.domain.Grade;
 import com.t2m.g2nee.shop.memberset.grade.repository.GradeRepository;
 import com.t2m.g2nee.shop.memberset.member.domain.Member;
-import com.t2m.g2nee.shop.memberset.member.dto.request.MemberLoginRequestDto;
 import com.t2m.g2nee.shop.memberset.member.dto.request.SignUpMemberRequestDto;
 import com.t2m.g2nee.shop.memberset.member.dto.response.MemberDetailInfoResponseDto;
 import com.t2m.g2nee.shop.memberset.member.dto.response.MemberResponse;
@@ -25,7 +24,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

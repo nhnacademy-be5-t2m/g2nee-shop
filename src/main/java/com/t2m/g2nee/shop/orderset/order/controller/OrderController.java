@@ -5,6 +5,7 @@ import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
 import com.t2m.g2nee.shop.orderset.order.service.OrderService;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import com.t2m.g2nee.shop.point.dto.response.GradeResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -126,5 +127,19 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(customerOrderInfoDto);
+    }
+
+    /**
+     * 회원의 지난 3달간 주문금액 총액을 알려주는 메소드
+     *
+     * @param memberId 주문금액 총액을 알아낼 memberId
+     * @return 지난 3달 주문 총 금액
+     */
+    @GetMapping("/change/{memberId}")
+    public ResponseEntity<GradeResponseDto> getTotalOrderAmount(@PathVariable("memberId") Long memberId) {
+        GradeResponseDto result = orderService.getGradeResponse(memberId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(result);
     }
 }
