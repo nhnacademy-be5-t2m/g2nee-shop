@@ -1,4 +1,4 @@
-package com.t2m.g2nee.shop.memberset.member.service.Impl;
+package com.t2m.g2nee.shop.memberset.member.service.impl;
 
 import com.t2m.g2nee.shop.exception.AlreadyExistException;
 import com.t2m.g2nee.shop.exception.NotFoundException;
@@ -10,6 +10,7 @@ import com.t2m.g2nee.shop.memberset.customer.repository.CustomerRepository;
 import com.t2m.g2nee.shop.memberset.grade.domain.Grade;
 import com.t2m.g2nee.shop.memberset.grade.repository.GradeRepository;
 import com.t2m.g2nee.shop.memberset.member.domain.Member;
+import com.t2m.g2nee.shop.memberset.member.dto.request.MemberLoginRequestDto;
 import com.t2m.g2nee.shop.memberset.member.dto.request.SignUpMemberRequestDto;
 import com.t2m.g2nee.shop.memberset.member.dto.response.MemberDetailInfoResponseDto;
 import com.t2m.g2nee.shop.memberset.member.dto.response.MemberResponse;
@@ -20,12 +21,13 @@ import com.t2m.g2nee.shop.point.service.PointService;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
-import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 회원 정보를 위한 service 입니다.
@@ -37,7 +39,6 @@ import org.springframework.stereotype.Service;
 @Service
 @EnableAsync
 @RequiredArgsConstructor
-@Transactional
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final AuthMemberRepository authMemberRepository;
@@ -53,6 +54,7 @@ public class MemberServiceImpl implements MemberService {
      * @throws AlreadyExistException username, nickname 이 중복되는 경우 예외를 던집니다.
      */
     @Override
+    @Transactional
     public MemberResponse signUp(SignUpMemberRequestDto signUpDto) {
 
         if (existsNickname(signUpDto.getNickName())) {
@@ -83,10 +85,12 @@ public class MemberServiceImpl implements MemberService {
                 member.getGrade().getGradeName().toString());
     }
 
+
     /**
      * {@inheritDoc}
      */
     @Override
+    @Transactional(readOnly = true)
     public boolean existsNickname(String nickname) {
         return memberRepository.existsByNickname(nickname);
     }
@@ -95,6 +99,7 @@ public class MemberServiceImpl implements MemberService {
      * {@inheritDoc}
      */
     @Override
+    @Transactional(readOnly = true)
     public boolean existsUsername(String username) {
         return memberRepository.existsByUsername(username);
     }
@@ -107,8 +112,7 @@ public class MemberServiceImpl implements MemberService {
     public boolean isMember(Long customerId) {
         if (!customerRepository.existsById(customerId)) {
             throw new NotFoundException(customerId + "의 정보가 존재하지 않습니다.");
-        }
-        if (!memberRepository.existsById(customerId)) {
+        } else if (!memberRepository.existsById(customerId)) {
             return false;
         }
         return true;
@@ -120,17 +124,17 @@ public class MemberServiceImpl implements MemberService {
      *
      * @throws NotFoundException 으로 username 에 해당하는 정보가 없는 경우 예외를 던집니다.
      */
+    @Transactional(readOnly = true)
     public MemberResponseToAuth getMemberInfo(String username) {
-        if (!existsUsername(username)) {
-            throw new NotFoundException(username + "의 정보가 존재하지 않습니다.");
-        }
-        Member member = (Member) memberRepository.findByUsername(username);
+        Member member = memberRepository.findActiveMemberByUsername(username)
+                .orElseThrow(() -> new NotFoundException(username + "의 정보가 존재하지 않습니다."));
         ArrayList<String> authorities = new ArrayList<>();
         List<AuthMember> authMembers = authMemberRepository.getAuthMembersByMember_CustomerId(member.getCustomerId());
 
         for (AuthMember authMember : authMembers) {
             authorities.add(
-                    String.valueOf(authRepository.findById(authMember.getAuth().getAuthId()).get().getAuthName()));
+                    String.valueOf(authRepository.findById(authMember.getAuth().getAuthId())
+                            .orElseThrow(() -> new NotFoundException("권한 정보가 없습니다.")).getAuthName()));
         }
         return new MemberResponseToAuth(member.getCustomerId(), member.getUsername(), member.getPassword(),
                 authorities);
@@ -142,20 +146,20 @@ public class MemberServiceImpl implements MemberService {
      * @throws NotFoundException 으로 customerId 에 해당하는 정보가 없는 경우 예외를 던집니다.
      */
     @Override
+    @Transactional(readOnly = true)
     public MemberDetailInfoResponseDto getMemberDetailInfo(Long customerId) {
-        if (!memberRepository.existsById(customerId)) {
-            throw new NotFoundException(customerId + "의 정보가 존재하지 않습니다.");
-        }
-        Member member = memberRepository.findById(customerId).get();
+        Member member = memberRepository.findById(customerId)
+                .orElseThrow(() -> new NotFoundException(customerId + "의 정보가 존재하지 않습니다."));
         ArrayList<String> authorities = new ArrayList<>();
         List<AuthMember> authMembers = authMemberRepository.getAuthMembersByMember_CustomerId(member.getCustomerId());
 
         for (AuthMember authMember : authMembers) {
             authorities.add(
-                    String.valueOf(authRepository.findById(authMember.getAuth().getAuthId()).get().getAuthName()));
+                    String.valueOf(authRepository.findById(authMember.getAuth().getAuthId())
+                            .orElseThrow(() -> new NotFoundException("권한 정보를 찾을 수 없습니다.")).getAuthName()));
         }
 
-        MemberDetailInfoResponseDto memberDetail = new MemberDetailInfoResponseDto(
+        return new MemberDetailInfoResponseDto(
                 member.getCustomerId(),
                 member.getName(),
                 member.getUsername(),
@@ -168,7 +172,6 @@ public class MemberServiceImpl implements MemberService {
                 member.getMemberStatus(),
                 authorities
         );
-        return memberDetail;
     }
 
     /**
@@ -177,11 +180,12 @@ public class MemberServiceImpl implements MemberService {
      * @throws NotFoundException 으로 username 에 해당하는 정보가 없는 경우 예외를 던집니다.
      */
     @Override
+    @Transactional(readOnly = true)
     public MemberDetailInfoResponseDto getMemberDetailInfoToAccessToken(String accessToken) {
         Base64.Decoder decoder = Base64.getUrlDecoder();
-        String[] access_chunks = accessToken.split("\\.");
-        String access_payload = new String(decoder.decode(access_chunks[1]));
-        JSONObject aObject = new JSONObject(access_payload);
+        String[] accessChunks = accessToken.split("\\.");
+        String accessPayload = new String(decoder.decode(accessChunks[1]));
+        JSONObject aObject = new JSONObject(accessPayload);
         String username = aObject.getString("username");
 
         if (!memberRepository.existsByUsername(username)) {
@@ -189,5 +193,38 @@ public class MemberServiceImpl implements MemberService {
         }
         Member member = (Member) memberRepository.findByUsername(username);
         return getMemberDetailInfo(member.getCustomerId());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<Member> getAllMembers() {
+        return memberRepository.findAll();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws NotFoundException 으로 customerId 에 해당하는 정보가 없는 경우 예외를 던집니다.
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Member getMember(Long customerId) {
+        return memberRepository.findById(customerId).orElseThrow(() -> new NotFoundException("존재하지 않는 회원입니다."));
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws NotFoundException 으로 username 에 해당하는 정보가 없는 경우 예외를 던집니다.
+     */
+    @Override
+    public Member modifyStatus(Long memberId, String status) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NotFoundException("존재하지 않는 회원입니다."));
+
+        member.setMemberStatus(Member.MemberStatus.valueOf(status));
+        return memberRepository.save(member);
     }
 }

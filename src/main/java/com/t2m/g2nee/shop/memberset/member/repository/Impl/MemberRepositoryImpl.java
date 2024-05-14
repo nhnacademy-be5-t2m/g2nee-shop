@@ -31,4 +31,15 @@ public class MemberRepositoryImpl extends QuerydslRepositorySupport implements M
         );
     }
 
+    @Override
+    public Optional<Member> findActiveMemberByUsername(String username) {
+        QMember member = QMember.member;
+        return Optional.ofNullable(
+                queryFactory.selectFrom(member)
+                        .where(member.username.eq(username)
+                                .and(member.memberStatus.eq(Member.MemberStatus.ACTIVE)))
+                        .fetchOne()
+        );
+    }
+
 }

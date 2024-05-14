@@ -20,7 +20,7 @@
 //import com.t2m.g2nee.shop.memberset.member.dto.request.SignUpMemberRequestDto;
 //import com.t2m.g2nee.shop.memberset.member.dto.response.MemberResponse;
 //import com.t2m.g2nee.shop.memberset.member.repository.MemberRepository;
-//import com.t2m.g2nee.shop.memberset.member.service.Impl.MemberServiceImpl;
+//import com.t2m.g2nee.shop.memberset.member.service.impl.MemberServiceImpl;
 //import com.t2m.g2nee.shop.memberset.member.service.dummy.MemberDummy;
 //import com.t2m.g2nee.shop.point.service.PointService;
 //import org.junit.jupiter.api.BeforeEach;
