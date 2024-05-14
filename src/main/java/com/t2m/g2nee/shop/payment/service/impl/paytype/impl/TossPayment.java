@@ -50,9 +50,9 @@ public class TossPayment implements PaymentRequestMethod {
     /**
      * TossPayment의 생성자 입니다.
      *
-     * @param restTemplate       toss에 api요청을 보낼 restTemplate
-     * @param paymentRepository  결제 정보 저장 및 확인을 위한 레포지토리
-     * @param secretKey          Toss Payment api 헤더에 들어가야하는 값
+     * @param restTemplate      toss에 api요청을 보낼 restTemplate
+     * @param paymentRepository 결제 정보 저장 및 확인을 위한 레포지토리
+     * @param secretKey         Toss Payment api 헤더에 들어가야하는 값
      */
     public TossPayment(RestTemplate restTemplate, PaymentRepository paymentRepository, String secretKey) {
         this.restTemplate = restTemplate;

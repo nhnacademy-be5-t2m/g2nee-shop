@@ -42,8 +42,8 @@ public interface PointService {
 
     /**
      * member에게 구매시 포인트를 주는 메소드
-     * @param memberId
-     * * @param order
+     *
+     * @param memberId * @param order
      */
     void givePurchasePoint(Long memberId, Order order);
 
