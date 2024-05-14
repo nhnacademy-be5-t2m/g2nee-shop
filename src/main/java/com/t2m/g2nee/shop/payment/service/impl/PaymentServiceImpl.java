@@ -15,8 +15,8 @@ import com.t2m.g2nee.shop.payment.dto.request.PaymentRequest;
 import com.t2m.g2nee.shop.payment.dto.response.PaymentInfoDto;
 import com.t2m.g2nee.shop.payment.repository.PaymentRepository;
 import com.t2m.g2nee.shop.payment.service.PaymentService;
+import com.t2m.g2nee.shop.payment.service.PaymentSupportService;
 import com.t2m.g2nee.shop.payment.service.impl.paytype.PaymentRequestMethod;
-import com.t2m.g2nee.shop.point.service.PointService;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
@@ -48,8 +48,8 @@ public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentServiceFactory factory;
     private final MemberService memberService;
-    private final PointService pointService;
     private final CustomerService customerService;
+    private final PaymentSupportService paymentSupportService;
 
 
     /**
@@ -74,6 +74,8 @@ public class PaymentServiceImpl implements PaymentService {
 
         //주문상태가 결제대기인지 확인
         if (order.getOrderState().equals(Order.OrderState.PAYWAITING)) {
+            //재고 변경
+            orderDetailService.setBookQuantity(order.getOrderId());
 
             //결제 승인
             PaymentRequestMethod paymentMethod = factory.getPaymentRequest(request.getPayType());
@@ -85,35 +87,19 @@ public class PaymentServiceImpl implements PaymentService {
                 throw new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, "결제에 실패하였습니다.");
             }
 
-            //재고 변경
-            orderDetailService.setBookQuantity(order.getOrderId());
-            //order상태 변경
-            orderService.changeOrderState(order.getOrderId(), Order.OrderState.WAITING);
+            payment = paymentSupportService.memberPayment(order.getOrderId(), payment);
 
             //회원의 경우 포인트 및 쿠폰 처리
             if (memberService.isMember(request.getCustomerId())) {
-                memberPayment(request.getCustomerId(), order, request.getPoint());
+                paymentSupportService.memberPoint(request.getCustomerId(), order, request.getPoint());
+                paymentSupportService.memberCoupon(order);
             }
 
-            //결제 테이블 저장
-            return convertToPaymentInfoDto(paymentRepository.save(payment));
+            return convertToPaymentInfoDto(payment);
         }
 
         //결제 대기 상태가 아닌 경우 예외
         throw new BadRequestException("결제에 유효한 주문이 아닙니다.");
-
-    }
-
-    private void memberPayment(Long customerId, Order order, int point) {
-        //포인트 사용
-        if (point > 0) {
-            pointService.usePoint(customerId, order.getOrderId(), point);
-        }
-        //포인트 저장
-        pointService.givePurchasePoint(customerId, order.getOrderAmount());
-
-        //쿠폰 사용으로 변경
-        orderService.applyUseCoupon(order);
     }
 
     /**
@@ -187,7 +173,8 @@ public class PaymentServiceImpl implements PaymentService {
      */
     private PaymentInfoDto convertToPaymentInfoDto(Payment payment) {
 
-        return new PaymentInfoDto(payment.getPaymentId(), payment.getAmount(), payment.getPayType(),
+        return new PaymentInfoDto(payment.getPaymentId(), payment.getAmount(),
+                payment.getPayType().split("-")[1].trim(),
                 payment.getPaymentDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
                 payment.getPayStatus().getName(), payment.getOrder().getOrderId(),
                 payment.getOrder().getOrderNumber(), orderDetailService.getOrderName(payment.getOrder().getOrderId()));
