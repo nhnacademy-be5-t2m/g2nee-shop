@@ -25,7 +25,7 @@ public class CouponTypeInfoDto {
 
     private String expirationDate;
 
-    private String  status;
+    private String status;
 
     private Long couponTypeId;
 
@@ -37,7 +37,7 @@ public class CouponTypeInfoDto {
 
     private BigDecimal discount;
 
-    private BigDecimal  minimumOrderAmount;
+    private BigDecimal minimumOrderAmount;
 
     private BigDecimal maximumDiscount;
 

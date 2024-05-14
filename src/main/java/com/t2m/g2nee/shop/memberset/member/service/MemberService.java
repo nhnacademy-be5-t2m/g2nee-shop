@@ -1,6 +1,7 @@
 package com.t2m.g2nee.shop.memberset.member.service;
 
 import com.t2m.g2nee.shop.memberset.member.domain.Member;
+import com.t2m.g2nee.shop.memberset.member.dto.request.MemberLoginRequestDto;
 import com.t2m.g2nee.shop.memberset.member.dto.request.SignUpMemberRequestDto;
 import com.t2m.g2nee.shop.memberset.member.dto.response.MemberDetailInfoResponseDto;
 import com.t2m.g2nee.shop.memberset.member.dto.response.MemberResponse;
@@ -90,4 +91,13 @@ public interface MemberService {
      * @author : 김수빈
      */
     Member getMember(Long customerId);
+
+    /**
+     * 회원의 상태를 변경하는 메소드
+     *
+     * @param status   바꿀 status
+     * @param memberId 바꿔야할 회원 id
+     * @return 바꿔진 Member 객체
+     */
+    Member modifyStatus(Long memberId, String status);
 }
