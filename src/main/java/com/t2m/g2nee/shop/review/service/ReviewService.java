@@ -10,6 +10,7 @@ import com.t2m.g2nee.shop.memberset.member.repository.MemberRepository;
 import com.t2m.g2nee.shop.nhnstorage.AuthService;
 import com.t2m.g2nee.shop.nhnstorage.ObjectService;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import com.t2m.g2nee.shop.point.service.PointService;
 import com.t2m.g2nee.shop.review.domain.Review;
 import com.t2m.g2nee.shop.review.dto.ReviewDto;
 import com.t2m.g2nee.shop.review.repository.ReviewRepository;
@@ -43,6 +44,7 @@ public class ReviewService {
     private final ObjectService objectService;
     private final AuthService authService;
     private final ReviewFileRepository reviewFileRepository;
+    private final PointService pointService;
 
     /**
      * 리뷰를 등록하는 메서드
@@ -71,6 +73,12 @@ public class ReviewService {
         if (image != null) {
             String tokenId = authService.requestToken();
             url = uploadImage(image, saveReview, tokenId, book.getEngTitle(), member.getCustomerId());
+            //사진 리뷰적립금 부여
+            pointService.givePhotoReviewPoint(member);
+        } else {
+            //리뷰적립금 부여
+            pointService.giveReviewPoint(member);
+
         }
 
         return ReviewDto.Response.builder()

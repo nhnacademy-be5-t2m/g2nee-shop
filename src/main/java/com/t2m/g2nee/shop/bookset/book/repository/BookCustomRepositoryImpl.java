@@ -27,7 +27,6 @@ import com.t2m.g2nee.shop.fileset.bookfile.domain.QBookFile;
 import com.t2m.g2nee.shop.fileset.file.domain.QFile;
 import com.t2m.g2nee.shop.like.domain.QBookLike;
 import com.t2m.g2nee.shop.review.domain.QReview;
-import com.t2m.g2nee.shop.shoppingcart.dto.ShoppingCartDto;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -180,6 +179,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                                 , book.price
                                 , book.salePrice
                                 , book.bookStatus
+                                , book.quantity
                                 , publisher.publisherName
                                 , publisher.publisherEngName
                                 , isLiked.as("isLiked")
@@ -260,6 +260,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
 
 
     }
+
     /**
      * Elasticsearch를 이용해서 키워드를 통해 가중치를 부여하여 검색하고 필요에 따라 카테고리를 필터링하여 검색하는 메서드 입니다.
      *
@@ -275,14 +276,16 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
          */
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
 
-        // 가중치 설정
-        MatchQueryBuilder titleQuery = QueryBuilders.matchQuery("title", keyword).boost(75);
-        MatchQueryBuilder bookIndexQuery = QueryBuilders.matchQuery("bookIndex", keyword).boost(5);
-        MatchQueryBuilder descriptionQuery = QueryBuilders.matchQuery("description", keyword).boost(5);
-        MatchQueryBuilder contributorQuery = QueryBuilders.matchQuery("contributorName", keyword).boost(30);
-        MatchQueryBuilder publisherQuery = QueryBuilders.matchQuery("publisherName", keyword).boost(30);
+        // 가중치 설정, 제목과 정확히 일치하면 점수를 매우 높게 설정
+        MatchQueryBuilder titleQuery = QueryBuilders.matchQuery("title.token", keyword).boost(75);
+        MatchQueryBuilder titleKeywordQuery = QueryBuilders.matchQuery("title.keyword", keyword).boost(150);
+        MatchQueryBuilder bookIndexQuery = QueryBuilders.matchQuery("bookIndex.token", keyword).boost(5);
+        MatchQueryBuilder descriptionQuery = QueryBuilders.matchQuery("description.token", keyword).boost(5);
+        MatchQueryBuilder contributorQuery = QueryBuilders.matchQuery("contributorName.token", keyword).boost(30);
+        MatchQueryBuilder publisherQuery = QueryBuilders.matchQuery("publisherName.token", keyword).boost(30);
 
         boolQuery.should(titleQuery);
+        boolQuery.should(titleKeywordQuery);
         boolQuery.should(bookIndexQuery);
         boolQuery.should(descriptionQuery);
         boolQuery.should(contributorQuery);
@@ -338,6 +341,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                                 , book.engTitle
                                 , book.publishedDate
                                 , book.viewCount
+                                , book.quantity
                                 , book.price
                                 , book.salePrice
                                 , book.bookStatus
@@ -385,6 +389,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                         , book.bookId
                         , bookFile.url.as("thumbnailImageUrl")
                         , book.title
+                        , book.quantity
                         , book.engTitle
                         , book.bookStatus
                         , book.viewCount))
@@ -397,7 +402,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
     /**
      * 도서에 기여자와 역할 정보를 설정하고 반환하는 메서드입니다.
      *
-     * @param responseList    책 responseDto 리스트
+     * @param responseList 책 responseDto 리스트
      * @return dto response
      */
     private List<BookDto.ListResponse> toListResponseList(List<BookDto.ListResponse> responseList) {
@@ -543,7 +548,8 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
 
     /**
      * 카테고리 ID가 요청으로 왔을 때 필터링을 위한 메서드
-     * @param categoryId   카테고리 아이디
+     *
+     * @param categoryId 카테고리 아이디
      * @return BooleanExpression
      */
     private BooleanExpression eqCategoryBookId(Long categoryId) {

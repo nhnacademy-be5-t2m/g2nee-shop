@@ -18,7 +18,7 @@ public interface PackageService {
      * 포장지를 저장합니다.
      *
      * @param request 포장지 저장 객체
-     * @param image 포장지 이미지
+     * @param image   포장지 이미지
      * @return PackageInfoDto
      */
     PackageInfoDto savePackage(MultipartFile image, PackageSaveDto request);

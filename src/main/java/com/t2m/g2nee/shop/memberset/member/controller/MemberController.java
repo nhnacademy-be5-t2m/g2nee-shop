@@ -1,5 +1,7 @@
 package com.t2m.g2nee.shop.memberset.member.controller;
 
+import com.t2m.g2nee.shop.memberset.member.domain.Member;
+import com.t2m.g2nee.shop.memberset.member.dto.request.MemberLoginRequestDto;
 import com.t2m.g2nee.shop.memberset.member.dto.request.SignUpMemberRequestDto;
 import com.t2m.g2nee.shop.memberset.member.dto.request.UsernameRequestDto;
 import com.t2m.g2nee.shop.memberset.member.dto.response.MemberDetailInfoResponseDto;
@@ -41,7 +43,6 @@ public class MemberController {
     @PostMapping("/signup")
     public ResponseEntity<MemberResponse> memberSignUp(@Valid @RequestBody SignUpMemberRequestDto signUpDto) {
         MemberResponse memberResponse = memberService.signUp(signUpDto);
-
         return ResponseEntity.status(HttpStatus.CREATED)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(memberResponse);
@@ -120,4 +121,19 @@ public class MemberController {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(result);
     }
+
+    /**
+     * member의 상태를 바꾸는 메소드
+     *
+     * @param status 중복여부를 체크할 nickname
+     * @return 중복여부를 true, false 로 반환
+     */
+    @PostMapping("/{memberId}/changeStatus")
+    public ResponseEntity<String> changeStatus(@PathVariable("memberId") Long memberId, @RequestBody String status) {
+        Member member = memberService.modifyStatus(memberId, status);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(member.getMemberStatus().getName());
+    }
+
 }

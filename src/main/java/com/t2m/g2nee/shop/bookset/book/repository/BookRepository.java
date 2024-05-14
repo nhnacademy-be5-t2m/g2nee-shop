@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface BookRepository extends JpaRepository<Book, Long>, BookCustomRepository {
 
-    @Query("SELECT b FROM Book b WHERE b.bookStatus = 'DELETED'")
+    @Query("SELECT b FROM Book b WHERE b.bookId = :bookId AND b.bookStatus != 'DELETED'")
     Optional<Book> findByBookId(Long bookId);
 }

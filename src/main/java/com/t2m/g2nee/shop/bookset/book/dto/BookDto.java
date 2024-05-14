@@ -115,6 +115,7 @@ public class BookDto {
         private String publisherEngName;
         private BookStatus bookStatus;
         private List<BookContributorDto.Response> contributorRoleList;
+        private int quantity;
         private Long bookLikeId;
         private boolean isLiked;
         private Long reviewCount;
