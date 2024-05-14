@@ -36,8 +36,8 @@ public interface OrderService {
     /**
      * 회원의 전체 주문 조회
      *
-     * @param page       현재 페이지.
-     * @param customerId 회원번호.
+     * @param page     현재 페이지.
+     * @param memberId 회원번호.
      * @return 회원의 모든 주문 반환
      */
     PageResponse<GetOrderInfoResponseDto> getOrderListForMembers(int page, Long memberId);
