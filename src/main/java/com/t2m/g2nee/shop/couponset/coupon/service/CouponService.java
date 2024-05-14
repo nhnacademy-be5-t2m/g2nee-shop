@@ -1,5 +1,6 @@
 package com.t2m.g2nee.shop.couponset.coupon.service;
 
+import com.t2m.g2nee.shop.couponset.coupon.domain.Coupon;
 import com.t2m.g2nee.shop.couponset.coupon.dto.request.CouponDownloadDto;
 import com.t2m.g2nee.shop.couponset.coupon.dto.request.CouponIssueDto;
 import com.t2m.g2nee.shop.couponset.coupon.dto.response.CouponInfoDto;
@@ -49,5 +50,8 @@ public interface CouponService {
      * @return
      */
     PageResponse<CouponInfoDto> getTotalCoupons(Long customerId, int page);
+
+
+    Coupon getCoupon(Long couponId);
 
 }

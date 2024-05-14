@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -117,6 +118,23 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(customerOrderInfoDto);
+    }
+
+    /**
+     * 주문 상태 변경
+     *
+     * @param orderId    주문Id
+     * @param orderState 주문 상태
+     * @return 주문 상태 변경된 주문 정보
+     */
+    @PatchMapping("/state/{orderId}")
+    public ResponseEntity<GetOrderInfoResponseDto> changeOrderState(@PathVariable("orderId") Long orderId,
+                                                                    Order.OrderState orderState) {
+        orderService.changeOrderState(orderId, orderState);
+        GetOrderInfoResponseDto orderInfoResponseDto = orderService.getOrderInfoById(orderId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(orderInfoResponseDto);
     }
 
 

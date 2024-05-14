@@ -14,6 +14,7 @@ import com.t2m.g2nee.shop.couponset.coupon.service.CouponService;
 import com.t2m.g2nee.shop.couponset.coupontype.domain.CouponType;
 import com.t2m.g2nee.shop.couponset.coupontype.service.CouponTypeService;
 import com.t2m.g2nee.shop.exception.BadRequestException;
+import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.memberset.member.domain.Member;
 import com.t2m.g2nee.shop.memberset.member.service.MemberService;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
@@ -228,5 +229,10 @@ public class CouponServiceImpl implements CouponService {
                 coupon.getCouponType().getPeriod(), coupon.getCouponType().getType().getName(),
                 target
         );
+    }
+
+    @Override
+    public Coupon getCoupon(Long couponId) {
+        return couponRepository.findById(couponId).orElseThrow(() -> new NotFoundException("쿠폰이 존재하지 않습니다."));
     }
 }
