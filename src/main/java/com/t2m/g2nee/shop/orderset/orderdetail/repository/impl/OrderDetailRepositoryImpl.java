@@ -2,7 +2,9 @@ package com.t2m.g2nee.shop.orderset.orderdetail.repository.impl;
 
 import com.querydsl.core.types.Projections;
 import com.t2m.g2nee.shop.bookset.book.domain.QBook;
+import com.t2m.g2nee.shop.couponset.coupon.domain.QCoupon;
 import com.t2m.g2nee.shop.memberset.customer.domain.QCustomer;
+import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import com.t2m.g2nee.shop.orderset.order.domain.QOrder;
 import com.t2m.g2nee.shop.orderset.orderdetail.domain.OrderDetail;
 import com.t2m.g2nee.shop.orderset.orderdetail.domain.QOrderDetail;
@@ -41,7 +43,13 @@ public class OrderDetailRepositoryImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public List<OrderDetail> findByOrder_OrderId(Long orderId) {
-        return null;
+    public List<Order> getRemainOrders(Long orderDetailId, Long couponId) {
+        QCoupon coupon = QCoupon.coupon;
+        return from(orderDetail)
+                .where(coupon.couponId.eq(couponId)
+                        .and(orderDetail.orderDetailId.ne(orderDetailId)))
+                .select(order)
+                .distinct()
+                .fetch();
     }
 }

@@ -220,4 +220,14 @@ public class BookGetService {
                 .totalElements(bookPage.getTotalElements())
                 .build();
     }
+
+    /**
+     * bookId로 책을 얻는 메소드입니다.
+     *
+     * @param bookId 책 id
+     * @return Book 객체
+     */
+    public Book getBook(Long bookId) {
+        return bookRepository.findById(bookId).orElseThrow(() -> new NotFoundException("책 정보가 없습니다"));
+    }
 }

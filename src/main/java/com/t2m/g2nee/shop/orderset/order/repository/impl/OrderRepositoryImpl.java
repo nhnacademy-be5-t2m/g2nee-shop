@@ -12,7 +12,6 @@ import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminRespon
 import com.t2m.g2nee.shop.orderset.order.repository.OrderCustomRepository;
 import com.t2m.g2nee.shop.orderset.orderdetail.domain.QOrderDetail;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -168,11 +167,4 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
                         order.message,
                         couponType.name.as("couponName"))).fetchOne();
     }
-
-    @Override
-    public Optional<Order> findByOrderNumber(String orderNumber) {
-        return Optional.empty();
-    }
-
-
 }

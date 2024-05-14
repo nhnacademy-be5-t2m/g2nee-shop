@@ -22,7 +22,8 @@ import lombok.Setter;
         visible = true //true 일 경우 property에 있는 값도 역직렬화
 )
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = TossPaymentRequestDto.class, name = "toss")//역직렬화 할 수 있는 하위 클래스
+        @JsonSubTypes.Type(value = TossPaymentRequestDto.class, name = "toss"),//역직렬화 할 수 있는 하위 클래스
+        @JsonSubTypes.Type(value = PaymentRequestDto.class, name = "point")
 })
 @NoArgsConstructor
 @AllArgsConstructor
@@ -52,4 +53,9 @@ public abstract class PaymentRequest {
      */
     @NotBlank
     private String payType;
+
+    /**
+     * 사용 포인트
+     */
+    private Integer point;
 }

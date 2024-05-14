@@ -14,7 +14,7 @@ public interface CustomerService {
     Customer saveCustomer(CustomerSaveRequest customerRequest);
 
     /**
-     * 비회원의 정보를 가져오는 메소드
+     * 고객의 정보를 가져오는 메소드
      *
      * @param customerId
      * @return customer 정보를 반환
