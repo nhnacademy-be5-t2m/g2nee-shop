@@ -40,7 +40,7 @@ public interface OrderService {
      * @param customerId 회원번호.
      * @return 회원의 모든 주문 반환
      */
-    PageResponse<GetOrderInfoResponseDto> getOrderListForMembers(int page, Long customerId);
+    PageResponse<GetOrderInfoResponseDto> getOrderListForMembers(int page, Long memberId);
 
     /**
      * 주문 정보 조회

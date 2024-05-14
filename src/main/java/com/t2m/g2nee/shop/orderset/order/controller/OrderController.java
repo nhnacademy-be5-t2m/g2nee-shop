@@ -72,15 +72,15 @@ public class OrderController {
     /**
      * member가 주문을 조회
      *
-     * @param page       현재 page
-     * @param customerId 회원번호
+     * @param page     현재 page
+     * @param memberId 회원번호
      * @return 200, 회원의 전체 주문
      */
-    @GetMapping("/members/{customerId}/")
+    @GetMapping("/members/{memberId}/list")
     public ResponseEntity<PageResponse<GetOrderInfoResponseDto>> getOrderListForMembers(
-            @RequestParam int page, @PathVariable("customerId") Long customerId) {
+            @PathVariable("memberId") Long memberId, @RequestParam int page) {
         PageResponse<GetOrderInfoResponseDto> memberListResponse =
-                orderService.getOrderListForMembers(page, customerId);
+                orderService.getOrderListForMembers(page, memberId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)

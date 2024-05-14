@@ -64,11 +64,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public PageResponse<GetOrderInfoResponseDto> getOrderListForMembers(int page, Long customerId) {
+    public PageResponse<GetOrderInfoResponseDto> getOrderListForMembers(int page, Long memberId) {
         int size = 5;
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdAt"));
         Page<GetOrderInfoResponseDto> returnOrderList =
-                orderRepository.getOrderListForMembers(pageable, customerId);
+                orderRepository.getOrderListForMembers(pageable, memberId);
         PageResponse<GetOrderInfoResponseDto> pageResponse = new PageResponse<>();
         return pageResponse.getPageResponse(page, 4, returnOrderList);
     }

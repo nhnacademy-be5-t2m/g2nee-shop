@@ -96,11 +96,11 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
 
 
     @Override
-    public Page<GetOrderInfoResponseDto> getOrderListForMembers(Pageable pageable, Long customerId) {
+    public Page<GetOrderInfoResponseDto> getOrderListForMembers(Pageable pageable, Long memberId) {
         List<GetOrderInfoResponseDto> queryMemberOrderList = from(order)
                 .innerJoin(member).on(order.customer.customerId.eq(member.customerId))
                 .leftJoin(couponType).on(order.coupon.couponType.couponTypeId.eq(couponType.couponTypeId))
-                .where(order.customer.customerId.eq(customerId))
+                .where(order.customer.customerId.eq(memberId))
                 .select(Projections.fields(GetOrderInfoResponseDto.class,
                         order.orderId,
                         order.orderNumber,
