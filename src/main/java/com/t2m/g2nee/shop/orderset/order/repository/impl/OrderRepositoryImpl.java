@@ -95,11 +95,11 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
 
 
     @Override
-    public Page<GetOrderInfoResponseDto> getOrderListForMembers(Pageable pageable, Long customerId) {
+    public Page<GetOrderInfoResponseDto> getOrderListForMembers(Pageable pageable, Long memberId) {
         List<GetOrderInfoResponseDto> queryMemberOrderList = from(order)
                 .innerJoin(member).on(order.customer.customerId.eq(member.customerId))
                 .leftJoin(couponType).on(order.coupon.couponType.couponTypeId.eq(couponType.couponTypeId))
-                .where(order.customer.customerId.eq(customerId))
+                .where(order.customer.customerId.eq(memberId))
                 .select(Projections.fields(GetOrderInfoResponseDto.class,
                         order.orderId,
                         order.orderNumber,
@@ -123,14 +123,18 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long customerId) {
+    public GetOrderInfoResponseDto getOrderInfoById(Long orderId) {
+
         return from(order)
-                .innerJoin(member).on(order.customer.customerId.eq(member.customerId))
+                .innerJoin(customer).on(order.customer.customerId.eq(customer.customerId))
                 .leftJoin(couponType).on(order.coupon.couponType.couponTypeId.eq(couponType.couponTypeId))
-                .where(order.orderId.eq(orderId).and(order.customer.customerId.eq(customerId)))
+                .innerJoin(orderDetail).on(order.orderId.eq(orderDetail.order.orderId))
+                .where(order.orderId.eq(orderId))
                 .select(Projections.fields(GetOrderInfoResponseDto.class,
                         order.orderId,
                         order.orderNumber,
+                        customer.customerId.as("customerId"),
+                        customer.name.as("customerName"),
                         order.orderDate,
                         order.deliveryWishDate,
                         order.deliveryFee,
@@ -155,6 +159,8 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
                         order.orderId,
                         order.orderNumber,
                         order.orderDate,
+                        customer.customerId.as("customerId"),
+                        customer.name.as("customerName"),
                         order.deliveryWishDate,
                         order.deliveryFee,
                         order.orderState,

@@ -36,21 +36,20 @@ public interface OrderCustomRepository {
     /**
      * 회원의 전체 주문 반환.
      *
-     * @param pageable   paging
-     * @param customerId 회원번호
+     * @param pageable paging
+     * @param memberId 회원번호
      * @return 회원 전체 주문 반환
      */
-    Page<GetOrderInfoResponseDto> getOrderListForMembers(Pageable pageable, Long customerId);
+    Page<GetOrderInfoResponseDto> getOrderListForMembers(Pageable pageable, Long memberId);
 
 
     /**
      * 주문id로 단일 주문 정보 반환(회원용)
      *
-     * @param orderId    주문id
-     * @param customerId 회원id
+     * @param orderId 주문id
      * @return 주문 정보 반환
      */
-    GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long customerId);
+    GetOrderInfoResponseDto getOrderInfoById(Long orderId);
 
     /**
      * 주문번호로 주문 정보 반환(비회원용)

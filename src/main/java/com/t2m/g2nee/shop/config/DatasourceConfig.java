@@ -30,6 +30,8 @@ public class DatasourceConfig {
         basicDataSource.setValidationQuery("SELECT 1");
         basicDataSource.setMinIdle(20);
         basicDataSource.setMaxIdle(20);
+        basicDataSource.setMaxTotal(20);
+        basicDataSource.setInitialSize(20);
         return basicDataSource;
 
     }

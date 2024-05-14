@@ -68,11 +68,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public PageResponse<GetOrderInfoResponseDto> getOrderListForMembers(int page, Long customerId) {
+    public PageResponse<GetOrderInfoResponseDto> getOrderListForMembers(int page, Long memberId) {
         int size = 5;
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdAt"));
         Page<GetOrderInfoResponseDto> returnOrderList =
-                orderRepository.getOrderListForMembers(pageable, customerId);
+                orderRepository.getOrderListForMembers(pageable, memberId);
         PageResponse<GetOrderInfoResponseDto> pageResponse = new PageResponse<>();
         return pageResponse.getPageResponse(page, 4, returnOrderList);
     }
@@ -80,8 +80,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long customerId) {
-        return orderRepository.getOrderInfoById(orderId, customerId);
+    public GetOrderInfoResponseDto getOrderInfoById(Long orderId) {
+        orderRepository.findById(orderId).orElseThrow(()
+                -> new NotFoundException("주문이 존재하지 않습니다."));
+
+        return orderRepository.getOrderInfoById(orderId);
+
     }
 
     //주문 번호로 조회
@@ -236,4 +240,5 @@ public class OrderServiceImpl implements OrderService {
                 order.getCustomer().getEmail(), order.getCustomer().getPhoneNumber(), order.getCustomer().getName()
         );
     }
+
 }

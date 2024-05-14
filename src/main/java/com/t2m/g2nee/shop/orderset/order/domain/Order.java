@@ -69,7 +69,6 @@ public class Order {
         }
     }
 
-
     public void changeState(OrderState orderState) {
         this.orderState = orderState;
     }

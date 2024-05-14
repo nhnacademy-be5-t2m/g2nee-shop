@@ -3,6 +3,8 @@ package com.t2m.g2nee.shop.orderset.orderdetail.repository.impl;
 import com.querydsl.core.types.Projections;
 import com.t2m.g2nee.shop.bookset.book.domain.QBook;
 import com.t2m.g2nee.shop.couponset.coupon.domain.QCoupon;
+import com.t2m.g2nee.shop.couponset.coupon.domain.QCoupon;
+import com.t2m.g2nee.shop.couponset.coupontype.domain.QCouponType;
 import com.t2m.g2nee.shop.memberset.customer.domain.QCustomer;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import com.t2m.g2nee.shop.orderset.order.domain.QOrder;
@@ -21,6 +23,8 @@ public class OrderDetailRepositoryImpl extends QuerydslRepositorySupport
     QCustomer customer = QCustomer.customer;
     QBook book = QBook.book;
     QPackageType packageType = QPackageType.packageType;
+    QCoupon coupon = QCoupon.coupon;
+    QCouponType couponType = QCouponType.couponType;
 
     public OrderDetailRepositoryImpl() {
         super(OrderDetail.class);
@@ -32,6 +36,7 @@ public class OrderDetailRepositoryImpl extends QuerydslRepositorySupport
         return from(orderDetail)
                 .innerJoin(packageType).on(orderDetail.packageType.packageId.eq(packageType.packageId))
                 .innerJoin(book).on(orderDetail.book.bookId.eq(book.bookId))
+                .leftJoin(couponType).on(orderDetail.coupon.couponType.couponTypeId.eq(couponType.couponTypeId))
                 .where(orderDetail.order.orderId.eq(orderId))/////
                 .select(Projections.fields(GetOrderDetailResponseDto.class,
                         orderDetail.orderDetailId,
@@ -39,7 +44,8 @@ public class OrderDetailRepositoryImpl extends QuerydslRepositorySupport
                         orderDetail.quantity,
                         orderDetail.isCancelled,
                         book.title.as("bookName"),
-                        packageType.name.as("packageName"))).fetch();
+                        packageType.name.as("packageName"),
+                        couponType.name.as("couponName"))).orderBy(orderDetail.orderDetailId.desc()).fetch();
     }
 
     @Override

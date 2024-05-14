@@ -51,6 +51,7 @@ public interface CouponService {
      */
     PageResponse<CouponInfoDto> getTotalCoupons(Long customerId, int page);
 
+
     /**
      * 쿠폰 id로 쿠폰을 얻는 메소드 입니다.
      *

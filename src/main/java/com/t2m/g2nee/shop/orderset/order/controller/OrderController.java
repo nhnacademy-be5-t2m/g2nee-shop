@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,7 +42,7 @@ public class OrderController {
      * @param page 현재 페이지
      * @return 전체 주문 반환
      */
-    @GetMapping("/admin/orders")
+    @GetMapping("/admin/orders/list")
     public ResponseEntity<PageResponse<GetOrderListForAdminResponseDto>> getAllOrders(
             @RequestParam int page) {
         PageResponse<GetOrderListForAdminResponseDto> adminListResponse = orderService.getALlOrderList(page);
@@ -58,7 +59,7 @@ public class OrderController {
      * @param orderState 주문 상태
      * @return 주문 list
      */
-    @GetMapping("/admin/orders/{orderState}")
+    @GetMapping("/admin/orders/list/{orderState}")
     public ResponseEntity<PageResponse<GetOrderListForAdminResponseDto>> getAllOrdersByState(
             @RequestParam int page, @PathVariable Order.OrderState orderState) {
         PageResponse<GetOrderListForAdminResponseDto> adminListResponse =
@@ -72,15 +73,15 @@ public class OrderController {
     /**
      * member가 주문을 조회
      *
-     * @param page       현재 page
-     * @param customerId 회원번호
+     * @param page     현재 page
+     * @param memberId 회원번호
      * @return 200, 회원의 전체 주문
      */
-    @GetMapping("/members/{customerId}/")
+    @GetMapping("/members/{memberId}/list")
     public ResponseEntity<PageResponse<GetOrderInfoResponseDto>> getOrderListForMembers(
-            @RequestParam int page, @PathVariable("customerId") Long customerId) {
+            @PathVariable("memberId") Long memberId, @RequestParam int page) {
         PageResponse<GetOrderInfoResponseDto> memberListResponse =
-                orderService.getOrderListForMembers(page, customerId);
+                orderService.getOrderListForMembers(page, memberId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -88,20 +89,20 @@ public class OrderController {
     }
 
     /**
-     * 주문id로 주문 정보 조회(회원용)
+     * 주문id로 주문 정보 조회
      *
      * @param orderId 주문 id
      * @return 200, 주문 정보 반환
      */
     //@MemberAndAuth
-    @GetMapping("/members/{customerId}/order/{orderId}")
+    @GetMapping("/order/{orderId}")
     public ResponseEntity<GetOrderInfoResponseDto> getOrderInfoByOrderId(
-            @PathVariable Long orderId, @PathVariable Long customerId) {
-        GetOrderInfoResponseDto orderInfoResponseDto = orderService.getOrderInfoById(orderId, customerId);
+            @PathVariable Long orderId) {
+        GetOrderInfoResponseDto orderInfoResponseDto = orderService.getOrderInfoById(orderId);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(orderInfoResponseDto);
-
     }
 
     /**
@@ -117,6 +118,23 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(customerOrderInfoDto);
+    }
+
+    /**
+     * 주문 상태 변경
+     *
+     * @param orderId    주문Id
+     * @param orderState 주문 상태
+     * @return 주문 상태 변경된 주문 정보
+     */
+    @PatchMapping("/state/{orderId}")
+    public ResponseEntity<GetOrderInfoResponseDto> changeOrderState(@PathVariable("orderId") Long orderId,
+                                                                    Order.OrderState orderState) {
+        orderService.changeOrderState(orderId, orderState);
+        GetOrderInfoResponseDto orderInfoResponseDto = orderService.getOrderInfoById(orderId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(orderInfoResponseDto);
     }
 
 
