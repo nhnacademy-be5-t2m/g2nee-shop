@@ -142,7 +142,7 @@ public class OrderServiceImpl implements OrderService {
         //주문 저장
         Order order = orderRepository.save(
                 Order.builder()
-                        .orderNumber("g2nee-order-" + UUID.randomUUID().toString())
+                        .orderNumber(UUID.randomUUID().toString())
                         .orderDate(LocalDateTime.now())
                         .deliveryWishDate(wishDate)
                         .deliveryFee(BigDecimal.valueOf(deliveryFee))
@@ -151,7 +151,7 @@ public class OrderServiceImpl implements OrderService {
                         .orderAmount(BigDecimal.valueOf(orderSaveDto.getOrderAmount()))
                         .receiverName(orderSaveDto.getReceiverName())
                         .receiverPhoneNumber(orderSaveDto.getReceiverPhoneNumber())
-                        .receiveAddress(orderSaveDto.getReceiveAddress())
+                        .receiveAddress(orderSaveDto.getReceiverAddress())
                         .zipcode(orderSaveDto.getZipcode())
                         .detailAddress(orderSaveDto.getDetailAddress())
                         .message(orderSaveDto.getMessage())
@@ -227,13 +227,13 @@ public class OrderServiceImpl implements OrderService {
                 orderDetailService.getOrderName(order.getOrderId()),
                 order.getOrderNumber(), order.getOrderAmount(), order.getCustomer().getCustomerId(),
                 orderDetails,
-
                 order.getOrderId(), order.getOrderDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
                 order.getDeliveryWishDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
                 order.getDeliveryFee(),
                 order.getOrderState().getName(), order.getNetAmount(), order.getReceiverName(),
                 order.getReceiverPhoneNumber(),
-                order.getReceiveAddress(), order.getZipcode(), order.getDetailAddress(), order.getMessage(), couponName
+                order.getReceiveAddress(), order.getZipcode(), order.getDetailAddress(), order.getMessage(), couponName,
+                order.getCustomer().getEmail(), order.getCustomer().getPhoneNumber(), order.getCustomer().getName()
         );
     }
 }

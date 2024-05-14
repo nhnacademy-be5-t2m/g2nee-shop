@@ -56,5 +56,5 @@ public abstract class PaymentRequest {
     /**
      * 사용 포인트
      */
-    private int point;
+    private Integer point;
 }

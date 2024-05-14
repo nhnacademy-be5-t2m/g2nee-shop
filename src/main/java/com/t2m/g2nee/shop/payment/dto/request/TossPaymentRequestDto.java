@@ -32,7 +32,7 @@ public class TossPaymentRequestDto extends PaymentRequest {
      * @param paymentKey  페이먼트 키
      */
     public TossPaymentRequestDto(String orderNumber, BigDecimal amount, Long customerId, String payType,
-                                 String paymentKey, int point) {
+                                 String paymentKey, Integer point) {
         super(orderNumber, amount, customerId, payType, point);
         this.paymentKey = paymentKey;
     }

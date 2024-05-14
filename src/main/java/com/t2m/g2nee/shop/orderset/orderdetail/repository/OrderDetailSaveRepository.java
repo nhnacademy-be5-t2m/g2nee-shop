@@ -33,7 +33,8 @@ public class OrderDetailSaveRepository {
                     ps.setLong(4, orderDetail.getBook().getBookId());
                     ps.setLong(5, orderDetail.getPackageType().getPackageId());
                     ps.setLong(6, orderDetail.getOrder().getOrderId());
-                    ps.setLong(7, orderDetail.getCoupon().getCouponId());
+                    ps.setObject(7,
+                            orderDetail.getCoupon() != null ? orderDetail.getCoupon().getCouponId() : null);
                 });
     }
 }

@@ -53,6 +53,3 @@ public class OrderDetailRepositoryImpl extends QuerydslRepositorySupport
                 .fetch();
     }
 }
-/*
-SELECT od FROM OrderDetail od WHERE od.coupon.couponId = :couponId AND od.orderDetailId <> :orderDetailId
- */
