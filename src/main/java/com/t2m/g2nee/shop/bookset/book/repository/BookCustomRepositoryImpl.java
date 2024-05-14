@@ -26,6 +26,7 @@ import com.t2m.g2nee.shop.fileset.bookfile.domain.BookFile;
 import com.t2m.g2nee.shop.fileset.bookfile.domain.QBookFile;
 import com.t2m.g2nee.shop.fileset.file.domain.QFile;
 import com.t2m.g2nee.shop.like.domain.QBookLike;
+import com.t2m.g2nee.shop.orderset.orderdetail.domain.QOrderDetail;
 import com.t2m.g2nee.shop.review.domain.QReview;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +62,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
     QBookTag bookTag = QBookTag.bookTag;
     QReview review = QReview.review;
     QBookLike bookLike = QBookLike.bookLike;
+    QOrderDetail orderDetail = QOrderDetail.orderDetail;
 
     public BookCustomRepositoryImpl(ElasticsearchOperations operations) {
         super(Book.class);
@@ -621,6 +623,31 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                 .fetch();
 
         return new PageImpl<>(bookList, pageable, bookList.size());
+    }
+
+    @Override
+    public List<BookDto.ListResponse> getBestSeller() {
+
+        return from(book)
+                .innerJoin(publisher).on(book.publisher.publisherId.eq(publisher.publisherId))
+                .innerJoin(bookFile).on(book.bookId.eq(bookFile.book.bookId))
+                .innerJoin(orderDetail).on(book.bookId.eq(orderDetail.book.bookId))
+                .where(bookFile.imageType.eq(BookFile.ImageType.THUMBNAIL))
+                .groupBy(book, bookFile)
+                .select(Projections.fields(BookDto.ListResponse.class
+                        , book.bookId
+                        , bookFile.url.as("thumbnailImageUrl")
+                        , book.title
+                        , book.engTitle
+                        , book.publishedDate
+                        , book.price, book.salePrice, book.bookStatus
+                        , publisher.publisherName
+                        , publisher.publisherName
+                        , orderDetail.quantity.sum()
+                ))
+                .orderBy(orderDetail.quantity.sum().desc())
+                .limit(6)
+                .fetch();
     }
 
     /**

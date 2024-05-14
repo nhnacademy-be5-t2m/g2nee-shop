@@ -26,5 +26,7 @@ public interface BookCustomRepository {
 
     Page<BookDto.ListResponse> getMemberLikeBook(Pageable pageable, Long memberId);
 
+    List<BookDto.ListResponse> getBestSeller();
+
 
 }

@@ -24,19 +24,17 @@ public class NhnCloudKeyProperties {
     private String dbUrlKeyId;
     private String dbUsernameKeyId;
     private String dbPasswordKeyId;
-    private String elasticsearchUrl;
     private String tossKeyId;
 
     @ConstructorBinding
     public NhnCloudKeyProperties(String url, String path, String appKey, String dbUrlKeyId, String dbUsernameKeyId,
-                                 String dbPasswordKeyId, String elasticsearchUrl, String tossKeyId) {
+                                 String dbPasswordKeyId, String tossKeyId) {
         this.url = url;
         this.path = path;
         this.appKey = appKey;
         this.dbUrlKeyId = dbUrlKeyId;
         this.dbUsernameKeyId = dbUsernameKeyId;
         this.dbPasswordKeyId = dbPasswordKeyId;
-        this.elasticsearchUrl = elasticsearchUrl;
         this.tossKeyId = tossKeyId;
     }
 
@@ -53,10 +51,10 @@ public class NhnCloudKeyProperties {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
-        String url = getUrl() + getPath() + getAppKey();
+        String nhnUrl = getUrl() + getPath() + getAppKey();
 
         HttpEntity<String> requestEntity = new HttpEntity<>(httpHeaders);
-        ResponseEntity<KeyResponseDto> exchange = restTemplate.exchange(url + keyId,
+        ResponseEntity<KeyResponseDto> exchange = restTemplate.exchange(nhnUrl + keyId,
                 HttpMethod.GET,
                 requestEntity,
                 new ParameterizedTypeReference<>() {
