@@ -10,6 +10,7 @@ import com.t2m.g2nee.shop.memberset.customer.repository.CustomerRepository;
 import com.t2m.g2nee.shop.memberset.grade.domain.Grade;
 import com.t2m.g2nee.shop.memberset.grade.repository.GradeRepository;
 import com.t2m.g2nee.shop.memberset.member.domain.Member;
+import com.t2m.g2nee.shop.memberset.member.dto.request.MemberLoginRequestDto;
 import com.t2m.g2nee.shop.memberset.member.dto.request.SignUpMemberRequestDto;
 import com.t2m.g2nee.shop.memberset.member.dto.response.MemberDetailInfoResponseDto;
 import com.t2m.g2nee.shop.memberset.member.dto.response.MemberResponse;
@@ -24,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -83,6 +85,7 @@ public class MemberServiceImpl implements MemberService {
                 member.getGrade().getGradeName().toString());
     }
 
+
     /**
      * {@inheritDoc}
      */
@@ -123,10 +126,8 @@ public class MemberServiceImpl implements MemberService {
      */
     @Transactional(readOnly = true)
     public MemberResponseToAuth getMemberInfo(String username) {
-        if (!existsUsername(username)) {
-            throw new NotFoundException(username + "의 정보가 존재하지 않습니다.");
-        }
-        Member member = (Member) memberRepository.findByUsername(username);
+        Member member = memberRepository.findActiveMemberByUsername(username)
+                .orElseThrow(() -> new NotFoundException(username + "의 정보가 존재하지 않습니다."));
         ArrayList<String> authorities = new ArrayList<>();
         List<AuthMember> authMembers = authMemberRepository.getAuthMembersByMember_CustomerId(member.getCustomerId());
 
@@ -205,10 +206,25 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * {@inheritDoc}
+     *
+     * @throws NotFoundException 으로 customerId 에 해당하는 정보가 없는 경우 예외를 던집니다.
      */
     @Override
     @Transactional(readOnly = true)
     public Member getMember(Long customerId) {
         return memberRepository.findById(customerId).orElseThrow(() -> new NotFoundException("존재하지 않는 회원입니다."));
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws NotFoundException 으로 username 에 해당하는 정보가 없는 경우 예외를 던집니다.
+     */
+    @Override
+    public Member modifyStatus(Long memberId, String status) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NotFoundException("존재하지 않는 회원입니다."));
+
+        member.setMemberStatus(Member.MemberStatus.valueOf(status));
+        return memberRepository.save(member);
     }
 }

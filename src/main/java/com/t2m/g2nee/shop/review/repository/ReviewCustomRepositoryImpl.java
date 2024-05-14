@@ -50,7 +50,7 @@ public class ReviewCustomRepositoryImpl extends QuerydslRepositorySupport implem
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        Long count = from(review).select(review.count()).fetchOne();
+        Long count = from(review).where(review.book.bookId.eq(bookId)).select(review.count()).fetchOne();
 
         return new PageImpl<>(reviewList, pageable, count);
     }
