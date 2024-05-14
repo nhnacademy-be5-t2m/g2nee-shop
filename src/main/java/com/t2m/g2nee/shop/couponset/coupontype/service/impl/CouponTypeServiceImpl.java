@@ -7,10 +7,8 @@ import com.t2m.g2nee.shop.bookset.book.repository.BookRepository;
 import com.t2m.g2nee.shop.bookset.category.domain.Category;
 import com.t2m.g2nee.shop.bookset.category.repository.CategoryRepository;
 import com.t2m.g2nee.shop.couponset.bookcoupon.domain.BookCoupon;
-import com.t2m.g2nee.shop.couponset.bookcoupon.dto.request.BookCouponRequestDto;
 import com.t2m.g2nee.shop.couponset.bookcoupon.repository.BookCouponRepository;
 import com.t2m.g2nee.shop.couponset.categorycoupon.domain.CategoryCoupon;
-import com.t2m.g2nee.shop.couponset.categorycoupon.dto.request.CategoryCouponRequestDto;
 import com.t2m.g2nee.shop.couponset.categorycoupon.repository.CategoryCouponRepository;
 import com.t2m.g2nee.shop.couponset.coupontype.domain.CouponType;
 import com.t2m.g2nee.shop.couponset.coupontype.dto.request.CouponTypeRequestDto;
@@ -106,39 +104,62 @@ public class CouponTypeServiceImpl implements CouponTypeService {
                 .status(couponTypeRequestDto.getStatus())
                 .build();
 
-        CouponType savedCouponType = (CouponType) couponTypeRepository.save(couponTypeInfo);
-        if (couponTypeRequestDto instanceof BookCouponRequestDto) {
-            BookCouponRequestDto bookCouponRequestDto = (BookCouponRequestDto) couponTypeRequestDto;
-            Book book = bookRepository.findById(bookCouponRequestDto.getBookId()).orElseThrow(() -> new NotFoundException("Book을 찾을 수 없습니다 " + bookCouponRequestDto.getBookId()));
+        CouponType savedCouponType =  couponTypeRepository.save(couponTypeInfo);
 
-            BookCoupon bookCoupon = BookCoupon.builder()
-                    .couponTypeId(couponTypeRequestDto.getCouponTypeId())
-                    .book(book)
-                    .build();
-
-            bookCoupon.setCouponTypeId(savedCouponType.getCouponTypeId());
-
-            bookCouponRepository.save(bookCoupon);
-
-        } else if (couponTypeRequestDto instanceof CategoryCouponRequestDto) {
-            CategoryCouponRequestDto categoryCouponRequestDto = (CategoryCouponRequestDto) couponTypeRequestDto;
-            Category category = categoryRepository.findById(categoryCouponRequestDto.getCategoryId()).orElseThrow(() -> new NotFoundException("카테고리를 찾을 수 없습니다 " + categoryCouponRequestDto.getCategoryId()));
-
-            CategoryCoupon categoryCoupon = CategoryCoupon.builder()
-                    .category(category)
-                    .build();
-
-            categoryCoupon.setCouponTypeId(savedCouponType.getCouponTypeId());
-            categoryCouponRepository.save(categoryCoupon);
-
-        }
 
         return new CouponTypeCreatedDto(savedCouponType.getPeriod(), savedCouponType.getName(), savedCouponType.getType(), savedCouponType.getDiscount());
 
     }
 
+    @Override
+    public CouponTypeCreatedDto createBookCoupon(CouponTypeRequestDto couponTypeRequestDto) {
+
+        Book book = bookRepository.findById(couponTypeRequestDto.getBookId()).orElseThrow(() -> new NotFoundException("Book을 찾을 수 없습니다 " + couponTypeRequestDto.getBookId()));
 
 
+        BookCoupon bookCouponInfo = BookCoupon.builder()
+                .couponTypeId(couponTypeRequestDto.getCouponTypeId())
+                .name(couponTypeRequestDto.getName())
+                .period(couponTypeRequestDto.getPeriod())
+                .type(couponTypeRequestDto.getType())
+                .discount(couponTypeRequestDto.getDiscount())
+                .type(couponTypeRequestDto.getType())
+                .discount(couponTypeRequestDto.getDiscount())
+                .minimumOrderAmount(couponTypeRequestDto.getMinimumOrderAmount())
+                .maximumDiscount(couponTypeRequestDto.getMaximumDiscount())
+                .status(couponTypeRequestDto.getStatus())
+                .book(book)
+                .build();
+
+        BookCoupon savedBookCoupon = bookCouponRepository.save(bookCouponInfo);
+
+        return new CouponTypeCreatedDto(savedBookCoupon.getPeriod(), savedBookCoupon.getName(), savedBookCoupon.getType(), savedBookCoupon.getDiscount());
+    }
+
+    @Override
+    public CouponTypeCreatedDto createCategoryCoupon(CouponTypeRequestDto couponTypeRequestDto) {
+
+        Category category = categoryRepository.findById(couponTypeRequestDto.getCategoryId()).orElseThrow(() -> new NotFoundException("Category를 찾을 수 없습니다 " + couponTypeRequestDto.getBookId()));
+
+        CategoryCoupon categoryCouponInfo = CategoryCoupon.builder()
+                .couponTypeId(couponTypeRequestDto.getCouponTypeId())
+                .name(couponTypeRequestDto.getName())
+                .period(couponTypeRequestDto.getPeriod())
+                .type(couponTypeRequestDto.getType())
+                .discount(couponTypeRequestDto.getDiscount())
+                .type(couponTypeRequestDto.getType())
+                .discount(couponTypeRequestDto.getDiscount())
+                .minimumOrderAmount(couponTypeRequestDto.getMinimumOrderAmount())
+                .maximumDiscount(couponTypeRequestDto.getMaximumDiscount())
+                .status(couponTypeRequestDto.getStatus())
+                .category(category)
+                .build();
+
+        CategoryCoupon savedCategoryCoupon = categoryCouponRepository.save(categoryCouponInfo);
+
+
+        return new CouponTypeCreatedDto(savedCategoryCoupon.getPeriod(), savedCategoryCoupon.getName(), savedCategoryCoupon.getType(), savedCategoryCoupon.getDiscount());
+    }
 
 
     private CouponTypeInfoDto convertToDTO(CouponTypeInfoDto couponTypeInfoDto) {

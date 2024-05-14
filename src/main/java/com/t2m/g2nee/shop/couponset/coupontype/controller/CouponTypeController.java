@@ -43,9 +43,42 @@ public class CouponTypeController {
 
     }
 
-    @PostMapping("createdCouponTypeInfo")
+    /**
+     * 관리자가 일반 쿠폰을 생성할 수 있는 메소드
+     * @param couponTypeRequestDto
+     * @return
+     */
+
+    @PostMapping("createCouponType")
     public ResponseEntity<CouponTypeCreatedDto> createCouponType(@RequestBody CouponTypeRequestDto couponTypeRequestDto){
         CouponTypeCreatedDto couponTypeCreatedDto  = couponTypeService.createCouponType(couponTypeRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(couponTypeCreatedDto);
+
+    }
+    /**
+     * 관리자가 도서 쿠폰을 생성할 수 있는 메소드
+     * @param couponTypeRequestDto
+     * @return
+     */
+    @PostMapping("createBookCoupon")
+    public ResponseEntity<CouponTypeCreatedDto> createBookCoupon(@RequestBody CouponTypeRequestDto couponTypeRequestDto){
+        CouponTypeCreatedDto couponTypeCreatedDto  = couponTypeService.createBookCoupon(couponTypeRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(couponTypeCreatedDto);
+
+    }
+
+    /**
+     * 관리자가 카테고리 쿠폰을 생성할 수 있는 메소드
+     * @param couponTypeRequestDto
+     * @return
+     */
+    @PostMapping("createCategoryCoupon")
+    public ResponseEntity<CouponTypeCreatedDto> createCategoryCoupon(@RequestBody CouponTypeRequestDto couponTypeRequestDto){
+        CouponTypeCreatedDto couponTypeCreatedDto  = couponTypeService.createCategoryCoupon(couponTypeRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(couponTypeCreatedDto);

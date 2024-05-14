@@ -24,6 +24,11 @@ public interface CouponTypeService {
 
     CouponTypeCreatedDto createCouponType(CouponTypeRequestDto couponTypeRequestDto);
 
+    CouponTypeCreatedDto createBookCoupon(CouponTypeRequestDto couponTypeRequestDto);
+
+    CouponTypeCreatedDto createCategoryCoupon(CouponTypeRequestDto couponTypeRequestDto);
+
+
 
 
 
