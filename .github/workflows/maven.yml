@@ -31,6 +31,7 @@ jobs:
         run: mvn -B package --file pom.xml
         env:
           APP_KEY: ${{ secrets.APP_KEY }}
+          NHNCLOUD_TOKEN_TENANT_ID: ${{ secrets.NHNCLOUD_TOKEN_TENANT_ID }}
 
       - name: Run SonarQube
         run: mvn sonar:sonar -Dsonar.projectKey=g2neeShop -Dsonar.host.url=${{secrets.SONAR_HOST}} -Dsonar.login=${{secrets.SONAR_TOKEN}}
