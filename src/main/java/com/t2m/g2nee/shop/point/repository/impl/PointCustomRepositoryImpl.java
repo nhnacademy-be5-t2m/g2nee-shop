@@ -73,6 +73,7 @@ public class PointCustomRepositoryImpl extends QuerydslRepositorySupport impleme
                         , point.point
                         , point.changeDate
                         , point.changeReason.as("reason")))
+                .orderBy(point.changeDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
