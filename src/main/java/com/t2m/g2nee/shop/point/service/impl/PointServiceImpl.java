@@ -125,6 +125,9 @@ public class PointServiceImpl implements PointService {
         PointPolicyInfoDto pointPolicyInfoDto =
                 pointPolicyService.getPointPolicyByPointName(member.getGrade().getGradeName().getName());
         int point = new BigDecimal(pointPolicyInfoDto.getAmount()).multiply(order.getOrderAmount()).intValue();
+        if(point<=0){
+            return;
+        }
         PointCreateRequestDto pointCreateRequestDto = new PointCreateRequestDto(
                 member.getCustomerId(),
                 order.getOrderId(),
