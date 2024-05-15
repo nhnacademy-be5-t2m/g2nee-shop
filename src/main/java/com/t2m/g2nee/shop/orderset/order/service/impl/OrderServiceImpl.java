@@ -78,12 +78,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public GetOrderInfoResponseDto getOrderInfoById(Long orderId) {
-        orderRepository.findById(orderId).orElseThrow(()
-                -> new NotFoundException("주문이 존재하지 않습니다."));
-
-        return orderRepository.getOrderInfoById(orderId);
-
+    public GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long customerId) {
+        return orderRepository.getOrderInfoById(orderId, customerId);
     }
 
     //주문 번호로 조회
