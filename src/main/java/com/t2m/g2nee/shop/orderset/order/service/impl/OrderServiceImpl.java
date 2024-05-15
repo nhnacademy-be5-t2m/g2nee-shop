@@ -1,7 +1,5 @@
 package com.t2m.g2nee.shop.orderset.order.service.impl;
 
-import com.t2m.g2nee.shop.bookset.category.domain.Category;
-import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryInfoDto;
 import com.t2m.g2nee.shop.couponset.coupon.domain.Coupon;
 import com.t2m.g2nee.shop.couponset.coupon.service.CouponService;
 import com.t2m.g2nee.shop.exception.NotFoundException;
@@ -17,7 +15,6 @@ import com.t2m.g2nee.shop.orderset.order.service.OrderService;
 import com.t2m.g2nee.shop.orderset.orderdetail.dto.response.GetOrderDetailResponseDto;
 import com.t2m.g2nee.shop.orderset.orderdetail.service.OrderDetailService;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
-import com.t2m.g2nee.shop.policyset.deliverypolicy.service.DeliveryPolicyService;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -42,7 +39,6 @@ public class OrderServiceImpl implements OrderService {
     private final CustomerService customerService;
     private final OrderDetailService orderDetailService;
     private final CouponService couponService;
-    private final DeliveryPolicyService deliveryPolicyService;
 
     private static final int MAXPAGEBUTTONS = 5;
 
@@ -152,17 +148,6 @@ public class OrderServiceImpl implements OrderService {
         if (Objects.nonNull(orderSaveDto.getDeliveryWishDate())) {
             wishDate = LocalDateTime.parse(orderSaveDto.getDeliveryWishDate() + "T00:00:00");
         }
-
-        //배송비 확인
-//        DeliveryPolicyInfoDto deliveryPolicy = deliveryPolicyService.getDeliveryPolicy();
-//        int deliveryFee = orderSaveDto.getDeliveryFee();
-//        boolean overDelivery = (orderSaveDto.getOrderAmount() < deliveryPolicy.getFreeDeliveryStandard()) &&
-//                (deliveryFee == deliveryPolicy.getDeliveryFee());
-//        boolean underDelivery = (orderSaveDto.getOrderAmount() >= deliveryPolicy.getFreeDeliveryStandard()) &&
-//                (deliveryFee != 0);
-//        if (overDelivery || underDelivery) {
-//            throw new BadRequestException("배송비가 일치하지 않습니다.");
-//        }
 
         //주문 저장
         Order order = orderRepository.save(

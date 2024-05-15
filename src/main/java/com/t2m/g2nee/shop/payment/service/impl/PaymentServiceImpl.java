@@ -20,6 +20,7 @@ import com.t2m.g2nee.shop.payment.service.impl.paytype.PaymentRequestMethod;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -132,9 +133,12 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     @Transactional(readOnly = true)
     public PaymentInfoDto getPayment(Long orderId) {
-        return convertToPaymentInfoDto(
-                paymentRepository.findByOrder_OrderId(orderId)
-                        .orElseThrow(() -> new NotFoundException("결제가 존재하지 않습니다.")));
+        Optional<Payment> paymentOptional = paymentRepository.findByOrder_OrderId(orderId);
+        if (paymentOptional.isPresent()) {
+            return convertToPaymentInfoDto(paymentOptional.get());
+        } else {
+            return null;
+        }
     }
 
     /**

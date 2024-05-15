@@ -156,8 +156,9 @@ public class PointServiceImpl implements PointService {
         Point point = pointRepository.findUsePointByOrderId(orderId)
                 .orElseThrow(() -> new NotFoundException("orderId에 해당하는 사용된 포인트가 없습니다."));
 
-        pointRepository.findReturnPointByOrderId(orderId).orElseThrow(
-                () -> new BadRequestException("해당 주문에 사용된 포인트는 이미 반환되었습니다."));
+        if(point.getChangeReason().equals(RETURN)){
+            throw new BadRequestException("해당 주문에 사용된 포인트는 이미 반환되었습니다.");
+        }
 
         PointCreateRequestDto pointCreateRequestDto = new PointCreateRequestDto(
                 order.getCustomer().getCustomerId(),
