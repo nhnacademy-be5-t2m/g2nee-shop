@@ -278,6 +278,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
          Elasticsearch search 쿼리
          */
 
+        // 통합, 출판사, 태그, 참여자 검색 쿼리 생성
         AbstractQueryBuilder<?> query = searchCondition(keyword, condition);
 
         NativeSearchQueryBuilder searchQuery = new NativeSearchQueryBuilder()
