@@ -25,13 +25,13 @@ import com.t2m.g2nee.shop.orderset.orderdetail.dto.response.GetOrderDetailRespon
 import com.t2m.g2nee.shop.orderset.orderdetail.service.OrderDetailService;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import com.t2m.g2nee.shop.point.dto.response.GradeResponseDto;
-import com.t2m.g2nee.shop.policyset.deliverypolicy.service.DeliveryPolicyService;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -49,9 +49,11 @@ public class OrderServiceImpl implements OrderService {
     private final CustomerService customerService;
     private final OrderDetailService orderDetailService;
     private final CouponService couponService;
+
+    private static final int MAXPAGEBUTTONS = 5;
+
     private final MemberRepository memberRepository;
     private final GradeRepository gradeRepository;
-    private final DeliveryPolicyService deliveryPolicyService;
 
     @Override
     @Transactional(readOnly = true)
@@ -78,20 +80,41 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public PageResponse<GetOrderInfoResponseDto> getOrderListForMembers(int page, Long memberId) {
-        int size = 5;
-        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdAt"));
-        Page<GetOrderInfoResponseDto> returnOrderList =
-                orderRepository.getOrderListForMembers(pageable, memberId);
-        PageResponse<GetOrderInfoResponseDto> pageResponse = new PageResponse<>();
-        return pageResponse.getPageResponse(page, 4, returnOrderList);
+    public PageResponse<OrderForPaymentDto> getOrderListForMembers(int page, Long memberId) {
+
+        Page<Order> orders = orderRepository.findByCustomer_CustomerId(memberId,
+                PageRequest.of(page - 1, 10, Sort.by("orderId").descending()));
+
+        List<OrderForPaymentDto> orderList = orders
+                .stream().map((Order order) -> convertOrderInfoDto(order, null))
+                .collect(Collectors.toList());
+
+        int startPage = (int) Math.max(1, orders.getNumber() - Math.floor((double) MAXPAGEBUTTONS / 2));
+        int endPage = Math.min(startPage + MAXPAGEBUTTONS - 1, orders.getTotalPages());
+
+        if (endPage - startPage + 1 < MAXPAGEBUTTONS) {
+            startPage = Math.max(1, endPage - MAXPAGEBUTTONS + 1);
+        }
+
+        return PageResponse.<OrderForPaymentDto>builder()
+                .data(orderList)
+                .currentPage(page)
+                .totalPage(orders.getTotalPages())
+                .startPage(startPage)
+                .endPage(endPage)
+                .totalElements(orders.getTotalElements())
+                .build();
     }
 
 
     @Override
     @Transactional(readOnly = true)
-    public GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long customerId) {
-        return orderRepository.getOrderInfoById(orderId, customerId);
+    public GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long memberId) {
+        orderRepository.findById(orderId).orElseThrow(()
+                -> new NotFoundException("주문이 존재하지 않습니다."));
+
+        return orderRepository.getOrderInfoById(orderId, memberId);
+
     }
 
     //주문 번호로 조회
@@ -137,17 +160,6 @@ public class OrderServiceImpl implements OrderService {
         if (Objects.nonNull(orderSaveDto.getDeliveryWishDate())) {
             wishDate = LocalDateTime.parse(orderSaveDto.getDeliveryWishDate() + "T00:00:00");
         }
-
-        //배송비 확인
-//        DeliveryPolicyInfoDto deliveryPolicy = deliveryPolicyService.getDeliveryPolicy();
-//        int deliveryFee = orderSaveDto.getDeliveryFee();
-//        boolean overDelivery = (orderSaveDto.getOrderAmount() < deliveryPolicy.getFreeDeliveryStandard()) &&
-//                (deliveryFee == deliveryPolicy.getDeliveryFee());
-//        boolean underDelivery = (orderSaveDto.getOrderAmount() >= deliveryPolicy.getFreeDeliveryStandard()) &&
-//                (deliveryFee != 0);
-//        if (overDelivery || underDelivery) {
-//            throw new BadRequestException("배송비가 일치하지 않습니다.");
-//        }
 
         //주문 저장
         Order order = orderRepository.save(
@@ -204,6 +216,11 @@ public class OrderServiceImpl implements OrderService {
             //사용후, 만약에 쿠폰을 사용한 다른 주문이 있을 경우 결제 실패 처리
             abortOrders(remainOrders);
         }
+    }
+
+    @Override
+    public String getOrderName(Long orderId) {
+        return orderDetailService.getOrderName(orderId);
     }
 
 
@@ -271,7 +288,7 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public void updateGrade() {
-        LocalDateTime currentMonth =  LocalDateTime.now()
+        LocalDateTime currentMonth = LocalDateTime.now()
                 .withDayOfMonth(1)
                 .withHour(0)
                 .withMinute(0)

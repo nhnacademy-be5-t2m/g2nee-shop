@@ -40,7 +40,9 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     @Override
     @Transactional(readOnly = true)
     public List<GetOrderDetailResponseDto> getOrderDetailListByOrderId(Long orderId) {
-        return orderDetailRepository.getOrderDetailListByOrderId(orderId);
+        return orderDetailRepository.findByOrder_OrderId(orderId)
+                .stream().map(this::convertToGetOrderDetailResponseDto)
+                .collect(Collectors.toList());
     }
 
 

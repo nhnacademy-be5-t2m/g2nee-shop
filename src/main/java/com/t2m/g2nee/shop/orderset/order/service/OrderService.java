@@ -37,11 +37,11 @@ public interface OrderService {
     /**
      * 회원의 전체 주문 조회
      *
-     * @param page       현재 페이지.
-     * @param customerId 회원번호.
+     * @param page     현재 페이지.
+     * @param memberId 회원번호.
      * @return 회원의 모든 주문 반환
      */
-    PageResponse<GetOrderInfoResponseDto> getOrderListForMembers(int page, Long customerId);
+    PageResponse<OrderForPaymentDto> getOrderListForMembers(int page, Long memberId);
 
     /**
      * 주문 정보 조회
@@ -49,7 +49,7 @@ public interface OrderService {
      * @param orderId 주문 id.
      * @return 주문 정보 반환
      */
-    GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long customerId);
+    GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long memberId);
 
     /**
      * 비회원 주문 정보 조회(주문 번호로 조회)
@@ -107,4 +107,6 @@ public interface OrderService {
     Order getOrder(String orderNumber);
 
     void applyUseCoupon(Order order);
+
+    String getOrderName(Long orderId);
 }

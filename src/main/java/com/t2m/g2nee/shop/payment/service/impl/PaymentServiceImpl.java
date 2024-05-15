@@ -20,6 +20,7 @@ import com.t2m.g2nee.shop.payment.service.impl.paytype.PaymentRequestMethod;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -110,16 +111,20 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentInfoDto cancelPayment(Long paymentId) {
         Payment payment =
                 paymentRepository.findById(paymentId).orElseThrow(() -> new NotFoundException("결제가 존재하지 않습니다."));
-        PaymentRequestMethod paymentMethod = factory.getPaymentRequest(payment.getPayType().split("-")[0].trim());
+        //배송 전 결제 취소
+        if (payment.getOrder().getOrderState().equals(Order.OrderState.WAITING)) {
+            //결제 취소
+            PaymentRequestMethod paymentMethod = factory.getPaymentRequest(payment.getPayType().split("-")[0].trim());
+            Payment cancelPayment = paymentMethod.requestCancelPayment(payment);
 
-        //결제 취소
-        Payment cancelPayment = paymentMethod.requestCancelPayment(payment);
+            //주문 및 주문 상세 결제 취소 상태 변경
+            orderService.changeOrderState(cancelPayment.getOrder().getOrderId(), Order.OrderState.CANCEL);
+            orderDetailService.cancelAllOrderDetail(cancelPayment.getOrder().getOrderId());
 
-        //주문 및 주문 상세 결제 취소 상태 변경
-        orderService.changeOrderState(cancelPayment.getOrder().getOrderId(), Order.OrderState.CANCEL);
-        orderDetailService.cancelAllOrderDetail(cancelPayment.getOrder().getOrderId());
-
-        return convertToPaymentInfoDto(cancelPayment);
+            return convertToPaymentInfoDto(cancelPayment);
+        } else {
+            throw new BadRequestException("배송 전에만 결제를 취소할 수 있습니다.");
+        }
     }
 
     /**
@@ -128,9 +133,12 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     @Transactional(readOnly = true)
     public PaymentInfoDto getPayment(Long orderId) {
-        return convertToPaymentInfoDto(
-                paymentRepository.findByOrder_OrderId(orderId)
-                        .orElseThrow(() -> new NotFoundException("결제가 존재하지 않습니다.")));
+        Optional<Payment> paymentOptional = paymentRepository.findByOrder_OrderId(orderId);
+        if (paymentOptional.isPresent()) {
+            return convertToPaymentInfoDto(paymentOptional.get());
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -174,7 +182,7 @@ public class PaymentServiceImpl implements PaymentService {
     private PaymentInfoDto convertToPaymentInfoDto(Payment payment) {
 
         return new PaymentInfoDto(payment.getPaymentId(), payment.getAmount(),
-                payment.getPayType().split("-")[1].trim(),
+                payment.getPayType(),
                 payment.getPaymentDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
                 payment.getPayStatus().getName(), payment.getOrder().getOrderId(),
                 payment.getOrder().getOrderNumber(), orderDetailService.getOrderName(payment.getOrder().getOrderId()));
