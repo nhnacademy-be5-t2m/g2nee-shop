@@ -1,9 +1,8 @@
 package com.t2m.g2nee.shop.couponset.coupontype.controller;
 
 
-import com.t2m.g2nee.shop.couponset.coupontype.domain.CouponType;
+import com.t2m.g2nee.shop.couponset.coupontype.dto.CouponTypeInfoDto;
 import com.t2m.g2nee.shop.couponset.coupontype.dto.response.CouponTypeCreatedDto;
-import com.t2m.g2nee.shop.couponset.coupontype.dto.response.CouponTypeInfoDto;
 import com.t2m.g2nee.shop.couponset.coupontype.dto.request.CouponTypeRequestDto;
 import com.t2m.g2nee.shop.couponset.coupontype.service.CouponTypeService;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;

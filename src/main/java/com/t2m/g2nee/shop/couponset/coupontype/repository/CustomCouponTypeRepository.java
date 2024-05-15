@@ -1,6 +1,6 @@
 package com.t2m.g2nee.shop.couponset.coupontype.repository;
 
-import com.t2m.g2nee.shop.couponset.coupontype.dto.response.CouponTypeInfoDto;
+import com.t2m.g2nee.shop.couponset.coupontype.dto.CouponTypeInfoDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

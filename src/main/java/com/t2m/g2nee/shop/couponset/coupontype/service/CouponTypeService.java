@@ -1,9 +1,11 @@
 package com.t2m.g2nee.shop.couponset.coupontype.service;
 
+import com.t2m.g2nee.shop.couponset.coupontype.domain.CouponType;
+import com.t2m.g2nee.shop.couponset.coupontype.dto.CouponTypeInfoDto;
 import com.t2m.g2nee.shop.couponset.coupontype.dto.request.CouponTypeRequestDto;
 import com.t2m.g2nee.shop.couponset.coupontype.dto.response.CouponTypeCreatedDto;
-import com.t2m.g2nee.shop.couponset.coupontype.dto.response.CouponTypeInfoDto;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,13 +17,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface CouponTypeService {
-
-    /**
-     * customerId로 각 고객의 쿠폰을 조회할 수 있는 Service
-     * @param customerId
-     * @return
-     */
-    List<CouponTypeInfoDto> findAllByCustomer_CustomerId(Long customerId);
 
     /**
      * 관리자가 모든 쿠폰을 조회할 수 있는 Service

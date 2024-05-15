@@ -165,6 +165,12 @@ public class PointPolicyServiceImpl implements PointPolicyService {
             }
         }
 
+        if (pointPolicy.getPolicyType().equals(PointPolicy.PolicyType.PERCENT)) {
+            //금액의 경우 *100 후에 보여줌
+            int percentValue = (int) (Double.parseDouble(amount) * 100);
+            amount = String.valueOf(percentValue);
+        }
+
         return new PointPolicyInfoDto(pointPolicy.getPointPolicyId(), pointPolicy.getPolicyName(),
                 pointPolicy.getPolicyType().getName(), amount, pointPolicy.getIsActivated(),
                 pointPolicy.getChangedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));

@@ -11,13 +11,14 @@ import com.t2m.g2nee.shop.couponset.bookcoupon.repository.BookCouponRepository;
 import com.t2m.g2nee.shop.couponset.categorycoupon.domain.CategoryCoupon;
 import com.t2m.g2nee.shop.couponset.categorycoupon.repository.CategoryCouponRepository;
 import com.t2m.g2nee.shop.couponset.coupontype.domain.CouponType;
+import com.t2m.g2nee.shop.couponset.coupontype.dto.CouponTypeInfoDto;
 import com.t2m.g2nee.shop.couponset.coupontype.dto.request.CouponTypeRequestDto;
 import com.t2m.g2nee.shop.couponset.coupontype.dto.response.CouponTypeCreatedDto;
-import com.t2m.g2nee.shop.couponset.coupontype.dto.response.CouponTypeInfoDto;
 import com.t2m.g2nee.shop.couponset.coupontype.repository.CouponTypeRepository;
 import com.t2m.g2nee.shop.couponset.coupontype.service.CouponTypeService;
 import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import java.math.BigDecimal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -179,12 +180,26 @@ public class CouponTypeServiceImpl implements CouponTypeService {
 
 
     private CouponTypeInfoDto convertToDTO(CouponTypeInfoDto couponTypeInfoDto) {
+        String discount = couponTypeInfoDto.getDiscount().toString();
+        if (couponTypeInfoDto.getType().equals("AMOUNT")) {
+            //금액의 경우 소수점을 떼고 보여줌
+            int dot = discount.indexOf(".");
+            if (dot != -1) {
+                discount = discount.substring(0, dot);
+            }
+        }
+
+        if (couponTypeInfoDto.getType().equals("PERCENT")) {
+            //금액의 경우 *100 후에 보여줌
+            int percentValue = (int) (Double.parseDouble(discount) * 100);
+            discount = String.valueOf(percentValue);
+        }
 
         CouponTypeInfoDto dto = CouponTypeInfoDto.builder()
                 .couponTypeId(couponTypeInfoDto.getCouponTypeId())
                 .couponTypeName(couponTypeInfoDto.getCouponTypeName())
                 .period(couponTypeInfoDto.getPeriod())
-                .discount(couponTypeInfoDto.getDiscount())
+                .discount(new BigDecimal(discount))
                 .minimumOrderAmount(couponTypeInfoDto.getMinimumOrderAmount())
                 .maximumDiscount(couponTypeInfoDto.getMaximumDiscount())
                 .categoryId(couponTypeInfoDto.getCategoryId())
