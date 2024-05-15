@@ -55,4 +55,8 @@ public class Coupon {
             return name;
         }
     }
+
+    public void changeCouponStatus(Coupon.CouponStatus status) {
+        this.status = status;
+    }
 }

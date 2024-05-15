@@ -1,11 +1,11 @@
 package com.t2m.g2nee.shop.orderset.order.service;
 
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
-import com.t2m.g2nee.shop.orderset.order.dto.request.OrderCreateRequestDto;
+import com.t2m.g2nee.shop.orderset.order.dto.request.OrderSaveDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
+import com.t2m.g2nee.shop.orderset.order.dto.response.OrderForPaymentDto;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
-import java.time.LocalDateTime;
 
 /**
  * 주문 서비스
@@ -14,13 +14,6 @@ import java.time.LocalDateTime;
  * @since : 1.0
  */
 public interface OrderService {
-
-    /**
-     * 주문 생성
-     *
-     * @param orderCreateRequestDto 해당 dto 객체
-     */
-    Long createOrder(OrderCreateRequestDto orderCreateRequestDto);
 
     /**
      * 전체 주문 조회(admin용)
@@ -43,11 +36,11 @@ public interface OrderService {
     /**
      * 회원의 전체 주문 조회
      *
-     * @param page       현재 페이지.
-     * @param customerId 회원번호.
+     * @param page     현재 페이지.
+     * @param memberId 회원번호.
      * @return 회원의 모든 주문 반환
      */
-    PageResponse<GetOrderInfoResponseDto> getOrderListForMembers(int page, Long customerId);
+    PageResponse<GetOrderInfoResponseDto> getOrderListForMembers(int page, Long memberId);
 
     /**
      * 주문 정보 조회
@@ -55,10 +48,10 @@ public interface OrderService {
      * @param orderId 주문 id.
      * @return 주문 정보 반환
      */
-    GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long customerId);
+    GetOrderInfoResponseDto getOrderInfoById(Long orderId);
 
     /**
-     * 비회원 주문 정보 조회(주문 번호로 조회)
+     * 주문 번호로 조회
      *
      * @param orderNumber 주문번호.
      * @return 주문 정보
@@ -74,19 +67,31 @@ public interface OrderService {
     void changeOrderState(Long orderId, Order.OrderState orderState);
 
     /**
-     * 30일 이상 된 비회원 여부 확인
-     *
-     * @param orderDate  주문 날짜
-     * @param customerId 비회원 Id
-     * @return
-     */
-    boolean getNonMemberOrderForOneMonth(LocalDateTime orderDate, Long customerId);
-
-    /**
      * 주문 soft delete
      *
      * @param orderId 주문Id
      */
     void deleteOrder(Long orderId);
 
+    /**
+     * 주문서를 저장합니다.
+     *
+     * @param orderSaveDto 회원 주문 저장 dto
+     * @return 주문 내역
+     * @author : 김수빈
+     * @since : 1.0
+     */
+    OrderForPaymentDto saveOrder(OrderSaveDto orderSaveDto);
+
+    /**
+     * 주문 번호를 통해 주문을 조회합니다.
+     *
+     * @param orderNumber 주문 번호
+     * @return Order 객체
+     * @author : 김수빈
+     * @since : 1.0
+     */
+    Order getOrder(String orderNumber);
+
+    void applyUseCoupon(Order order);
 }

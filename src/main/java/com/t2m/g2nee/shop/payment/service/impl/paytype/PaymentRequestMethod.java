@@ -1,5 +1,7 @@
 package com.t2m.g2nee.shop.payment.service.impl.paytype;
 
+import com.t2m.g2nee.shop.memberset.customer.domain.Customer;
+import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import com.t2m.g2nee.shop.payment.domain.Payment;
 import com.t2m.g2nee.shop.payment.dto.request.PaymentRequest;
 
@@ -17,7 +19,7 @@ public interface PaymentRequestMethod {
      * @param request 결체 승인 요청 객체
      * @return Payment
      */
-    Payment requestCreatePayment(PaymentRequest request);
+    Payment requestCreatePayment(PaymentRequest request, Customer customer, Order order);
 
     /**
      * 결제를 취소합니다.

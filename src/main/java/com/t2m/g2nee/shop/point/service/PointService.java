@@ -1,8 +1,8 @@
 package com.t2m.g2nee.shop.point.service;
 
 import com.t2m.g2nee.shop.memberset.member.domain.Member;
+import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import com.t2m.g2nee.shop.point.dto.request.PointCreateRequestDto;
-import java.math.BigDecimal;
 
 /**
  * 주소 정보를 위한 service interface 입니다.
@@ -43,10 +43,9 @@ public interface PointService {
     /**
      * member에게 구매시 포인트를 주는 메소드
      *
-     * @param member      포인트를 줄 대상
-     * @param orderAmount 결제금액
+     * @param memberId * @param order
      */
-    void givePurchasePoint(Member member, BigDecimal orderAmount);
+    void givePurchasePoint(Long memberId, Order order);
 
     /**
      * member가 구매시 포인트를 사용하는 메소드

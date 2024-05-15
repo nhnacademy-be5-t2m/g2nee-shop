@@ -3,6 +3,7 @@ package com.t2m.g2nee.shop.policyset.pointpolicy.dto.request;
 import com.t2m.g2nee.shop.policyset.pointpolicy.dto.annotation.PolicyType;
 import java.math.BigDecimal;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,7 +25,7 @@ public class PointPolicySaveDto {
      * 포인트 정책 이름
      */
     @NotBlank(message = "포인트 정책 이름은 비울 수 없습니다.")
-    @Size(min = 1, max = 50, message = "20자 미만으로 입력해 주세요.")
+    @Size(min = 1, max = 20, message = "20자 미만으로 입력해 주세요.")
     private String policyName;
 
     /**
@@ -36,5 +37,6 @@ public class PointPolicySaveDto {
     /**
      * 적립 금액
      */
+    @NotNull
     private BigDecimal amount;
 }

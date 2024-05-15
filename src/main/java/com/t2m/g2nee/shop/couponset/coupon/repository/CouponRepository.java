@@ -9,6 +9,10 @@ import org.springframework.data.repository.query.Param;
 
 public interface CouponRepository extends JpaRepository<Coupon, Long>, CouponRepositoryCustom {
 
+    boolean existsByCouponType_CouponTypeIdAndMember_CustomerId(Long couponTypeId, Long customerId);
+
+    boolean existsByCouponType_CouponTypeId(Long couponTypeId);
+
 
     @Query(value = "SELECT * FROM t2m_dev.Coupons " +
             "WHERE customerId = :customerId " +

@@ -1,5 +1,6 @@
 package com.t2m.g2nee.shop.couponset.coupon.service;
 
+import com.t2m.g2nee.shop.couponset.coupon.domain.Coupon;
 import com.t2m.g2nee.shop.couponset.coupon.dto.request.CouponDownloadDto;
 import com.t2m.g2nee.shop.couponset.coupon.dto.request.CouponIssueDto;
 import com.t2m.g2nee.shop.couponset.coupon.dto.response.CouponInfoDto;
@@ -50,4 +51,19 @@ public interface CouponService {
      */
     PageResponse<CouponInfoDto> getTotalCoupons(Long customerId, int page);
 
+
+    /**
+     * 쿠폰 id로 쿠폰을 얻는 메소드 입니다.
+     *
+     * @param couponId 쿠폰 id
+     * @return 쿠폰 객체
+     */
+    Coupon getCoupon(Long couponId);
+
+    /**
+     * 쿠폰 사용으로 변경하는 메소드입니다.
+     *
+     * @param couponId 쿠폰 id
+     */
+    void useCoupon(Long couponId);
 }

@@ -123,7 +123,7 @@ public class BookGetController {
         }
 
         PageResponse<BookDto.ListResponse> responses =
-                bookGetService.getBookByCategoryAndElasticsearch(page, memberId, categoryId, keyword, sort,condition);
+                bookGetService.getBookByCategoryAndElasticsearch(page, memberId, categoryId, keyword, sort, condition);
 
         return ResponseEntity.status(HttpStatus.OK).body(responses);
     }
