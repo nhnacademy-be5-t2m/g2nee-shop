@@ -13,16 +13,23 @@ import com.t2m.g2nee.shop.memberset.member.domain.Member;
 import com.t2m.g2nee.shop.memberset.member.repository.MemberRepository;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import com.t2m.g2nee.shop.orderset.order.repository.OrderRepository;
+import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import com.t2m.g2nee.shop.point.domain.Point;
 import com.t2m.g2nee.shop.point.dto.request.PointCreateRequestDto;
+import com.t2m.g2nee.shop.point.dto.response.PointResponseDto;
 import com.t2m.g2nee.shop.point.repository.PointRepository;
 import com.t2m.g2nee.shop.point.service.PointService;
 import com.t2m.g2nee.shop.policyset.pointpolicy.dto.response.PointPolicyInfoDto;
 import com.t2m.g2nee.shop.policyset.pointpolicy.service.PointPolicyService;
+import com.t2m.g2nee.shop.review.dto.ReviewDto;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -176,5 +183,17 @@ public class PointServiceImpl implements PointService {
     @Transactional(readOnly = true)
     public Integer getTotalPoint(Long memberId) {
         return pointRepository.getTotalPoint(memberId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PageResponse<PointResponseDto> getMemberPointDetail(int page, Long memberId) {
+        int size = 10;
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        Page<PointResponseDto> pointDetailPage = pointRepository.getMemberPointDetail(pageable, memberId);
+
+        PageResponse<PointResponseDto> pageResponse = new PageResponse<>();
+        return pageResponse.getPageResponse(page, 10, pointDetailPage);
     }
 }

@@ -115,11 +115,15 @@ public class BookGetController {
             @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) String sort,
             @RequestParam String keyword,
-            @RequestParam String condition,
+            @RequestParam(required = false) String condition,
             @RequestParam int page) {
 
         if (!StringUtils.hasText(sort)) {
             sort = "viewCount";
+        }
+
+        if(!StringUtils.hasText(condition)){
+            condition= "INTEGRATION";
         }
 
         PageResponse<BookDto.ListResponse> responses =

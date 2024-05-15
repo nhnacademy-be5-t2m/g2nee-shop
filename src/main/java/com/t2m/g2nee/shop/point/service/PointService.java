@@ -2,7 +2,10 @@ package com.t2m.g2nee.shop.point.service;
 
 import com.t2m.g2nee.shop.memberset.member.domain.Member;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
+import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import com.t2m.g2nee.shop.point.dto.request.PointCreateRequestDto;
+import com.t2m.g2nee.shop.point.dto.response.PointResponseDto;
+import java.util.List;
 
 /**
  * 주소 정보를 위한 service interface 입니다.
@@ -69,4 +72,6 @@ public interface PointService {
      * @param memberId 포인트를 받아올 member의 id
      */
     Integer getTotalPoint(Long memberId);
+
+    PageResponse<PointResponseDto> getMemberPointDetail(int page, Long memberId);
 }
