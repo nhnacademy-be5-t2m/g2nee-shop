@@ -122,8 +122,8 @@ public class BookGetController {
             sort = "viewCount";
         }
 
-        if(!StringUtils.hasText(condition)){
-            condition= "INTEGRATION";
+        if (!StringUtils.hasText(condition)) {
+            condition = "INTEGRATION";
         }
 
         PageResponse<BookDto.ListResponse> responses =
