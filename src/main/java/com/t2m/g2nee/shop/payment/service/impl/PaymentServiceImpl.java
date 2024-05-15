@@ -178,7 +178,7 @@ public class PaymentServiceImpl implements PaymentService {
     private PaymentInfoDto convertToPaymentInfoDto(Payment payment) {
 
         return new PaymentInfoDto(payment.getPaymentId(), payment.getAmount(),
-                payment.getPayType().split("-")[1].trim(),
+                payment.getPayType(),
                 payment.getPaymentDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
                 payment.getPayStatus().getName(), payment.getOrder().getOrderId(),
                 payment.getOrder().getOrderNumber(), orderDetailService.getOrderName(payment.getOrder().getOrderId()));
