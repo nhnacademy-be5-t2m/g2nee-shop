@@ -110,16 +110,20 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentInfoDto cancelPayment(Long paymentId) {
         Payment payment =
                 paymentRepository.findById(paymentId).orElseThrow(() -> new NotFoundException("결제가 존재하지 않습니다."));
-        PaymentRequestMethod paymentMethod = factory.getPaymentRequest(payment.getPayType().split("-")[0].trim());
+        //배송 전 결제 취소
+        if(payment.getOrder().getOrderState().equals(Order.OrderState.WAITING)){
+            //결제 취소
+            PaymentRequestMethod paymentMethod = factory.getPaymentRequest(payment.getPayType().split("-")[0].trim());
+            Payment cancelPayment = paymentMethod.requestCancelPayment(payment);
 
-        //결제 취소
-        Payment cancelPayment = paymentMethod.requestCancelPayment(payment);
+            //주문 및 주문 상세 결제 취소 상태 변경
+            orderService.changeOrderState(cancelPayment.getOrder().getOrderId(), Order.OrderState.CANCEL);
+            orderDetailService.cancelAllOrderDetail(cancelPayment.getOrder().getOrderId());
 
-        //주문 및 주문 상세 결제 취소 상태 변경
-        orderService.changeOrderState(cancelPayment.getOrder().getOrderId(), Order.OrderState.CANCEL);
-        orderDetailService.cancelAllOrderDetail(cancelPayment.getOrder().getOrderId());
-
-        return convertToPaymentInfoDto(cancelPayment);
+            return convertToPaymentInfoDto(cancelPayment);
+        }else{
+            throw new BadRequestException("배송 전에만 결제를 취소할 수 있습니다.");
+        }
     }
 
     /**
