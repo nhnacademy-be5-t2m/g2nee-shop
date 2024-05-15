@@ -70,4 +70,12 @@ public interface OrderCustomRepository {
     Optional<Order> findByOrderNumber(String orderNumber);
 
 
+    /**
+     * 회원이 주문한 책 수량을 조회하는 메서드
+     *
+     * @param memberId 회원 아이디
+     * @param bookId 책 아이디
+     * @return Integer
+     */
+    Integer getMemberBookOrderNum(Long memberId, Long bookId);
 }

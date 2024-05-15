@@ -648,7 +648,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                         , book.price, book.salePrice, book.bookStatus
                         , publisher.publisherName
                 ))
-                .orderBy(orderDetail.book.bookId.count().desc())
+                .orderBy(orderDetail.quantity.sum().desc())
                 .limit(6)
                 .fetch();
     }

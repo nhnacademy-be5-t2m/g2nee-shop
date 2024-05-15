@@ -19,6 +19,10 @@ public class ReviewCustomRepositoryImpl extends QuerydslRepositorySupport implem
         super(Review.class);
     }
 
+
+    QReview review = QReview.review;
+    QMember member = QMember.member;
+    QReviewFile reviewFile = QReviewFile.reviewFile;
     /**
      * 책의 리뷰 정보를 조회하는 메서드
      *
@@ -28,10 +32,6 @@ public class ReviewCustomRepositoryImpl extends QuerydslRepositorySupport implem
      */
     @Override
     public Page<ReviewDto.Response> getReviews(Long bookId, Pageable pageable) {
-
-        QReview review = QReview.review;
-        QMember member = QMember.member;
-        QReviewFile reviewFile = QReviewFile.reviewFile;
 
         List<ReviewDto.Response> reviewList = from(review)
                 .innerJoin(member).on(review.member.customerId.eq(member.customerId))
@@ -56,9 +56,7 @@ public class ReviewCustomRepositoryImpl extends QuerydslRepositorySupport implem
     }
 
     @Override
-    public ReviewDto.Response getReview(Long memberId, Long bookId) {
-
-        QReview review = QReview.review;
+    public ReviewDto.Response getMemberReviews(Long memberId, Long bookId) {
 
         return from(review)
                 .where(review.member.customerId.eq(memberId)
