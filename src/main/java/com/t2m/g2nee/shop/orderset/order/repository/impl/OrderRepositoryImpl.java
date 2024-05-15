@@ -197,7 +197,7 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
                 .from(order)
                 .where(order.orderState.eq(DELIVERED)
                         .and(order.customer.customerId.eq(memberId))
-                        .and(order.orderDate.between(threeMonthsAgo, LocalDateTime.now())))
+                        .and(order.orderDate.between(threeMonthsAgo, currentTime)))
                 .fetchOne();
     }
 

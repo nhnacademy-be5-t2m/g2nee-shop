@@ -252,7 +252,12 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public GradeResponseDto getTotalAmount(Long memberId) {
-        LocalDateTime currentMonth = LocalDateTime.now().withDayOfMonth(1);
+        LocalDateTime currentMonth = LocalDateTime.now()
+                .withDayOfMonth(1)
+                .withHour(0)
+                .withMinute(0)
+                .withSecond(0)
+                .withNano(0);
         Member member =
                 memberRepository.findActiveMemberById(memberId).orElseThrow(() -> new NotFoundException("회원정보가 없습니다."));
         Long totalAmount = Long.parseLong(
@@ -266,7 +271,12 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public void updateGrade() {
-        LocalDateTime currentMonth = LocalDateTime.now().withDayOfMonth(1);
+        LocalDateTime currentMonth =  LocalDateTime.now()
+                .withDayOfMonth(1)
+                .withHour(0)
+                .withMinute(0)
+                .withSecond(0)
+                .withNano(0);
         List<Member> members = memberRepository.findActiveAllMemberById();
         if (members.size() == 0) {
             return;
