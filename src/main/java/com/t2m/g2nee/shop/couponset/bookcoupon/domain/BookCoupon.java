@@ -7,10 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @Entity
@@ -26,4 +24,5 @@ public class BookCoupon extends CouponType {
     @ManyToOne
     @JoinColumn(name = "bookId")
     private Book book;
+
 }
