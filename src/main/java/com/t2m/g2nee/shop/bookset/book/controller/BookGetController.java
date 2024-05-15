@@ -115,11 +115,15 @@ public class BookGetController {
             @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) String sort,
             @RequestParam String keyword,
-            @RequestParam String condition,
+            @RequestParam(required = false) String condition,
             @RequestParam int page) {
 
         if (!StringUtils.hasText(sort)) {
             sort = "viewCount";
+        }
+
+        if (!StringUtils.hasText(condition)) {
+            condition = "INTEGRATION";
         }
 
         PageResponse<BookDto.ListResponse> responses =
@@ -167,6 +171,19 @@ public class BookGetController {
             @RequestParam(defaultValue = "1") int page, @PathVariable Long memberId) {
 
         PageResponse<BookDto.ListResponse> responses = bookGetService.getMemberLikeBook(page, memberId);
+        return ResponseEntity.status(HttpStatus.OK).body(responses);
+    }
+
+    /**
+     * 가장 판매량이 높은 6권의 책을 조회하는 컨트롤러
+     *
+     * @return ResponseEntity<List < BookDto.ListResponse>>
+     */
+    @GetMapping("/bestseller")
+    public ResponseEntity<List<BookDto.ListResponse>> getBestSeller() {
+
+        List<BookDto.ListResponse> responses = bookGetService.getBestseller();
+
         return ResponseEntity.status(HttpStatus.OK).body(responses);
     }
 }

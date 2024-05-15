@@ -5,6 +5,7 @@ import com.t2m.g2nee.shop.memberset.customer.domain.Customer;
 import com.t2m.g2nee.shop.memberset.member.domain.Member;
 import com.t2m.g2nee.shop.memberset.member.domain.QMember;
 import com.t2m.g2nee.shop.memberset.member.repository.MemberCustomRepository;
+import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
@@ -31,6 +32,18 @@ public class MemberRepositoryImpl extends QuerydslRepositorySupport implements M
         );
     }
 
+    @Override
+    public List<Member> findActiveAllMemberById() {
+        QMember member = QMember.member;
+
+        return queryFactory.selectFrom(member)
+                .where(member.memberStatus.eq(Member.MemberStatus.ACTIVE))
+                .fetch();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Member> findActiveMemberByUsername(String username) {
         QMember member = QMember.member;

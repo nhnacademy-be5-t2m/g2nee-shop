@@ -1,7 +1,10 @@
 package com.t2m.g2nee.shop.point.repository;
 
 import com.t2m.g2nee.shop.point.domain.Point;
+import com.t2m.g2nee.shop.point.dto.response.PointResponseDto;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface PointCustomRepository {
     /**
@@ -27,5 +30,13 @@ public interface PointCustomRepository {
      * @return point 정보
      */
     Optional<Point> findReturnPointByOrderId(Long orderId);
+
+    /**
+     * 회원 포인트 변동 내역을 조회하는 메서드
+     *
+     * @param memberId 회원 아이디
+     * @return List<PointResponseDto>
+     */
+    Page<PointResponseDto> getMemberPointDetail(Pageable pageable, Long memberId);
 
 }

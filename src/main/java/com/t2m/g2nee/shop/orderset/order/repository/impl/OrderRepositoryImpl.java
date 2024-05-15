@@ -1,6 +1,10 @@
 package com.t2m.g2nee.shop.orderset.order.repository.impl;
 
+import static com.t2m.g2nee.shop.orderset.order.domain.Order.OrderState.DELIVERED;
+
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.t2m.g2nee.shop.bookset.book.domain.QBook;
 import com.t2m.g2nee.shop.couponset.coupon.domain.QCoupon;
 import com.t2m.g2nee.shop.couponset.coupontype.domain.QCouponType;
 import com.t2m.g2nee.shop.memberset.customer.domain.QCustomer;
@@ -11,7 +15,11 @@ import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
 import com.t2m.g2nee.shop.orderset.order.repository.OrderCustomRepository;
 import com.t2m.g2nee.shop.orderset.orderdetail.domain.QOrderDetail;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import javax.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -32,9 +40,13 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
     QOrderDetail orderDetail = QOrderDetail.orderDetail;
     QCoupon coupon = QCoupon.coupon;
     QCouponType couponType = QCouponType.couponType;
+    QBook book = QBook.book;
 
-    public OrderRepositoryImpl() {
+    private final JPAQueryFactory queryFactory;
+
+    public OrderRepositoryImpl(EntityManager entityManager) {
         super(Order.class);
+        this.queryFactory = new JPAQueryFactory(entityManager);
     }
 
 
@@ -95,11 +107,11 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
 
 
     @Override
-    public Page<GetOrderInfoResponseDto> getOrderListForMembers(Pageable pageable, Long memberId) {
+    public Page<GetOrderInfoResponseDto> getOrderListForMembers(Pageable pageable, Long customerId) {
         List<GetOrderInfoResponseDto> queryMemberOrderList = from(order)
                 .innerJoin(member).on(order.customer.customerId.eq(member.customerId))
                 .leftJoin(couponType).on(order.coupon.couponType.couponTypeId.eq(couponType.couponTypeId))
-                .where(order.customer.customerId.eq(memberId))
+                .where(order.customer.customerId.eq(customerId))
                 .select(Projections.fields(GetOrderInfoResponseDto.class,
                         order.orderId,
                         order.orderNumber,
@@ -123,18 +135,14 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public GetOrderInfoResponseDto getOrderInfoById(Long orderId) {
-
+    public GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long customerId) {
         return from(order)
-                .innerJoin(customer).on(order.customer.customerId.eq(customer.customerId))
+                .innerJoin(member).on(order.customer.customerId.eq(member.customerId))
                 .leftJoin(couponType).on(order.coupon.couponType.couponTypeId.eq(couponType.couponTypeId))
-                .innerJoin(orderDetail).on(order.orderId.eq(orderDetail.order.orderId))
-                .where(order.orderId.eq(orderId))
+                .where(order.orderId.eq(orderId).and(order.customer.customerId.eq(customerId)))
                 .select(Projections.fields(GetOrderInfoResponseDto.class,
                         order.orderId,
                         order.orderNumber,
-                        customer.customerId.as("customerId"),
-                        customer.name.as("customerName"),
                         order.orderDate,
                         order.deliveryWishDate,
                         order.deliveryFee,
@@ -159,8 +167,6 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
                         order.orderId,
                         order.orderNumber,
                         order.orderDate,
-                        customer.customerId.as("customerId"),
-                        customer.name.as("customerName"),
                         order.deliveryWishDate,
                         order.deliveryFee,
                         order.orderState,
@@ -172,5 +178,39 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
                         order.detailAddress,
                         order.message,
                         couponType.name.as("couponName"))).fetchOne();
+    }
+
+    @Override
+    public Optional<Order> findByOrderNumber(String orderNumber) {
+        return Optional.empty();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public BigDecimal getTotalOrderAmount(LocalDateTime currentTime, Long memberId) {
+        QOrder order = QOrder.order;
+        LocalDateTime threeMonthsAgo = currentTime.minusMonths(3);
+
+        return queryFactory.select(order.netAmount.sum().coalesce(BigDecimal.ZERO))
+                .from(order)
+                .where(order.orderState.eq(DELIVERED)
+                        .and(order.customer.customerId.eq(memberId))
+                        .and(order.orderDate.between(threeMonthsAgo, currentTime)))
+                .fetchOne();
+    }
+
+    @Override
+    public Integer getMemberBookOrderNum(Long memberId, Long bookId) {
+
+        return from(book)
+                .innerJoin(orderDetail).on(orderDetail.book.bookId.eq(book.bookId))
+                .innerJoin(order).on(orderDetail.order.orderId.eq(order.orderId))
+                .where(order.customer.customerId.eq(memberId)
+                        .and(book.bookId.eq(bookId)))
+                .select(orderDetail.quantity.sum())
+                .groupBy(book)
+                .fetchOne();
     }
 }
