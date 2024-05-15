@@ -34,10 +34,10 @@ public class CouponTypeController {
      * @return
      */
     @GetMapping
-    public ResponseEntity<PageResponse<CouponTypeInfoDto>> getAllCoupons(@RequestParam(defaultValue = "1") int page ) {
+    public ResponseEntity<PageResponse<CouponTypeInfoDto>> getAllCouponTypes(@RequestParam(defaultValue = "1") int page ) {
 
 
-        PageResponse<CouponTypeInfoDto> responses =  couponTypeService.getAllCoupons(page);
+        PageResponse<CouponTypeInfoDto> responses =  couponTypeService.getAllCouponTypes(page);
 
         return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(responses);
 

@@ -20,7 +20,7 @@ public interface CouponTypeService {
      * @param page
      * @return
      */
-    PageResponse<CouponTypeInfoDto> getAllCoupons(int page);
+    PageResponse<CouponTypeInfoDto> getAllCouponTypes(int page);
 
     CouponTypeCreatedDto createCouponType(CouponTypeRequestDto couponTypeRequestDto);
 

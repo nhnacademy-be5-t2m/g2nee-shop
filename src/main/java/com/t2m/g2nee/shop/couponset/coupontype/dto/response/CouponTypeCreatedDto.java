@@ -21,4 +21,8 @@ public class CouponTypeCreatedDto {
     private String name;
     private CouponType.Type type;
     private BigDecimal discount;
+    private BigDecimal  minimumOrderAmount;
+    private BigDecimal maximumDiscount;
+    private CouponType.CouponTypeStatus  status;
+
 }
