@@ -169,4 +169,16 @@ public class BookGetController {
         PageResponse<BookDto.ListResponse> responses = bookGetService.getMemberLikeBook(page, memberId);
         return ResponseEntity.status(HttpStatus.OK).body(responses);
     }
+
+    /**
+     * 가장 판매량이 높은 6권의 책을 조회하는 컨트롤러
+     * @return ResponseEntity<List<BookDto.ListResponse>>
+     */
+    @GetMapping("/bestseller")
+    public ResponseEntity<List<BookDto.ListResponse>> getBestSeller(){
+
+        List<BookDto.ListResponse> responses = bookGetService.getBestseller();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responses);
+    }
 }

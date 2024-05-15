@@ -625,6 +625,10 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
         return new PageImpl<>(bookList, pageable, bookList.size());
     }
 
+    /**
+     * 주문량이 많은 책 6권을 조회하는 메서드
+     * @return List<BookDto.ListResponse>
+     */
     @Override
     public List<BookDto.ListResponse> getBestSeller() {
 
@@ -640,10 +644,9 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                         , book.title
                         , book.engTitle
                         , book.publishedDate
+                        , book.quantity
                         , book.price, book.salePrice, book.bookStatus
                         , publisher.publisherName
-                        , publisher.publisherName
-                        , orderDetail.quantity.sum()
                 ))
                 .orderBy(orderDetail.quantity.sum().desc())
                 .limit(6)

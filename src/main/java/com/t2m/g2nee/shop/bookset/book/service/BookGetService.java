@@ -192,6 +192,10 @@ public class BookGetService {
         return getPageResponse(page, bookList);
     }
 
+    public List<BookDto.ListResponse> getBestseller(){
+        return bookRepository.getBestSeller();
+    }
+
     /**
      * Paging하여 응답객체를 생성하는 메서드 입니다.
      *

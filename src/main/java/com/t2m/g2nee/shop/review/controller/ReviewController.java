@@ -3,6 +3,7 @@ package com.t2m.g2nee.shop.review.controller;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import com.t2m.g2nee.shop.review.dto.ReviewDto;
 import com.t2m.g2nee.shop.review.service.ReviewService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,16 +63,15 @@ public class ReviewController {
     }
 
     /**
-     * 리뷰 하나를 조회하는 컨트롤러
-     *
+     * 회원이 책에 작성한 리뷰를 조회하는 컨트롤러
      * @param request 리뷰 정보 객체
      * @return ResponseEntity<ReviewDto.Response>
      * 확인 용이기 떄문에 응답에 id 값만 있음
      */
     @GetMapping
-    public ResponseEntity<ReviewDto.Response> getReview(@ModelAttribute ReviewDto.Request request) {
+    public ResponseEntity<ReviewDto.Response> getMemberReviews(@ModelAttribute ReviewDto.Request request) {
 
-        ReviewDto.Response response = reviewService.getReview(request.getMemberId(), request.getBookId());
+        ReviewDto.Response response = reviewService.getMemberReviews(request.getMemberId(), request.getBookId());
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

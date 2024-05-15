@@ -9,6 +9,7 @@ import com.t2m.g2nee.shop.memberset.member.domain.Member;
 import com.t2m.g2nee.shop.memberset.member.repository.MemberRepository;
 import com.t2m.g2nee.shop.nhnstorage.AuthService;
 import com.t2m.g2nee.shop.nhnstorage.ObjectService;
+import com.t2m.g2nee.shop.orderset.order.repository.OrderRepository;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import com.t2m.g2nee.shop.point.service.PointService;
 import com.t2m.g2nee.shop.review.domain.Review;
@@ -17,6 +18,7 @@ import com.t2m.g2nee.shop.review.repository.ReviewRepository;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -45,6 +47,7 @@ public class ReviewService {
     private final AuthService authService;
     private final ReviewFileRepository reviewFileRepository;
     private final PointService pointService;
+    private final OrderRepository orderRepository;
 
     /**
      * 리뷰를 등록하는 메서드
@@ -122,14 +125,24 @@ public class ReviewService {
 
 
     /**
-     * 리뷰 중복 작성을 막기 위해 해당하는 리뷰를 찾는 메서드
-     *
+     * 주문한 책에만 리뷰를 작성하도록 확인하는 메서드
      * @param memberId 회원 아이디
      * @param bookId   책 아이디
      * @return ReviewDto.Response
      */
-    public ReviewDto.Response getReview(Long memberId, Long bookId) {
-        return reviewRepository.getReview(memberId, bookId);
+    public ReviewDto.Response getMemberReviews(Long memberId, Long bookId) {
+
+        // 회원이 책을 구매했는 지 확인
+        Integer orderNum = orderRepository.getMemberBookOrderNum(memberId, bookId);
+
+        // 구매했으면 리뷰를 작성했는 지 확인
+        if(orderNum == null || orderNum < 0) {
+            // 구매 내역이 없으면 더미 리뷰 데이터 전송 -> front에서 review 정보가 있냐 없냐에 따라 true false로 판별하기 때문에
+            // 구매한 것이 아니면 항상 false를 반환하도록 객체를 리턴
+            return new ReviewDto.Response();
+        }
+        return reviewRepository.getMemberReviews(memberId, bookId);
+
     }
 
     /**

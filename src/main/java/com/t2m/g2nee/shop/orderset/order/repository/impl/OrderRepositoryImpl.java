@@ -1,6 +1,7 @@
 package com.t2m.g2nee.shop.orderset.order.repository.impl;
 
 import com.querydsl.core.types.Projections;
+import com.t2m.g2nee.shop.bookset.book.domain.QBook;
 import com.t2m.g2nee.shop.couponset.coupon.domain.QCoupon;
 import com.t2m.g2nee.shop.couponset.coupontype.domain.QCouponType;
 import com.t2m.g2nee.shop.memberset.customer.domain.QCustomer;
@@ -32,6 +33,7 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
     QOrderDetail orderDetail = QOrderDetail.orderDetail;
     QCoupon coupon = QCoupon.coupon;
     QCouponType couponType = QCouponType.couponType;
+    QBook book = QBook.book;
 
     public OrderRepositoryImpl() {
         super(Order.class);
@@ -95,11 +97,11 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
 
 
     @Override
-    public Page<GetOrderInfoResponseDto> getOrderListForMembers(Pageable pageable, Long memberId) {
+    public Page<GetOrderInfoResponseDto> getOrderListForMembers(Pageable pageable, Long customerId) {
         List<GetOrderInfoResponseDto> queryMemberOrderList = from(order)
                 .innerJoin(member).on(order.customer.customerId.eq(member.customerId))
                 .leftJoin(couponType).on(order.coupon.couponType.couponTypeId.eq(couponType.couponTypeId))
-                .where(order.customer.customerId.eq(memberId))
+                .where(order.customer.customerId.eq(customerId))
                 .select(Projections.fields(GetOrderInfoResponseDto.class,
                         order.orderId,
                         order.orderNumber,
@@ -123,18 +125,14 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public GetOrderInfoResponseDto getOrderInfoById(Long orderId) {
-
+    public GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long customerId) {
         return from(order)
-                .innerJoin(customer).on(order.customer.customerId.eq(customer.customerId))
+                .innerJoin(member).on(order.customer.customerId.eq(member.customerId))
                 .leftJoin(couponType).on(order.coupon.couponType.couponTypeId.eq(couponType.couponTypeId))
-                .innerJoin(orderDetail).on(order.orderId.eq(orderDetail.order.orderId))
-                .where(order.orderId.eq(orderId))
+                .where(order.orderId.eq(orderId).and(order.customer.customerId.eq(customerId)))
                 .select(Projections.fields(GetOrderInfoResponseDto.class,
                         order.orderId,
                         order.orderNumber,
-                        customer.customerId.as("customerId"),
-                        customer.name.as("customerName"),
                         order.orderDate,
                         order.deliveryWishDate,
                         order.deliveryFee,
@@ -159,8 +157,6 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
                         order.orderId,
                         order.orderNumber,
                         order.orderDate,
-                        customer.customerId.as("customerId"),
-                        customer.name.as("customerName"),
                         order.deliveryWishDate,
                         order.deliveryFee,
                         order.orderState,
@@ -172,5 +168,23 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
                         order.detailAddress,
                         order.message,
                         couponType.name.as("couponName"))).fetchOne();
+    }
+
+    @Override
+    public Optional<Order> findByOrderNumber(String orderNumber) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Integer getMemberBookOrderNum(Long memberId, Long bookId) {
+
+        return from(book)
+                .innerJoin(orderDetail).on(orderDetail.book.bookId.eq(book.bookId))
+                .innerJoin(order).on(orderDetail.order.orderId.eq(order.orderId))
+                .where(order.customer.customerId.eq(memberId)
+                        .and(book.bookId.eq(bookId)))
+                .select(orderDetail.quantity.sum())
+                .groupBy(book)
+                .fetchOne();
     }
 }
