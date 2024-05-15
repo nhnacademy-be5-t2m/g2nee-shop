@@ -10,6 +10,7 @@ import com.t2m.g2nee.shop.payment.dto.request.TossPaymentRequestDto;
 import com.t2m.g2nee.shop.payment.dto.response.TossPaymentResponseDto;
 import com.t2m.g2nee.shop.payment.repository.PaymentRepository;
 import com.t2m.g2nee.shop.payment.service.impl.paytype.PaymentRequestMethod;
+import com.t2m.g2nee.shop.point.service.PointService;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -42,6 +43,8 @@ public class TossPayment implements PaymentRequestMethod {
 
     private final PaymentRepository paymentRepository;
 
+    private final PointService pointService;
+
     private String secretKey;
 
     @Value("${toss.api.api.url}")
@@ -54,9 +57,10 @@ public class TossPayment implements PaymentRequestMethod {
      * @param paymentRepository 결제 정보 저장 및 확인을 위한 레포지토리
      * @param secretKey         Toss Payment api 헤더에 들어가야하는 값
      */
-    public TossPayment(RestTemplate restTemplate, PaymentRepository paymentRepository, String secretKey) {
+    public TossPayment(RestTemplate restTemplate, PaymentRepository paymentRepository, PointService pointService, String secretKey) {
         this.restTemplate = restTemplate;
         this.paymentRepository = paymentRepository;
+        this.pointService = pointService;
         this.secretKey = secretKey;
     }
 
@@ -153,6 +157,9 @@ public class TossPayment implements PaymentRequestMethod {
         if (response.getStatusCode() == HttpStatus.OK &&
                 tossResponse.getCancels().get(0).getCancelStatus().equals("DONE")) {
             Payment updatePayment = payment;
+
+            pointService.returnPoint(payment.getOrder().getOrderId());
+
             updatePayment.setCancel(
                     OffsetDateTime.parse(tossResponse.getCancels().get(0).getCanceledAt()).toLocalDateTime());
             return paymentRepository.save(updatePayment);

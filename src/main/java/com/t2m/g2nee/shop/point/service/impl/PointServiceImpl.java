@@ -47,7 +47,7 @@ public class PointServiceImpl implements PointService {
      * @throws NotFoundException 으로 username 에 해당하는 정보가 없는 경우 예외를 던집니다.
      */
     @Override
-    public void savePoint(PointCreateRequestDto request) {
+    public Point savePoint(PointCreateRequestDto request) {
         Member member = memberRepository.findActiveMemberById(request.getMemberId())
                 .orElseThrow(() -> new NotFoundException("회원 정보를 찾을 수 없습니다."));
         Order order = null;
@@ -65,7 +65,7 @@ public class PointServiceImpl implements PointService {
                 .changeDate(LocalDateTime.now())
                 .build();
 
-        pointRepository.save(point);
+        return pointRepository.save(point);
     }
 
     /**
@@ -151,10 +151,13 @@ public class PointServiceImpl implements PointService {
      * {@inheritDoc}
      */
     @Override
-    public void returnPoint(Long orderId) {
+    public Point returnPoint(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException("order 정보가 없습니다."));
-        Point point = pointRepository.findUsePointByOrderId(orderId)
-                .orElseThrow(() -> new NotFoundException("orderId에 해당하는 사용된 포인트가 없습니다."));
+        Point point = pointRepository.findUsePointByOrderId(orderId).orElse(null);
+        //다른 결제일 경우, 포인트를 사용할 수도 있고 안 할 수도 있음
+        if(point == null){//사용하지 않았을 경우 바로 리턴
+            return null;
+        }
 
         if(point.getChangeReason().equals(RETURN)){
             throw new BadRequestException("해당 주문에 사용된 포인트는 이미 반환되었습니다.");
@@ -166,7 +169,7 @@ public class PointServiceImpl implements PointService {
                 point.getPoint(),
                 RETURN
         );
-        savePoint(pointCreateRequestDto);
+        return savePoint(pointCreateRequestDto);
     }
 
 

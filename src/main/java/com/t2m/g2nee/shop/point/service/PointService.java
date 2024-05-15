@@ -2,6 +2,7 @@ package com.t2m.g2nee.shop.point.service;
 
 import com.t2m.g2nee.shop.memberset.member.domain.Member;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
+import com.t2m.g2nee.shop.point.domain.Point;
 import com.t2m.g2nee.shop.point.dto.request.PointCreateRequestDto;
 
 /**
@@ -17,7 +18,7 @@ public interface PointService {
      *
      * @param request
      */
-    void savePoint(PointCreateRequestDto request);
+    Point savePoint(PointCreateRequestDto request);
 
     /**
      * member에게 회원가입 포인트를 주는 메소드
@@ -61,7 +62,7 @@ public interface PointService {
      *
      * @param orderId 포인트를 사용했던 order의 id
      */
-    void returnPoint(Long orderId);
+    Point returnPoint(Long orderId);
 
     /**
      * member의 전체 포인트를 받아오는 메소드

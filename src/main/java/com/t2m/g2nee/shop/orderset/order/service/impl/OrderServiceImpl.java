@@ -71,7 +71,7 @@ public class OrderServiceImpl implements OrderService {
     public PageResponse<OrderForPaymentDto> getOrderListForMembers(int page, Long memberId) {
 
         Page<Order> orders = orderRepository.findByCustomer_CustomerId(memberId,
-                PageRequest.of(page - 1, 10));
+                PageRequest.of(page - 1, 10,Sort.by("orderId").descending()));
 
         List<OrderForPaymentDto> orderList = orders
                 .stream().map((Order order) -> convertOrderInfoDto(order, null))
