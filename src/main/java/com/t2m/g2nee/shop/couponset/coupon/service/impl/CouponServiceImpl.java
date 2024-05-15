@@ -210,15 +210,15 @@ public class CouponServiceImpl implements CouponService {
         }
 
         //쿠폰 대상 선택
-        String target = "전체";
+        String target = "전체 적용";
         BookCoupon bookCoupon = bookCouponService.getBookCoupon(coupon.getCouponType().getCouponTypeId());
         if (Objects.nonNull(bookCoupon)) {
-            target = bookCoupon.getBook().getTitle();
+            target = "대상 도서: "+bookCoupon.getBook().getTitle();
         }
         CategoryCoupon categoryCoupon =
                 categoryCouponService.getCategoryCoupon(coupon.getCouponType().getCouponTypeId());
         if (Objects.nonNull(categoryCoupon)) {
-            target = categoryCoupon.getCategory().getCategoryName();
+            target = "대상 카테고리: "+categoryCoupon.getCategory().getCategoryName();
         }
 
         return new CouponInfoDto(
