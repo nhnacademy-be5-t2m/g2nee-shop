@@ -136,12 +136,12 @@ public class ReviewService {
         Integer orderNum = orderRepository.getMemberBookOrderNum(memberId, bookId);
 
         // 구매했으면 리뷰를 작성했는 지 확인
-        if(orderNum > 0) {
-            return reviewRepository.getMemberReviews(memberId, bookId);
+        if(orderNum == null || orderNum < 0) {
+            // 구매 내역이 없으면 더미 리뷰 데이터 전송 -> front에서 review 정보가 있냐 없냐에 따라 true false로 판별하기 때문에
+            // 구매한 것이 아니면 항상 false를 반환하도록 객체를 리턴
+            return new ReviewDto.Response();
         }
-        // 아니면 더미 리뷰 데이터 전송 -> front에서 review 정보가 있냐 없냐에 따라 true false로 판별하기 때문에
-        // 구매한 것이 아니면 항상 false를 반환하도록 객체를 리턴
-        return new ReviewDto.Response();
+        return reviewRepository.getMemberReviews(memberId, bookId);
 
     }
 
