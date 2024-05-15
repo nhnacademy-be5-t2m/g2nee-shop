@@ -1,31 +1,39 @@
 package com.t2m.g2nee.shop.point.repository.impl;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.t2m.g2nee.shop.memberset.customer.domain.Customer;
+import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import com.t2m.g2nee.shop.point.domain.Point;
 import com.t2m.g2nee.shop.point.domain.QPoint;
+import com.t2m.g2nee.shop.point.dto.response.PointResponseDto;
 import com.t2m.g2nee.shop.point.repository.PointCustomRepository;
+import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 public class PointCustomRepositoryImpl extends QuerydslRepositorySupport implements PointCustomRepository {
     private final JPAQueryFactory queryFactory;
 
     public PointCustomRepositoryImpl(EntityManager entityManager) {
-        super(Customer.class);
+        super(Point.class);
         this.queryFactory = new JPAQueryFactory(entityManager);
     }
+    QPoint point = QPoint.point1;
 
     /**
      * {@inheritDoc}
      */
     @Override
     public Integer getTotalPoint(Long memberId) {
-        QPoint point1 = QPoint.point1;
-        return queryFactory.select(point1.point.sum())
-                .from(point1)
-                .where(point1.member.customerId.eq(memberId))
+
+        return queryFactory.select(point.point.sum())
+                .from(point)
+                .where(point.member.customerId.eq(memberId))
                 .fetchOne();
     }
 
@@ -34,10 +42,9 @@ public class PointCustomRepositoryImpl extends QuerydslRepositorySupport impleme
      */
     @Override
     public Optional<Point> findUsePointByOrderId(Long orderId) {
-        QPoint point1 = QPoint.point1;
-        return Optional.ofNullable(from(point1)
-                .where(point1.order.orderId.eq(orderId)
-                        .and(point1.changeReason.eq(Point.ChangeReason.USE)))
+        return Optional.ofNullable(from(point)
+                .where(point.order.orderId.eq(orderId)
+                        .and(point.changeReason.eq(Point.ChangeReason.USE)))
                 .fetchOne());
     }
 
@@ -46,10 +53,31 @@ public class PointCustomRepositoryImpl extends QuerydslRepositorySupport impleme
      */
     @Override
     public Optional<Point> findReturnPointByOrderId(Long orderId) {
-        QPoint point1 = QPoint.point1;
-        return Optional.ofNullable(from(point1)
-                .where(point1.order.orderId.eq(orderId)
-                        .and(point1.changeReason.eq(Point.ChangeReason.RETURN)))
+        return Optional.ofNullable(from(point)
+                .where(point.order.orderId.eq(orderId)
+                        .and(point.changeReason.eq(Point.ChangeReason.RETURN)))
                 .fetchOne());
+    }
+
+    /**
+     * Author : 신동민
+     * 회원 포인트 적립 내역을 확인하는 메서드
+     * @param memberId 회원 아이디
+     * @return List<PointResponseDto>
+     */
+    @Override
+    public Page<PointResponseDto> getMemberPointDetail(Pageable pageable, Long memberId) {
+        List<PointResponseDto> pointDetailList = from(point)
+                .where(point.member.customerId.eq(memberId))
+                .select(Projections.fields(PointResponseDto.class
+                        , point.point
+                        , point.changeDate
+                        , point.changeReason.as("reason")))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        return new PageImpl<>(pointDetailList, pageable, pointDetailList.size());
+
     }
 }
