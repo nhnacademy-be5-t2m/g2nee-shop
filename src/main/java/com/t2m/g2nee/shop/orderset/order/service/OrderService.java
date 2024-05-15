@@ -91,9 +91,14 @@ public interface OrderService {
     void deleteOrder(Long orderId);
 
     /**
-     * 주문 총액을 가져오는 메소드
+     * 이전 3달간 주문 총액과 회원 등급을 가져오는 메소드
      *
      * @param memberId
      */
-    GradeResponseDto getGradeResponse(Long memberId);
+    GradeResponseDto getTotalAmount(Long memberId);
+
+    /**
+     * 모든 회원의 등급을 update하는 메소드
+     */
+    void updateGrade();
 }

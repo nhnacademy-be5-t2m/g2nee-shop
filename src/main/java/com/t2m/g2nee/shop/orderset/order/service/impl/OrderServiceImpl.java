@@ -25,6 +25,7 @@ import com.t2m.g2nee.shop.point.dto.response.GradeResponseDto;
 import com.t2m.g2nee.shop.policyset.pointpolicy.repository.PointPolicyRepository;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -135,7 +136,6 @@ public class OrderServiceImpl implements OrderService {
         } else {
             return false;
         }
-
     }
 
     @Override
@@ -147,32 +147,47 @@ public class OrderServiceImpl implements OrderService {
      * {@inheritDoc}
      */
     @Override
-    public GradeResponseDto getGradeResponse(Long memberId) {
-        LocalDateTime currentTime = LocalDateTime.now();
+    public GradeResponseDto getTotalAmount(Long memberId) {
+        LocalDateTime currentMonth = LocalDateTime.now().withDayOfMonth(1);
         Member member =
                 memberRepository.findActiveMemberById(memberId).orElseThrow(() -> new NotFoundException("회원정보가 없습니다."));
-        Long totalOrderAmount = Long.parseLong(
-                String.valueOf(orderRepository.getTotalOrderAmount(currentTime, memberId)));
-        Grade originGradeName = member.getGrade();
-        Grade newGradeName = null;
-        if (0L <= totalOrderAmount && totalOrderAmount < 100000L) {
-            newGradeName = gradeRepository.findByGradeName(NORMAL);
-        } else if (100000 <= totalOrderAmount && totalOrderAmount < 200000) {
-            newGradeName = gradeRepository.findByGradeName(ROYAL);
-        } else if (200000 <= totalOrderAmount && totalOrderAmount < 300000) {
-            newGradeName = gradeRepository.findByGradeName(GOLD);
-        } else {
-            newGradeName = gradeRepository.findByGradeName(PLATINUM);
-        }
-
-        if (originGradeName != newGradeName) {
-            member.setGrade(newGradeName);
-            memberRepository.save(member);
-        }
-
-        return new GradeResponseDto(totalOrderAmount, newGradeName.getGradeName().getName());
+        Long totalAmount = Long.parseLong(
+                String.valueOf(orderRepository.getTotalOrderAmount(currentMonth, memberId)));
+        String grade = member.getGrade().getGradeName().getName();
+        return new GradeResponseDto(totalAmount, grade);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void updateGrade() {
+        LocalDateTime currentMonth = LocalDateTime.now().withDayOfMonth(1);
+        List<Member> members = memberRepository.findActiveAllMemberById();
+        if (members.size() == 0) {
+            return;
+        }
+        for (Member member : members) {
+            Long totalOrderAmount = Long.parseLong(
+                    String.valueOf(orderRepository.getTotalOrderAmount(currentMonth, member.getCustomerId())));
+            Grade originGradeName = member.getGrade();
+            Grade newGradeName = null;
+            if (0L <= totalOrderAmount && totalOrderAmount < 100000L) {
+                newGradeName = gradeRepository.findByGradeName(NORMAL);
+            } else if (100000 <= totalOrderAmount && totalOrderAmount < 200000) {
+                newGradeName = gradeRepository.findByGradeName(ROYAL);
+            } else if (200000 <= totalOrderAmount && totalOrderAmount < 300000) {
+                newGradeName = gradeRepository.findByGradeName(GOLD);
+            } else {
+                newGradeName = gradeRepository.findByGradeName(PLATINUM);
+            }
 
+            if (originGradeName != newGradeName) {
+                member.setGrade(newGradeName);
+                memberRepository.save(member);
+            }
+        }
+
+    }
 }
 

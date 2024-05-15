@@ -7,6 +7,8 @@ import com.t2m.g2nee.shop.memberset.member.dto.response.MemberDetailInfoResponse
 import com.t2m.g2nee.shop.memberset.member.dto.response.MemberResponse;
 import com.t2m.g2nee.shop.memberset.member.dto.response.MemberResponseToAuth;
 import com.t2m.g2nee.shop.memberset.member.service.MemberService;
+import com.t2m.g2nee.shop.orderset.order.service.OrderService;
+import com.t2m.g2nee.shop.point.dto.response.GradeResponseDto;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/shop/member")
 public class MemberController {
     private final MemberService memberService;
+    private final OrderService orderService;
 
     /**
      * 회원가입을 처리하는 메소드
@@ -133,6 +136,20 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(member.getMemberStatus().getName());
+    }
+
+    /**
+     * 회원의 지난 3달간 주문금액 총액과 등급을 알려주는 메소드
+     *
+     * @param memberId 주문금액 총액을 알아낼 memberId
+     * @return 지난 3달 주문 총 금액
+     */
+    @GetMapping("/getGrade/{memberId}")
+    public ResponseEntity<GradeResponseDto> getTotalOrderAmount(@PathVariable("memberId") Long memberId) {
+        GradeResponseDto result = orderService.getTotalAmount(memberId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(result);
     }
 
 }
