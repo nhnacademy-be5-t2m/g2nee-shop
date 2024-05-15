@@ -1,10 +1,19 @@
 package com.t2m.g2nee.shop.orderset.order.service.impl;
 
+import static com.t2m.g2nee.shop.memberset.grade.domain.Grade.GradeName.GOLD;
+import static com.t2m.g2nee.shop.memberset.grade.domain.Grade.GradeName.NORMAL;
+import static com.t2m.g2nee.shop.memberset.grade.domain.Grade.GradeName.PLATINUM;
+import static com.t2m.g2nee.shop.memberset.grade.domain.Grade.GradeName.ROYAL;
+
 import com.t2m.g2nee.shop.couponset.coupon.domain.Coupon;
 import com.t2m.g2nee.shop.couponset.coupon.service.CouponService;
 import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.memberset.customer.domain.Customer;
 import com.t2m.g2nee.shop.memberset.customer.service.CustomerService;
+import com.t2m.g2nee.shop.memberset.grade.domain.Grade;
+import com.t2m.g2nee.shop.memberset.grade.repository.GradeRepository;
+import com.t2m.g2nee.shop.memberset.member.domain.Member;
+import com.t2m.g2nee.shop.memberset.member.repository.MemberRepository;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import com.t2m.g2nee.shop.orderset.order.dto.request.OrderSaveDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
@@ -15,13 +24,14 @@ import com.t2m.g2nee.shop.orderset.order.service.OrderService;
 import com.t2m.g2nee.shop.orderset.orderdetail.dto.response.GetOrderDetailResponseDto;
 import com.t2m.g2nee.shop.orderset.orderdetail.service.OrderDetailService;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
-import com.t2m.g2nee.shop.policyset.deliverypolicy.service.DeliveryPolicyService;
+import com.t2m.g2nee.shop.point.dto.response.GradeResponseDto;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -44,7 +54,6 @@ public class OrderServiceImpl implements OrderService {
 
     private final MemberRepository memberRepository;
     private final GradeRepository gradeRepository;
-    private final DeliveryPolicyService deliveryPolicyService;
 
     @Override
     @Transactional(readOnly = true)
@@ -74,7 +83,7 @@ public class OrderServiceImpl implements OrderService {
     public PageResponse<OrderForPaymentDto> getOrderListForMembers(int page, Long memberId) {
 
         Page<Order> orders = orderRepository.findByCustomer_CustomerId(memberId,
-                PageRequest.of(page - 1, 10,Sort.by("orderId").descending()));
+                PageRequest.of(page - 1, 10, Sort.by("orderId").descending()));
 
         List<OrderForPaymentDto> orderList = orders
                 .stream().map((Order order) -> convertOrderInfoDto(order, null))
@@ -100,11 +109,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public GetOrderInfoResponseDto getOrderInfoById(Long orderId) {
+    public GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long memberId) {
         orderRepository.findById(orderId).orElseThrow(()
                 -> new NotFoundException("주문이 존재하지 않습니다."));
 
-        return orderRepository.getOrderInfoById(orderId);
+        return orderRepository.getOrderInfoById(orderId, memberId);
 
     }
 
@@ -226,8 +235,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
-
-
     /**
      * 주문과 주문 상세 객체를 OrderForPaymentDto로 변환합니다.
      *
@@ -281,7 +288,7 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public void updateGrade() {
-        LocalDateTime currentMonth =  LocalDateTime.now()
+        LocalDateTime currentMonth = LocalDateTime.now()
                 .withDayOfMonth(1)
                 .withHour(0)
                 .withMinute(0)

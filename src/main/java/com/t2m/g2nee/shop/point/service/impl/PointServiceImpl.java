@@ -125,7 +125,7 @@ public class PointServiceImpl implements PointService {
         PointPolicyInfoDto pointPolicyInfoDto =
                 pointPolicyService.getPointPolicyByPointName(member.getGrade().getGradeName().getName());
         int point = new BigDecimal(pointPolicyInfoDto.getAmount()).multiply(order.getOrderAmount()).intValue();
-        if(point<=0){
+        if (point <= 0) {
             return;
         }
         PointCreateRequestDto pointCreateRequestDto = new PointCreateRequestDto(
@@ -163,11 +163,11 @@ public class PointServiceImpl implements PointService {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException("order 정보가 없습니다."));
         Point point = pointRepository.findUsePointByOrderId(orderId).orElse(null);
         //다른 결제일 경우, 포인트를 사용할 수도 있고 안 할 수도 있음
-        if(point == null){//사용하지 않았을 경우 바로 리턴
+        if (point == null) {//사용하지 않았을 경우 바로 리턴
             return null;
         }
 
-        if(point.getChangeReason().equals(RETURN)){
+        if (point.getChangeReason().equals(RETURN)) {
             throw new BadRequestException("해당 주문에 사용된 포인트는 이미 반환되었습니다.");
         }
 

@@ -139,7 +139,7 @@ public class OrderController {
     }
 
     @GetMapping("/orderName/{orderId}")
-    public ResponseEntity<String> getOrderName(@PathVariable("orderId") Long orderId){
+    public ResponseEntity<String> getOrderName(@PathVariable("orderId") Long orderId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(orderService.getOrderName(orderId));

@@ -112,7 +112,7 @@ public class PaymentServiceImpl implements PaymentService {
         Payment payment =
                 paymentRepository.findById(paymentId).orElseThrow(() -> new NotFoundException("결제가 존재하지 않습니다."));
         //배송 전 결제 취소
-        if(payment.getOrder().getOrderState().equals(Order.OrderState.WAITING)){
+        if (payment.getOrder().getOrderState().equals(Order.OrderState.WAITING)) {
             //결제 취소
             PaymentRequestMethod paymentMethod = factory.getPaymentRequest(payment.getPayType().split("-")[0].trim());
             Payment cancelPayment = paymentMethod.requestCancelPayment(payment);
@@ -122,7 +122,7 @@ public class PaymentServiceImpl implements PaymentService {
             orderDetailService.cancelAllOrderDetail(cancelPayment.getOrder().getOrderId());
 
             return convertToPaymentInfoDto(cancelPayment);
-        }else{
+        } else {
             throw new BadRequestException("배송 전에만 결제를 취소할 수 있습니다.");
         }
     }

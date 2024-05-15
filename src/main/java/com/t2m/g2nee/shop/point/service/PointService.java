@@ -2,7 +2,10 @@ package com.t2m.g2nee.shop.point.service;
 
 import com.t2m.g2nee.shop.memberset.member.domain.Member;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
+import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import com.t2m.g2nee.shop.point.domain.Point;
 import com.t2m.g2nee.shop.point.dto.request.PointCreateRequestDto;
+import com.t2m.g2nee.shop.point.dto.response.PointResponseDto;
 
 /**
  * 주소 정보를 위한 service interface 입니다.
