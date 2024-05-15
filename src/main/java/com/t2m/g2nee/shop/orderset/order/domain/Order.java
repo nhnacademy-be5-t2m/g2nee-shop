@@ -18,12 +18,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "Orders")
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -38,8 +36,8 @@ public class Order {
     private BigDecimal deliveryFee; //배송비
     @Enumerated(EnumType.STRING)
     private OrderState orderState;
-    private BigDecimal netAmount;   //순수 금액
-    private BigDecimal orderAmount; //주문금액
+    private BigDecimal netAmount;   //순수 금액: 진짜 쌩 가격
+    private BigDecimal orderAmount; //주문금액: 할인율 다 받은거
     private String receiverName;
     private String receiverPhoneNumber;
     private String receiveAddress;
@@ -56,8 +54,10 @@ public class Order {
     private Coupon coupon;
 
     public enum OrderState {
-        WAITING("배송대기"), DELIVERING("배송중"), DELIVERED("배송완료"),
-        RETURNING("반품대기"), RETURNED("반품완료");
+        WAITING("배송준비"), DELIVERING("배송중"), DELIVERED("배송완료"),
+        RETURNING("반품대기"), RETURNED("반품완료"), CANCEL("주문취소"),
+
+        PAYWAITING("결제대기"), ABORTED("결제실패");
         private final String name;
 
         OrderState(String name) {
@@ -68,7 +68,6 @@ public class Order {
             return name;
         }
     }
-
 
     public void changeState(OrderState orderState) {
         this.orderState = orderState;

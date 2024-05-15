@@ -41,9 +41,7 @@ public class CustomerServiceImpl implements CustomerService {
      * @throws NotFoundException customerId에 해당하는 customer 정보가 없는 경우 예외를 던집니다.
      */
     public Customer getCustomerInfo(Long customerId) {
-        if (!customerRepository.existsById(customerId)) {
-            throw new NotFoundException(customerId + "의 정보가 없습니다.");
-        }
-        return customerRepository.findById(customerId).get();
+        return customerRepository.findById(customerId)
+                .orElseThrow(() -> new NotFoundException(customerId + "의 정보가 없습니다."));
     }
 }
