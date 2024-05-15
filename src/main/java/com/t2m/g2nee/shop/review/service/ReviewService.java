@@ -18,7 +18,6 @@ import com.t2m.g2nee.shop.review.repository.ReviewRepository;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -126,6 +125,7 @@ public class ReviewService {
 
     /**
      * 주문한 책에만 리뷰를 작성하도록 확인하는 메서드
+     *
      * @param memberId 회원 아이디
      * @param bookId   책 아이디
      * @return ReviewDto.Response
@@ -136,7 +136,7 @@ public class ReviewService {
         Integer orderNum = orderRepository.getMemberBookOrderNum(memberId, bookId);
 
         // 구매했으면 리뷰를 작성했는 지 확인
-        if(orderNum == null || orderNum < 0) {
+        if (orderNum == null || orderNum < 0) {
             // 구매 내역이 없으면 더미 리뷰 데이터 전송 -> front에서 review 정보가 있냐 없냐에 따라 true false로 판별하기 때문에
             // 구매한 것이 아니면 항상 false를 반환하도록 객체를 리턴
             return new ReviewDto.Response();

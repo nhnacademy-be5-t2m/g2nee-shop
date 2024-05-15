@@ -192,7 +192,7 @@ public class BookGetService {
         return getPageResponse(page, bookList);
     }
 
-    public List<BookDto.ListResponse> getBestseller(){
+    public List<BookDto.ListResponse> getBestseller() {
         return bookRepository.getBestSeller();
     }
 

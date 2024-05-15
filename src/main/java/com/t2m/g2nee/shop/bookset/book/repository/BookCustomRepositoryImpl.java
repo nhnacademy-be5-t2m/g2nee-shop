@@ -627,6 +627,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
 
     /**
      * 주문량이 많은 책 6권을 조회하는 메서드
+     *
      * @return List<BookDto.ListResponse>
      */
     @Override

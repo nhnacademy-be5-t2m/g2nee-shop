@@ -3,7 +3,6 @@ package com.t2m.g2nee.shop.orderset.orderdetail.repository.impl;
 import com.querydsl.core.types.Projections;
 import com.t2m.g2nee.shop.bookset.book.domain.QBook;
 import com.t2m.g2nee.shop.couponset.coupon.domain.QCoupon;
-import com.t2m.g2nee.shop.couponset.coupon.domain.QCoupon;
 import com.t2m.g2nee.shop.couponset.coupontype.domain.QCouponType;
 import com.t2m.g2nee.shop.memberset.customer.domain.QCustomer;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;

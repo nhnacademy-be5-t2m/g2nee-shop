@@ -23,6 +23,7 @@ public class ReviewCustomRepositoryImpl extends QuerydslRepositorySupport implem
     QReview review = QReview.review;
     QMember member = QMember.member;
     QReviewFile reviewFile = QReviewFile.reviewFile;
+
     /**
      * 책의 리뷰 정보를 조회하는 메서드
      *
