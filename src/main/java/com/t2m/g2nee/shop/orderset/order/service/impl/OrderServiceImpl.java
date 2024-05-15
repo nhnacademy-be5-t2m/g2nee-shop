@@ -1,5 +1,7 @@
 package com.t2m.g2nee.shop.orderset.order.service.impl;
 
+import com.t2m.g2nee.shop.bookset.category.domain.Category;
+import com.t2m.g2nee.shop.bookset.category.dto.response.CategoryInfoDto;
 import com.t2m.g2nee.shop.couponset.coupon.domain.Coupon;
 import com.t2m.g2nee.shop.couponset.coupon.service.CouponService;
 import com.t2m.g2nee.shop.exception.NotFoundException;
@@ -22,6 +24,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -40,6 +43,9 @@ public class OrderServiceImpl implements OrderService {
     private final OrderDetailService orderDetailService;
     private final CouponService couponService;
     private final DeliveryPolicyService deliveryPolicyService;
+
+    private static final int MAXPAGEBUTTONS = 5;
+
 
     @Override
     @Transactional(readOnly = true)
@@ -66,13 +72,30 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public PageResponse<GetOrderInfoResponseDto> getOrderListForMembers(int page, Long memberId) {
-        int size = 5;
-        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdAt"));
-        Page<GetOrderInfoResponseDto> returnOrderList =
-                orderRepository.getOrderListForMembers(pageable, memberId);
-        PageResponse<GetOrderInfoResponseDto> pageResponse = new PageResponse<>();
-        return pageResponse.getPageResponse(page, 4, returnOrderList);
+    public PageResponse<OrderForPaymentDto> getOrderListForMembers(int page, Long memberId) {
+
+        Page<Order> orders = orderRepository.findByCustomer_CustomerId(memberId,
+                PageRequest.of(page - 1, 10));
+
+        List<OrderForPaymentDto> orderList = orders
+                .stream().map((Order order) -> convertOrderInfoDto(order, null))
+                .collect(Collectors.toList());
+
+        int startPage = (int) Math.max(1, orders.getNumber() - Math.floor((double) MAXPAGEBUTTONS / 2));
+        int endPage = Math.min(startPage + MAXPAGEBUTTONS - 1, orders.getTotalPages());
+
+        if (endPage - startPage + 1 < MAXPAGEBUTTONS) {
+            startPage = Math.max(1, endPage - MAXPAGEBUTTONS + 1);
+        }
+
+        return PageResponse.<OrderForPaymentDto>builder()
+                .data(orderList)
+                .currentPage(page)
+                .totalPage(orders.getTotalPages())
+                .startPage(startPage)
+                .endPage(endPage)
+                .totalElements(orders.getTotalElements())
+                .build();
     }
 
 
@@ -198,6 +221,11 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    @Override
+    public String getOrderName(Long orderId) {
+        return orderDetailService.getOrderName(orderId);
+    }
+
 
     private void abortOrders(List<Order> remainOrders) {
         if (!remainOrders.isEmpty()) {
@@ -208,6 +236,8 @@ public class OrderServiceImpl implements OrderService {
             }
         }
     }
+
+
 
 
     /**

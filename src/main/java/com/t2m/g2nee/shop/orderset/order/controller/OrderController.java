@@ -78,9 +78,9 @@ public class OrderController {
      * @return 200, 회원의 전체 주문
      */
     @GetMapping("/members/{memberId}/list")
-    public ResponseEntity<PageResponse<GetOrderInfoResponseDto>> getOrderListForMembers(
+    public ResponseEntity<PageResponse<OrderForPaymentDto>> getOrderListForMembers(
             @PathVariable("memberId") Long memberId, @RequestParam int page) {
-        PageResponse<GetOrderInfoResponseDto> memberListResponse =
+        PageResponse<OrderForPaymentDto> memberListResponse =
                 orderService.getOrderListForMembers(page, memberId);
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -135,6 +135,13 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(orderInfoResponseDto);
+    }
+
+    @GetMapping("/orderName/{orderId}")
+    public ResponseEntity<String> getOrderName(@PathVariable("orderId") Long orderId){
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(orderService.getOrderName(orderId));
     }
 
 

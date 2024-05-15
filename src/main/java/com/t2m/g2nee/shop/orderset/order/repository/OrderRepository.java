@@ -3,6 +3,8 @@ package com.t2m.g2nee.shop.orderset.order.repository;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OrderRepository extends JpaRepository<Order, Long>, OrderCustomRepository {
@@ -15,4 +17,6 @@ public interface OrderRepository extends JpaRepository<Order, Long>, OrderCustom
      * @return 주문 정보 반환
      */
     Optional<Order> findByOrderNumber(String orderNumber);
+
+    Page<Order> findByCustomer_CustomerId(Long customerId, Pageable pageable);
 }

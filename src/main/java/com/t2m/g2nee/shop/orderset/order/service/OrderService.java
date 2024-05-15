@@ -40,7 +40,7 @@ public interface OrderService {
      * @param memberId 회원번호.
      * @return 회원의 모든 주문 반환
      */
-    PageResponse<GetOrderInfoResponseDto> getOrderListForMembers(int page, Long memberId);
+    PageResponse<OrderForPaymentDto> getOrderListForMembers(int page, Long memberId);
 
     /**
      * 주문 정보 조회
@@ -94,4 +94,6 @@ public interface OrderService {
     Order getOrder(String orderNumber);
 
     void applyUseCoupon(Order order);
+
+    String getOrderName(Long orderId);
 }
