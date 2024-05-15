@@ -1,6 +1,7 @@
 package com.t2m.g2nee.shop.memberset.member.repository;
 
 import com.t2m.g2nee.shop.memberset.member.domain.Member;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.repository.NoRepositoryBean;
 
@@ -20,6 +21,13 @@ public interface MemberCustomRepository {
      * @return Optional<Member> member정보
      */
     Optional<Member> findActiveMemberById(Long memberId);
+
+    /**
+     * ACTIVE 상태의 모든회원을 찾아 반환하는 메소드
+     *
+     * @return List<Member> ACTIVE한 모든 멤버
+     */
+    List<Member> findActiveAllMemberById();
 
 
     /**

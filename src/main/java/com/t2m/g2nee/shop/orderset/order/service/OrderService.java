@@ -6,6 +6,7 @@ import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.OrderForPaymentDto;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import com.t2m.g2nee.shop.point.dto.response.GradeResponseDto;
 
 /**
  * 주문 서비스
@@ -36,11 +37,11 @@ public interface OrderService {
     /**
      * 회원의 전체 주문 조회
      *
-     * @param page     현재 페이지.
-     * @param memberId 회원번호.
+     * @param page       현재 페이지.
+     * @param customerId 회원번호.
      * @return 회원의 모든 주문 반환
      */
-    PageResponse<GetOrderInfoResponseDto> getOrderListForMembers(int page, Long memberId);
+    PageResponse<GetOrderInfoResponseDto> getOrderListForMembers(int page, Long customerId);
 
     /**
      * 주문 정보 조회
@@ -51,7 +52,7 @@ public interface OrderService {
     GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long customerId);
 
     /**
-     * 주문 번호로 조회
+     * 비회원 주문 정보 조회(주문 번호로 조회)
      *
      * @param orderNumber 주문번호.
      * @return 주문 정보
@@ -72,6 +73,18 @@ public interface OrderService {
      * @param orderId 주문Id
      */
     void deleteOrder(Long orderId);
+
+    /**
+     * 이전 3달간 주문 총액과 회원 등급을 가져오는 메소드
+     *
+     * @param memberId
+     */
+    GradeResponseDto getTotalAmount(Long memberId);
+
+    /**
+     * 모든 회원의 등급을 update하는 메소드
+     */
+    void updateGrade();
 
     /**
      * 주문서를 저장합니다.

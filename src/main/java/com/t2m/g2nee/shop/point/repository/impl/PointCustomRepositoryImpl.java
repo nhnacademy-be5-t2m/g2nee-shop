@@ -2,8 +2,6 @@ package com.t2m.g2nee.shop.point.repository.impl;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.t2m.g2nee.shop.memberset.customer.domain.Customer;
-import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import com.t2m.g2nee.shop.point.domain.Point;
 import com.t2m.g2nee.shop.point.domain.QPoint;
 import com.t2m.g2nee.shop.point.dto.response.PointResponseDto;
@@ -23,6 +21,7 @@ public class PointCustomRepositoryImpl extends QuerydslRepositorySupport impleme
         super(Point.class);
         this.queryFactory = new JPAQueryFactory(entityManager);
     }
+
     QPoint point = QPoint.point1;
 
     /**
@@ -62,6 +61,7 @@ public class PointCustomRepositoryImpl extends QuerydslRepositorySupport impleme
     /**
      * Author : 신동민
      * 회원 포인트 적립 내역을 확인하는 메서드
+     *
      * @param memberId 회원 아이디
      * @return List<PointResponseDto>
      */

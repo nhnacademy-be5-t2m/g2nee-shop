@@ -1,6 +1,9 @@
 package com.t2m.g2nee.shop.orderset.order.repository.impl;
 
+import static com.t2m.g2nee.shop.orderset.order.domain.Order.OrderState.DELIVERED;
+
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.t2m.g2nee.shop.bookset.book.domain.QBook;
 import com.t2m.g2nee.shop.couponset.coupon.domain.QCoupon;
 import com.t2m.g2nee.shop.couponset.coupontype.domain.QCouponType;
@@ -12,8 +15,11 @@ import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
 import com.t2m.g2nee.shop.orderset.order.repository.OrderCustomRepository;
 import com.t2m.g2nee.shop.orderset.orderdetail.domain.QOrderDetail;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -36,8 +42,11 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
     QCouponType couponType = QCouponType.couponType;
     QBook book = QBook.book;
 
-    public OrderRepositoryImpl() {
+    private final JPAQueryFactory queryFactory;
+
+    public OrderRepositoryImpl(EntityManager entityManager) {
         super(Order.class);
+        this.queryFactory = new JPAQueryFactory(entityManager);
     }
 
 
@@ -174,6 +183,22 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
     @Override
     public Optional<Order> findByOrderNumber(String orderNumber) {
         return Optional.empty();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public BigDecimal getTotalOrderAmount(LocalDateTime currentTime, Long memberId) {
+        QOrder order = QOrder.order;
+        LocalDateTime threeMonthsAgo = currentTime.minusMonths(3);
+
+        return queryFactory.select(order.netAmount.sum().coalesce(BigDecimal.ZERO))
+                .from(order)
+                .where(order.orderState.eq(DELIVERED)
+                        .and(order.customer.customerId.eq(memberId))
+                        .and(order.orderDate.between(threeMonthsAgo, currentTime)))
+                .fetchOne();
     }
 
     @Override

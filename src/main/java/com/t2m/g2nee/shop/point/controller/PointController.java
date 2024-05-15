@@ -4,7 +4,6 @@ import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import com.t2m.g2nee.shop.point.dto.request.PointCreateRequestDto;
 import com.t2m.g2nee.shop.point.dto.response.PointResponseDto;
 import com.t2m.g2nee.shop.point.service.PointService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +34,9 @@ public class PointController {
     }
 
     @GetMapping("/member/{memberId}")
-    public ResponseEntity<PageResponse<PointResponseDto>> getMemberPointDetail(@PathVariable Long memberId, @RequestParam(defaultValue = "1") int page){
+    public ResponseEntity<PageResponse<PointResponseDto>> getMemberPointDetail(@PathVariable Long memberId,
+                                                                               @RequestParam(defaultValue = "1")
+                                                                               int page) {
 
         PageResponse<PointResponseDto> responses = pointService.getMemberPointDetail(page, memberId);
 
