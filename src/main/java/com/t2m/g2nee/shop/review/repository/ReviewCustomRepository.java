@@ -8,5 +8,7 @@ public interface ReviewCustomRepository {
 
     Page<ReviewDto.Response> getReviews(Long bookId, Pageable pageable);
 
-    ReviewDto.Response getReview(Long memberId, Long bookId);
+    ReviewDto.Response getMemberReviews(Long memberId, Long bookId);
+
+
 }

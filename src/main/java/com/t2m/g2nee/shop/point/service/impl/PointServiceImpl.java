@@ -13,17 +13,25 @@ import com.t2m.g2nee.shop.memberset.member.domain.Member;
 import com.t2m.g2nee.shop.memberset.member.repository.MemberRepository;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import com.t2m.g2nee.shop.orderset.order.repository.OrderRepository;
+import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import com.t2m.g2nee.shop.point.domain.Point;
 import com.t2m.g2nee.shop.point.dto.request.PointCreateRequestDto;
+import com.t2m.g2nee.shop.point.dto.response.PointResponseDto;
 import com.t2m.g2nee.shop.point.repository.PointRepository;
 import com.t2m.g2nee.shop.point.service.PointService;
 import com.t2m.g2nee.shop.policyset.pointpolicy.dto.response.PointPolicyInfoDto;
 import com.t2m.g2nee.shop.policyset.pointpolicy.service.PointPolicyService;
+import com.t2m.g2nee.shop.review.dto.ReviewDto;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 포인트 정보를 위한 service 입니다.
@@ -113,13 +121,15 @@ public class PointServiceImpl implements PointService {
      * {@inheritDoc}
      */
     @Override
-    public void givePurchasePoint(Member member, BigDecimal orderAmount) {
+    public void givePurchasePoint(Long memberId, Order order) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NotFoundException("회원을 찾을 수 없습니다."));
+
         PointPolicyInfoDto pointPolicyInfoDto =
-                pointPolicyService.getPointPolicyByPointName(member.getMemberStatus().getName());
-        int point = new BigDecimal(pointPolicyInfoDto.getAmount()).multiply(orderAmount).intValue();
+                pointPolicyService.getPointPolicyByPointName(member.getGrade().getGradeName().getName());
+        int point = new BigDecimal(pointPolicyInfoDto.getAmount()).multiply(order.getOrderAmount()).intValue();
         PointCreateRequestDto pointCreateRequestDto = new PointCreateRequestDto(
                 member.getCustomerId(),
-                null,
+                order.getOrderId(),
                 point,
                 PURCHASE
         );
@@ -152,9 +162,10 @@ public class PointServiceImpl implements PointService {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException("order 정보가 없습니다."));
         Point point = pointRepository.findUsePointByOrderId(orderId)
                 .orElseThrow(() -> new NotFoundException("orderId에 해당하는 사용된 포인트가 없습니다."));
-        if (pointRepository.findReturnPointByOrderId(orderId) != null) {
-            new BadRequestException("해당 주문에 사용된 포인트는 이미 반환되었습니다.");
-        }
+
+        pointRepository.findReturnPointByOrderId(orderId).orElseThrow(
+                () -> new BadRequestException("해당 주문에 사용된 포인트는 이미 반환되었습니다."));
+
         PointCreateRequestDto pointCreateRequestDto = new PointCreateRequestDto(
                 order.getCustomer().getCustomerId(),
                 orderId,
@@ -169,7 +180,20 @@ public class PointServiceImpl implements PointService {
      * {@inheritDoc}
      */
     @Override
+    @Transactional(readOnly = true)
     public Integer getTotalPoint(Long memberId) {
         return pointRepository.getTotalPoint(memberId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PageResponse<PointResponseDto> getMemberPointDetail(int page, Long memberId) {
+        int size = 10;
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        Page<PointResponseDto> pointDetailPage = pointRepository.getMemberPointDetail(pageable, memberId);
+
+        PageResponse<PointResponseDto> pageResponse = new PageResponse<>();
+        return pageResponse.getPageResponse(page, 10, pointDetailPage);
     }
 }

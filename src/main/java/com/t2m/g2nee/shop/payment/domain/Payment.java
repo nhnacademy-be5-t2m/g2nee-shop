@@ -65,7 +65,7 @@ public class Payment {
 
     public enum PayStatus {
 
-        COMPLETE("결제완료"), CANCELLED("결제취소"), WAITING("결제대기"), ABORTED("결제실패");
+        COMPLETE("결제완료"), CANCELLED("결제취소");
         private final String name;
 
         PayStatus(String name) {

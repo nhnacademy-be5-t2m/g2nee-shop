@@ -4,6 +4,8 @@ import com.t2m.g2nee.shop.memberset.member.domain.Member;
 import com.t2m.g2nee.shop.orderset.order.domain.Order;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,6 +32,7 @@ public class Point {
     private Long pointId;
 
     private int point;
+    @Enumerated(EnumType.STRING)
     private ChangeReason changeReason;
     private LocalDateTime changeDate;
 

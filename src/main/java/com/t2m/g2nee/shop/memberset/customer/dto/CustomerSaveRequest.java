@@ -1,5 +1,6 @@
 package com.t2m.g2nee.shop.memberset.customer.dto;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,13 +22,13 @@ public class CustomerSaveRequest {
     @Pattern(regexp = "^[a-zA-Z가-힣]{2,20}$", message = "영어와 한글만 사용하여 2-20자의 형식으로 작성하여 주십시오.")
     private String name;
 
-    @Pattern(regexp = "^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[~?!@#$%^&*_-]).{8,20}$", message = "영어 숫자, 특수문자를 포함하여 8-20자의 형식으로 작성하여 주십시오.")
+    @NotEmpty(message = "비밀번호를 입력하여 주십시오.")
     private String password;
 
     @Pattern(regexp = "^[a-zA-Z0-9+-\\_.]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$", message = "올바른 email 형식으로 작성하여 주십시오.")
     private String email;
 
-    @Pattern(regexp = "^\\d{3}-\\d{3,4}-\\d{4}$", message = "'-'를 제외한 올바른 전화번호형식으로 작성하여 주십시오.")
+    @Pattern(regexp = "^\\d{3}-\\d{3,4}-\\d{4}$", message = "'-'를 포함한 전화번호형식으로 작성하여 주십시오.")
     private String phoneNumber;
 
 }

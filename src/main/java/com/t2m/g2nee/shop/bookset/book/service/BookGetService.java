@@ -134,20 +134,35 @@ public class BookGetService {
      * @param categoryId 카테고리 아이디
      * @param keyword    키워드
      * @param sort       정렬 기준 default viewCount
+     * @param condition  정렬 조건 default INTEGRATION
      * @return PageResponse<BookDto.ListResponse>
      */
     public PageResponse<BookDto.ListResponse> getBookByCategoryAndElasticsearch(int page, Long memberId,
                                                                                 Long categoryId,
-                                                                                String keyword, String sort) {
+                                                                                String keyword,
+                                                                                String sort,
+                                                                                String condition) {
         // 조건에 맞게 정렬하여 페이지 생성
         int size = 8;
         Pageable pageable = PageRequest.of(page - 1, size);
 
         // categoryId가 null 일 경우 repository에서 키워드만 받도록 처리
         Page<BookDto.ListResponse> bookPage =
-                bookRepository.getBooksByElasticSearchAndCategory(memberId, categoryId, keyword, pageable, sort);
+                bookRepository.getBooksByElasticSearchAndCategory(memberId, categoryId, keyword, pageable, sort,
+                        condition);
 
         return getPageResponse(page, bookPage);
+
+    }
+
+    /**
+     * 책 수량을 조회하는 메서드
+     *
+     * @return List<BookDto.ListResponse>
+     */
+    public List<BookDto.ListResponse> getBookStock(List<Long> bookIdList) {
+
+        return bookRepository.getBookStock(bookIdList);
 
     }
 
@@ -160,6 +175,25 @@ public class BookGetService {
     public List<BookDto.ListResponse> getRecommendBooks(List<Long> categoryIdList, Long bookId) {
 
         return bookRepository.getRecommendBooks(categoryIdList, bookId);
+    }
+
+    /**
+     * 회원이 좋아요한 책을 조회하는 메서드
+     *
+     * @param memberId 회원 아이디
+     * @return List<BookDto.ListResponse>
+     */
+    public PageResponse<BookDto.ListResponse> getMemberLikeBook(int page, Long memberId) {
+        int size = 8;
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        Page<BookDto.ListResponse> bookList = bookRepository.getMemberLikeBook(pageable, memberId);
+
+        return getPageResponse(page, bookList);
+    }
+
+    public List<BookDto.ListResponse> getBestseller() {
+        return bookRepository.getBestSeller();
     }
 
     /**
@@ -190,5 +224,15 @@ public class BookGetService {
                 .totalPage(bookPage.getTotalPages())
                 .totalElements(bookPage.getTotalElements())
                 .build();
+    }
+
+    /**
+     * bookId로 책을 얻는 메소드입니다.
+     *
+     * @param bookId 책 id
+     * @return Book 객체
+     */
+    public Book getBook(Long bookId) {
+        return bookRepository.findById(bookId).orElseThrow(() -> new NotFoundException("책 정보가 없습니다"));
     }
 }

@@ -115,14 +115,19 @@ public class BookGetController {
             @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) String sort,
             @RequestParam String keyword,
+            @RequestParam(required = false) String condition,
             @RequestParam int page) {
 
         if (!StringUtils.hasText(sort)) {
             sort = "viewCount";
         }
 
+        if(!StringUtils.hasText(condition)){
+            condition= "INTEGRATION";
+        }
+
         PageResponse<BookDto.ListResponse> responses =
-                bookGetService.getBookByCategoryAndElasticsearch(page, memberId, categoryId, keyword, sort);
+                bookGetService.getBookByCategoryAndElasticsearch(page, memberId, categoryId, keyword, sort, condition);
 
         return ResponseEntity.status(HttpStatus.OK).body(responses);
     }
@@ -143,5 +148,42 @@ public class BookGetController {
         return ResponseEntity.status(HttpStatus.OK).body(responses);
     }
 
+    /**
+     * 주문 시 책의 재고 확인을 위해 책 재고를 조회하는 컨트롤러
+     *
+     * @param bookIdList 책 아이디 리스트
+     */
+    @GetMapping("/stock")
+    public ResponseEntity<List<BookDto.ListResponse>> getBookStock(@RequestParam List<Long> bookIdList) {
 
+        List<BookDto.ListResponse> responses = bookGetService.getBookStock(bookIdList);
+        return ResponseEntity.status(HttpStatus.OK).body(responses);
+    }
+
+    /**
+     * 회원이 좋아요한 책을 조회하는 컨트롤러
+     *
+     * @param memberId 회원 아이디
+     * @return ResponseEntity<List < BookDto.ListResponse>>
+     */
+    @GetMapping("/like/member/{memberId}")
+    public ResponseEntity<PageResponse<BookDto.ListResponse>> getMemberLikeBook(
+            @RequestParam(defaultValue = "1") int page, @PathVariable Long memberId) {
+
+        PageResponse<BookDto.ListResponse> responses = bookGetService.getMemberLikeBook(page, memberId);
+        return ResponseEntity.status(HttpStatus.OK).body(responses);
+    }
+
+    /**
+     * 가장 판매량이 높은 6권의 책을 조회하는 컨트롤러
+     *
+     * @return ResponseEntity<List < BookDto.ListResponse>>
+     */
+    @GetMapping("/bestseller")
+    public ResponseEntity<List<BookDto.ListResponse>> getBestSeller() {
+
+        List<BookDto.ListResponse> responses = bookGetService.getBestseller();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responses);
+    }
 }

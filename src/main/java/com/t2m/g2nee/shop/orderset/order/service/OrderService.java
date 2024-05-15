@@ -101,4 +101,25 @@ public interface OrderService {
      * 모든 회원의 등급을 update하는 메소드
      */
     void updateGrade();
+    /**
+     * 주문서를 저장합니다.
+     *
+     * @param orderSaveDto 회원 주문 저장 dto
+     * @return 주문 내역
+     * @author : 김수빈
+     * @since : 1.0
+     */
+    OrderForPaymentDto saveOrder(OrderSaveDto orderSaveDto);
+
+    /**
+     * 주문 번호를 통해 주문을 조회합니다.
+     *
+     * @param orderNumber 주문 번호
+     * @return Order 객체
+     * @author : 김수빈
+     * @since : 1.0
+     */
+    Order getOrder(String orderNumber);
+
+    void applyUseCoupon(Order order);
 }

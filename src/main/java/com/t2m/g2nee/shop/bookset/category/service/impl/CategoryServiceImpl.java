@@ -61,7 +61,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         //상위 카테고리 id가 0인 경우: 최상위 카테고리 일 때이므로 경로 추가 없음
         //그 외의 경우: 하위 카테고리 이므로 경로 추가 필요
-        if (categorySaveDto.getAncestorCategoryId() != 0) {
+        if (!categorySaveDto.getAncestorCategoryId().equals(0L)) {
             //상위 카테고리를 검색: 저장할 카테고리와 depth가 적은 카테고리 순서로 반환됨
             List<Category> ancestorIdList =
                     categoryBasicService.getAncestorList(categorySaveDto.getAncestorCategoryId());
@@ -124,7 +124,7 @@ public class CategoryServiceImpl implements CategoryService {
 
                 categoryPathBasicService.saveCategoryPath(new CategoryPath(category, category, depth++));
 
-                if (categorySaveDto.getAncestorCategoryId() != 0) {
+                if (!categorySaveDto.getAncestorCategoryId().equals(0L)) {
                     List<Category> ancestorIdList =
                             categoryBasicService.getAncestorList(categorySaveDto.getAncestorCategoryId());
 
