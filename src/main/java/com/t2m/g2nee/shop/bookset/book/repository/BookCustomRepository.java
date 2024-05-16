@@ -21,7 +21,7 @@ public interface BookCustomRepository {
 
     List<BookDto.ListResponse> getRecommendBooks(List<Long> categoryIdList, Long bookId);
 
-    List<BookDto.ListResponse> getBookStock(List<Long> bookIdList);
+    List<BookDto.ListResponse> getBooksForCheck(List<Long> bookIdList);
 
     List<Long> getLowestCategoryId(List<Long> categoryIdList);
 

@@ -156,13 +156,13 @@ public class BookGetService {
     }
 
     /**
-     * 책 수량을 조회하는 메서드
+     * 주문 전 책 상태를 조회하는 메서드
      *
      * @return List<BookDto.ListResponse>
      */
-    public List<BookDto.ListResponse> getBookStock(List<Long> bookIdList) {
+    public List<BookDto.ListResponse> getBooksForCheck(List<Long> bookIdList) {
 
-        return bookRepository.getBookStock(bookIdList);
+        return bookRepository.getBooksForCheck(bookIdList);
 
     }
 
