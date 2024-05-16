@@ -6,7 +6,6 @@ import org.springframework.data.domain.Pageable;
 
 /**
  * 쿠폰조회 관련 Repository
- *
  * @author : 김수현
  * @since : 1.0
  */
@@ -14,11 +13,11 @@ public interface CustomCouponTypeRepository {
 
     /**
      * admin에서 쿠폰 조회하는 controller
-     *
      * @param pageable
      * @return
      */
-    Page<CouponTypeInfoDto> getAllCoupons(Pageable pageable);
+   Page<CouponTypeInfoDto> getAllCoupons(Pageable pageable);
+
 
 
 }

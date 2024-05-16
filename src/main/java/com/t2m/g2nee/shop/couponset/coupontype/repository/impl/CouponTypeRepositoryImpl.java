@@ -7,15 +7,18 @@ import com.t2m.g2nee.shop.couponset.coupon.domain.Coupon;
 import com.t2m.g2nee.shop.couponset.coupontype.domain.QCouponType;
 import com.t2m.g2nee.shop.couponset.coupontype.dto.CouponTypeInfoDto;
 import com.t2m.g2nee.shop.couponset.coupontype.repository.CustomCouponTypeRepository;
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
+
+import java.util.List;
+
 @Repository
 public class CouponTypeRepositoryImpl extends QuerydslRepositorySupport implements CustomCouponTypeRepository {
+
 
 
     public CouponTypeRepositoryImpl() {
