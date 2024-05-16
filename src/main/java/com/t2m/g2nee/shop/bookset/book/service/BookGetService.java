@@ -6,7 +6,6 @@ import com.t2m.g2nee.shop.bookset.book.dto.BookDto;
 import com.t2m.g2nee.shop.bookset.book.repository.BookRepository;
 import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
-import com.t2m.g2nee.shop.utils.MarkDownUtil;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class BookGetService {
 
     private final BookRepository bookRepository;
-    private final MarkDownUtil markDownUtil;
 
     /**
      * 가장 최신 출판된 6개의 책을 조회하는 메서드 입니다.
@@ -90,8 +88,6 @@ public class BookGetService {
     @Transactional
     public BookDto.Response getBookDetail(Long memberId, Long bookId) {
         BookDto.Response bookDetail = bookRepository.getBookDetail(memberId, bookId);
-        bookDetail.setBookIndex(markDownUtil.markdown(bookDetail.getBookIndex()));
-        bookDetail.setDescription(markDownUtil.markdown(bookDetail.getDescription()));
         bookDetail.setScoreAverage(Math.round(bookDetail.getScoreAverage() * 10) / 10.0);
 
         return bookDetail;
