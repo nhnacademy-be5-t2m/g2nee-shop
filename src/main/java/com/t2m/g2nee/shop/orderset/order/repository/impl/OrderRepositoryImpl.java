@@ -4,6 +4,7 @@ import static com.t2m.g2nee.shop.orderset.order.domain.Order.OrderState.DELIVERE
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.t2m.g2nee.shop.bookset.book.domain.QBook;
 import com.t2m.g2nee.shop.couponset.coupon.domain.QCoupon;
 import com.t2m.g2nee.shop.couponset.coupontype.domain.QCouponType;
 import com.t2m.g2nee.shop.memberset.customer.domain.QCustomer;
@@ -37,6 +38,8 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
     QOrderDetail orderDetail = QOrderDetail.orderDetail;
     QCoupon coupon = QCoupon.coupon;
     QCouponType couponType = QCouponType.couponType;
+    QBook book = QBook.book;
+
 
     private final JPAQueryFactory queryFactory;
 
@@ -195,6 +198,19 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
                 .where(order.orderState.eq(DELIVERED)
                         .and(order.customer.customerId.eq(memberId))
                         .and(order.orderDate.between(threeMonthsAgo, currentTime)))
+                .fetchOne();
+    }
+
+    @Override
+    public Integer getMemberBookOrderNum(Long memberId, Long bookId) {
+
+        return from(book)
+                .innerJoin(orderDetail).on(orderDetail.book.bookId.eq(book.bookId))
+                .innerJoin(order).on(orderDetail.order.orderId.eq(order.orderId))
+                .where(order.customer.customerId.eq(memberId)
+                        .and(book.bookId.eq(bookId)))
+                .select(orderDetail.quantity.sum())
+                .groupBy(book)
                 .fetchOne();
     }
 }

@@ -24,6 +24,7 @@ import com.t2m.g2nee.shop.orderset.order.service.OrderService;
 import com.t2m.g2nee.shop.orderset.orderdetail.dto.response.GetOrderDetailResponseDto;
 import com.t2m.g2nee.shop.orderset.orderdetail.service.OrderDetailService;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import com.t2m.g2nee.shop.point.dto.response.GradeResponseDto;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -300,5 +301,24 @@ public class OrderServiceImpl implements OrderService {
                 memberRepository.save(member);
             }
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GradeResponseDto getTotalAmount(Long memberId) {
+        LocalDateTime currentMonth = LocalDateTime.now()
+                .withDayOfMonth(1)
+                .withHour(0)
+                .withMinute(0)
+                .withSecond(0)
+                .withNano(0);
+        Member member =
+                memberRepository.findActiveMemberById(memberId).orElseThrow(() -> new NotFoundException("회원정보가 없습니다."));
+        Long totalAmount = Long.parseLong(
+                String.valueOf(orderRepository.getTotalOrderAmount(currentMonth, memberId)));
+        String grade = member.getGrade().getGradeName().getName();
+        return new GradeResponseDto(totalAmount, grade);
     }
 }
