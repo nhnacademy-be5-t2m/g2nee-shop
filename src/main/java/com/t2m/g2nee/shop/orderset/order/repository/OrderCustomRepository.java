@@ -39,21 +39,20 @@ public interface OrderCustomRepository {
     /**
      * 회원의 전체 주문 반환.
      *
-     * @param pageable   paging
-     * @param customerId 회원번호
+     * @param pageable paging
+     * @param memberId 회원번호
      * @return 회원 전체 주문 반환
      */
-    Page<GetOrderInfoResponseDto> getOrderListForMembers(Pageable pageable, Long customerId);
+    Page<GetOrderInfoResponseDto> getOrderListForMembers(Pageable pageable, Long memberId);
 
 
     /**
      * 주문id로 단일 주문 정보 반환(회원용)
      *
-     * @param orderId    주문id
-     * @param customerId 회원id
+     * @param orderId 주문id
      * @return 주문 정보 반환
      */
-    GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long customerId);
+    GetOrderInfoResponseDto getOrderInfoById(Long orderId);
 
     /**
      * 주문번호로 주문 정보 반환(비회원용)
@@ -62,30 +61,4 @@ public interface OrderCustomRepository {
      * @return 주문정보 반환
      */
     GetOrderInfoResponseDto getOrderInfoByOrderNumber(String orderNumber);
-
-    /**
-     * 주문 번호로 주문 조회
-     *
-     * @param orderNumber 주문 번호
-     * @return 주문 정보 반환
-     */
-    Optional<Order> findByOrderNumber(String orderNumber);
-
-    /**
-     * member의 지난 3달간의 주문총액
-     *
-     * @param memberId    memberId
-     * @param currentTime 지난 3달 계산을 위한 현재 시간
-     * @return 지난 3달간의 주문총액
-     */
-    BigDecimal getTotalOrderAmount(LocalDateTime currentTime, Long memberId);
-
-    /**
-     * 회원이 주문한 책 수량을 조회하는 메서드
-     *
-     * @param memberId 회원 아이디
-     * @param bookId   책 아이디
-     * @return Integer
-     */
-    Integer getMemberBookOrderNum(Long memberId, Long bookId);
 }

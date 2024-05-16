@@ -89,20 +89,20 @@ public class OrderController {
     }
 
     /**
-     * 주문id로 주문 정보 조회(회원용)
+     * 주문id로 주문 정보 조회
      *
      * @param orderId 주문 id
      * @return 200, 주문 정보 반환
      */
     //@MemberAndAuth
-    @GetMapping("/members/{customerId}/order/{orderId}")
+    @GetMapping("/order/{orderId}")
     public ResponseEntity<GetOrderInfoResponseDto> getOrderInfoByOrderId(
-            @PathVariable Long orderId, @PathVariable Long customerId) {
-        GetOrderInfoResponseDto orderInfoResponseDto = orderService.getOrderInfoById(orderId, customerId);
+            @PathVariable Long orderId) {
+        GetOrderInfoResponseDto orderInfoResponseDto = orderService.getOrderInfoById(orderId);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(orderInfoResponseDto);
-
     }
 
     /**
@@ -131,15 +131,14 @@ public class OrderController {
     public ResponseEntity<GetOrderInfoResponseDto> changeOrderState(@PathVariable("orderId") Long orderId,
                                                                     Order.OrderState orderState) {
         orderService.changeOrderState(orderId, orderState);
-//        GetOrderInfoResponseDto orderInfoResponseDto = orderService.getOrderInfoById(orderId);
-//        return ResponseEntity.status(HttpStatus.OK)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .body(orderInfoResponseDto);
-        return null;
+        GetOrderInfoResponseDto orderInfoResponseDto = orderService.getOrderInfoById(orderId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(orderInfoResponseDto);
     }
 
     @GetMapping("/orderName/{orderId}")
-    public ResponseEntity<String> getOrderName(@PathVariable("orderId") Long orderId) {
+    public ResponseEntity<String> getOrderName(@PathVariable("orderId") Long orderId){
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(orderService.getOrderName(orderId));

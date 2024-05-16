@@ -52,8 +52,6 @@ public class OrderServiceImpl implements OrderService {
 
     private static final int MAXPAGEBUTTONS = 5;
 
-    private final MemberRepository memberRepository;
-    private final GradeRepository gradeRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -83,7 +81,7 @@ public class OrderServiceImpl implements OrderService {
     public PageResponse<OrderForPaymentDto> getOrderListForMembers(int page, Long memberId) {
 
         Page<Order> orders = orderRepository.findByCustomer_CustomerId(memberId,
-                PageRequest.of(page - 1, 10, Sort.by("orderId").descending()));
+                PageRequest.of(page - 1, 10,Sort.by("orderId").descending()));
 
         List<OrderForPaymentDto> orderList = orders
                 .stream().map((Order order) -> convertOrderInfoDto(order, null))
@@ -109,11 +107,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long memberId) {
+    public GetOrderInfoResponseDto getOrderInfoById(Long orderId) {
         orderRepository.findById(orderId).orElseThrow(()
                 -> new NotFoundException("주문이 존재하지 않습니다."));
 
-        return orderRepository.getOrderInfoById(orderId, memberId);
+        return orderRepository.getOrderInfoById(orderId);
 
     }
 
@@ -235,6 +233,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
+
+
     /**
      * 주문과 주문 상세 객체를 OrderForPaymentDto로 변환합니다.
      *
@@ -262,63 +262,6 @@ public class OrderServiceImpl implements OrderService {
                 order.getReceiveAddress(), order.getZipcode(), order.getDetailAddress(), order.getMessage(), couponName,
                 order.getCustomer().getEmail(), order.getCustomer().getPhoneNumber(), order.getCustomer().getName()
         );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public GradeResponseDto getTotalAmount(Long memberId) {
-        LocalDateTime currentMonth = LocalDateTime.now()
-                .withDayOfMonth(1)
-                .withHour(0)
-                .withMinute(0)
-                .withSecond(0)
-                .withNano(0);
-        Member member =
-                memberRepository.findActiveMemberById(memberId).orElseThrow(() -> new NotFoundException("회원정보가 없습니다."));
-        Long totalAmount = Long.parseLong(
-                String.valueOf(orderRepository.getTotalOrderAmount(currentMonth, memberId)));
-        String grade = member.getGrade().getGradeName().getName();
-        return new GradeResponseDto(totalAmount, grade);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void updateGrade() {
-        LocalDateTime currentMonth = LocalDateTime.now()
-                .withDayOfMonth(1)
-                .withHour(0)
-                .withMinute(0)
-                .withSecond(0)
-                .withNano(0);
-        List<Member> members = memberRepository.findActiveAllMemberById();
-        if (members.size() == 0) {
-            return;
-        }
-        for (Member member : members) {
-            Long totalOrderAmount = Long.parseLong(
-                    String.valueOf(orderRepository.getTotalOrderAmount(currentMonth, member.getCustomerId())));
-            Grade originGradeName = member.getGrade();
-            Grade newGradeName = null;
-            if (0L <= totalOrderAmount && totalOrderAmount < 100000L) {
-                newGradeName = gradeRepository.findByGradeName(NORMAL);
-            } else if (100000 <= totalOrderAmount && totalOrderAmount < 200000) {
-                newGradeName = gradeRepository.findByGradeName(ROYAL);
-            } else if (200000 <= totalOrderAmount && totalOrderAmount < 300000) {
-                newGradeName = gradeRepository.findByGradeName(GOLD);
-            } else {
-                newGradeName = gradeRepository.findByGradeName(PLATINUM);
-            }
-
-            if (originGradeName != newGradeName) {
-                member.setGrade(newGradeName);
-                memberRepository.save(member);
-            }
-        }
-
     }
 
 }

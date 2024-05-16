@@ -15,7 +15,6 @@ import com.t2m.g2nee.shop.point.dto.response.GradeResponseDto;
  * @since : 1.0
  */
 public interface OrderService {
-
     /**
      * 전체 주문 조회(admin용)
      *
@@ -49,10 +48,10 @@ public interface OrderService {
      * @param orderId 주문 id.
      * @return 주문 정보 반환
      */
-    GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long memberId);
+    GetOrderInfoResponseDto getOrderInfoById(Long orderId);
 
     /**
-     * 비회원 주문 정보 조회(주문 번호로 조회)
+     * 주문 번호로 조회
      *
      * @param orderNumber 주문번호.
      * @return 주문 정보
@@ -73,18 +72,6 @@ public interface OrderService {
      * @param orderId 주문Id
      */
     void deleteOrder(Long orderId);
-
-    /**
-     * 이전 3달간 주문 총액과 회원 등급을 가져오는 메소드
-     *
-     * @param memberId
-     */
-    GradeResponseDto getTotalAmount(Long memberId);
-
-    /**
-     * 모든 회원의 등급을 update하는 메소드
-     */
-    void updateGrade();
 
     /**
      * 주문서를 저장합니다.

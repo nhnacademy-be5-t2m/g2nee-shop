@@ -33,20 +33,15 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  */
 public class OrderRepositoryImpl extends QuerydslRepositorySupport
         implements OrderCustomRepository {
-
     QOrder order = QOrder.order;
     QCustomer customer = QCustomer.customer;
     QMember member = QMember.member;
     QOrderDetail orderDetail = QOrderDetail.orderDetail;
     QCoupon coupon = QCoupon.coupon;
     QCouponType couponType = QCouponType.couponType;
-    QBook book = QBook.book;
 
-    private final JPAQueryFactory queryFactory;
-
-    public OrderRepositoryImpl(EntityManager entityManager) {
+    public OrderRepositoryImpl() {
         super(Order.class);
-        this.queryFactory = new JPAQueryFactory(entityManager);
     }
 
 
@@ -107,11 +102,11 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
 
 
     @Override
-    public Page<GetOrderInfoResponseDto> getOrderListForMembers(Pageable pageable, Long customerId) {
+    public Page<GetOrderInfoResponseDto> getOrderListForMembers(Pageable pageable, Long memberId) {
         List<GetOrderInfoResponseDto> queryMemberOrderList = from(order)
                 .innerJoin(member).on(order.customer.customerId.eq(member.customerId))
                 .leftJoin(couponType).on(order.coupon.couponType.couponTypeId.eq(couponType.couponTypeId))
-                .where(order.customer.customerId.eq(customerId))
+                .where(order.customer.customerId.eq(memberId))
                 .select(Projections.fields(GetOrderInfoResponseDto.class,
                         order.orderId,
                         order.orderNumber,
@@ -135,14 +130,18 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public GetOrderInfoResponseDto getOrderInfoById(Long orderId, Long customerId) {
+    public GetOrderInfoResponseDto getOrderInfoById(Long orderId) {
+
         return from(order)
-                .innerJoin(member).on(order.customer.customerId.eq(member.customerId))
+                .innerJoin(customer).on(order.customer.customerId.eq(customer.customerId))
                 .leftJoin(couponType).on(order.coupon.couponType.couponTypeId.eq(couponType.couponTypeId))
-                .where(order.orderId.eq(orderId).and(order.customer.customerId.eq(customerId)))
+                .innerJoin(orderDetail).on(order.orderId.eq(orderDetail.order.orderId))
+                .where(order.orderId.eq(orderId))
                 .select(Projections.fields(GetOrderInfoResponseDto.class,
                         order.orderId,
                         order.orderNumber,
+                        customer.customerId.as("customerId"),
+                        customer.name.as("customerName"),
                         order.orderDate,
                         order.deliveryWishDate,
                         order.deliveryFee,
@@ -167,6 +166,8 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
                         order.orderId,
                         order.orderNumber,
                         order.orderDate,
+                        customer.customerId.as("customerId"),
+                        customer.name.as("customerName"),
                         order.deliveryWishDate,
                         order.deliveryFee,
                         order.orderState,
@@ -178,39 +179,5 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
                         order.detailAddress,
                         order.message,
                         couponType.name.as("couponName"))).fetchOne();
-    }
-
-    @Override
-    public Optional<Order> findByOrderNumber(String orderNumber) {
-        return Optional.empty();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public BigDecimal getTotalOrderAmount(LocalDateTime currentTime, Long memberId) {
-        QOrder order = QOrder.order;
-        LocalDateTime threeMonthsAgo = currentTime.minusMonths(3);
-
-        return queryFactory.select(order.netAmount.sum().coalesce(BigDecimal.ZERO))
-                .from(order)
-                .where(order.orderState.eq(DELIVERED)
-                        .and(order.customer.customerId.eq(memberId))
-                        .and(order.orderDate.between(threeMonthsAgo, currentTime)))
-                .fetchOne();
-    }
-
-    @Override
-    public Integer getMemberBookOrderNum(Long memberId, Long bookId) {
-
-        return from(book)
-                .innerJoin(orderDetail).on(orderDetail.book.bookId.eq(book.bookId))
-                .innerJoin(order).on(orderDetail.order.orderId.eq(order.orderId))
-                .where(order.customer.customerId.eq(memberId)
-                        .and(book.bookId.eq(bookId)))
-                .select(orderDetail.quantity.sum())
-                .groupBy(book)
-                .fetchOne();
     }
 }
