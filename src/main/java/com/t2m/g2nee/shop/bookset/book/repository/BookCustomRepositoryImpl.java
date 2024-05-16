@@ -395,12 +395,13 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
      * @return List<BookDto.ListResponse>
      */
     @Override
-    public List<BookDto.ListResponse> getBookStock(List<Long> bookIdList) {
+    public List<BookDto.ListResponse> getBooksForCheck(List<Long> bookIdList) {
         return from(book)
                 .where(book.bookId.in(bookIdList))
                 .select(Projections.fields(BookDto.ListResponse.class
                         , book.bookId
                         , book.title
+                        , book.salePrice
                         , book.quantity))
                 .fetch();
     }

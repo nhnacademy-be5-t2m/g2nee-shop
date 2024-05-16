@@ -153,10 +153,10 @@ public class BookGetController {
      *
      * @param bookIdList 책 아이디 리스트
      */
-    @GetMapping("/stock")
-    public ResponseEntity<List<BookDto.ListResponse>> getBookStock(@RequestParam List<Long> bookIdList) {
+    @GetMapping("/check")
+    public ResponseEntity<List<BookDto.ListResponse>> getBooksForCheck(@RequestParam List<Long> bookIdList) {
 
-        List<BookDto.ListResponse> responses = bookGetService.getBookStock(bookIdList);
+        List<BookDto.ListResponse> responses = bookGetService.getBooksForCheck(bookIdList);
         return ResponseEntity.status(HttpStatus.OK).body(responses);
     }
 
