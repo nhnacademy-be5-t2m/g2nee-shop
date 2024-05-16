@@ -14,7 +14,7 @@ public interface CouponRepository extends JpaRepository<Coupon, Long>, CouponRep
     boolean existsByCouponType_CouponTypeId(Long couponTypeId);
 
 
-    @Query(value = "SELECT * FROM t2m_dev.Coupons " +
+    @Query(value = "SELECT * FROM Coupons " +
             "WHERE customerId = :customerId " +
             "ORDER BY (CASE WHEN status = 'NOTUSED' THEN 1 ELSE 2 END), expirationDate ASC",
             nativeQuery = true)
