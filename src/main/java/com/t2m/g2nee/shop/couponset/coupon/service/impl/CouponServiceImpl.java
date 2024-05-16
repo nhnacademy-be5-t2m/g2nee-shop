@@ -18,6 +18,7 @@ import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.memberset.member.domain.Member;
 import com.t2m.g2nee.shop.memberset.member.service.MemberService;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import com.t2m.g2nee.shop.policyset.pointpolicy.domain.PointPolicy;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -207,6 +208,12 @@ public class CouponServiceImpl implements CouponService {
             if (dot != -1) {
                 discount = discount.substring(0, dot);
             }
+        }
+
+        if (coupon.getCouponType().getType().equals(CouponType.Type.PERCENT)) {
+            //금액의 경우 *100 후에 보여줌
+            int percentValue = (int) (Double.parseDouble(discount) * 100);
+            discount = String.valueOf(percentValue);
         }
 
         //쿠폰 대상 선택
