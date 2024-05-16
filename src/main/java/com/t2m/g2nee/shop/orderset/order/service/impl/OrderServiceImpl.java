@@ -24,7 +24,6 @@ import com.t2m.g2nee.shop.orderset.order.service.OrderService;
 import com.t2m.g2nee.shop.orderset.orderdetail.dto.response.GetOrderDetailResponseDto;
 import com.t2m.g2nee.shop.orderset.orderdetail.service.OrderDetailService;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
-import com.t2m.g2nee.shop.point.dto.response.GradeResponseDto;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -49,6 +48,8 @@ public class OrderServiceImpl implements OrderService {
     private final CustomerService customerService;
     private final OrderDetailService orderDetailService;
     private final CouponService couponService;
+    private final MemberRepository memberRepository;
+    private final GradeRepository gradeRepository;
 
     private static final int MAXPAGEBUTTONS = 5;
 
@@ -264,4 +265,40 @@ public class OrderServiceImpl implements OrderService {
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void updateGrade() {
+        LocalDateTime currentMonth = LocalDateTime.now()
+                .withDayOfMonth(1)
+                .withHour(0)
+                .withMinute(0)
+                .withSecond(0)
+                .withNano(0);
+        List<Member> members = memberRepository.findActiveAllMemberById();
+        if (members.isEmpty()) {
+            return;
+        }
+        for (Member member : members) {
+            Long totalOrderAmount = Long.parseLong(
+                    String.valueOf(orderRepository.getTotalOrderAmount(currentMonth, member.getCustomerId())));
+            Grade originGradeName = member.getGrade();
+            Grade newGradeName = null;
+            if (0L <= totalOrderAmount && totalOrderAmount < 100000L) {
+                newGradeName = gradeRepository.findByGradeName(NORMAL);
+            } else if (100000 <= totalOrderAmount && totalOrderAmount < 200000) {
+                newGradeName = gradeRepository.findByGradeName(ROYAL);
+            } else if (200000 <= totalOrderAmount && totalOrderAmount < 300000) {
+                newGradeName = gradeRepository.findByGradeName(GOLD);
+            } else {
+                newGradeName = gradeRepository.findByGradeName(PLATINUM);
+            }
+
+            if (originGradeName != newGradeName) {
+                member.setGrade(newGradeName);
+                memberRepository.save(member);
+            }
+        }
+    }
 }

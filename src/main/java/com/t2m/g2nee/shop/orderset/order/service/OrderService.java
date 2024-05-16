@@ -6,7 +6,6 @@ import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderInfoResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.GetOrderListForAdminResponseDto;
 import com.t2m.g2nee.shop.orderset.order.dto.response.OrderForPaymentDto;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
-import com.t2m.g2nee.shop.point.dto.response.GradeResponseDto;
 
 /**
  * 주문 서비스
@@ -96,4 +95,9 @@ public interface OrderService {
     void applyUseCoupon(Order order);
 
     String getOrderName(Long orderId);
+
+    /**
+     * 모든 회원의 등급을 update하는 메소드
+     */
+    void updateGrade();
 }
