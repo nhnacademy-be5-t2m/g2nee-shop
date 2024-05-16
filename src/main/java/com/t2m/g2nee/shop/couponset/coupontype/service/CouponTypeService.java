@@ -5,6 +5,7 @@ import com.t2m.g2nee.shop.couponset.coupontype.dto.CouponTypeInfoDto;
 import com.t2m.g2nee.shop.couponset.coupontype.dto.request.CouponTypeRequestDto;
 import com.t2m.g2nee.shop.couponset.coupontype.dto.response.CouponTypeCreatedDto;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,7 +20,6 @@ public interface CouponTypeService {
 
     /**
      * 관리자가 모든 쿠폰을 조회할 수 있는 Service
-     *
      * @param page
      * @return
      */
@@ -39,6 +39,7 @@ public interface CouponTypeService {
      * @author : 김수빈
      */
     CouponType getCoupon(Long couponTypeId);
+
 
 
 }

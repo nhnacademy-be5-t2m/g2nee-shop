@@ -128,17 +128,16 @@ public class OrderController {
      * @return 주문 상태 변경된 주문 정보
      */
     @PatchMapping("/state/{orderId}")
-    public ResponseEntity<GetOrderInfoResponseDto> changeOrderState(@PathVariable("orderId") Long orderId,
-                                                                    Order.OrderState orderState) {
+    public ResponseEntity<?> changeOrderState(@PathVariable("orderId") Long orderId,
+                                                                    @RequestBody Order.OrderState orderState) {
         orderService.changeOrderState(orderId, orderState);
-        GetOrderInfoResponseDto orderInfoResponseDto = orderService.getOrderInfoById(orderId);
-        return ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(orderInfoResponseDto);
+                .build();
     }
 
     @GetMapping("/orderName/{orderId}")
-    public ResponseEntity<String> getOrderName(@PathVariable("orderId") Long orderId) {
+    public ResponseEntity<String> getOrderName(@PathVariable("orderId") Long orderId){
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(orderService.getOrderName(orderId));
@@ -151,7 +150,7 @@ public class OrderController {
     }
 
     @PostMapping("/existsOrder")
-    public ResponseEntity<Boolean> existsOrderNumber(@RequestBody String orderNumber) {
+    public ResponseEntity<Boolean> existsOrderNumber(@RequestBody String orderNumber){
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(orderService.existsOrderNumber(orderNumber));
