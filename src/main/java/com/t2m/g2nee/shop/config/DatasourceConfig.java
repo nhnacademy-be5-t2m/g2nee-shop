@@ -24,7 +24,7 @@ public class DatasourceConfig {
 
         BasicDataSource basicDataSource = new BasicDataSource();
         basicDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        basicDataSource.setUrl(dataSourceProperties.getUrl()+"?rewriteBatchedStatements=true");
+        basicDataSource.setUrl(dataSourceProperties.getUrl());
         basicDataSource.setUsername(dataSourceProperties.getUsername());
         basicDataSource.setPassword(dataSourceProperties.getPassword());
         basicDataSource.setValidationQuery("SELECT 1");
