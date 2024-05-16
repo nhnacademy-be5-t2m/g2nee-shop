@@ -97,10 +97,13 @@ public interface OrderService {
 
     String getOrderName(Long orderId);
 
+    Boolean existsOrderNumber(String orderNumber);
+
     /**
      * 모든 회원의 등급을 update하는 메소드
      */
     void updateGrade();
+
     /**
      * 이전 3달간 주문 총액과 회원 등급을 가져오는 메소드
      *

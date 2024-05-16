@@ -138,7 +138,7 @@ public class OrderController {
     }
 
     @GetMapping("/orderName/{orderId}")
-    public ResponseEntity<String> getOrderName(@PathVariable("orderId") Long orderId){
+    public ResponseEntity<String> getOrderName(@PathVariable("orderId") Long orderId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(orderService.getOrderName(orderId));
@@ -148,5 +148,12 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<OrderForPaymentDto> createOrder(@RequestBody @Valid OrderSaveDto request) {
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(orderService.saveOrder(request));
+    }
+
+    @PostMapping("/existsOrder")
+    public ResponseEntity<Boolean> existsOrderNumber(@RequestBody String orderNumber) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(orderService.existsOrderNumber(orderNumber));
     }
 }

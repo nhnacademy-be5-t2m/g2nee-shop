@@ -21,4 +21,11 @@ public interface CustomerService {
      */
     Customer getCustomerInfo(Long customerId);
 
+    /**
+     * 비회원의 비밀번호를 가져오는 메소드
+     *
+     * @param customerId
+     * @return 비회원이면 비밀번호, 회원이면 MEMBER, 없는 정보면 null 반환
+     */
+    String getCustomerPassword(Long customerId);
 }
