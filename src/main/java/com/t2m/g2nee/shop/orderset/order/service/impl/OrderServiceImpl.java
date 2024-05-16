@@ -83,7 +83,7 @@ public class OrderServiceImpl implements OrderService {
     public PageResponse<OrderForPaymentDto> getOrderListForMembers(int page, Long memberId) {
 
         Page<Order> orders = orderRepository.findByCustomer_CustomerId(memberId,
-                PageRequest.of(page - 1, 10,Sort.by("orderId").descending()));
+                PageRequest.of(page - 1, 10, Sort.by("orderId").descending()));
 
         List<OrderForPaymentDto> orderList = orders
                 .stream().map((Order order) -> convertOrderInfoDto(order, null))
@@ -223,6 +223,14 @@ public class OrderServiceImpl implements OrderService {
         return orderDetailService.getOrderName(orderId);
     }
 
+    @Override
+    public Boolean existsOrderNumber(String orderNumber) {
+        if (orderRepository.findByOrderNumber(orderNumber).isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
 
     private void abortOrders(List<Order> remainOrders) {
         if (!remainOrders.isEmpty()) {
@@ -233,8 +241,6 @@ public class OrderServiceImpl implements OrderService {
             }
         }
     }
-
-
 
 
     /**

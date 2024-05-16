@@ -1,7 +1,6 @@
 package com.t2m.g2nee.shop.couponset.coupontype.service.impl;
 
 
-
 import com.t2m.g2nee.shop.bookset.book.domain.Book;
 import com.t2m.g2nee.shop.bookset.book.repository.BookRepository;
 import com.t2m.g2nee.shop.bookset.category.domain.Category;
@@ -19,15 +18,14 @@ import com.t2m.g2nee.shop.couponset.coupontype.service.CouponTypeService;
 import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
@@ -41,7 +39,6 @@ import java.util.stream.Collectors;
 public class CouponTypeServiceImpl implements CouponTypeService {
 
 
-
     private final CouponTypeRepository couponTypeRepository;
     private final BookRepository bookRepository;
     private final CategoryRepository categoryRepository;
@@ -52,6 +49,7 @@ public class CouponTypeServiceImpl implements CouponTypeService {
 
     /**
      * admin에서 모든 쿠폰을 조회할 수 있는 Service
+     *
      * @param page
      * @return
      */
@@ -88,14 +86,14 @@ public class CouponTypeServiceImpl implements CouponTypeService {
     }
 
 
-        /**
-         * admin에서 일반 쿠폰을 생성할 수 있는 Service
-         * @param couponTypeRequestDto
-         * @return
-         */
+    /**
+     * admin에서 일반 쿠폰을 생성할 수 있는 Service
+     *
+     * @param couponTypeRequestDto
+     * @return
+     */
     @Override
     public CouponTypeCreatedDto createCouponType(CouponTypeRequestDto couponTypeRequestDto) {
-
 
 
         CouponType couponTypeInfo = CouponType.builder()
@@ -111,22 +109,26 @@ public class CouponTypeServiceImpl implements CouponTypeService {
                 .status(couponTypeRequestDto.getStatus())
                 .build();
 
-        CouponType savedCouponType =  couponTypeRepository.save(couponTypeInfo);
+        CouponType savedCouponType = couponTypeRepository.save(couponTypeInfo);
 
 
-        return new CouponTypeCreatedDto(savedCouponType.getPeriod(), savedCouponType.getName(), savedCouponType.getType(), savedCouponType.getDiscount(),savedCouponType.getMinimumOrderAmount(),savedCouponType.getMaximumDiscount(),savedCouponType.getStatus());
+        return new CouponTypeCreatedDto(savedCouponType.getPeriod(), savedCouponType.getName(),
+                savedCouponType.getType(), savedCouponType.getDiscount(), savedCouponType.getMinimumOrderAmount(),
+                savedCouponType.getMaximumDiscount(), savedCouponType.getStatus());
 
     }
 
     /**
      * admin에서 BookCoupon을 생성할 수 있는 Service
+     *
      * @param couponTypeRequestDto
      * @return
      */
     @Override
     public CouponTypeCreatedDto createBookCoupon(CouponTypeRequestDto couponTypeRequestDto) {
 
-        Book book = bookRepository.findById(couponTypeRequestDto.getBookId()).orElseThrow(() -> new NotFoundException("Book을 찾을 수 없습니다 " + couponTypeRequestDto.getBookId()));
+        Book book = bookRepository.findById(couponTypeRequestDto.getBookId())
+                .orElseThrow(() -> new NotFoundException("Book을 찾을 수 없습니다 " + couponTypeRequestDto.getBookId()));
 
 
         BookCoupon bookCouponInfo = BookCoupon.builder()
@@ -145,18 +147,22 @@ public class CouponTypeServiceImpl implements CouponTypeService {
 
         BookCoupon savedBookCoupon = bookCouponRepository.save(bookCouponInfo);
 
-        return new CouponTypeCreatedDto(savedBookCoupon.getPeriod(), savedBookCoupon.getName(), savedBookCoupon.getType(), savedBookCoupon.getDiscount(),savedBookCoupon.getMinimumOrderAmount(),savedBookCoupon.getMaximumDiscount(),savedBookCoupon.getStatus());
+        return new CouponTypeCreatedDto(savedBookCoupon.getPeriod(), savedBookCoupon.getName(),
+                savedBookCoupon.getType(), savedBookCoupon.getDiscount(), savedBookCoupon.getMinimumOrderAmount(),
+                savedBookCoupon.getMaximumDiscount(), savedBookCoupon.getStatus());
     }
 
     /**
      * admin에서 CategoryCoupon을 생성할 수 있는 Service
+     *
      * @param couponTypeRequestDto
      * @return
      */
     @Override
     public CouponTypeCreatedDto createCategoryCoupon(CouponTypeRequestDto couponTypeRequestDto) {
 
-        Category category = categoryRepository.findById(couponTypeRequestDto.getCategoryId()).orElseThrow(() -> new NotFoundException("Category를 찾을 수 없습니다 " + couponTypeRequestDto.getBookId()));
+        Category category = categoryRepository.findById(couponTypeRequestDto.getCategoryId())
+                .orElseThrow(() -> new NotFoundException("Category를 찾을 수 없습니다 " + couponTypeRequestDto.getBookId()));
 
         CategoryCoupon categoryCouponInfo = CategoryCoupon.builder()
                 .couponTypeId(couponTypeRequestDto.getCouponTypeId())
@@ -175,7 +181,10 @@ public class CouponTypeServiceImpl implements CouponTypeService {
         CategoryCoupon savedCategoryCoupon = categoryCouponRepository.save(categoryCouponInfo);
 
 
-        return new CouponTypeCreatedDto(savedCategoryCoupon.getPeriod(), savedCategoryCoupon.getName(), savedCategoryCoupon.getType(), savedCategoryCoupon.getDiscount(),savedCategoryCoupon.getMinimumOrderAmount(),savedCategoryCoupon.getMaximumDiscount(),savedCategoryCoupon.getStatus());
+        return new CouponTypeCreatedDto(savedCategoryCoupon.getPeriod(), savedCategoryCoupon.getName(),
+                savedCategoryCoupon.getType(), savedCategoryCoupon.getDiscount(),
+                savedCategoryCoupon.getMinimumOrderAmount(), savedCategoryCoupon.getMaximumDiscount(),
+                savedCategoryCoupon.getStatus());
     }
 
 
@@ -228,7 +237,6 @@ public class CouponTypeServiceImpl implements CouponTypeService {
 
             dto.setStatus(CouponType.CouponTypeStatus.INDIVIDUAL.getName());
         }
-
 
 
         return dto;

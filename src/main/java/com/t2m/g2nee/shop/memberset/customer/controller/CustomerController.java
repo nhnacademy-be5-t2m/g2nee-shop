@@ -51,12 +51,12 @@ public class CustomerController {
      * @param customerId 가져오고 싶은 customerId 입력
      * @return customerId에 해당하는 customer 정보 반환
      */
-    @GetMapping("/getInfo/{customerId}")
-    public ResponseEntity<Customer> getCustomersInfo(@PathVariable("customerId") Long customerId) {
-        Customer customer = customerService.getCustomerInfo(customerId);
+    @GetMapping("/getPassword/{customerId}")
+    public ResponseEntity<String> getCustomersInfo(@PathVariable("customerId") Long customerId) {
+        String password = customerService.getCustomerPassword(customerId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(customer);
+                .body(password);
     }
 }

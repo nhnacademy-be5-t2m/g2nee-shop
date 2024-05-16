@@ -1,12 +1,10 @@
 package com.t2m.g2nee.shop.couponset.coupontype.dto.request;
 
 import com.t2m.g2nee.shop.couponset.coupontype.domain.CouponType;
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
-
 
 
 @AllArgsConstructor
@@ -24,7 +22,6 @@ public class CouponTypeRequestDto {
     private CouponType.CouponTypeStatus status;
     private Long bookId;
     private Long categoryId;
-
 
 
 }

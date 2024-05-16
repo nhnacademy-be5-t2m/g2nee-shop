@@ -135,7 +135,6 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport
 
     @Override
     public GetOrderInfoResponseDto getOrderInfoById(Long orderId) {
-
         return from(order)
                 .innerJoin(customer).on(order.customer.customerId.eq(customer.customerId))
                 .leftJoin(couponType).on(order.coupon.couponType.couponTypeId.eq(couponType.couponTypeId))
