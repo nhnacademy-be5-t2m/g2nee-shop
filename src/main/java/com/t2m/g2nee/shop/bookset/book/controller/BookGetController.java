@@ -90,7 +90,7 @@ public class BookGetController {
             @RequestParam(required = false) String sort,
             @RequestParam int page) {
         if (!StringUtils.hasText(sort)) {
-            sort = "viewCount";
+            sort = "accuracy";
         }
 
         PageResponse<BookDto.ListResponse> responses =
@@ -119,7 +119,7 @@ public class BookGetController {
             @RequestParam int page) {
 
         if (!StringUtils.hasText(sort)) {
-            sort = "viewCount";
+            sort = "accuracy";
         }
 
         if (!StringUtils.hasText(condition)) {
