@@ -716,7 +716,20 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
 
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
 
+        MatchQueryBuilder titleTokenQuery = QueryBuilders.matchQuery("title.token", keyword).boost(75);
+        MatchQueryBuilder titleJasoQuery = QueryBuilders.matchQuery("title.jaso", keyword).boost(75);
+        MatchQueryBuilder engTitleTokenQuery = QueryBuilders.matchQuery("engTitle.token", keyword).boost(75);
+        MatchQueryBuilder engTitleJasoQuery = QueryBuilders.matchQuery("engTitle.jaso", keyword).boost(75);
+
         switch (condition) {
+            case "TITLE":
+
+                return boolQuery
+                        .should(titleTokenQuery)
+                        .should(titleJasoQuery)
+                        .should(engTitleTokenQuery)
+                        .should(engTitleJasoQuery);
+
             case "PUBLISHER":
 
                 MatchQueryBuilder publisherTokenQuery = QueryBuilders.matchQuery("publisherName.token", keyword);
@@ -739,9 +752,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                         .must(tagJasoQuery);
             default:
 
-                // 통합 검색은 가중치 설정
-                MatchQueryBuilder titleTokenQuery = QueryBuilders.matchQuery("title.token", keyword).boost(60);
-                MatchQueryBuilder titleJasoQuery = QueryBuilders.matchQuery("title.jaso", keyword).boost(60);
+                // 통합 검색은 다른 필드에 추가적인 가중치 설정
 
                 MatchQueryBuilder bookIndexQuery = QueryBuilders.matchQuery("bookIndex.token", keyword).boost(5);
                 MatchQueryBuilder descriptionQuery = QueryBuilders.matchQuery("description.token", keyword).boost(5);
@@ -757,6 +768,8 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                 boolQuery.should(contributorQuery);
                 boolQuery.should(tagQuery);
                 boolQuery.should(publisherQuery);
+                boolQuery.should(engTitleTokenQuery);
+                boolQuery.should(engTitleJasoQuery);
 
                 return boolQuery;
 
