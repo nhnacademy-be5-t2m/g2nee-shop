@@ -20,9 +20,9 @@ public class ContributorDto {
     @Builder
     public static class Request {
 
-        @Pattern(regexp = "^[가-힣0-9]+$", message = "출판사 한글 이름을 입력해주세요.")
+        @Pattern(regexp = "^[가-힣0-9]+$", message = "기여자 한글 이름을 입력해주세요.")
         private String contributorName;
-        @Pattern(regexp = "^[A-Za-z0-9]+$", message = "출판사 영문 이름을 입력해주세요")
+        @Pattern(regexp = "^[A-Za-z0-9]+$", message = "기여자 영문 이름을 입력해주세요")
         private String contributorEngName;
 
     }
