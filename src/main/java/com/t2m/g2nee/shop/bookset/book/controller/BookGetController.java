@@ -3,6 +3,7 @@ package com.t2m.g2nee.shop.bookset.book.controller;
 import com.t2m.g2nee.shop.bookset.book.dto.BookDto;
 import com.t2m.g2nee.shop.bookset.book.service.BookGetService;
 import com.t2m.g2nee.shop.pageUtils.PageResponse;
+import java.net.URLDecoder;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -126,8 +127,11 @@ public class BookGetController {
             condition = "INTEGRATION";
         }
 
+        String decodedKeyword = URLDecoder.decode(URLDecoder.decode(keyword));
+
         PageResponse<BookDto.ListResponse> responses =
-                bookGetService.getBookByCategoryAndElasticsearch(page, memberId, categoryId, keyword, sort, condition);
+                bookGetService.getBookByCategoryAndElasticsearch(page, memberId, categoryId, decodedKeyword, sort,
+                        condition);
 
         return ResponseEntity.status(HttpStatus.OK).body(responses);
     }
