@@ -6,6 +6,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.jpa.JPQLQuery;
 import com.t2m.g2nee.shop.bookset.book.domain.Book;
 import com.t2m.g2nee.shop.bookset.book.domain.QBook;
 import com.t2m.g2nee.shop.bookset.book.dto.BookDto;
@@ -164,85 +165,48 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
             ex) 이과 / 수학, 과학 / 미분, 적분 일때 이과를 검색 시 이과, 수학, 과학, 미분, 적분 카테고리를 가진 모든 책이 조회됩니다.
             ex) 수학만 검색 시 수학, 미분 , 적분이 카테고리를 가진 책이 검색됩니다.
          */
-        List<BookDto.ListResponse> responseList;
 
-        if(orderSpecifier != null) {
+        JPQLQuery<BookDto.ListResponse> bookList = from(book)
+                .innerJoin(publisher).on(book.publisher.publisherId.eq(publisher.publisherId))
+                .innerJoin(bookFile).on(book.bookId.eq(bookFile.book.bookId))
+                .leftJoin(review).on(book.bookId.eq(review.book.bookId))
+                .leftJoin(bookLike).on(book.bookId.eq(bookLike.book.bookId))
+                .where(bookFile.imageType.eq(BookFile.ImageType.THUMBNAIL)
+                        .and(eqCategoryBookId(categoryId)
+                        ))
+                .select(Projections.fields(BookDto.ListResponse.class
+                        , book.bookId
+                        , bookFile.url.as("thumbnailImageUrl")
+                        , book.title
+                        , book.engTitle
+                        , book.publishedDate
+                        , book.viewCount
+                        , book.price
+                        , book.salePrice
+                        , book.bookStatus
+                        , book.quantity
+                        , publisher.publisherName
+                        , publisher.publisherEngName
+                        , isLiked.as("isLiked")
+                        , review.count().as("reviewCount")
+                        , score.as("scoreAverage")))
+                .groupBy(book, bookFile, publisher, bookLike, bookFile.url)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize());
 
-            responseList =
-                    from(book)
-                            .innerJoin(publisher).on(book.publisher.publisherId.eq(publisher.publisherId))
-                            .innerJoin(bookFile).on(book.bookId.eq(bookFile.book.bookId))
-                            .leftJoin(review).on(book.bookId.eq(review.book.bookId))
-                            .leftJoin(bookLike).on(book.bookId.eq(bookLike.book.bookId))
-                            .where(bookFile.imageType.eq(BookFile.ImageType.THUMBNAIL)
-                                    .and(eqCategoryBookId(categoryId)
-                                    ))
-                            .select(Projections.fields(BookDto.ListResponse.class
-                                    , book.bookId
-                                    , bookFile.url.as("thumbnailImageUrl")
-                                    , book.title
-                                    , book.engTitle
-                                    , book.publishedDate
-                                    , book.viewCount
-                                    , book.price
-                                    , book.salePrice
-                                    , book.bookStatus
-                                    , book.quantity
-                                    , publisher.publisherName
-                                    , publisher.publisherEngName
-                                    , isLiked.as("isLiked")
-                                    , review.count().as("reviewCount")
-                                    , score.as("scoreAverage")))
-                            .groupBy(book, bookFile, publisher, bookLike, bookFile.url)
-                            // 정렬 조건에 따라 리스트 반환
-                            .orderBy(orderSpecifier)
-                            .offset(pageable.getOffset())
-                            .limit(pageable.getPageSize())
-                            .fetch().stream()
-                            .map(b -> {
-                                double roundedScore = Math.round(b.getScoreAverage() * 10) / 10.0;
-                                b.setScoreAverage(roundedScore);
-                                return b;
-                            })
-                            .collect(Collectors.toList());
-        } else {
-            responseList =
-                    from(book)
-                            .innerJoin(publisher).on(book.publisher.publisherId.eq(publisher.publisherId))
-                            .innerJoin(bookFile).on(book.bookId.eq(bookFile.book.bookId))
-                            .leftJoin(review).on(book.bookId.eq(review.book.bookId))
-                            .leftJoin(bookLike).on(book.bookId.eq(bookLike.book.bookId))
-                            .where(bookFile.imageType.eq(BookFile.ImageType.THUMBNAIL)
-                                    .and(eqCategoryBookId(categoryId)
-                                    ))
-                            .select(Projections.fields(BookDto.ListResponse.class
-                                    , book.bookId
-                                    , bookFile.url.as("thumbnailImageUrl")
-                                    , book.title
-                                    , book.engTitle
-                                    , book.publishedDate
-                                    , book.viewCount
-                                    , book.price
-                                    , book.salePrice
-                                    , book.bookStatus
-                                    , book.quantity
-                                    , publisher.publisherName
-                                    , publisher.publisherEngName
-                                    , isLiked.as("isLiked")
-                                    , review.count().as("reviewCount")
-                                    , score.as("scoreAverage")))
-                            .groupBy(book, bookFile, publisher, bookLike, bookFile.url)
-                            // 정렬 조건에 따라 리스트 반환
-                            .offset(pageable.getOffset())
-                            .limit(pageable.getPageSize())
-                            .fetch().stream()
-                            .map(b -> {
-                                double roundedScore = Math.round(b.getScoreAverage() * 10) / 10.0;
-                                b.setScoreAverage(roundedScore);
-                                return b;
-                            })
-                            .collect(Collectors.toList());
+        // 정렬 조건에 따라 정렬 -> default 정확도 순 (elasticsearch score)
+        if (orderSpecifier != null) {
+            bookList.orderBy(orderSpecifier);
         }
+
+        // 리뷰 점수를 소수 첫째까지 반올림
+        List<BookDto.ListResponse> responseList = bookList.fetch().stream()
+                .map(b -> {
+                    double roundedScore = Math.round(b.getScoreAverage() * 10) / 10.0;
+                    b.setScoreAverage(roundedScore);
+                    return b;
+                })
+                .collect(Collectors.toList());
 
         List<BookDto.ListResponse> responses = toListResponseList(responseList);
 
@@ -359,90 +323,50 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
         NumberExpression<Double>
                 score = new CaseBuilder().when(review.score.avg().isNull()).then(0D).otherwise(review.score.avg());
 
-        List<BookDto.ListResponse> responseList;
+        // 정렬 전 책 리스트 조회
+        JPQLQuery<BookDto.ListResponse> bookList = from(book)
+                .innerJoin(publisher).on(book.publisher.publisherId.eq(publisher.publisherId))
+                .innerJoin(bookFile).on(book.bookId.eq(bookFile.book.bookId))
+                .leftJoin(review).on(book.bookId.eq(review.book.bookId))
+                .leftJoin(bookLike).on(book.bookId.eq(bookLike.book.bookId))
+                .where(book.bookId.in(indexIdList)
+                        .and(eqCategoryBookId(categoryId))
+                        .and(bookFile.imageType.eq(BookFile.ImageType.THUMBNAIL)))
+                .select(Projections.fields(BookDto.ListResponse.class,
+                        book.bookId,
+                        bookFile.url.as("thumbnailImageUrl"),
+                        book.title,
+                        book.engTitle,
+                        book.publishedDate,
+                        book.viewCount,
+                        book.quantity,
+                        book.price,
+                        book.salePrice,
+                        book.bookStatus,
+                        publisher.publisherName,
+                        publisher.publisherEngName,
+                        bookLike.bookLikeId,
+                        isLiked.as("isLiked"),
+                        review.count().as("reviewCount"),
+                        score.as("scoreAverage")))
+                .groupBy(book, bookFile, publisher, bookLike, bookFile.url)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize());
 
-        // 정렬 조건이 있을 때
-        if(orderSpecifier != null) {
+        // 정렬 조건에 따라 정렬 -> default 정확도 순 (elasticsearch score)
+        if (orderSpecifier != null) {
+            bookList.orderBy(orderSpecifier);
+        }
 
-            responseList =
-                    from(book)
-                            .innerJoin(publisher).on(book.publisher.publisherId.eq(publisher.publisherId))
-                            .innerJoin(bookFile).on(book.bookId.eq(bookFile.book.bookId))
-                            .leftJoin(review).on(book.bookId.eq(review.book.bookId))
-                            .leftJoin(bookLike).on(book.bookId.eq(bookLike.book.bookId))
-                            .where(book.bookId.in(indexIdList)
-                                    .and(eqCategoryBookId(categoryId))
-                                    .and(bookFile.imageType.eq(BookFile.ImageType.THUMBNAIL)))
-                            .select(Projections.fields(BookDto.ListResponse.class
-                                    , book.bookId
-                                    , bookFile.url.as("thumbnailImageUrl")
-                                    , book.title
-                                    , book.engTitle
-                                    , book.publishedDate
-                                    , book.viewCount
-                                    , book.quantity
-                                    , book.price
-                                    , book.salePrice
-                                    , book.bookStatus
-                                    , publisher.publisherName
-                                    , publisher.publisherEngName
-                                    , bookLike.bookLikeId
-                                    , isLiked.as("isLiked")
-                                    , review.count().as("reviewCount")
-                                    , score.as("scoreAverage")))
-                            .groupBy(book, bookFile, publisher, bookLike, bookFile.url)
-                            // 정렬 조건에 따라 리스트 반환
-                            .offset(pageable.getOffset())
-                            .limit(pageable.getPageSize())
-                            .orderBy(orderSpecifier)
-                            .fetch().stream()
-                            .map(b -> {
-                                double roundedScore = Math.round(b.getScoreAverage() * 10) / 10.0;
-                                b.setScoreAverage(roundedScore);
-                                return b;
-                            })
-                            .collect(Collectors.toList());
-        }
-        // default 정렬 조건
-        else {
-            responseList =
-                    from(book)
-                            .innerJoin(publisher).on(book.publisher.publisherId.eq(publisher.publisherId))
-                            .innerJoin(bookFile).on(book.bookId.eq(bookFile.book.bookId))
-                            .leftJoin(review).on(book.bookId.eq(review.book.bookId))
-                            .leftJoin(bookLike).on(book.bookId.eq(bookLike.book.bookId))
-                            .where(book.bookId.in(indexIdList)
-                                    .and(eqCategoryBookId(categoryId))
-                                    .and(bookFile.imageType.eq(BookFile.ImageType.THUMBNAIL)))
-                            .select(Projections.fields(BookDto.ListResponse.class
-                                    , book.bookId
-                                    , bookFile.url.as("thumbnailImageUrl")
-                                    , book.title
-                                    , book.engTitle
-                                    , book.publishedDate
-                                    , book.viewCount
-                                    , book.quantity
-                                    , book.price
-                                    , book.salePrice
-                                    , book.bookStatus
-                                    , publisher.publisherName
-                                    , publisher.publisherEngName
-                                    , bookLike.bookLikeId
-                                    , isLiked.as("isLiked")
-                                    , review.count().as("reviewCount")
-                                    , score.as("scoreAverage")))
-                            .groupBy(book, bookFile, publisher, bookLike, bookFile.url)
-                            // 정렬 조건에 따라 리스트 반환
-                            .offset(pageable.getOffset())
-                            .limit(pageable.getPageSize())
-                            .fetch().stream()
-                            .map(b -> {
-                                double roundedScore = Math.round(b.getScoreAverage() * 10) / 10.0;
-                                b.setScoreAverage(roundedScore);
-                                return b;
-                            })
-                            .collect(Collectors.toList());
-        }
+        // 리뷰 점수를 소수 첫째까지 반올림
+        List<BookDto.ListResponse> responseList = bookList.fetch().stream()
+                .map(b -> {
+                    double roundedScore = Math.round(b.getScoreAverage() * 10) / 10.0;
+                    b.setScoreAverage(roundedScore);
+                    return b;
+                })
+                .collect(Collectors.toList());
+
 
         List<BookDto.ListResponse> responses = toListResponseList(responseList);
 
@@ -812,8 +736,6 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
 
         MatchQueryBuilder titleTokenQuery = QueryBuilders.matchQuery("title.token", keyword).boost(100);
         MatchQueryBuilder titleJasoQuery = QueryBuilders.matchQuery("title.jaso", keyword).boost(100);
-        MatchQueryBuilder engTitleTokenQuery = QueryBuilders.matchQuery("engTitle.token", keyword).boost(100);
-        MatchQueryBuilder engTitleJasoQuery = QueryBuilders.matchQuery("engTitle.jaso", keyword).boost(100);
 
         switch (condition) {
             case "INTEGRATION":
@@ -834,10 +756,8 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                 boolQuery.should(contributorQuery);
                 boolQuery.should(tagQuery);
                 boolQuery.should(publisherQuery);
-                boolQuery.should(engTitleTokenQuery);
-                boolQuery.should(engTitleJasoQuery);
 
-                return boolQuery;
+                return boolQuery.minimumShouldMatch(1);
 
             case "PUBLISHER":
 
@@ -845,26 +765,28 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                 MatchQueryBuilder publisherJasoQuery = QueryBuilders.matchQuery("publisherName.jaso", keyword).boost(100);
                 return boolQuery
                         .should(publisherTokenQuery)
-                        .should(publisherJasoQuery);
+                        .should(publisherJasoQuery)
+                        .minimumShouldMatch(1);
 
             case "CONTRIBUTOR":
                 MatchQueryBuilder contributorTokenQuery = QueryBuilders.matchQuery("contributorName.token", keyword).boost(100);
                 MatchQueryBuilder contributorJasoQuery = QueryBuilders.matchQuery("contributorName.jaso", keyword).boost(100);
                 return boolQuery
                         .should(contributorTokenQuery)
-                        .should(contributorJasoQuery);
+                        .should(contributorJasoQuery)
+                        .minimumShouldMatch(1);
             case "TAG":
                 MatchQueryBuilder tagTokenQuery = QueryBuilders.matchQuery("tagName.token", keyword).boost(100);
                 MatchQueryBuilder tagJasoQuery = QueryBuilders.matchQuery("tagName.jaso", keyword).boost(100);
                 return boolQuery
                         .should(tagTokenQuery)
-                        .should(tagJasoQuery);
+                        .should(tagJasoQuery)
+                        .minimumShouldMatch(1);
             default:
                 return boolQuery
                         .should(titleTokenQuery)
                         .should(titleJasoQuery)
-                        .should(engTitleTokenQuery)
-                        .should(engTitleJasoQuery);
+                        .minimumShouldMatch(1);
 
         }
     }
