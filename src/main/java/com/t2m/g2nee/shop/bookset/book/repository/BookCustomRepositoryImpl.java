@@ -194,7 +194,6 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
 
-        // 정렬 조건에 따라 정렬 -> default 정확도 순 (elasticsearch score)
         if (orderSpecifier != null) {
             bookList.orderBy(orderSpecifier);
         }
@@ -353,19 +352,31 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
 
-        // 정렬 조건에 따라 정렬 -> default 정확도 순 (elasticsearch score)
-        if (orderSpecifier != null) {
-            bookList.orderBy(orderSpecifier);
-        }
 
+        List<BookDto.ListResponse> responseList;
+        // 정렬 조건에 따라 정렬 -> default 정확도 순 (elasticsearch score)
         // 리뷰 점수를 소수 첫째까지 반올림
-        List<BookDto.ListResponse> responseList = bookList.fetch().stream()
-                .map(b -> {
-                    double roundedScore = Math.round(b.getScoreAverage() * 10) / 10.0;
-                    b.setScoreAverage(roundedScore);
-                    return b;
-                })
-                .collect(Collectors.toList());
+        if (orderSpecifier != null) {
+            responseList = bookList.orderBy(orderSpecifier).fetch().stream()
+                    .map(b -> {
+                        double roundedScore = Math.round(b.getScoreAverage() * 10) / 10.0;
+                        b.setScoreAverage(roundedScore);
+                        return b;
+                    })
+                    .collect(Collectors.toList());
+        } else {
+            // 정렬 조건이 없으면 elasticsearch score가 높은 순으로 정렬
+            List<BookDto.ListResponse> responses = bookList.fetch();
+            responseList = indexIdList.stream()
+                    .flatMap(id -> responses.stream()
+                            .filter(response -> response.getBookId().equals(id)))
+                    .map(b -> {
+                        double roundedScore = Math.round(b.getScoreAverage() * 10) / 10.0;
+                        b.setScoreAverage(roundedScore);
+                        return b;
+                    })
+                    .collect(Collectors.toList());
+        }
 
 
         List<BookDto.ListResponse> responses = toListResponseList(responseList);
