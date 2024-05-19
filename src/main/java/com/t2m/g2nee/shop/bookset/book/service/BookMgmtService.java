@@ -26,12 +26,14 @@ import com.t2m.g2nee.shop.exception.BadRequestException;
 import com.t2m.g2nee.shop.exception.NotFoundException;
 import com.t2m.g2nee.shop.fileset.bookfile.domain.BookFile;
 import com.t2m.g2nee.shop.fileset.bookfile.repostitory.BookFileRepository;
+import com.t2m.g2nee.shop.fileset.file.domain.File;
 import com.t2m.g2nee.shop.nhnstorage.AuthService;
 import com.t2m.g2nee.shop.nhnstorage.ObjectService;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -133,8 +135,8 @@ public class BookMgmtService {
 
                     String objectName = "thumb/" + request.getEngTitle();
                     // 기존 이미지를 삭제합니다'
-                    BookFile bookFile = bookFileRepository.findByBookIdAndImageType(bookId, ImageType.THUMBNAIL);
-                    String imageUrl = bookFile.getUrl();
+                    List<BookFile> bookFiles = bookFileRepository.findByBookIdAndImageType(bookId, ImageType.THUMBNAIL);
+                    List<String> imageUrl = bookFiles.stream().map(File::getUrl).collect(Collectors.toList());
                     deleteImage(imageUrl, tokenId);
                     // 기존 이미지의 연관관계를 없앱니다.
                     bookFileRepository.deleteByBookIdAndImageType(bookId, ImageType.THUMBNAIL);
@@ -146,9 +148,9 @@ public class BookMgmtService {
                 if (details != null) {
 
                     // 기존 이미지를 삭제합니다'
-                    BookFile bookFile = bookFileRepository.findByBookIdAndImageType(bookId, ImageType.DETAIL);
-                    String imageUrl = bookFile.getUrl();
-                    deleteImage(imageUrl, tokenId);
+                    List<BookFile> bookFiles = bookFileRepository.findByBookIdAndImageType(bookId, ImageType.DETAIL);
+                    List<String> imageUrls = bookFiles.stream().map(File::getUrl).collect(Collectors.toList());
+                    deleteImage(imageUrls, tokenId);
                     // 기존 이미지의 연관관계를 없앱니다.
                     bookFileRepository.deleteByBookIdAndImageType(bookId, ImageType.DETAIL);
                     // storage에 새 이미지를 업로드합니다
@@ -375,9 +377,9 @@ public class BookMgmtService {
         }
     }
 
-    public void deleteImage(String url, String tokenId) {
+    public void deleteImage(List<String> urls, String tokenId) {
 
-        objectService.deleteObject(url, tokenId);
+        objectService.deleteObject(urls, tokenId);
     }
 
 }

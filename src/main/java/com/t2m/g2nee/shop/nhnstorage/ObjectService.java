@@ -2,6 +2,7 @@ package com.t2m.g2nee.shop.nhnstorage;
 
 import com.t2m.g2nee.shop.properties.NhnCloudStorageProperties;
 import java.io.InputStream;
+import java.util.List;
 import lombok.Data;
 import lombok.NonNull;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
@@ -84,15 +85,18 @@ public class ObjectService {
      * nhncloud api를 호출하여 storage에 이미지를 저장하는 메서드
      *
      * @param tokenId 인증토큰 Id값
-     * @param url     삭제할 파일 url
+     * @param urls     삭제할 파일 url들
      */
-    public void deleteObject(String url, String tokenId) {
+    public void deleteObject(List<String> urls, String tokenId) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Auth-Token", tokenId);
 
         HttpEntity<String> requestEntity = new HttpEntity<>(headers);
-        this.restTemplate.exchange(url, HttpMethod.DELETE, requestEntity, String.class);
+
+        for (String url : urls) {
+            this.restTemplate.exchange(url, HttpMethod.DELETE, requestEntity, String.class);
+        }
     }
 }
 
