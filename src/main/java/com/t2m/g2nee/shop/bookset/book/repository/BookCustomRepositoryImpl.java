@@ -400,6 +400,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                 .where(bookFile.imageType.eq(BookFile.ImageType.THUMBNAIL)
                         .and(bookCategory.book.bookId.ne(bookId))
                         .and(bookCategory.category.categoryId.in(categoryIdList)))
+                .distinct()
                 .select(Projections.fields(BookDto.ListResponse.class
                         , book.bookId
                         , bookFile.url.as("thumbnailImageUrl")
