@@ -190,16 +190,18 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                         , isLiked.as("isLiked")
                         , review.count().as("reviewCount")
                         , score.as("scoreAverage")))
-                .groupBy(book, bookFile, publisher, bookLike, bookFile.url)
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize());
+                .groupBy(book, bookFile, publisher, bookLike, bookFile.url);
+
+        int totalSize = bookList.fetch().size();
 
         if (orderSpecifier != null) {
             bookList.orderBy(orderSpecifier);
         }
 
         // 리뷰 점수를 소수 첫째까지 반올림
-        List<BookDto.ListResponse> responseList = bookList.fetch().stream()
+        List<BookDto.ListResponse> responseList = bookList
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize()).fetch().stream()
                 .map(b -> {
                     double roundedScore = Math.round(b.getScoreAverage() * 10) / 10.0;
                     b.setScoreAverage(roundedScore);
@@ -209,7 +211,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
 
         List<BookDto.ListResponse> responses = toListResponseList(responseList);
 
-        return new PageImpl<>(responses, pageable, responses.size());
+        return new PageImpl<>(responses, pageable, totalSize);
     }
 
     /**
@@ -348,27 +350,26 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                         isLiked.as("isLiked"),
                         review.count().as("reviewCount"),
                         score.as("scoreAverage")))
-                .groupBy(book, bookFile, publisher, bookLike, bookFile.url)
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize());
+                .groupBy(book, bookFile, publisher, bookLike, bookFile.url);
+
+        int totalSize = bookList.fetch().size();
 
 
         List<BookDto.ListResponse> responseList;
         // 정렬 조건에 따라 정렬 -> default 정확도 순 (elasticsearch score)
         // 리뷰 점수를 소수 첫째까지 반올림
         if (orderSpecifier != null) {
-            responseList = bookList.orderBy(orderSpecifier).fetch().stream()
-                    .map(b -> {
-                        double roundedScore = Math.round(b.getScoreAverage() * 10) / 10.0;
-                        b.setScoreAverage(roundedScore);
-                        return b;
-                    })
-                    .collect(Collectors.toList());
-        } else {
+            bookList.orderBy(orderSpecifier);
+        }
             // 정렬 조건이 없으면 elasticsearch score가 높은 순으로 정렬
-            List<BookDto.ListResponse> responses = bookList.fetch();
+
+            List<BookDto.ListResponse> bookResponse = bookList
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetch();
+
             responseList = indexIdList.stream()
-                    .flatMap(id -> responses.stream()
+                    .flatMap(id -> bookResponse.stream()
                             .filter(response -> response.getBookId().equals(id)))
                     .map(b -> {
                         double roundedScore = Math.round(b.getScoreAverage() * 10) / 10.0;
@@ -376,12 +377,10 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                         return b;
                     })
                     .collect(Collectors.toList());
-        }
-
 
         List<BookDto.ListResponse> responses = toListResponseList(responseList);
 
-        return new PageImpl<>(responses, pageable, responses.size());
+        return new PageImpl<>(responses, pageable, totalSize);
 
     }
 
