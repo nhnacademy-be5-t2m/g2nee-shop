@@ -16,5 +16,6 @@ public class MemberResponseToAuth {
     private long memberId;
     private String username;
     private String password;
+    private String email;
     private List<String> authorities;
 }

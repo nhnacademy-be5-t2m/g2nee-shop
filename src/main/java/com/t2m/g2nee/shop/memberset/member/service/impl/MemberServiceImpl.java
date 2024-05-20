@@ -134,7 +134,7 @@ public class MemberServiceImpl implements MemberService {
                     String.valueOf(authRepository.findById(authMember.getAuth().getAuthId())
                             .orElseThrow(() -> new NotFoundException("권한 정보가 없습니다.")).getAuthName()));
         }
-        return new MemberResponseToAuth(member.getCustomerId(), member.getUsername(), member.getPassword(),
+        return new MemberResponseToAuth(member.getCustomerId(), member.getUsername(), member.getPassword(),member.getEmail(),
                 authorities);
     }
 
