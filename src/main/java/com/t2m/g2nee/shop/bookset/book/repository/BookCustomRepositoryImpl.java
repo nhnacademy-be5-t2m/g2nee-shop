@@ -747,6 +747,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
 
         MatchQueryBuilder titleTokenQuery = QueryBuilders.matchQuery("title.token", keyword).boost(100);
         MatchQueryBuilder titleJasoQuery = QueryBuilders.matchQuery("title.jaso", keyword).boost(100);
+        MatchQueryBuilder titleNgramQuery = QueryBuilders.matchQuery("title.ngram", keyword).boost(100);
 
         switch (condition) {
             case "INTEGRATION":
@@ -797,6 +798,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                 return boolQuery
                         .should(titleTokenQuery)
                         .should(titleJasoQuery)
+                        .should(titleNgramQuery)
                         .minimumShouldMatch(1);
 
         }
