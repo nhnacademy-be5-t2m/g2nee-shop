@@ -192,9 +192,9 @@ public class BookMgmtService {
 
             if (!request.getCategoryIdList().isEmpty()) {
                 Optional.of(request.getCategoryIdList())
-                        .ifPresent(contributorIdList -> {
+                        .ifPresent(categoryIdList -> {
                             bookCategoryRepository.deleteByBookId(bookId);
-                            List<Long> lowestCategoryId = bookRepository.getLowestCategoryId(request.getCategoryIdList());
+                            List<Long> lowestCategoryId = bookRepository.getLowestCategoryId(categoryIdList);
                             saveBookCategory(lowestCategoryId, book);
                         });
             }
