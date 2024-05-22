@@ -38,6 +38,7 @@ import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
@@ -290,7 +291,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
         AbstractQueryBuilder<?> query = searchCondition(keyword, condition);
 
         NativeSearchQueryBuilder searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(query);
+                .withQuery(query).withPageable(PageRequest.of(0,30));
         /*
             search 결과로 가져온 인덱스 객체들을 포함하는 hitList
          */
