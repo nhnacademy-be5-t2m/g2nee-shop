@@ -145,7 +145,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
 
         // 정렬 조건
 
-        OrderSpecifier<?> orderSpecifier = sorting(book, review, sort);
+        OrderSpecifier<?> orderSpecifier = sorting(sort);
 
         // 요청으로 들어온 회원아이디와 조인한 테이블의 memberId가 같은 튜플은 isLiked를 true로 설정
 
@@ -310,7 +310,7 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
          */
 
         // 정렬 조건
-        OrderSpecifier<?> orderSpecifier = sorting(book, review, sort);
+        OrderSpecifier<?> orderSpecifier = sorting(sort);
 
         // 요청으로 들어온 회원아이디와 조인한 테이블의 memberId가 같은 튜플은 isLiked를 true로 설정
         BooleanExpression isLiked;
@@ -356,20 +356,19 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
 
 
         List<BookDto.ListResponse> responseList;
-        // 정렬 조건에 따라 정렬 -> default 정확도 순 (elasticsearch score)
+        // 정렬 조건에 따라 정렬
         // 리뷰 점수를 소수 첫째까지 반올림
         if (orderSpecifier != null) {
-            bookList.orderBy(orderSpecifier);
-        }
-            // 정렬 조건이 없으면 elasticsearch score가 높은 순으로 정렬
-
-            List<BookDto.ListResponse> bookResponse = bookList
+            responseList = bookList.orderBy(orderSpecifier)
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
                     .fetch();
+        } else {
+            // default 정확도 순
+            List<BookDto.ListResponse> bookListFetch = bookList.fetch();
 
             responseList = indexIdList.stream()
-                    .flatMap(id -> bookResponse.stream()
+                    .flatMap(id -> bookListFetch.stream()
                             .filter(response -> response.getBookId().equals(id)))
                     .map(b -> {
                         double roundedScore = Math.round(b.getScoreAverage() * 10) / 10.0;
@@ -377,6 +376,11 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                         return b;
                     })
                     .collect(Collectors.toList());
+
+            int start = pageable.getPageNumber() * pageable.getPageSize();
+            int end = Math.min(start + pageable.getPageSize(), responseList.size());
+            responseList = responseList.subList(start, end);
+        }
 
         List<BookDto.ListResponse> responses = toListResponseList(responseList);
 
@@ -697,13 +701,10 @@ public class BookCustomRepositoryImpl extends QuerydslRepositorySupport implemen
 
     /**
      * 조건에 따라 정렬을 설정하는 메서드
-     *
-     * @param book   책 객체
-     * @param review 리뷰 객체
      * @param sort   정렬 조건
      * @return OrderSpecifier<?>
      */
-    private OrderSpecifier<?> sorting(QBook book, QReview review, String sort) {
+    private OrderSpecifier<?> sorting(String sort) {
 
         OrderSpecifier<?> orderSpecifier;
 
